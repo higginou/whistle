@@ -1,0 +1,93 @@
+# generated: 2026-03-28
+# last_updated: 2026-03-28 (1-1 done)
+# project: Whistle
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-03-28
+last_updated: 2026-03-28 (1-1 done)
+project: Whistle
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # Epic 1 : Fondation & Pipeline de Donnees
+  epic-1: in-progress
+  1-1-initialisation-du-projet-vite-pwa-dependances: done
+  1-2-definition-du-schema-json-de-saison: backlog
+  1-3-scraping-des-resultats-et-calendrier-lnr: backlog
+  1-4-validation-de-lintegrite-des-donnees-scrapees: backlog
+  1-5-calcul-du-modele-elo-et-projections: backlog
+  1-6-generation-du-json-de-saison-avec-historique: backlog
+  1-7-pipeline-github-actions-avec-fallback-et-alerting: backlog
+  epic-1-retrospective: optional
+
+  # Epic 2 : Score Card & Situation Equipe Favorite
+  epic-2: backlog
+  2-1-design-tokens-et-fondation-visuelle: backlog
+  2-2-store-detat-fetch-donnees-et-router: backlog
+  2-3-layout-page-principale-et-structure-html-semantique: backlog
+  2-4-score-card-hero-la-rochelle: backlog
+  2-5-badge-nouvelle-journee: backlog
+  epic-2-retrospective: optional
+
+  # Epic 3 : Classement Anime & Exploration des Equipes
+  epic-3: backlog
+  3-1-zones-de-classement-et-lignes-dequipe: backlog
+  3-2-bouton-reveler-la-projection-et-moteur-danimation: backlog
+  3-3-cards-achievement-modele: backlog
+  3-4-bottom-sheet-fiche-detaillee-equipe: backlog
+  3-5-etats-vides-et-gestion-offline-gracieuse: backlog
+  epic-3-retrospective: optional
+
+  # Epic 4 : PWA, Offline & Deploiement
+  epic-4: backlog
+  4-1-configuration-service-worker-et-strategies-de-cache: backlog
+  4-2-manifest-pwa-icones-et-installation-android: backlog
+  4-3-deploiement-github-pages: backlog
+  epic-4-retrospective: optional
+
+  # Epic 5 : Transparence du Modele (Phase 2)
+  epic-5: backlog
+  5-1-vue-transparence-donnees-sources-et-metriques-du-modele: backlog
+  5-2-journal-de-corrections-et-recalibrage-automatique: backlog
+  5-3-mode-simple-mode-detaille: backlog
+  5-4-micro-classement-confrontations-directes-et-gestion-promus: backlog
+  epic-5-retrospective: optional
+
+  # Epic 6 : Simulateur (Phase 2/3)
+  epic-6: backlog
+  6-1-selection-et-modification-de-resultats-de-matchs: backlog
+  6-2-recalcul-instantane-et-animation-de-limpact: backlog
+  epic-6-retrospective: optional
