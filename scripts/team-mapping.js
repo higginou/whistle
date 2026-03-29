@@ -104,6 +104,7 @@ export const VALID_TEAM_IDS = [
   'montpellier',
   'pau',
   'montauban',
+  'perpignan',
   'bayonne',
   'stade-francais',
   'vannes',

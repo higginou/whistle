@@ -179,9 +179,9 @@ describe('validateStandings', () => {
 
   it('detects unknown team ID', () => {
     const standings = make14Standings();
-    standings[0] = makeStanding({ id: 'perpignan', rank: 1 });
+    standings[0] = makeStanding({ id: 'grenoble', rank: 1 });
     const errors = validateStandings(standings);
-    expect(errors.some((e) => e.includes('perpignan'))).toBe(true);
+    expect(errors.some((e) => e.includes('grenoble'))).toBe(true);
   });
 
   it('detects duplicate team IDs', () => {
@@ -456,10 +456,10 @@ describe('validateTeamIds', () => {
 
   it('detects unknown home team in results', () => {
     const errors = validateTeamIds(
-      [makeResult({ home: 'perpignan' })],
+      [makeResult({ home: 'grenoble' })],
       [],
     );
-    expect(errors.some((e) => e.includes('perpignan'))).toBe(true);
+    expect(errors.some((e) => e.includes('grenoble'))).toBe(true);
   });
 
   it('detects unknown away team in results', () => {

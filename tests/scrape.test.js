@@ -444,8 +444,8 @@ describe('team-mapping : resolveTeamId', () => {
 });
 
 describe('team-mapping : VALID_TEAM_IDS', () => {
-  it('contient exactement 14 equipes', () => {
-    expect(VALID_TEAM_IDS).toHaveLength(14);
+  it('contient 15 equipes (14 actuelles + perpignan historique)', () => {
+    expect(VALID_TEAM_IDS).toHaveLength(15);
   });
 
   it('tous les IDs sont en kebab-case', () => {
