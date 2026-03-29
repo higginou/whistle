@@ -6,46 +6,91 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       workbox: {
+        // Precache: app shell (JS, CSS, HTML, icons, fonts)
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        cleanupOutdatedCaches: true,
+
+        // SPA navigation fallback
+        navigateFallback: 'index.html',
+        navigateFallbackDenylist: [/^\/data\//],
+
+        // Runtime caching rules
         runtimeCaching: [
+          // JSON data files — network-first with cache fallback
+          {
+            urlPattern: /\/data\/.*\.json$/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'whistle-data',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+              },
+              networkTimeoutSeconds: 5,
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+          // Google Fonts stylesheets
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'google-fonts-stylesheets',
-              expiration: { maxEntries: 4, maxAgeSeconds: 60 * 60 * 24 * 365 }
-            }
+              expiration: {
+                maxEntries: 4,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
+            },
           },
+          // Google Fonts webfont files
           {
             urlPattern: /^https:\/\/fonts\.gstatic\.com\/.*/i,
             handler: 'CacheFirst',
             options: {
               cacheName: 'google-fonts-webfonts',
-              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365 },
-              cacheableResponse: { statuses: [0, 200] }
-            }
-          }
-        ]
+              expiration: {
+                maxEntries: 20,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+            },
+          },
+        ],
       },
       manifest: {
         name: 'Whistle — Projections TOP 14',
         short_name: 'Whistle',
+        description: 'Projections du classement TOP 14 avec modele Elo',
         theme_color: '#6d28d9',
-        background_color: '#6d28d9',
+        background_color: '#0f0a1a',
         display: 'standalone',
+        orientation: 'portrait',
+        scope: '/',
+        start_url: '/',
         icons: [
           {
             src: 'pwa-192x192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
-          }
-        ]
-      }
-    })
-  ]
+            purpose: 'any',
+          },
+          {
+            src: 'pwa-512x512-maskable.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+        ],
+      },
+    }),
+  ],
 })

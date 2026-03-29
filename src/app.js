@@ -1,4 +1,5 @@
 import './styles/base.css'
+import { registerSW } from 'virtual:pwa-register'
 import { get, set, on } from './store.js'
 import { loadSeason } from './data.js'
 import { init as initRouter } from './router.js'
@@ -81,6 +82,25 @@ on('activeSheet', (event) => {
     set('selectedTeam', null)
     closeBottomSheet()
   }
+})
+
+// Register Service Worker (autoUpdate — silent, no user prompt)
+registerSW({
+  immediate: true,
+  onOfflineReady() {
+    console.log('[SW] Offline ready')
+  },
+  onRegisteredSW(swUrl, registration) {
+    // Periodic check for new SW (every hour)
+    if (registration) {
+      setInterval(() => {
+        registration.update()
+      }, 60 * 60 * 1000)
+    }
+  },
+  onRegisterError(error) {
+    console.error('[SW] Registration failed:', error)
+  },
 })
 
 initRouter()

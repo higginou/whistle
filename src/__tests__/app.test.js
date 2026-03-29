@@ -1,6 +1,9 @@
 // @vitest-environment jsdom
 import { beforeEach, describe, it, expect, vi } from 'vitest'
 
+// Mock virtual:pwa-register (Vite virtual module, not available in test env)
+vi.mock('virtual:pwa-register', () => ({ registerSW: vi.fn(() => vi.fn()) }))
+
 // Mock data.js to prevent actual fetch calls
 vi.mock('../data.js', () => ({ loadSeason: vi.fn() }))
 
