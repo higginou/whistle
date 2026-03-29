@@ -1,0 +1,66 @@
+@import "./tokens.css";
+
+/* ===== Reset ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== Base ===== */
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+  font-size: var(--w-text-body);
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--w-color-text-primary);
+  background-color: var(--w-color-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== App Container ===== */
+#app {
+  max-width: 430px;
+  margin: 0 auto;
+  padding: 0 var(--w-space-md);
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+/* ===== Tabular Numbers ===== */
+.w-tabular {
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== Touch ===== */
+button,
+a,
+[role="button"] {
+  touch-action: manipulation;
+}
+
+/* ===== Card Utility ===== */
+.w-card {
+  background-color: var(--w-color-surface-elevated);
+  box-shadow: var(--w-shadow-card);
+  border-radius: var(--w-radius-card);
+}
+
+/* ===== Reduced Motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

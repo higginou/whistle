@@ -1,0 +1,52 @@
+/* Whistle Design Tokens */
+/* Open Props easings for animation (stories 3.x) */
+@import "open-props/easings";
+
+:root {
+  /* ===== Zone Colors ===== */
+  --w-color-europe: #6d28d9;
+  --w-color-top6: #16a34a;
+  --w-color-mid: #6b7280;
+  --w-color-relegation: #dc2626;
+
+  /* Zone backgrounds (pale) */
+  --w-color-europe-bg: #f3e8ff;
+  --w-color-top6-bg: #dcfce7;
+  --w-color-mid-bg: #f3f4f6;
+  --w-color-relegation-bg: #fef2f2;
+
+  /* ===== Functional Palette ===== */
+  --w-color-primary: #6d28d9;
+  --w-color-surface: #faf8f5;
+  --w-color-surface-elevated: #ffffff;
+  --w-color-text-primary: #1f2937;
+  --w-color-text-secondary: #6b7280;
+  --w-color-success: #16a34a;
+  --w-color-danger: #dc2626;
+
+  /* ===== Confidence Colors ===== */
+  --w-color-confidence-high: #16a34a;
+  --w-color-confidence-mid: #f59e0b;
+  --w-color-confidence-low: #fca5a5;
+
+  /* ===== Spacing (8px grid) ===== */
+  --w-space-xs: 0.25rem;
+  --w-space-sm: 0.5rem;
+  --w-space-md: 1rem;
+  --w-space-lg: 1.5rem;
+  --w-space-xl: 2rem;
+  --w-space-2xl: 3rem;
+
+  /* ===== Typography Scale ===== */
+  --w-text-hero: 2rem;
+  --w-text-h1: 1.5rem;
+  --w-text-h2: 1.25rem;
+  --w-text-body: 1rem;
+  --w-text-label: 0.875rem;
+  --w-text-caption: 0.75rem;
+
+  /* ===== Radius & Shadow ===== */
+  --w-radius-card: 12px;
+  --w-radius-button: 14px;
+  --w-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
