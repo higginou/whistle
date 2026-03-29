@@ -1,5 +1,7 @@
 import '../styles/components/rank-row.css'
 import { render as renderConfidenceBar } from './confidence-bar.js'
+import { set } from '../store.js'
+import { pushSheet } from '../router.js'
 
 const FAVORITE_TEAM = 'la-rochelle'
 
@@ -95,10 +97,33 @@ export function render(listElement, team) {
   const row = document.createElement('div')
   row.className = `w-rank-row${isFavorite ? ' w-rank-row--favorite' : ''}`
   row.dataset.teamId = team.id
+  row.setAttribute('role', 'button')
+  row.setAttribute('tabindex', '0')
   row.setAttribute(
     'aria-label',
     `${rank}${ordinalSuffix(rank)}, ${team.name}, Elo ${team.elo}, ${trendLabel}, confiance ${confLabel}`,
   )
+
+  // Tap handler — open team detail bottom sheet
+  row.addEventListener('click', () => {
+    set('selectedTeam', team.id)
+    pushSheet('team-detail')
+  })
+
+  // Keyboard support
+  row.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      set('selectedTeam', team.id)
+      pushSheet('team-detail')
+    }
+  })
+
+  // Tactile feedback (scale 0.97)
+  row.addEventListener('pointerdown', () => row.classList.add('is-pressed'))
+  row.addEventListener('pointerup', () => row.classList.remove('is-pressed'))
+  row.addEventListener('pointerleave', () => row.classList.remove('is-pressed'))
+  row.addEventListener('pointercancel', () => row.classList.remove('is-pressed'))
 
   // Position
   const position = document.createElement('span')

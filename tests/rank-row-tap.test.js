@@ -1,0 +1,73 @@
+// @vitest-environment jsdom
+import { describe, it, expect, beforeEach, vi } from 'vitest'
+
+// Mock store and router before importing rank-row
+vi.mock('../src/store.js', () => ({
+  set: vi.fn(),
+}))
+vi.mock('../src/router.js', () => ({
+  pushSheet: vi.fn(),
+}))
+// Stub confidence-bar (DOM-only, not under test)
+vi.mock('../src/components/confidence-bar.js', () => ({
+  render: vi.fn(),
+}))
+// CSS import is a no-op in vitest/jsdom
+vi.mock('../src/styles/components/rank-row.css', () => ({}))
+
+import { render } from '../src/components/rank-row.js'
+import { set } from '../src/store.js'
+import { pushSheet } from '../src/router.js'
+
+/** Minimal team object */
+function makeTeam(overrides = {}) {
+  return {
+    id: 'la-rochelle',
+    name: 'Stade Rochelais',
+    currentRank: 4,
+    elo: 1582,
+    confidence: 0.74,
+    trend: 'up',
+    ...overrides,
+  }
+}
+
+describe('rank-row — tap interaction', () => {
+  let ul
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    ul = document.createElement('ul')
+  })
+
+  it('click triggers set(selectedTeam) and pushSheet(team-detail)', () => {
+    const team = makeTeam({ id: 'toulouse' })
+    render(ul, team)
+
+    const row = ul.querySelector('.w-rank-row')
+    row.click()
+
+    expect(set).toHaveBeenCalledWith('selectedTeam', 'toulouse')
+    expect(pushSheet).toHaveBeenCalledWith('team-detail')
+  })
+
+  it('rendered row has role="button" and tabindex="0"', () => {
+    render(ul, makeTeam())
+
+    const row = ul.querySelector('.w-rank-row')
+    expect(row.getAttribute('role')).toBe('button')
+    expect(row.getAttribute('tabindex')).toBe('0')
+  })
+
+  it('pointerdown adds is-pressed, pointerup removes it', () => {
+    render(ul, makeTeam())
+
+    const row = ul.querySelector('.w-rank-row')
+
+    row.dispatchEvent(new Event('pointerdown'))
+    expect(row.classList.contains('is-pressed')).toBe(true)
+
+    row.dispatchEvent(new Event('pointerup'))
+    expect(row.classList.contains('is-pressed')).toBe(false)
+  })
+})

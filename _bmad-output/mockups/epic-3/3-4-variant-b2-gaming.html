@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Story 3-4 — Variante B2 : Gaming Stats Screen</title>
+<style>
+  :root {
+    --w-color-europe: #a78bfa;
+    --w-color-top6: #4ade80;
+    --w-color-mid: #fbbf24;
+    --w-color-relegation: #f87171;
+
+    --w-color-primary: #a78bfa;
+    --w-color-surface: #12062a;
+    --w-color-surface-elevated: #1a0a2e;
+    --w-color-surface-card: rgba(109, 40, 217, 0.12);
+    --w-color-text-primary: #f0f0f5;
+    --w-color-text-secondary: #9ca3af;
+    --w-color-text-muted: #6b7280;
+    --w-color-success: #4ade80;
+    --w-color-danger: #f87171;
+    --w-color-draw: #9ca3af;
+    --w-color-muted: #4b5563;
+    --w-color-favorite: #ffd700;
+
+    --w-space-xs: 0.25rem;
+    --w-space-sm: 0.5rem;
+    --w-space-md: 1rem;
+    --w-space-lg: 1.5rem;
+    --w-space-xl: 2rem;
+
+    --w-text-hero: 2.25rem;
+    --w-text-h1: 1.5rem;
+    --w-text-h2: 1.25rem;
+    --w-text-body: 1rem;
+    --w-text-label: 0.875rem;
+    --w-text-caption: 0.75rem;
+    --w-text-stat: 1.75rem;
+
+    --w-radius-card: 12px;
+    --w-radius-sheet: 16px;
+    --w-shadow-sheet: 0 -4px 24px rgba(26, 10, 46, 0.7);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+
+  body {
+    font-family: "Nunito", system-ui, -apple-system, sans-serif;
+    font-size: var(--w-text-body);
+    color: var(--w-color-text-primary);
+    background: var(--w-color-surface);
+    min-height: 100dvh;
+  }
+
+  /* Demo trigger */
+  .w-demo {
+    max-width: 430px;
+    margin: 0 auto;
+    padding: var(--w-space-xl) var(--w-space-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--w-space-lg);
+  }
+
+  .w-demo__title {
+    font-size: var(--w-text-label);
+    color: var(--w-color-text-secondary);
+    text-align: center;
+  }
+
+  .w-demo__trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--w-space-sm);
+    padding: var(--w-space-md) var(--w-space-lg);
+    background: var(--w-color-surface-elevated);
+    border: 1px solid rgba(167, 139, 250, 0.3);
+    border-radius: var(--w-radius-card);
+    color: var(--w-color-text-primary);
+    font-size: var(--w-text-body);
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    touch-action: manipulation;
+  }
+
+  .w-demo__trigger:active { transform: scale(0.97); }
+
+  .w-demo__trigger-logo {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--w-color-favorite);
+    display: flex; align-items: center; justify-content: center;
+    font-size: var(--w-text-caption); font-weight: 800; color: #12062a;
+  }
+
+  /* ===== Dialog (Bottom Sheet) ===== */
+  dialog.w-bottom-sheet {
+    position: fixed;
+    bottom: 0; left: 0; right: 0; top: auto;
+    width: 100%; max-width: 430px;
+    margin: 0 auto;
+    border: none; padding: 0;
+    background: var(--w-color-surface-elevated);
+    border-radius: var(--w-radius-sheet) var(--w-radius-sheet) 0 0;
+    box-shadow: var(--w-shadow-sheet);
+    color: var(--w-color-text-primary);
+    overflow: hidden;
+    max-height: 90dvh;
+    transform: translateY(100%);
+    transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
+  }
+
+  dialog.w-bottom-sheet[open] { transform: translateY(0); }
+  dialog.w-bottom-sheet.w-bottom-sheet--closing {
+    transform: translateY(100%);
+    transition-duration: 200ms;
+    transition-timing-function: ease-in;
+  }
+
+  dialog.w-bottom-sheet::backdrop {
+    background: rgba(0, 0, 0, 0);
+    animation: w-backdrop-in 300ms ease forwards;
+  }
+  dialog.w-bottom-sheet.w-bottom-sheet--closing::backdrop {
+    animation: w-backdrop-out 200ms ease forwards;
+  }
+
+  @keyframes w-backdrop-in { from { background: rgba(18,6,42,0); } to { background: rgba(18,6,42,0.65); } }
+  @keyframes w-backdrop-out { from { background: rgba(18,6,42,0.65); } to { background: rgba(18,6,42,0); } }
+
+  /* Sheet background gradient + scanlines */
+  .w-bottom-sheet__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background: linear-gradient(180deg, rgba(139,92,246,0.18) 0%, rgba(109,40,217,0.08) 40%, rgba(18,6,42,0.6) 100%);
+  }
+
+  /* Scanline overlay */
+  .w-bottom-sheet__bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      transparent 2px,
+      rgba(255,255,255,0.02) 2px,
+      rgba(255,255,255,0.02) 4px
+    );
+    pointer-events: none;
+  }
+
+  /* HUD corner accents */
+  .w-hud-corner {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .w-hud-corner--tl { top: 8px; left: 8px; border-top: 2px solid rgba(167,139,250,0.3); border-left: 2px solid rgba(167,139,250,0.3); }
+  .w-hud-corner--tr { top: 8px; right: 8px; border-top: 2px solid rgba(167,139,250,0.3); border-right: 2px solid rgba(167,139,250,0.3); }
+  .w-hud-corner--bl { bottom: 8px; left: 8px; border-bottom: 2px solid rgba(167,139,250,0.15); border-left: 2px solid rgba(167,139,250,0.15); }
+  .w-hud-corner--br { bottom: 8px; right: 8px; border-bottom: 2px solid rgba(167,139,250,0.15); border-right: 2px solid rgba(167,139,250,0.15); }
+
+  /* Handle */
+  .w-bottom-sheet__handle {
+    display: flex; justify-content: center;
+    padding: var(--w-space-sm) 0;
+    cursor: grab; touch-action: none;
+    position: relative; z-index: 2;
+  }
+  .w-bottom-sheet__handle::after {
+    content: ""; width: 40px; height: 4px;
+    border-radius: 2px; background: rgba(139,92,246,0.4);
+  }
+
+  /* Close */
+  .w-bottom-sheet__close {
+    position: absolute; top: var(--w-space-sm); right: var(--w-space-sm);
+    width: 48px; height: 48px; border: none;
+    background: transparent; color: var(--w-color-text-secondary);
+    font-size: 1.25rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; touch-action: manipulation;
+    z-index: 3;
+  }
+  .w-bottom-sheet__close:focus-visible { outline: 2px solid var(--w-color-primary); outline-offset: 2px; }
+
+  /* Content */
+  .w-bottom-sheet__content {
+    overflow-y: auto;
+    padding: 0 var(--w-space-md) var(--w-space-xl);
+    max-height: calc(90dvh - 40px);
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ===== Hero Header ===== */
+  .w-sheet-hero {
+    text-align: center;
+    padding: var(--w-space-md) 0 var(--w-space-lg);
+    border-bottom: 1px solid rgba(167,139,250,0.2);
+    margin-bottom: var(--w-space-lg);
+  }
+
+  .w-sheet-hero__logo {
+    width: 72px; height: 72px; border-radius: 50%;
+    margin: 0 auto var(--w-space-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: var(--w-text-h1); font-weight: 800;
+    background: var(--w-color-favorite);
+    color: #1a1a24;
+    box-shadow:
+      0 0 0 3px rgba(255, 215, 0, 0.4),
+      0 0 20px rgba(255, 215, 0, 0.3),
+      0 0 40px rgba(255, 215, 0, 0.1);
+    animation: w-logo-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes w-logo-pulse {
+    0%, 100% {
+      box-shadow:
+        0 0 0 3px rgba(255, 215, 0, 0.4),
+        0 0 20px rgba(255, 215, 0, 0.3),
+        0 0 40px rgba(255, 215, 0, 0.1);
+    }
+    50% {
+      box-shadow:
+        0 0 0 4px rgba(255, 215, 0, 0.6),
+        0 0 30px rgba(255, 215, 0, 0.45),
+        0 0 60px rgba(255, 215, 0, 0.2);
+    }
+  }
+
+  .w-sheet-hero__name {
+    font-size: var(--w-text-h1);
+    font-weight: 800;
+    margin-bottom: var(--w-space-xs);
+    letter-spacing: 0.02em;
+  }
+
+  .w-sheet-hero__elo {
+    font-size: var(--w-text-label);
+    color: var(--w-color-text-secondary);
+  }
+
+  .w-sheet-hero__elo strong {
+    color: var(--w-color-primary);
+    font-weight: 800;
+    text-shadow: 0 0 10px rgba(167, 139, 250, 0.4);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* XP / Strength tier bar */
+  .w-sheet-tier {
+    display: flex;
+    align-items: center;
+    gap: var(--w-space-sm);
+    margin-top: var(--w-space-sm);
+    justify-content: center;
+  }
+
+  .w-sheet-tier__label {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-primary);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 8px rgba(167,139,250,0.3);
+  }
+
+  .w-sheet-tier__bar {
+    width: 100px;
+    height: 6px;
+    background: rgba(167, 139, 250, 0.15);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .w-sheet-tier__bar-fill {
+    height: 100%;
+    width: 79%; /* 1582/2000 roughly */
+    background: linear-gradient(90deg, var(--w-color-primary), #c4b5fd);
+    border-radius: 3px;
+    box-shadow: 0 0 8px rgba(167,139,250,0.4);
+  }
+
+  /* ===== Progression Arrow ===== */
+  .w-sheet-progression {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--w-space-lg);
+    padding: var(--w-space-lg);
+    background: var(--w-color-surface-card);
+    backdrop-filter: blur(8px);
+    border-radius: var(--w-radius-card);
+    margin-bottom: var(--w-space-lg);
+    border: 1px solid rgba(139, 92, 246, 0.15);
+    box-shadow: 0 0 12px rgba(109, 40, 217, 0.15);
+  }
+
+  .w-sheet-progression__rank {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .w-sheet-progression__rank-label {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .w-sheet-progression__rank-num {
+    font-size: var(--w-text-hero);
+    font-weight: 800;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .w-sheet-progression__rank-num--projected {
+    color: var(--w-color-success);
+    text-shadow: 0 0 14px rgba(74, 222, 128, 0.5);
+  }
+
+  .w-sheet-progression__arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: var(--w-color-success);
+  }
+
+  .w-sheet-progression__arrow-line {
+    width: 56px;
+    height: 3px;
+    background: var(--w-color-success);
+    border-radius: 2px;
+    position: relative;
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+  }
+
+  .w-sheet-progression__arrow-line::after {
+    content: "";
+    position: absolute;
+    right: -2px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-left-color: var(--w-color-success);
+    filter: drop-shadow(0 0 4px rgba(74, 222, 128, 0.5));
+  }
+
+  .w-sheet-progression__arrow-label {
+    font-size: var(--w-text-caption);
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+  }
+
+  .w-sheet-progression__confidence {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .w-sheet-progression__confidence-value {
+    font-size: var(--w-text-h2);
+    font-weight: 800;
+    color: var(--w-color-success);
+    font-variant-numeric: tabular-nums;
+    animation: w-confidence-pulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes w-confidence-pulse {
+    0%, 100% { text-shadow: 0 0 8px rgba(74, 222, 128, 0.3); }
+    50% { text-shadow: 0 0 16px rgba(74, 222, 128, 0.6), 0 0 24px rgba(74, 222, 128, 0.2); }
+  }
+
+  .w-sheet-progression__confidence-label {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-muted);
+  }
+
+  /* ===== Section title with accent ===== */
+  .w-section-title {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--w-space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--w-space-sm);
+  }
+
+  .w-section-title::before {
+    content: "";
+    width: 3px;
+    height: 14px;
+    border-radius: 2px;
+    background: var(--w-color-primary);
+    box-shadow: 0 0 6px rgba(167,139,250,0.4);
+    flex-shrink: 0;
+  }
+
+  /* ===== Zone Cards (RPG stat cards) ===== */
+  .w-sheet-zones {
+    display: flex;
+    flex-direction: column;
+    gap: var(--w-space-sm);
+    margin-bottom: var(--w-space-lg);
+  }
+
+  .w-zone-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--w-space-md) var(--w-space-md) var(--w-space-md) var(--w-space-lg);
+    background: var(--w-color-surface-card);
+    backdrop-filter: blur(8px);
+    border-radius: var(--w-radius-card);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid transparent;
+    transition: border-color 0.3s ease;
+  }
+
+  /* Shimmer effect */
+  .w-zone-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(167,139,250,0.06), transparent);
+    animation: w-shimmer 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes w-shimmer {
+    0% { left: -100%; }
+    50% { left: 150%; }
+    100% { left: 150%; }
+  }
+
+  /* Colored left accent bar */
+  .w-zone-card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+  }
+
+  .w-zone-card--europe {
+    box-shadow: inset 3px 0 0 var(--w-color-europe), 0 0 10px rgba(167, 139, 250, 0.1);
+    border-color: rgba(167, 139, 250, 0.15);
+  }
+  .w-zone-card--europe::after { background: var(--w-color-europe); }
+  .w-zone-card--europe::before { animation-delay: 0s; }
+
+  .w-zone-card--top6 {
+    box-shadow: inset 3px 0 0 var(--w-color-top6), 0 0 10px rgba(74, 222, 128, 0.1);
+    border-color: rgba(74, 222, 128, 0.15);
+  }
+  .w-zone-card--top6::after { background: var(--w-color-top6); }
+  .w-zone-card--top6::before { animation-delay: 0.5s; }
+
+  .w-zone-card--mid {
+    box-shadow: inset 3px 0 0 var(--w-color-mid), 0 0 10px rgba(251, 191, 36, 0.1);
+    border-color: rgba(251, 191, 36, 0.15);
+  }
+  .w-zone-card--mid::after { background: var(--w-color-mid); }
+  .w-zone-card--mid::before { animation-delay: 1s; }
+
+  .w-zone-card--relegation {
+    box-shadow: inset 3px 0 0 var(--w-color-relegation), 0 0 10px rgba(248, 113, 113, 0.1);
+    border-color: rgba(248, 113, 113, 0.15);
+  }
+  .w-zone-card--relegation::after { background: var(--w-color-relegation); }
+  .w-zone-card--relegation::before { animation-delay: 1.5s; }
+
+  .w-zone-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .w-zone-card__name {
+    font-size: var(--w-text-body);
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .w-zone-card--europe .w-zone-card__name { color: var(--w-color-europe); }
+  .w-zone-card--top6 .w-zone-card__name { color: var(--w-color-top6); }
+  .w-zone-card--mid .w-zone-card__name { color: var(--w-color-mid); }
+  .w-zone-card--relegation .w-zone-card__name { color: var(--w-color-relegation); }
+
+  .w-zone-card__subtitle {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-muted);
+  }
+
+  .w-zone-card__pct {
+    font-size: var(--w-text-stat);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .w-zone-card--europe .w-zone-card__pct {
+    color: var(--w-color-europe);
+    text-shadow: 0 0 12px rgba(167, 139, 250, 0.5);
+  }
+  .w-zone-card--top6 .w-zone-card__pct {
+    color: var(--w-color-top6);
+    text-shadow: 0 0 12px rgba(74, 222, 128, 0.5);
+  }
+  .w-zone-card--mid .w-zone-card__pct {
+    color: var(--w-color-mid);
+    text-shadow: 0 0 12px rgba(251, 191, 36, 0.5);
+  }
+  .w-zone-card--relegation .w-zone-card__pct {
+    color: var(--w-color-relegation);
+    text-shadow: 0 0 12px rgba(248, 113, 113, 0.5);
+  }
+
+  .w-zone-card__pct-symbol {
+    font-size: var(--w-text-label);
+    opacity: 0.7;
+  }
+
+  /* ===== Form display ===== */
+  .w-sheet-form {
+    margin-bottom: var(--w-space-lg);
+  }
+
+  .w-sheet-form__dots {
+    display: flex;
+    gap: var(--w-space-sm);
+    justify-content: center;
+    margin-bottom: var(--w-space-sm);
+  }
+
+  .w-sheet-form__dot {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--w-text-label);
+    font-weight: 800;
+    color: #fff;
+  }
+
+  .w-sheet-form__dot--W {
+    background: var(--w-color-success);
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.35);
+  }
+  .w-sheet-form__dot--L {
+    background: var(--w-color-danger);
+    box-shadow: 0 0 10px rgba(248, 113, 113, 0.35);
+  }
+  .w-sheet-form__dot--D {
+    background: var(--w-color-draw);
+    box-shadow: 0 0 10px rgba(156, 163, 175, 0.25);
+  }
+
+  .w-sheet-form__streak {
+    text-align: center;
+    font-size: var(--w-text-caption);
+    color: var(--w-color-success);
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(74, 222, 128, 0.3);
+  }
+
+  .w-sheet-form__streak::before {
+    content: "\25B2 "; /* up triangle */
+    font-size: 0.6em;
+  }
+
+  /* ===== Reduced motion ===== */
+  @media (prefers-reduced-motion: reduce) {
+    dialog.w-bottom-sheet,
+    dialog.w-bottom-sheet::backdrop {
+      transition: none !important;
+      animation: none !important;
+    }
+    .w-sheet-hero__logo {
+      animation: none !important;
+    }
+    .w-sheet-progression__confidence-value {
+      animation: none !important;
+      text-shadow: 0 0 8px rgba(74, 222, 128, 0.3) !important;
+    }
+    .w-zone-card::before {
+      animation: none !important;
+      display: none;
+    }
+    .w-bottom-sheet__bg::after {
+      display: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="w-demo">
+  <p class="w-demo__title">Story 3-4 / Variante B2 : Gaming Stats Screen<br>Tap pour ouvrir le bottom sheet</p>
+
+  <button class="w-demo__trigger" id="openBtn" aria-label="Ouvrir la fiche La Rochelle">
+    <span class="w-demo__trigger-logo">SR</span>
+    <span>4e &mdash; La Rochelle &mdash; Elo 1582</span>
+  </button>
+</div>
+
+<dialog class="w-bottom-sheet" id="sheet" aria-label="Fiche equipe La Rochelle">
+  <!-- Background gradient + scanlines -->
+  <div class="w-bottom-sheet__bg" aria-hidden="true"></div>
+
+  <!-- HUD corner accents -->
+  <div class="w-hud-corner w-hud-corner--tl" aria-hidden="true"></div>
+  <div class="w-hud-corner w-hud-corner--tr" aria-hidden="true"></div>
+  <div class="w-hud-corner w-hud-corner--bl" aria-hidden="true"></div>
+  <div class="w-hud-corner w-hud-corner--br" aria-hidden="true"></div>
+
+  <div class="w-bottom-sheet__handle" aria-hidden="true"></div>
+  <button class="w-bottom-sheet__close" aria-label="Fermer" id="closeBtn">&times;</button>
+
+  <div class="w-bottom-sheet__content">
+    <!-- Hero Header -->
+    <div class="w-sheet-hero">
+      <div class="w-sheet-hero__logo" aria-hidden="true">SR</div>
+      <div class="w-sheet-hero__name">La Rochelle</div>
+      <div class="w-sheet-hero__elo">Elo <strong>1582</strong></div>
+      <div class="w-sheet-tier" aria-label="Niveau de force : Elite">
+        <span class="w-sheet-tier__label">Elite</span>
+        <div class="w-sheet-tier__bar" role="meter" aria-valuenow="79" aria-valuemin="0" aria-valuemax="100" aria-label="Puissance 79%">
+          <div class="w-sheet-tier__bar-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progression Arrow -->
+    <div class="w-sheet-progression">
+      <div class="w-sheet-progression__rank">
+        <span class="w-sheet-progression__rank-label">Actuel</span>
+        <span class="w-sheet-progression__rank-num">4<sup style="font-size:0.4em">e</sup></span>
+      </div>
+
+      <div class="w-sheet-progression__arrow">
+        <div class="w-sheet-progression__arrow-line"></div>
+        <span class="w-sheet-progression__arrow-label">&uarr; +1</span>
+      </div>
+
+      <div class="w-sheet-progression__rank">
+        <span class="w-sheet-progression__rank-label">Projete</span>
+        <span class="w-sheet-progression__rank-num w-sheet-progression__rank-num--projected">3<sup style="font-size:0.4em">e</sup></span>
+      </div>
+
+      <div class="w-sheet-progression__confidence">
+        <span class="w-sheet-progression__confidence-value">74%</span>
+        <span class="w-sheet-progression__confidence-label">Confiance</span>
+      </div>
+    </div>
+
+    <!-- Zone Probabilities (Power Cards) -->
+    <p class="w-section-title">Probabilites par zone</p>
+    <div class="w-sheet-zones">
+      <div class="w-zone-card w-zone-card--europe" aria-label="Demi-finales : 35%">
+        <div class="w-zone-card__info">
+          <span class="w-zone-card__name">Demi-finales</span>
+          <span class="w-zone-card__subtitle">Acc&#232;s direct</span>
+        </div>
+        <span class="w-zone-card__pct">35<span class="w-zone-card__pct-symbol">%</span></span>
+      </div>
+
+      <div class="w-zone-card w-zone-card--top6" aria-label="Top 6 : 40%">
+        <div class="w-zone-card__info">
+          <span class="w-zone-card__name">Top 6</span>
+          <span class="w-zone-card__subtitle">Phases finales</span>
+        </div>
+        <span class="w-zone-card__pct">40<span class="w-zone-card__pct-symbol">%</span></span>
+      </div>
+
+      <div class="w-zone-card w-zone-card--mid" aria-label="Milieu de tableau : 20%">
+        <div class="w-zone-card__info">
+          <span class="w-zone-card__name">Milieu</span>
+          <span class="w-zone-card__subtitle">Milieu de tableau</span>
+        </div>
+        <span class="w-zone-card__pct">20<span class="w-zone-card__pct-symbol">%</span></span>
+      </div>
+
+      <div class="w-zone-card w-zone-card--relegation" aria-label="Relegation : 5%">
+        <div class="w-zone-card__info">
+          <span class="w-zone-card__name">Relegation</span>
+          <span class="w-zone-card__subtitle">Zone rouge</span>
+        </div>
+        <span class="w-zone-card__pct">5<span class="w-zone-card__pct-symbol">%</span></span>
+      </div>
+    </div>
+
+    <!-- Form -->
+    <div class="w-sheet-form">
+      <p class="w-section-title">Forme recente</p>
+      <div class="w-sheet-form__dots">
+        <span class="w-sheet-form__dot w-sheet-form__dot--W" aria-label="Victoire">V</span>
+        <span class="w-sheet-form__dot w-sheet-form__dot--W" aria-label="Victoire">V</span>
+        <span class="w-sheet-form__dot w-sheet-form__dot--L" aria-label="Defaite">D</span>
+        <span class="w-sheet-form__dot w-sheet-form__dot--W" aria-label="Victoire">V</span>
+        <span class="w-sheet-form__dot w-sheet-form__dot--D" aria-label="Nul">N</span>
+      </div>
+      <div class="w-sheet-form__streak" aria-label="Tendance positive">Tendance haussiere</div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+const sheet = document.getElementById('sheet');
+const openBtn = document.getElementById('openBtn');
+const closeBtn = document.getElementById('closeBtn');
+const handle = sheet.querySelector('.w-bottom-sheet__handle');
+
+// Drag state
+let startY = 0, currentY = 0, isDragging = false;
+
+openBtn.addEventListener('click', () => {
+  sheet.showModal();
+});
+
+function closeSheet() {
+  sheet.classList.add('w-bottom-sheet--closing');
+  const fallback = setTimeout(() => {
+    sheet.classList.remove('w-bottom-sheet--closing');
+    sheet.close();
+  }, 220);
+  sheet.addEventListener('transitionend', function handler() {
+    clearTimeout(fallback);
+    sheet.removeEventListener('transitionend', handler);
+    sheet.classList.remove('w-bottom-sheet--closing');
+    sheet.close();
+  }, { once: true });
+}
+
+closeBtn.addEventListener('click', closeSheet);
+sheet.addEventListener('click', (e) => { if (e.target === sheet) closeSheet(); });
+
+handle.addEventListener('touchstart', (e) => {
+  isDragging = true;
+  startY = e.touches[0].clientY;
+  currentY = 0;
+  sheet.style.transition = 'none';
+}, { passive: false });
+
+handle.addEventListener('touchmove', (e) => {
+  if (!isDragging) return;
+  e.preventDefault();
+  const delta = e.touches[0].clientY - startY;
+  if (delta > 0) { currentY = delta; sheet.style.transform = `translateY(${delta}px)`; }
+}, { passive: false });
+
+handle.addEventListener('touchend', () => {
+  if (!isDragging) return;
+  isDragging = false;
+  sheet.style.transition = '';
+  if (currentY > 120) { closeSheet(); } else { sheet.style.transform = ''; }
+});
+
+sheet.addEventListener('cancel', (e) => { e.preventDefault(); closeSheet(); });
+</script>
+
+</body>
+</html>

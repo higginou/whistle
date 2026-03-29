@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Story 3-4 — Variante B : Visual Storytelling</title>
+<style>
+  :root {
+    --w-color-europe: #8b5cf6;
+    --w-color-top6: #22c55e;
+    --w-color-mid: #9ca3af;
+    --w-color-relegation: #ef4444;
+
+    --w-color-primary: #8b5cf6;
+    --w-color-surface: #0f0f14;
+    --w-color-surface-elevated: #1a1a24;
+    --w-color-surface-card: #22222e;
+    --w-color-text-primary: #f0f0f5;
+    --w-color-text-secondary: #9ca3af;
+    --w-color-text-muted: #6b7280;
+    --w-color-success: #22c55e;
+    --w-color-danger: #ef4444;
+    --w-color-draw: #9ca3af;
+    --w-color-muted: #4b5563;
+    --w-color-favorite: #ffd700;
+
+    --w-space-xs: 0.25rem;
+    --w-space-sm: 0.5rem;
+    --w-space-md: 1rem;
+    --w-space-lg: 1.5rem;
+    --w-space-xl: 2rem;
+
+    --w-text-hero: 2rem;
+    --w-text-h1: 1.5rem;
+    --w-text-h2: 1.25rem;
+    --w-text-body: 1rem;
+    --w-text-label: 0.875rem;
+    --w-text-caption: 0.75rem;
+
+    --w-radius-card: 12px;
+    --w-radius-sheet: 16px;
+    --w-shadow-sheet: 0 -4px 24px rgba(0, 0, 0, 0.5);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+
+  body {
+    font-family: "Nunito", system-ui, -apple-system, sans-serif;
+    font-size: var(--w-text-body);
+    color: var(--w-color-text-primary);
+    background: var(--w-color-surface);
+    min-height: 100dvh;
+  }
+
+  /* Demo */
+  .w-demo {
+    max-width: 430px;
+    margin: 0 auto;
+    padding: var(--w-space-xl) var(--w-space-md);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--w-space-lg);
+  }
+
+  .w-demo__title {
+    font-size: var(--w-text-label);
+    color: var(--w-color-text-secondary);
+    text-align: center;
+  }
+
+  .w-demo__trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--w-space-sm);
+    padding: var(--w-space-md) var(--w-space-lg);
+    background: var(--w-color-surface-elevated);
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    border-radius: var(--w-radius-card);
+    color: var(--w-color-text-primary);
+    font-size: var(--w-text-body);
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    touch-action: manipulation;
+  }
+
+  .w-demo__trigger:active { transform: scale(0.97); }
+
+  .w-demo__trigger-logo {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--w-color-favorite);
+    display: flex; align-items: center; justify-content: center;
+    font-size: var(--w-text-caption); font-weight: 800; color: #1a1a24;
+  }
+
+  /* ===== Dialog ===== */
+  dialog.w-bottom-sheet {
+    position: fixed;
+    bottom: 0; left: 0; right: 0; top: auto;
+    width: 100%; max-width: 430px;
+    margin: 0 auto;
+    border: none; padding: 0;
+    background: var(--w-color-surface-elevated);
+    border-radius: var(--w-radius-sheet) var(--w-radius-sheet) 0 0;
+    box-shadow: var(--w-shadow-sheet);
+    color: var(--w-color-text-primary);
+    overflow: hidden;
+    max-height: 90dvh;
+    transform: translateY(100%);
+    transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
+    will-change: transform;
+  }
+
+  dialog.w-bottom-sheet[open] { transform: translateY(0); }
+  dialog.w-bottom-sheet.w-bottom-sheet--closing {
+    transform: translateY(100%);
+    transition-duration: 200ms;
+    transition-timing-function: ease-in;
+  }
+
+  dialog.w-bottom-sheet::backdrop {
+    background: rgba(0, 0, 0, 0);
+    animation: w-backdrop-in 300ms ease forwards;
+  }
+  dialog.w-bottom-sheet.w-bottom-sheet--closing::backdrop {
+    animation: w-backdrop-out 200ms ease forwards;
+  }
+
+  @keyframes w-backdrop-in { from { background: rgba(0,0,0,0); } to { background: rgba(0,0,0,0.4); } }
+  @keyframes w-backdrop-out { from { background: rgba(0,0,0,0.4); } to { background: rgba(0,0,0,0); } }
+
+  /* Handle */
+  .w-bottom-sheet__handle {
+    display: flex; justify-content: center;
+    padding: var(--w-space-sm) 0;
+    cursor: grab; touch-action: none;
+  }
+  .w-bottom-sheet__handle::after {
+    content: ""; width: 40px; height: 4px;
+    border-radius: 2px; background: var(--w-color-muted);
+  }
+
+  /* Close */
+  .w-bottom-sheet__close {
+    position: absolute; top: var(--w-space-sm); right: var(--w-space-sm);
+    width: 48px; height: 48px; border: none;
+    background: transparent; color: var(--w-color-text-secondary);
+    font-size: 1.25rem; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; touch-action: manipulation;
+  }
+  .w-bottom-sheet__close:focus-visible { outline: 2px solid var(--w-color-primary); outline-offset: 2px; }
+
+  /* Content */
+  .w-bottom-sheet__content {
+    overflow-y: auto;
+    padding: 0 var(--w-space-md) var(--w-space-xl);
+    max-height: calc(90dvh - 40px);
+  }
+
+  /* ===== Hero Header ===== */
+  .w-sheet-hero {
+    text-align: center;
+    padding: var(--w-space-md) 0 var(--w-space-lg);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    margin-bottom: var(--w-space-lg);
+  }
+
+  .w-sheet-hero__logo {
+    width: 64px; height: 64px; border-radius: 50%;
+    margin: 0 auto var(--w-space-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: var(--w-text-h1); font-weight: 800;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+  }
+
+  .w-sheet-hero__name {
+    font-size: var(--w-text-h1);
+    font-weight: 800;
+    margin-bottom: var(--w-space-xs);
+  }
+
+  .w-sheet-hero__elo {
+    font-size: var(--w-text-label);
+    color: var(--w-color-text-secondary);
+  }
+
+  .w-sheet-hero__elo strong {
+    color: var(--w-color-primary);
+    font-weight: 800;
+  }
+
+  /* ===== Progression Arrow ===== */
+  .w-sheet-progression {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--w-space-lg);
+    padding: var(--w-space-lg);
+    background: var(--w-color-surface-card);
+    border-radius: var(--w-radius-card);
+    margin-bottom: var(--w-space-lg);
+  }
+
+  .w-sheet-progression__rank {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .w-sheet-progression__rank-label {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .w-sheet-progression__rank-num {
+    font-size: var(--w-text-hero);
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .w-sheet-progression__rank-suffix {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-secondary);
+  }
+
+  .w-sheet-progression__arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    color: var(--w-color-success);
+  }
+
+  .w-sheet-progression__arrow-line {
+    width: 60px;
+    height: 3px;
+    background: var(--w-color-success);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  .w-sheet-progression__arrow-line::after {
+    content: "";
+    position: absolute;
+    right: -2px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 6px solid transparent;
+    border-left-color: var(--w-color-success);
+  }
+
+  .w-sheet-progression__arrow-label {
+    font-size: var(--w-text-caption);
+    font-weight: 700;
+  }
+
+  .w-sheet-progression__confidence {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .w-sheet-progression__confidence-value {
+    font-size: var(--w-text-h2);
+    font-weight: 800;
+    color: var(--w-color-success);
+  }
+
+  .w-sheet-progression__confidence-label {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-muted);
+  }
+
+  /* ===== Zone Gauges ===== */
+  .w-sheet-gauges {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--w-space-sm);
+    margin-bottom: var(--w-space-lg);
+  }
+
+  .w-sheet-gauge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: var(--w-space-md);
+    background: var(--w-color-surface-card);
+    border-radius: var(--w-radius-card);
+    gap: var(--w-space-xs);
+  }
+
+  .w-sheet-gauge__ring {
+    width: 64px;
+    height: 64px;
+    position: relative;
+  }
+
+  .w-sheet-gauge__ring svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+
+  .w-sheet-gauge__ring-bg {
+    fill: none;
+    stroke: var(--w-color-surface-elevated);
+    stroke-width: 6;
+  }
+
+  .w-sheet-gauge__ring-fill {
+    fill: none;
+    stroke-width: 6;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.6s ease;
+  }
+
+  .w-sheet-gauge__ring-value {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--w-text-label);
+    font-weight: 800;
+  }
+
+  .w-sheet-gauge__label {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-secondary);
+    text-align: center;
+  }
+
+  /* ===== Form display ===== */
+  .w-sheet-form {
+    margin-bottom: var(--w-space-lg);
+  }
+
+  .w-sheet-form__title {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--w-space-sm);
+  }
+
+  .w-sheet-form__dots {
+    display: flex;
+    gap: var(--w-space-sm);
+    justify-content: center;
+  }
+
+  .w-sheet-form__dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--w-text-label);
+    font-weight: 800;
+    color: #fff;
+  }
+
+  .w-sheet-form__dot--W { background: var(--w-color-success); }
+  .w-sheet-form__dot--L { background: var(--w-color-danger); }
+  .w-sheet-form__dot--D { background: var(--w-color-draw); }
+
+  /* ===== Section title ===== */
+  .w-section-title {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--w-space-sm);
+  }
+
+  /* ===== Reduced motion ===== */
+  @media (prefers-reduced-motion: reduce) {
+    dialog.w-bottom-sheet,
+    dialog.w-bottom-sheet::backdrop {
+      transition: none !important;
+      animation: none !important;
+    }
+    .w-sheet-gauge__ring-fill {
+      transition: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="w-demo">
+  <p class="w-demo__title">Story 3-4 / Variante B : Visual Storytelling<br>Tap pour ouvrir le bottom sheet</p>
+
+  <button class="w-demo__trigger" id="openBtn" aria-label="Ouvrir la fiche La Rochelle">
+    <span class="w-demo__trigger-logo">SR</span>
+    <span>4e &mdash; La Rochelle &mdash; Elo 1582</span>
+  </button>
+</div>
+
+<dialog class="w-bottom-sheet" id="sheet" aria-label="Fiche La Rochelle">
+  <div class="w-bottom-sheet__handle" aria-hidden="true"></div>
+  <button class="w-bottom-sheet__close" aria-label="Fermer" id="closeBtn">&times;</button>
+
+  <div class="w-bottom-sheet__content">
+    <!-- Hero Header -->
+    <div class="w-sheet-hero">
+      <div class="w-sheet-hero__logo" style="background: #ffd700; color: #1a1a24;">SR</div>
+      <div class="w-sheet-hero__name">La Rochelle</div>
+      <div class="w-sheet-hero__elo">Elo <strong>1582</strong></div>
+    </div>
+
+    <!-- Progression Arrow -->
+    <div class="w-sheet-progression">
+      <div class="w-sheet-progression__rank">
+        <span class="w-sheet-progression__rank-label">Actuel</span>
+        <span class="w-sheet-progression__rank-num">4<sup style="font-size:0.4em">e</sup></span>
+      </div>
+
+      <div class="w-sheet-progression__arrow">
+        <div class="w-sheet-progression__arrow-line"></div>
+        <span class="w-sheet-progression__arrow-label">&uarr; +1</span>
+      </div>
+
+      <div class="w-sheet-progression__rank">
+        <span class="w-sheet-progression__rank-label">Projete</span>
+        <span class="w-sheet-progression__rank-num" style="color: var(--w-color-success);">3<sup style="font-size:0.4em">e</sup></span>
+      </div>
+
+      <div class="w-sheet-progression__confidence">
+        <span class="w-sheet-progression__confidence-value">74%</span>
+        <span class="w-sheet-progression__confidence-label">Confiance</span>
+      </div>
+    </div>
+
+    <!-- Zone Gauges -->
+    <p class="w-section-title">Probabilites par zone</p>
+    <div class="w-sheet-gauges" id="gauges">
+      <!-- Filled by JS -->
+    </div>
+
+    <!-- Form -->
+    <div class="w-sheet-form">
+      <p class="w-sheet-form__title">Forme recente</p>
+      <div class="w-sheet-form__dots">
+        <span class="w-sheet-form__dot w-sheet-form__dot--W">V</span>
+        <span class="w-sheet-form__dot w-sheet-form__dot--W">V</span>
+        <span class="w-sheet-form__dot w-sheet-form__dot--L">D</span>
+        <span class="w-sheet-form__dot w-sheet-form__dot--W">V</span>
+        <span class="w-sheet-form__dot w-sheet-form__dot--D">N</span>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+const sheet = document.getElementById('sheet');
+const openBtn = document.getElementById('openBtn');
+const closeBtn = document.getElementById('closeBtn');
+const handle = sheet.querySelector('.w-bottom-sheet__handle');
+
+// Build gauge rings
+const zones = [
+  { label: 'Demi-finales', pct: 35, color: 'var(--w-color-europe)' },
+  { label: 'Phases finales', pct: 40, color: 'var(--w-color-top6)' },
+  { label: 'Milieu', pct: 20, color: 'var(--w-color-mid)' },
+  { label: 'Relegation', pct: 5, color: 'var(--w-color-relegation)' },
+];
+
+const circumference = 2 * Math.PI * 26; // radius 26
+const gaugesEl = document.getElementById('gauges');
+
+zones.forEach(z => {
+  const offset = circumference - (z.pct / 100) * circumference;
+  const div = document.createElement('div');
+  div.className = 'w-sheet-gauge';
+  div.innerHTML = `
+    <div class="w-sheet-gauge__ring">
+      <svg viewBox="0 0 64 64">
+        <circle class="w-sheet-gauge__ring-bg" cx="32" cy="32" r="26" />
+        <circle class="w-sheet-gauge__ring-fill" cx="32" cy="32" r="26"
+          stroke="${z.color}"
+          stroke-dasharray="${circumference}"
+          stroke-dashoffset="${offset}" />
+      </svg>
+      <span class="w-sheet-gauge__ring-value">${z.pct}%</span>
+    </div>
+    <span class="w-sheet-gauge__label">${z.label}</span>
+  `;
+  gaugesEl.appendChild(div);
+});
+
+// Drag state
+let startY = 0, currentY = 0, isDragging = false;
+
+openBtn.addEventListener('click', () => {
+  sheet.showModal();
+});
+
+function closeSheet() {
+  sheet.classList.add('w-bottom-sheet--closing');
+  const fallback = setTimeout(() => {
+    sheet.classList.remove('w-bottom-sheet--closing');
+    sheet.close();
+  }, 220);
+  sheet.addEventListener('transitionend', function handler() {
+    clearTimeout(fallback);
+    sheet.removeEventListener('transitionend', handler);
+    sheet.classList.remove('w-bottom-sheet--closing');
+    sheet.close();
+  }, { once: true });
+}
+
+closeBtn.addEventListener('click', closeSheet);
+sheet.addEventListener('click', (e) => { if (e.target === sheet) closeSheet(); });
+
+handle.addEventListener('touchstart', (e) => {
+  isDragging = true;
+  startY = e.touches[0].clientY;
+  currentY = 0;
+  sheet.style.transition = 'none';
+}, { passive: false });
+
+handle.addEventListener('touchmove', (e) => {
+  if (!isDragging) return;
+  e.preventDefault();
+  const delta = e.touches[0].clientY - startY;
+  if (delta > 0) { currentY = delta; sheet.style.transform = `translateY(${delta}px)`; }
+}, { passive: false });
+
+handle.addEventListener('touchend', () => {
+  if (!isDragging) return;
+  isDragging = false;
+  sheet.style.transition = '';
+  if (currentY > 120) { closeSheet(); } else { sheet.style.transform = ''; }
+});
+
+sheet.addEventListener('cancel', (e) => { e.preventDefault(); closeSheet(); });
+</script>
+
+</body>
+</html>
