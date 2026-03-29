@@ -1,5 +1,6 @@
 import '../styles/components/score-card.css'
 import { get, on } from '../store.js'
+import { render as renderBadge } from './badge.js'
 
 const FAVORITE_TEAM = 'la-rochelle'
 const MAX_UPCOMING = 3
@@ -151,7 +152,6 @@ function buildHTML(team, season) {
   return `
     <div class="w-score-card__header">
       <h1 class="w-score-card__team-name">Stade Rochelais</h1>
-      <span class="w-score-card__badge-slot"></span>
     </div>
 
     <div class="w-score-card__grid">
@@ -232,6 +232,10 @@ export function render(container) {
   article.setAttribute('aria-label', 'Fiche La Rochelle')
   container.appendChild(article)
 
+  // Persistent badge slot — survives innerHTML re-renders
+  const badgeSlot = document.createElement('span')
+  badgeSlot.className = 'w-score-card__badge-slot'
+
   function update() {
     const season = get('season')
     if (!season) return
@@ -240,6 +244,10 @@ export function render(container) {
     if (!team) return
 
     article.innerHTML = buildHTML(team, season)
+
+    // Re-attach persistent badge slot into the header
+    const header = article.querySelector('.w-score-card__header')
+    if (header) header.appendChild(badgeSlot)
 
     // Bind XP card toggle
     const xpCard = article.querySelector('.w-mini-card--xp')
@@ -256,6 +264,7 @@ export function render(container) {
 
   // Initial render if data already present
   update()
+  renderBadge(badgeSlot)
 
   // Listen for future updates
   on('season', update)
