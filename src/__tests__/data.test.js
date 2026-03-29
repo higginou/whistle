@@ -130,6 +130,61 @@ describe('data.loadSeason', () => {
     expect(dataFreshCalls).toHaveLength(0)
   })
 
+  it('sets dataFresh on first visit (no cache)', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(SEASON_DATA),
+    })
+
+    await loadSeason('2025-2026')
+
+    expect(store.set).toHaveBeenCalledWith('dataFresh', true)
+  })
+
+  it('sets dataStale when lastUpdated is older than 7 days', async () => {
+    const oldDate = new Date(Date.now() - 8 * 24 * 60 * 60 * 1000).toISOString()
+    const staleData = { ...SEASON_DATA, lastUpdated: oldDate }
+
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(staleData),
+    })
+
+    await loadSeason('2025-2026')
+
+    expect(store.set).toHaveBeenCalledWith('dataStale', oldDate)
+  })
+
+  it('does NOT set dataStale when data is recent', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(SEASON_DATA),
+    })
+
+    await loadSeason('2025-2026')
+
+    const staleCalls = store.set.mock.calls.filter(
+      ([key]) => key === 'dataStale',
+    )
+    expect(staleCalls).toHaveLength(0)
+  })
+
+  it('sets dataStale on cache fallback with old data', async () => {
+    const oldDate = new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString()
+    const staleData = { ...SEASON_DATA, lastUpdated: oldDate }
+    localStorageMock._set(
+      'whistle-season-2025-2026',
+      JSON.stringify(staleData),
+    )
+
+    mockFetch.mockRejectedValueOnce(new Error('network error'))
+
+    await loadSeason('2025-2026')
+
+    expect(store.set).toHaveBeenCalledWith('dataStale', oldDate)
+    expect(store.set).toHaveBeenCalledWith('season', staleData)
+  })
+
   it('sets season to null when no cache and fetch fails', async () => {
     mockFetch.mockRejectedValueOnce(new Error('network error'))
 

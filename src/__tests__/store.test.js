@@ -24,6 +24,10 @@ describe('store', () => {
     it('has dataFresh = false', () => {
       expect(get('dataFresh')).toBe(false)
     })
+
+    it('has dataStale = null', () => {
+      expect(get('dataStale')).toBe(null)
+    })
   })
 
   describe('get/set', () => {
@@ -106,6 +110,17 @@ describe('store', () => {
       })
       set('dataFresh', true)
       expect(received).toEqual({ value: true, previous: false })
+      unsub()
+    })
+
+    it('dispatches data-stale event', () => {
+      let received = null
+      const unsub = on('dataStale', (event) => {
+        received = event.detail
+      })
+      const isoDate = '2026-03-20T10:00:00Z'
+      set('dataStale', isoDate)
+      expect(received).toEqual({ value: isoDate, previous: null })
       unsub()
     })
 

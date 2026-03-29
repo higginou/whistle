@@ -36,7 +36,7 @@
 # - Inter-epic work (retro action items, debt, prep) is tracked under inter_epic_tasks
 
 generated: 2026-03-28
-last_updated: 2026-03-29 (3-4 done)
+last_updated: 2026-03-29 (3-5 done)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -69,7 +69,7 @@ development_status:
   3-2-bouton-reveler-la-projection-et-moteur-danimation: done
   3-3-cards-achievement-modele: done
   3-4-bottom-sheet-fiche-detaillee-equipe: done
-  3-5-etats-vides-et-gestion-offline-gracieuse: backlog
+  3-5-etats-vides-et-gestion-offline-gracieuse: done
   epic-3-retrospective: optional
 
   # Epic 4 : PWA, Offline & Deploiement

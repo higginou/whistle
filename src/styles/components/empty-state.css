@@ -1,0 +1,60 @@
+/* === Empty State (offline, no data) === */
+.w-empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  padding: 2rem var(--w-space-md);
+  text-align: center;
+  min-height: 80dvh;
+}
+
+/* Illustration container with dashed ring */
+.w-empty-state__illustration {
+  width: 160px;
+  height: 160px;
+  position: relative;
+}
+
+.w-empty-state__illustration::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 2px dashed rgba(109, 40, 217, 0.15);
+}
+
+.w-empty-state__illustration svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Text block */
+.w-empty-state__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--w-space-sm);
+}
+
+.w-empty-state__title {
+  font-size: var(--w-text-h1);
+  font-weight: 800;
+  color: var(--w-color-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.w-empty-state__message {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--w-color-primary);
+}
+
+.w-empty-state__sub {
+  font-size: var(--w-text-label);
+  font-weight: 400;
+  color: var(--w-color-text-secondary);
+  max-width: 260px;
+  margin: 0 auto;
+}

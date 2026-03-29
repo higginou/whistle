@@ -4,6 +4,7 @@ import { set } from './store.js'
 
 const CACHE_PREFIX = 'whistle-season-'
 const LAST_VISIT_KEY = 'whistle-last-visit'
+const STALE_THRESHOLD_MS = 7 * 24 * 60 * 60 * 1000
 
 /**
  * Load season data (network-first, cache fallback).
@@ -26,10 +27,18 @@ async function loadSeason(seasonId) {
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     const data = await response.json()
 
-    // Freshness detection: compare lastUpdated with cached version
+    // Freshness detection: first visit or updated data
     const cached = readCache(cacheKey)
-    if (cached && cached.lastUpdated !== data.lastUpdated) {
+    if (!cached || cached.lastUpdated !== data.lastUpdated) {
       set('dataFresh', true)
+    }
+
+    // Staleness detection
+    if (data.lastUpdated) {
+      const age = Date.now() - new Date(data.lastUpdated).getTime()
+      if (age > STALE_THRESHOLD_MS) {
+        set('dataStale', data.lastUpdated)
+      }
     }
 
     // Store in cache
@@ -41,6 +50,13 @@ async function loadSeason(seasonId) {
     // Network failed — fallback to cache
     const cached = readCache(cacheKey)
     if (cached) {
+      // Staleness detection on cached data
+      if (cached.lastUpdated) {
+        const age = Date.now() - new Date(cached.lastUpdated).getTime()
+        if (age > STALE_THRESHOLD_MS) {
+          set('dataStale', cached.lastUpdated)
+        }
+      }
       set('season', cached)
     } else {
       set('season', null)

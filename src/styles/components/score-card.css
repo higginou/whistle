@@ -302,6 +302,32 @@
   opacity: 0.6;
 }
 
+/* === Stale Indicator === */
+.w-stale-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  margin-top: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--w-color-text-secondary);
+  background: #f3f4f6;
+  border-radius: 8px;
+}
+
+.w-stale-indicator__icon {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: #9ca3af;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex-shrink: 0;
+}
+
 /* === Reduced Motion === */
 @media (prefers-reduced-motion: reduce) {
   .w-mini-card__arrow {

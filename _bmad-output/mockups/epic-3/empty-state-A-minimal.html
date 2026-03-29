@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whistle — Empty State Variante A (Minimal Elegant)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Reset & Base (from Whistle tokens) ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      font-family: "Nunito", sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #1f2937;
+      background-color: #faf8f5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #app {
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== VARIANTE A — Minimal Elegant ===== */
+    /* Approche : Logo discret + message chaleureux, fond clair uni.
+       Le minimum vital, ton amical. Pas d'illustration complexe. */
+
+    .w-empty-state {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      padding: 2rem 1rem;
+      text-align: center;
+    }
+
+    /* Logo — cercle violet avec sifflet SVG inline */
+    .w-empty-state__logo {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #7c3aed, #5b21b6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(109, 40, 217, 0.25);
+    }
+
+    .w-empty-state__logo svg {
+      width: 40px;
+      height: 40px;
+      fill: #fff;
+    }
+
+    .w-empty-state__title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #1f2937;
+      letter-spacing: -0.01em;
+    }
+
+    .w-empty-state__message {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #6b7280;
+      max-width: 280px;
+      line-height: 1.6;
+    }
+
+    /* ===== STALE INDICATOR (sous la score card) ===== */
+    .w-stale-demo {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e5e7eb;
+      width: 100%;
+    }
+
+    .w-stale-demo__label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Simulated score card fragment */
+    .w-score-card-stub {
+      background: linear-gradient(145deg, #7c3aed 0%, #6d28d9 40%, #5b21b6 100%);
+      border-radius: 16px;
+      color: #fff;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(109, 40, 217, 0.3);
+    }
+
+    .w-score-card-stub h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .w-stale-indicator {
+      text-align: center;
+      padding: 0.5rem 0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #9ca3af;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+
+    <!-- ============================== -->
+    <!-- EMPTY STATE — Variante A       -->
+    <!-- Minimal, elegant, chaleureux   -->
+    <!-- ============================== -->
+    <div class="w-empty-state">
+      <div class="w-empty-state__logo">
+        <!-- Simple whistle icon -->
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+        </svg>
+      </div>
+
+      <h1 class="w-empty-state__title">Whistle</h1>
+
+      <p class="w-empty-state__message">
+        Les donnees arrivent lundi
+      </p>
+    </div>
+
+    <!-- ============================== -->
+    <!-- STALE INDICATOR demo           -->
+    <!-- Variante A : texte simple gris -->
+    <!-- ============================== -->
+    <div class="w-stale-demo">
+      <p class="w-stale-demo__label">Indicateur stale (sous la score card) :</p>
+      <div class="w-score-card-stub">
+        <h2>Stade Rochelais</h2>
+      </div>
+      <p class="w-stale-indicator">
+        Derniere mise a jour : lundi 17 mars
+      </p>
+    </div>
+
+  </div>
+</body>
+</html>

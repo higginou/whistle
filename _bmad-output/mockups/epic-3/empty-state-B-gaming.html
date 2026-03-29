@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Whistle — Empty State Variante B (Gaming Card)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; }
+    body {
+      font-family: "Nunito", sans-serif;
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #1f2937;
+      background-color: #faf8f5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #app {
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 0 1rem;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== VARIANTE B — Gaming Card ===== */
+    /* Approche : Une "carte" style gaming centree, fond gradient violet
+       comme la score card. Le message est dans une mini-card semi-transparente.
+       Coherent avec l'esthetique score-card existante. */
+
+    .w-empty-state {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 0;
+    }
+
+    .w-empty-state__card {
+      background: linear-gradient(145deg, #7c3aed 0%, #6d28d9 40%, #5b21b6 100%);
+      border-radius: 16px;
+      color: #fff;
+      padding: 3rem 2rem;
+      box-shadow:
+        0 4px 20px rgba(109, 40, 217, 0.3),
+        0 1px 3px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+    }
+
+    /* Decorative circles (same as score-card) */
+    .w-empty-state__card::before,
+    .w-empty-state__card::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.04);
+      pointer-events: none;
+    }
+
+    .w-empty-state__card::before {
+      width: 180px;
+      height: 180px;
+      top: -60px;
+      right: -40px;
+    }
+
+    .w-empty-state__card::after {
+      width: 120px;
+      height: 120px;
+      bottom: -30px;
+      left: -30px;
+    }
+
+    .w-empty-state__icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      z-index: 1;
+    }
+
+    .w-empty-state__icon svg {
+      width: 28px;
+      height: 28px;
+      fill: rgba(255, 255, 255, 0.9);
+    }
+
+    .w-empty-state__title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .w-empty-state__pill {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      border-radius: 10px;
+      padding: 12px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+      z-index: 1;
+    }
+
+    .w-empty-state__message {
+      font-size: 1rem;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    .w-empty-state__sub {
+      font-size: 0.75rem;
+      font-weight: 400;
+      opacity: 0.5;
+      margin-top: 4px;
+    }
+
+    /* ===== STALE INDICATOR ===== */
+    /* Variante B : petite pill sous la card, meme style glass */
+    .w-stale-demo {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e5e7eb;
+      width: 100%;
+    }
+
+    .w-stale-demo__label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .w-score-card-stub {
+      background: linear-gradient(145deg, #7c3aed 0%, #6d28d9 40%, #5b21b6 100%);
+      border-radius: 16px;
+      color: #fff;
+      padding: 1.5rem;
+      box-shadow: 0 4px 20px rgba(109, 40, 217, 0.3);
+    }
+
+    .w-score-card-stub h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .w-stale-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 0;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #9ca3af;
+    }
+
+    .w-stale-indicator__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #f59e0b;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+
+    <!-- ============================== -->
+    <!-- EMPTY STATE — Variante B       -->
+    <!-- Gaming card, violet gradient   -->
+    <!-- ============================== -->
+    <div class="w-empty-state">
+      <div class="w-empty-state__card">
+        <div class="w-empty-state__icon">
+          <!-- Rugby ball simplified icon -->
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="12" cy="12" rx="9" ry="6" transform="rotate(-45 12 12)" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            <line x1="7" y1="7" x2="17" y2="17" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="9.5" y1="11.5" x2="12.5" y2="14.5" stroke="currentColor" stroke-width="1.2"/>
+            <line x1="11.5" y1="9.5" x2="14.5" y2="12.5" stroke="currentColor" stroke-width="1.2"/>
+          </svg>
+        </div>
+
+        <h1 class="w-empty-state__title">Whistle</h1>
+
+        <div class="w-empty-state__pill">
+          <p class="w-empty-state__message">Les donnees arrivent lundi</p>
+          <p class="w-empty-state__sub">Le modele se met a jour chaque semaine</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- STALE INDICATOR demo           -->
+    <!-- Variante B : dot jaune + texte -->
+    <!-- ============================== -->
+    <div class="w-stale-demo">
+      <p class="w-stale-demo__label">Indicateur stale (sous la score card) :</p>
+      <div class="w-score-card-stub">
+        <h2>Stade Rochelais</h2>
+      </div>
+      <div class="w-stale-indicator">
+        <span class="w-stale-indicator__dot"></span>
+        Derniere mise a jour : lundi 17 mars
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

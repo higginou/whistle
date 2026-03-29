@@ -28,6 +28,6 @@ describe('app integration', () => {
     set('season', null)
     const fallback = document.querySelector('.w-empty-state')
     expect(fallback).not.toBeNull()
-    expect(fallback.textContent).toBe('Les donnees arrivent lundi')
+    expect(fallback.textContent).toContain('Les donnees arrivent lundi')
   })
 })

@@ -6,6 +6,7 @@ const EVENT_NAMES = {
   activeSheet: 'sheet-opened',
   selectedTeam: 'team-selected',
   dataFresh: 'data-fresh',
+  dataStale: 'data-stale',
 }
 
 const INITIAL_STATE = {
@@ -14,6 +15,7 @@ const INITIAL_STATE = {
   activeSheet: null,
   selectedTeam: null,
   dataFresh: false,
+  dataStale: null,
 }
 
 const state = { ...INITIAL_STATE }

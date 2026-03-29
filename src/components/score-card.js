@@ -222,10 +222,20 @@ function handleXpToggle(event) {
 }
 
 /**
- * Render the score card into the given container.
- * Listens to store 'season' key for updates.
- * @param {HTMLElement} container
+ * Format an ISO date to French readable format.
+ * @param {string} isoDate
+ * @returns {string}
  */
+function formatDateFr(isoDate) {
+  const d = new Date(isoDate)
+  if (Number.isNaN(d.getTime())) return ''
+  return new Intl.DateTimeFormat('fr-FR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  }).format(d)
+}
+
 export function render(container) {
   const article = document.createElement('article')
   article.className = 'w-score-card'
@@ -235,6 +245,12 @@ export function render(container) {
   // Persistent badge slot — survives innerHTML re-renders
   const badgeSlot = document.createElement('span')
   badgeSlot.className = 'w-score-card__badge-slot'
+
+  // Stale indicator — persistent, below the card
+  const staleEl = document.createElement('div')
+  staleEl.className = 'w-stale-indicator'
+  staleEl.hidden = true
+  container.appendChild(staleEl)
 
   function update() {
     const season = get('season')
@@ -261,6 +277,23 @@ export function render(container) {
       })
     }
   }
+
+  // Show stale indicator when data is old
+  on('dataStale', (event) => {
+    const { value } = event.detail
+    if (value) {
+      staleEl.hidden = false
+      staleEl.innerHTML = `
+        <svg class="w-stale-indicator__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        Derniere mise a jour : ${formatDateFr(value)}
+      `
+    } else {
+      staleEl.hidden = true
+    }
+  })
 
   // Initial render if data already present
   update()

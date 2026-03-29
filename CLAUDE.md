@@ -165,6 +165,7 @@ An **epic** is NOT "done" until, in addition to all stories being done:
 **Transition flow:** `ready-for-dev` → `in-progress` → `review` → `done`
 - Dev sets `in-progress` when starting work
 - Dev sets `review` when implementation is complete and tests pass
+- **Code review automatique** — quand une story passe en `review`, l'agent DOIT lancer `bmad-code-review` immediatement dans un subagent, sans demander a l'utilisateur. Ne JAMAIS proposer de lancer le review — le faire directement.
 - After review approval, SM or Dev sets `done` in BOTH the story file AND sprint-status.yaml
 - These two statuses must ALWAYS be in sync
 
@@ -259,6 +260,7 @@ Always use Context7 when I need library/API documentation, code generation, setu
 - **No explicit GO from higgin = no UI code written** — this is a hard gate, not a guideline
 - **GO = mot explicite uniquement** — l'orchestrateur ne marque `GO higgin: oui` que si higgin a écrit "GO" ou une validation explicitement non ambiguë. La première réponse de higgin ne doit JAMAIS être interprétée comme un GO sauf si elle contient le mot "GO". Toute autre réponse est traitée comme feedback nécessitant une itération.
 - **Maquettes produites par un agent délégué** — l'orchestrateur ne produit JAMAIS de maquettes lui-même (HTML/CSS/JS). Il dispatch la tâche à un agent dev ou UX designer dédié et attend le résultat. L'orchestrateur est un chef d'orchestre, pas un musicien.
+- **Skill UI/UX obligatoire** — tout agent qui produit des maquettes (HTML/CSS/JS) ou prend des décisions de design UI DOIT utiliser le skill `ui-ux-pro-max` pour guider ses choix (style, couleurs, accessibilité, touch targets, empty states, etc.). Ce n'est pas optionnel.
 - The dev produces mockups, higgin reviews, chooses direction or requests iterations
 - Minor cosmetic adjustments (color tweaks, spacing) are NOT concerned — only structural changes
 - **Verification**: any agent moving a `ui-structural: true` story to `in-progress` MUST check that `GO higgin: oui` exists in the Maquettes section. If absent, HALT and ask higgin

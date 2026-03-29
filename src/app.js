@@ -7,6 +7,7 @@ import { render as renderScoreCard } from './components/score-card.js'
 import { render as renderZoneGroups } from './components/zone-group.js'
 import { render as renderRevealButton } from './components/reveal-button.js'
 import { render as renderAchievements } from './components/achievement-card.js'
+import { render as renderEmptyState } from './components/empty-state.js'
 import {
   render as renderBottomSheet,
   open as openBottomSheet,
@@ -14,25 +15,34 @@ import {
 } from './components/bottom-sheet.js'
 
 const appEl = document.querySelector('#app')
+let layoutRendered = false
 
-// Create layout once at startup
-const layout = renderLayout()
-appEl.replaceChildren(layout)
+function renderFullLayout() {
+  if (layoutRendered) return
+  layoutRendered = true
 
-const heroSection = layout.querySelector('.w-hero-section')
-if (heroSection) renderScoreCard(heroSection)
+  const layout = renderLayout()
+  appEl.replaceChildren(layout)
 
-const revealSection = layout.querySelector('.w-reveal-section')
-if (revealSection) renderRevealButton(revealSection)
+  const heroSection = layout.querySelector('.w-hero-section')
+  if (heroSection) renderScoreCard(heroSection)
 
-const achievementsSection = layout.querySelector('.w-achievements-section')
-const standingsSection = layout.querySelector('.w-standings-section')
+  const revealSection = layout.querySelector('.w-reveal-section')
+  if (revealSection) renderRevealButton(revealSection)
 
-// Handle empty state when season fetch returns null
+  // Bottom sheet — created once on body (top-level for showModal)
+  renderBottomSheet(document.body)
+}
+
+// Handle season data or empty state
 on('season', (event) => {
   const { value } = event.detail
   if (value) {
+    renderFullLayout()
     console.log('[Whistle] Season loaded:', value.id ?? 'unknown')
+
+    const achievementsSection = appEl.querySelector('.w-achievements-section')
+    const standingsSection = appEl.querySelector('.w-standings-section')
 
     // Render achievement cards
     if (achievementsSection) renderAchievements(achievementsSection, value)
@@ -46,15 +56,9 @@ on('season', (event) => {
     }
   } else {
     console.log('[Whistle] No season data available')
-    if (standingsSection) {
-      standingsSection.innerHTML =
-        '<p class="w-empty-state">Les donnees arrivent lundi</p>'
-    }
+    renderEmptyState(appEl)
   }
 })
-
-// Bottom sheet — created once on body (top-level for showModal)
-renderBottomSheet(document.body)
 
 // Open bottom sheet when a team is selected
 on('selectedTeam', (event) => {
