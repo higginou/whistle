@@ -582,6 +582,32 @@ async function main() {
   console.log(`  Output: ${OUTPUT_PATH}`);
 }
 
+/**
+ * Stub for API-Sports fallback source.
+ * Will be implemented when API-Sports integration is ready.
+ * For now, exits with a clear error message so the pipeline
+ * fallback mechanism is exercised and tested.
+ */
+async function mainApiSports() {
+  console.error(
+    'API-Sports fallback not yet implemented. ' +
+      'Set SCRAPE_SOURCE=lnr or leave unset to use the LNR source.',
+  );
+  process.exit(1);
+}
+
+/**
+ * Entry point: dispatches to the correct source based on SCRAPE_SOURCE env var.
+ */
+export function getScrapeSources() {
+  return ['lnr', 'api-sports'];
+}
+
 if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
-  main();
+  const source = process.env.SCRAPE_SOURCE || 'lnr';
+  if (source === 'api-sports') {
+    mainApiSports();
+  } else {
+    main();
+  }
 }
