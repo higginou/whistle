@@ -1,0 +1,58 @@
+/* Confidence bar — 4px meter showing projection confidence */
+
+.w-confidence-bar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex-shrink: 0;
+  min-width: 2.5rem;
+}
+
+.w-confidence-bar__track {
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.w-confidence-bar__fill {
+  height: 100%;
+  border-radius: 2px;
+
+}
+
+.w-confidence-bar__fill--high {
+  background: var(--w-color-confidence-high);
+}
+
+.w-confidence-bar__fill--mid {
+  background: var(--w-color-confidence-mid);
+}
+
+.w-confidence-bar__fill--low {
+  background: var(--w-color-confidence-low);
+}
+
+.w-confidence-bar__label {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 9999px;
+  color: #fff;
+  white-space: nowrap;
+  font-feature-settings: "tnum";
+}
+
+.w-confidence-bar__label--high {
+  background: var(--w-color-confidence-high);
+}
+
+.w-confidence-bar__label--mid {
+  background: var(--w-color-confidence-mid);
+}
+
+.w-confidence-bar__label--low {
+  background: var(--w-color-confidence-low);
+  color: #7f1d1d;
+}

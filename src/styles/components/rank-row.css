@@ -1,0 +1,95 @@
+/* Rank row — single team line in the standings */
+
+.w-rank-row {
+  display: flex;
+  align-items: center;
+  gap: var(--w-space-sm);
+  min-height: 48px;
+  padding: var(--w-space-sm) var(--w-space-md);
+  background: var(--w-color-surface-elevated);
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+/* Favorite team (La Rochelle) */
+.w-rank-row--favorite {
+  background: color-mix(
+    in srgb,
+    var(--w-color-europe-bg) 50%,
+    var(--w-color-surface-elevated)
+  );
+  border-left: 4px solid var(--w-color-primary);
+  padding-left: calc(var(--w-space-md) - 4px);
+}
+
+.w-rank-row--favorite .w-rank-row__name {
+  color: var(--w-color-primary);
+  font-weight: 700;
+}
+
+.w-rank-row__position {
+  font-size: var(--w-text-body);
+  font-weight: 700;
+  font-feature-settings: "tnum";
+  min-width: 1.5rem;
+  text-align: center;
+  color: var(--w-color-text-secondary);
+}
+
+.w-rank-row__logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.w-rank-row__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.w-rank-row__name {
+  font-size: var(--w-text-label);
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.w-rank-row__elo {
+  font-size: var(--w-text-caption);
+  color: var(--w-color-text-secondary);
+  font-feature-settings: "tnum";
+  display: flex;
+  align-items: center;
+  gap: var(--w-space-xs);
+}
+
+.w-rank-row__delta {
+  font-size: var(--w-text-caption);
+  font-weight: 600;
+  min-width: 1.5rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.w-rank-row__delta--up {
+  color: var(--w-color-success);
+}
+
+.w-rank-row__delta--down {
+  color: var(--w-color-danger);
+}
+
+.w-rank-row__delta--stable {
+  color: var(--w-color-text-secondary);
+}

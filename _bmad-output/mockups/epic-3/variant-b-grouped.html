@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Story 3-1 — Variante B : Grouped</title>
+<style>
+  :root {
+    --w-color-europe: #6d28d9;
+    --w-color-top6: #16a34a;
+    --w-color-mid: #6b7280;
+    --w-color-relegation: #dc2626;
+
+    --w-color-europe-bg: #f3e8ff;
+    --w-color-top6-bg: #dcfce7;
+    --w-color-mid-bg: #f3f4f6;
+    --w-color-relegation-bg: #fef2f2;
+
+    --w-color-primary: #6d28d9;
+    --w-color-surface: #faf8f5;
+    --w-color-surface-elevated: #ffffff;
+    --w-color-text-primary: #1f2937;
+    --w-color-text-secondary: #6b7280;
+    --w-color-success: #16a34a;
+    --w-color-danger: #dc2626;
+
+    --w-color-confidence-high: #16a34a;
+    --w-color-confidence-mid: #f59e0b;
+    --w-color-confidence-low: #fca5a5;
+
+    --w-space-xs: 0.25rem;
+    --w-space-sm: 0.5rem;
+    --w-space-md: 1rem;
+    --w-space-lg: 1.5rem;
+    --w-space-xl: 2rem;
+
+    --w-text-h2: 1.25rem;
+    --w-text-body: 1rem;
+    --w-text-label: 0.875rem;
+    --w-text-caption: 0.75rem;
+
+    --w-radius-card: 12px;
+    --w-shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background: var(--w-color-surface);
+    color: var(--w-color-text-primary);
+    max-width: 430px;
+    margin: 0 auto;
+    padding: var(--w-space-md);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .variant-label {
+    text-align: center;
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-secondary);
+    margin-bottom: var(--w-space-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: var(--w-text-h2);
+    margin-bottom: var(--w-space-lg);
+    color: var(--w-color-text-primary);
+  }
+
+  /* Zone group — card wrapper */
+  .w-zone-group {
+    margin-bottom: var(--w-space-lg);
+    border-radius: var(--w-radius-card);
+    overflow: hidden;
+    box-shadow: var(--w-shadow-card);
+  }
+
+  .w-zone-group__header {
+    font-size: var(--w-text-label);
+    font-weight: 700;
+    padding: var(--w-space-sm) var(--w-space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--w-space-sm);
+  }
+
+  .w-zone-group__header::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .w-zone-group--europe { background: var(--w-color-europe-bg); }
+  .w-zone-group--europe .w-zone-group__header { color: var(--w-color-europe); }
+  .w-zone-group--europe .w-zone-group__header::before { background: var(--w-color-europe); }
+
+  .w-zone-group--top6 { background: var(--w-color-top6-bg); }
+  .w-zone-group--top6 .w-zone-group__header { color: var(--w-color-top6); }
+  .w-zone-group--top6 .w-zone-group__header::before { background: var(--w-color-top6); }
+
+  .w-zone-group--mid { background: var(--w-color-mid-bg); }
+  .w-zone-group--mid .w-zone-group__header { color: var(--w-color-mid); }
+  .w-zone-group--mid .w-zone-group__header::before { background: var(--w-color-mid); }
+
+  .w-zone-group--relegation { background: var(--w-color-relegation-bg); }
+  .w-zone-group--relegation .w-zone-group__header { color: var(--w-color-relegation); }
+  .w-zone-group--relegation .w-zone-group__header::before { background: var(--w-color-relegation); }
+
+  .w-zone-group__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgba(0,0,0,0.06);
+  }
+
+  /* Rank row */
+  .w-rank-row {
+    display: flex;
+    align-items: center;
+    gap: var(--w-space-sm);
+    min-height: 48px;
+    padding: var(--w-space-sm) var(--w-space-md);
+    background: var(--w-color-surface-elevated);
+    touch-action: manipulation;
+    cursor: pointer;
+  }
+
+  .w-zone-group__list li:last-child .w-rank-row,
+  .w-rank-row:last-child {
+    /* no special treatment needed, gap handles it */
+  }
+
+  /* Favorite (La Rochelle) */
+  .w-rank-row--favorite {
+    background: color-mix(in srgb, var(--w-color-europe-bg) 50%, var(--w-color-surface-elevated));
+    border-left: 4px solid var(--w-color-primary);
+    padding-left: calc(var(--w-space-md) - 4px);
+  }
+  .w-rank-row--favorite .w-rank-row__name {
+    color: var(--w-color-primary);
+    font-weight: 700;
+  }
+
+  .w-rank-row__position {
+    font-size: var(--w-text-body);
+    font-weight: 700;
+    font-feature-settings: "tnum";
+    min-width: 1.5rem;
+    text-align: center;
+    color: var(--w-color-text-secondary);
+  }
+
+  .w-rank-row__logo {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .w-rank-row__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .w-rank-row__name {
+    font-size: var(--w-text-label);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .w-rank-row__elo {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-secondary);
+    font-feature-settings: "tnum";
+    display: flex;
+    align-items: center;
+    gap: var(--w-space-xs);
+  }
+
+  /* Confidence as colored dot/badge */
+  .w-confidence-dot {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 9999px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .w-confidence-dot--high { background: var(--w-color-confidence-high); }
+  .w-confidence-dot--mid { background: var(--w-color-confidence-mid); }
+  .w-confidence-dot--low { background: var(--w-color-confidence-low); color: #7f1d1d; }
+
+  .w-rank-row__delta {
+    font-size: var(--w-text-caption);
+    font-weight: 600;
+    min-width: 1.5rem;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .w-rank-row__delta--up { color: var(--w-color-success); }
+  .w-rank-row__delta--down { color: var(--w-color-danger); }
+  .w-rank-row__delta--stable { color: var(--w-color-text-secondary); }
+</style>
+</head>
+<body>
+  <p class="variant-label">Story 3-1 — Variante B</p>
+  <h1>Classement Groupe</h1>
+  <main id="standings" aria-label="Classement TOP 14"></main>
+
+<script>
+const teams = [
+  { id: 'stade-toulousain', name: 'Stade Toulousain', elo: 1795, confidence: 0.92, trend: 'stable', color: '#c41e3a' },
+  { id: 'bordeaux-begles', name: 'Bordeaux-Begles', elo: 1748, confidence: 0.88, trend: 'up', color: '#5a2d82' },
+  { id: 'la-rochelle', name: 'La Rochelle', elo: 1720, confidence: 0.82, trend: 'up', color: '#ffd700' },
+  { id: 'toulon', name: 'Toulon', elo: 1695, confidence: 0.78, trend: 'stable', color: '#cc0000' },
+  { id: 'racing-92', name: 'Racing 92', elo: 1670, confidence: 0.71, trend: 'down', color: '#1e3a5f' },
+  { id: 'castres', name: 'Castres', elo: 1655, confidence: 0.68, trend: 'up', color: '#003da5' },
+  { id: 'clermont', name: 'Clermont', elo: 1630, confidence: 0.62, trend: 'stable', color: '#ffe100' },
+  { id: 'lyon', name: 'Lyon', elo: 1610, confidence: 0.58, trend: 'down', color: '#e30613' },
+  { id: 'pau', name: 'Pau', elo: 1575, confidence: 0.52, trend: 'stable', color: '#006a4e' },
+  { id: 'montpellier', name: 'Montpellier', elo: 1550, confidence: 0.48, trend: 'up', color: '#003da5' },
+  { id: 'stade-francais', name: 'Stade Francais', elo: 1520, confidence: 0.45, trend: 'down', color: '#ff69b4' },
+  { id: 'perpignan', name: 'Perpignan', elo: 1485, confidence: 0.40, trend: 'stable', color: '#8b0000' },
+  { id: 'bayonne', name: 'Bayonne', elo: 1430, confidence: 0.35, trend: 'down', color: '#003da5' },
+  { id: 'vannes', name: 'Vannes', elo: 1380, confidence: 0.30, trend: 'down', color: '#e30613' },
+];
+
+const zones = [
+  { key: 'europe', label: 'Champions Cup', ranks: [1, 2] },
+  { key: 'top6', label: 'Phases finales', ranks: [3, 4, 5, 6] },
+  { key: 'mid', label: 'Ventre mou', ranks: [7, 8, 9, 10, 11, 12] },
+  { key: 'relegation', label: 'Maintien', ranks: [13, 14] },
+];
+
+function getConfidenceLevel(c) {
+  if (c > 0.70) return { level: 'elevee', cls: 'high', label: 'H' };
+  if (c >= 0.40) return { level: 'moyenne', cls: 'mid', label: 'M' };
+  return { level: 'basse', cls: 'low', label: 'B' };
+}
+
+function getDeltaText(trend) {
+  if (trend === 'up') return { text: '↑', cls: 'up' };
+  if (trend === 'down') return { text: '↓', cls: 'down' };
+  return { text: '=', cls: 'stable' };
+}
+
+function getInitials(name) {
+  return name.split(/[\s-]+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+}
+
+function getTrendLabel(trend) {
+  if (trend === 'up') return 'en hausse';
+  if (trend === 'down') return 'en baisse';
+  return 'stable';
+}
+
+const main = document.getElementById('standings');
+
+zones.forEach(zone => {
+  const zoneTeams = zone.ranks.map(r => ({ ...teams[r - 1], rank: r }));
+  const section = document.createElement('section');
+  section.className = `w-zone-group w-zone-group--${zone.key}`;
+  section.setAttribute('aria-label', `Zone ${zone.label}, ${zoneTeams.length} equipe${zoneTeams.length > 1 ? 's' : ''}`);
+
+  const h2 = document.createElement('h2');
+  h2.className = 'w-zone-group__header';
+  h2.textContent = zone.label;
+  section.appendChild(h2);
+
+  const ul = document.createElement('ul');
+  ul.className = 'w-zone-group__list';
+
+  zoneTeams.forEach(team => {
+    const conf = getConfidenceLevel(team.confidence);
+    const delta = getDeltaText(team.trend);
+    const isFav = team.id === 'la-rochelle';
+    const trendLabel = getTrendLabel(team.trend);
+
+    const li = document.createElement('li');
+
+    const row = document.createElement('div');
+    row.className = `w-rank-row${isFav ? ' w-rank-row--favorite' : ''}`;
+    row.setAttribute('aria-label', `${team.rank}${team.rank === 1 ? 'er' : 'eme'}, ${team.name}, Elo ${team.elo}, ${trendLabel}, confiance ${conf.level}`);
+
+    row.innerHTML = `
+      <span class="w-rank-row__position">${team.rank}</span>
+      <span class="w-rank-row__logo" style="background:${team.color}">${getInitials(team.name)}</span>
+      <div class="w-rank-row__info">
+        <span class="w-rank-row__name">${team.name}</span>
+        <span class="w-rank-row__elo">Elo ${team.elo}
+          <span class="w-confidence-dot w-confidence-dot--${conf.cls}" role="meter" aria-valuemin="0" aria-valuemax="1" aria-valuenow="${team.confidence}" aria-label="Confiance de la projection : ${conf.level}">${Math.round(team.confidence * 100)}%</span>
+        </span>
+      </div>
+      <span class="w-rank-row__delta w-rank-row__delta--${delta.cls}">${delta.text}</span>
+    `;
+    li.appendChild(row);
+    ul.appendChild(li);
+  });
+
+  section.appendChild(ul);
+  main.appendChild(section);
+});
+</script>
+</body>
+</html>

@@ -33,9 +33,10 @@
 # - Stories can be worked in parallel if team capacity allows
 # - SM typically creates next story after previous one is 'done' to incorporate learnings
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Inter-epic work (retro action items, debt, prep) is tracked under inter_epic_tasks
 
 generated: 2026-03-28
-last_updated: 2026-03-29 (epic-2 done)
+last_updated: 2026-03-29 (3-1 done)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -60,11 +61,11 @@ development_status:
   2-3-layout-page-principale-et-structure-html-semantique: done
   2-4-score-card-hero-la-rochelle: done
   2-5-badge-nouvelle-journee: done
-  epic-2-retrospective: optional
+  epic-2-retrospective: done
 
   # Epic 3 : Classement Anime & Exploration des Equipes
-  epic-3: backlog
-  3-1-zones-de-classement-et-lignes-dequipe: backlog
+  epic-3: in-progress
+  3-1-zones-de-classement-et-lignes-dequipe: done
   3-2-bouton-reveler-la-projection-et-moteur-danimation: backlog
   3-3-cards-achievement-modele: backlog
   3-4-bottom-sheet-fiche-detaillee-equipe: backlog
@@ -91,3 +92,15 @@ development_status:
   6-1-selection-et-modification-de-resultats-de-matchs: backlog
   6-2-recalcul-instantane-et-animation-de-limpact: backlog
   epic-6-retrospective: optional
+
+# Inter-epic tasks (retro action items, debt, preparation)
+# Tracked here to avoid losing visibility on work between epics
+inter_epic_tasks:
+  # Post-retro Epic 2 (2026-03-29)
+  retro2-fonts-nunito-evaluation: done        # Variable font ~38KB latin, budget OK
+  retro2-pattern-slot-persistant: done         # Documente dans epic-2-retro
+  retro2-tracking-inter-epics: done            # Cette section ajoutee
+  retro2-template-dev-agent-record: backlog    # Homogeneiser completion notes
+  retro2-spike-motion-v12: done                 # animate from motion/mini + spring, ~3.5KB gz, vanilla JS OK
+  retro2-spike-bottom-sheet: done              # Native <dialog> showModal(), free focus trap, drag on handle
+  retro2-strategie-test-animations: done       # Unit test logic/config, mock animate(), manual visual validation

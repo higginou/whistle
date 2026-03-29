@@ -1,0 +1,86 @@
+/* Zone group — card wrapper for a classement zone */
+
+.w-zone-group {
+  margin-bottom: var(--w-space-lg);
+  border-radius: var(--w-radius-card);
+  overflow: hidden;
+  box-shadow: var(--w-shadow-card);
+}
+
+.w-zone-group__header {
+  font-size: var(--w-text-label);
+  font-weight: 700;
+  padding: var(--w-space-sm) var(--w-space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--w-space-sm);
+  margin: 0;
+}
+
+.w-zone-group__header::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Demi-finales (qualif) */
+.w-zone-group--qualif {
+  background: var(--w-color-europe-bg);
+}
+
+.w-zone-group--qualif .w-zone-group__header {
+  color: var(--w-color-europe);
+}
+
+.w-zone-group--qualif .w-zone-group__header::before {
+  background: var(--w-color-europe);
+}
+
+/* Phases finales (top6) */
+.w-zone-group--top6 {
+  background: var(--w-color-top6-bg);
+}
+
+.w-zone-group--top6 .w-zone-group__header {
+  color: var(--w-color-top6);
+}
+
+.w-zone-group--top6 .w-zone-group__header::before {
+  background: var(--w-color-top6);
+}
+
+/* Ventre mou (mid) */
+.w-zone-group--mid {
+  background: var(--w-color-mid-bg);
+}
+
+.w-zone-group--mid .w-zone-group__header {
+  color: var(--w-color-mid);
+}
+
+.w-zone-group--mid .w-zone-group__header::before {
+  background: var(--w-color-mid);
+}
+
+/* Maintien (relegation) */
+.w-zone-group--relegation {
+  background: var(--w-color-relegation-bg);
+}
+
+.w-zone-group--relegation .w-zone-group__header {
+  color: var(--w-color-relegation);
+}
+
+.w-zone-group--relegation .w-zone-group__header::before {
+  background: var(--w-color-relegation);
+}
+
+.w-zone-group__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  background: rgba(0, 0, 0, 0.06);
+}

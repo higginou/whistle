@@ -192,8 +192,8 @@ function buildHTML(team, season) {
           <span class="w-mini-card__xp-pct">${top6Pct}%</span>
         </div>
         <div class="w-mini-card__zones">
-          <span class="w-mini-card__zone"><span class="w-mini-card__zone-dot" style="background:var(--w-color-europe)"></span> Europe ${toPercent(team.zones.europe)}</span>
-          <span class="w-mini-card__zone"><span class="w-mini-card__zone-dot" style="background:var(--w-color-top6)"></span> Top 6 ${toPercent(team.zones.top6)}</span>
+          <span class="w-mini-card__zone"><span class="w-mini-card__zone-dot" style="background:var(--w-color-europe)"></span> Demi-finales ${toPercent(team.zones.europe)}</span>
+          <span class="w-mini-card__zone"><span class="w-mini-card__zone-dot" style="background:var(--w-color-top6)"></span> Phases finales ${toPercent(team.zones.top6)}</span>
           <span class="w-mini-card__zone"><span class="w-mini-card__zone-dot" style="background:var(--w-color-mid)"></span> Milieu ${toPercent(team.zones.mid)}</span>
           <span class="w-mini-card__zone"><span class="w-mini-card__zone-dot" style="background:var(--w-color-relegation)"></span> Releg. ${toPercent(team.zones.relegation)}</span>
         </div>
