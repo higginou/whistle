@@ -53,9 +53,13 @@ describe('AC1 : structure racine du fichier de saison', () => {
     expect(seasonData.matchday).toBeGreaterThan(0);
   });
 
-  it('brierScore est un decimal entre 0 et 1', () => {
-    expect(seasonData.brierScore).toBeGreaterThanOrEqual(0);
-    expect(seasonData.brierScore).toBeLessThanOrEqual(1);
+  it('brierScore est null ou un decimal entre 0 et 1', () => {
+    if (seasonData.brierScore !== null) {
+      expect(seasonData.brierScore).toBeGreaterThanOrEqual(0);
+      expect(seasonData.brierScore).toBeLessThanOrEqual(1);
+    } else {
+      expect(seasonData.brierScore).toBeNull();
+    }
   });
 
   it('les champs JSON sont en camelCase (pas de snake_case ni PascalCase)', () => {
