@@ -19,3 +19,11 @@ Thumbs.db
 
 # Logs
 *.log
+
+# AI tooling
+.claude/
+.grepai/
+
+# Pipeline intermediate output
+data/scraped.json
+data/elo-output.json
