@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  base: '/whistle/',
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
@@ -12,7 +13,7 @@ export default defineConfig({
 
         // SPA navigation fallback
         navigateFallback: 'index.html',
-        navigateFallbackDenylist: [/^\/data\//],
+        navigateFallbackDenylist: [/^\/whistle\/data\//],
 
         // Runtime caching rules
         runtimeCaching: [
@@ -69,8 +70,8 @@ export default defineConfig({
         background_color: '#0f0a1a',
         display: 'standalone',
         orientation: 'portrait',
-        scope: '/',
-        start_url: '/',
+        scope: '/whistle/',
+        start_url: '/whistle/',
         icons: [
           {
             src: 'pwa-192x192.png',

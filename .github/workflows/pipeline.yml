@@ -44,11 +44,14 @@ jobs:
         run: node scripts/generate.js
 
       # Step 7: Commit and push updated data
+      - name: Sync data to public directory
+        run: cp -f data/2025-2026.json data/seasons.json public/data/
+
       - name: Commit and push data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/2025-2026.json data/seasons.json
+          git add data/2025-2026.json data/seasons.json public/data/2025-2026.json public/data/seasons.json
           git diff --staged --quiet && echo "No changes to commit" && exit 0
           MATCHDAY=$(node -e "import('node:fs').then(fs => { const d = JSON.parse(fs.readFileSync('data/2025-2026.json', 'utf-8')); console.log(d.currentMatchday || 'unknown'); })")
           git commit -m "chore: mise a jour donnees journee $MATCHDAY"
