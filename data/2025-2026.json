@@ -1,185 +1,247 @@
 {
   "season": "2025-2026",
-  "lastUpdated": "2026-03-28T08:00:00Z",
-  "matchday": 22,
+  "lastUpdated": "2026-03-29T08:50:25Z",
+  "matchday": 20,
   "brierScore": null,
   "teams": [
     {
       "id": "toulouse",
       "name": "Stade Toulousain",
       "currentRank": 1,
-      "projectedRank": 1,
-      "elo": 1680,
-      "confidence": 0.91,
-      "zones": { "europe": 0.88, "top6": 0.11, "mid": 0.01, "relegation": 0.0 },
-      "form": ["W", "W", "W", "L", "W"],
+      "projectedRank": 4,
+      "elo": 1514,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0,
+        "top6": 1,
+        "mid": 0,
+        "relegation": 0
+      },
+      "form": [
+        "W"
+      ],
+      "trend": "stable"
+    },
+    {
+      "id": "pau",
+      "name": "Section Paloise",
+      "currentRank": 2,
+      "projectedRank": 5,
+      "elo": 1513,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0,
+        "top6": 1,
+        "mid": 0,
+        "relegation": 0
+      },
+      "form": [
+        "W"
+      ],
       "trend": "stable"
     },
     {
       "id": "bordeaux-begles",
       "name": "Union Bordeaux-Begles",
-      "currentRank": 2,
+      "currentRank": 3,
       "projectedRank": 2,
-      "elo": 1645,
-      "confidence": 0.85,
-      "zones": { "europe": 0.78, "top6": 0.20, "mid": 0.02, "relegation": 0.0 },
-      "form": ["W", "L", "W", "W", "W"],
+      "elo": 1518,
+      "confidence": 0.47,
+      "zones": {
+        "europe": 0.8794,
+        "top6": 0.1206,
+        "mid": 0,
+        "relegation": 0
+      },
+      "form": [
+        "W"
+      ],
       "trend": "stable"
     },
     {
-      "id": "la-rochelle",
-      "name": "Stade Rochelais",
-      "currentRank": 3,
-      "projectedRank": 3,
-      "elo": 1620,
-      "confidence": 0.78,
-      "zones": { "europe": 0.65, "top6": 0.30, "mid": 0.05, "relegation": 0.0 },
-      "form": ["W", "W", "L", "W", "D"],
-      "trend": "up"
-    },
-    {
-      "id": "toulon",
-      "name": "RC Toulon",
+      "id": "montpellier",
+      "name": "Montpellier Herault Rugby",
       "currentRank": 4,
-      "projectedRank": 4,
-      "elo": 1590,
-      "confidence": 0.72,
-      "zones": { "europe": 0.45, "top6": 0.42, "mid": 0.13, "relegation": 0.0 },
-      "form": ["L", "W", "W", "W", "L"],
-      "trend": "up"
+      "projectedRank": 11,
+      "elo": 1486,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0,
+        "top6": 0,
+        "mid": 1,
+        "relegation": 0
+      },
+      "form": [
+        "L"
+      ],
+      "trend": "stable"
     },
     {
-      "id": "racing-92",
-      "name": "Racing 92",
+      "id": "stade-francais",
+      "name": "Stade Francais Paris",
       "currentRank": 5,
-      "projectedRank": 5,
-      "elo": 1575,
-      "confidence": 0.68,
-      "zones": { "europe": 0.30, "top6": 0.48, "mid": 0.22, "relegation": 0.0 },
-      "form": ["W", "D", "W", "L", "W"],
+      "projectedRank": 1,
+      "elo": 1500,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0.6405,
+        "top6": 0,
+        "mid": 0,
+        "relegation": 0.3595
+      },
+      "form": [],
       "trend": "stable"
     },
     {
       "id": "clermont",
       "name": "ASM Clermont Auvergne",
       "currentRank": 6,
-      "projectedRank": 6,
-      "elo": 1555,
-      "confidence": 0.62,
-      "zones": { "europe": 0.18, "top6": 0.50, "mid": 0.32, "relegation": 0.0 },
-      "form": ["W", "L", "L", "W", "W"],
-      "trend": "down"
+      "projectedRank": 8,
+      "elo": 1500,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0.4801,
+        "top6": 0,
+        "mid": 0.5199,
+        "relegation": 0
+      },
+      "form": [],
+      "trend": "stable"
+    },
+    {
+      "id": "racing-92",
+      "name": "Racing 92",
+      "currentRank": 7,
+      "projectedRank": 9,
+      "elo": 1487,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0,
+        "top6": 0,
+        "mid": 1,
+        "relegation": 0
+      },
+      "form": [
+        "L"
+      ],
+      "trend": "stable"
     },
     {
       "id": "castres",
       "name": "Castres Olympique",
-      "currentRank": 7,
+      "currentRank": 8,
+      "projectedRank": 3,
+      "elo": 1515,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0,
+        "top6": 1,
+        "mid": 0,
+        "relegation": 0
+      },
+      "form": [
+        "W"
+      ],
+      "trend": "stable"
+    },
+    {
+      "id": "la-rochelle",
+      "name": "Stade Rochelais",
+      "currentRank": 9,
+      "projectedRank": 10,
+      "elo": 1487,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0,
+        "top6": 0,
+        "mid": 1,
+        "relegation": 0
+      },
+      "form": [
+        "L"
+      ],
+      "trend": "stable"
+    },
+    {
+      "id": "bayonne",
+      "name": "Aviron Bayonnais",
+      "currentRank": 10,
+      "projectedRank": 6,
+      "elo": 1513,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0,
+        "top6": 0.8794,
+        "mid": 0.1206,
+        "relegation": 0
+      },
+      "form": [
+        "W"
+      ],
+      "trend": "stable"
+    },
+    {
+      "id": "toulon",
+      "name": "RC Toulon",
+      "currentRank": 11,
       "projectedRank": 7,
-      "elo": 1530,
-      "confidence": 0.58,
-      "zones": { "europe": 0.08, "top6": 0.38, "mid": 0.52, "relegation": 0.02 },
-      "form": ["D", "W", "L", "L", "W"],
+      "elo": 1500,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0,
+        "top6": 0,
+        "mid": 1,
+        "relegation": 0
+      },
+      "form": [
+        "L"
+      ],
       "trend": "stable"
     },
     {
       "id": "lyon",
       "name": "LOU Rugby",
-      "currentRank": 8,
-      "projectedRank": 8,
-      "elo": 1510,
-      "confidence": 0.55,
-      "zones": { "europe": 0.05, "top6": 0.28, "mid": 0.62, "relegation": 0.05 },
-      "form": ["L", "W", "L", "W", "L"],
-      "trend": "down"
-    },
-    {
-      "id": "montpellier",
-      "name": "Montpellier Herault Rugby",
-      "currentRank": 9,
-      "projectedRank": 9,
-      "elo": 1490,
-      "confidence": 0.52,
-      "zones": { "europe": 0.03, "top6": 0.18, "mid": 0.68, "relegation": 0.11 },
-      "form": ["L", "L", "W", "D", "W"],
+      "currentRank": 12,
+      "projectedRank": 13,
+      "elo": 1482,
+      "confidence": 0.47,
+      "zones": {
+        "europe": 0,
+        "top6": 0,
+        "mid": 0.3595,
+        "relegation": 0.6405
+      },
+      "form": [
+        "L"
+      ],
       "trend": "stable"
-    },
-    {
-      "id": "pau",
-      "name": "Section Paloise",
-      "currentRank": 10,
-      "projectedRank": 10,
-      "elo": 1470,
-      "confidence": 0.48,
-      "zones": { "europe": 0.01, "top6": 0.10, "mid": 0.72, "relegation": 0.17 },
-      "form": ["W", "L", "L", "L", "W"],
-      "trend": "down"
     },
     {
       "id": "montauban",
       "name": "US Montauban",
-      "currentRank": 11,
-      "projectedRank": 11,
-      "elo": 1450,
-      "confidence": 0.45,
-      "zones": { "europe": 0.0, "top6": 0.05, "mid": 0.65, "relegation": 0.30 },
-      "form": ["L", "W", "L", "L", "D"],
-      "trend": "down"
-    },
-    {
-      "id": "bayonne",
-      "name": "Aviron Bayonnais",
-      "currentRank": 12,
-      "projectedRank": 12,
-      "elo": 1430,
-      "confidence": 0.42,
-      "zones": { "europe": 0.0, "top6": 0.03, "mid": 0.55, "relegation": 0.42 },
-      "form": ["L", "L", "W", "L", "L"],
-      "trend": "down"
-    },
-    {
-      "id": "stade-francais",
-      "name": "Stade Francais Paris",
       "currentRank": 13,
-      "projectedRank": 13,
-      "elo": 1410,
-      "confidence": 0.38,
-      "zones": { "europe": 0.0, "top6": 0.01, "mid": 0.42, "relegation": 0.57 },
-      "form": ["L", "L", "L", "W", "L"],
-      "trend": "down"
-    },
-    {
-      "id": "vannes",
-      "name": "Rugby Club Vannetais",
-      "currentRank": 14,
-      "projectedRank": 14,
-      "elo": 1380,
-      "confidence": 0.35,
-      "zones": { "europe": 0.0, "top6": 0.0, "mid": 0.28, "relegation": 0.72 },
-      "form": ["L", "L", "L", "L", "W"],
-      "trend": "down"
+      "projectedRank": 12,
+      "elo": 1485,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0,
+        "top6": 0,
+        "mid": 1,
+        "relegation": 0
+      },
+      "form": [
+        "L"
+      ],
+      "trend": "stable"
     }
   ],
   "calendar": [
     {
-      "matchday": 23,
-      "date": "2026-04-04T15:00:00Z",
-      "home": "la-rochelle",
-      "away": "toulouse",
-      "difficulty": 0.85
-    },
-    {
-      "matchday": 23,
-      "date": "2026-04-04T17:00:00Z",
-      "home": "bordeaux-begles",
-      "away": "toulon",
-      "difficulty": 0.72
-    },
-    {
-      "matchday": 23,
-      "date": "2026-04-04T21:05:00Z",
-      "home": "racing-92",
+      "matchday": 20,
+      "date": "",
+      "home": "stade-francais",
       "away": "clermont",
-      "difficulty": 0.60
+      "difficulty": 0.41
     }
   ],
   "predictions": [
@@ -187,20 +249,147 @@
       "matchday": 22,
       "date": "2026-03-28T08:00:00Z",
       "projections": [
-        { "teamId": "toulouse", "projectedRank": 1, "confidence": 0.91 },
-        { "teamId": "bordeaux-begles", "projectedRank": 2, "confidence": 0.85 },
-        { "teamId": "la-rochelle", "projectedRank": 3, "confidence": 0.78 },
-        { "teamId": "toulon", "projectedRank": 4, "confidence": 0.72 },
-        { "teamId": "racing-92", "projectedRank": 5, "confidence": 0.68 },
-        { "teamId": "clermont", "projectedRank": 6, "confidence": 0.62 },
-        { "teamId": "castres", "projectedRank": 7, "confidence": 0.58 },
-        { "teamId": "lyon", "projectedRank": 8, "confidence": 0.55 },
-        { "teamId": "montpellier", "projectedRank": 9, "confidence": 0.52 },
-        { "teamId": "pau", "projectedRank": 10, "confidence": 0.48 },
-        { "teamId": "montauban", "projectedRank": 11, "confidence": 0.45 },
-        { "teamId": "bayonne", "projectedRank": 12, "confidence": 0.42 },
-        { "teamId": "stade-francais", "projectedRank": 13, "confidence": 0.38 },
-        { "teamId": "vannes", "projectedRank": 14, "confidence": 0.35 }
+        {
+          "teamId": "toulouse",
+          "projectedRank": 1,
+          "confidence": 0.91
+        },
+        {
+          "teamId": "bordeaux-begles",
+          "projectedRank": 2,
+          "confidence": 0.85
+        },
+        {
+          "teamId": "la-rochelle",
+          "projectedRank": 3,
+          "confidence": 0.78
+        },
+        {
+          "teamId": "toulon",
+          "projectedRank": 4,
+          "confidence": 0.72
+        },
+        {
+          "teamId": "racing-92",
+          "projectedRank": 5,
+          "confidence": 0.68
+        },
+        {
+          "teamId": "clermont",
+          "projectedRank": 6,
+          "confidence": 0.62
+        },
+        {
+          "teamId": "castres",
+          "projectedRank": 7,
+          "confidence": 0.58
+        },
+        {
+          "teamId": "lyon",
+          "projectedRank": 8,
+          "confidence": 0.55
+        },
+        {
+          "teamId": "montpellier",
+          "projectedRank": 9,
+          "confidence": 0.52
+        },
+        {
+          "teamId": "pau",
+          "projectedRank": 10,
+          "confidence": 0.48
+        },
+        {
+          "teamId": "montauban",
+          "projectedRank": 11,
+          "confidence": 0.45
+        },
+        {
+          "teamId": "bayonne",
+          "projectedRank": 12,
+          "confidence": 0.42
+        },
+        {
+          "teamId": "stade-francais",
+          "projectedRank": 13,
+          "confidence": 0.38
+        },
+        {
+          "teamId": "vannes",
+          "projectedRank": 14,
+          "confidence": 0.35
+        }
+      ]
+    },
+    {
+      "matchday": 20,
+      "date": "2026-03-29T08:50:25Z",
+      "projections": [
+        {
+          "teamId": "toulouse",
+          "projectedRank": 4,
+          "confidence": 0.46
+        },
+        {
+          "teamId": "pau",
+          "projectedRank": 5,
+          "confidence": 0.46
+        },
+        {
+          "teamId": "bordeaux-begles",
+          "projectedRank": 2,
+          "confidence": 0.47
+        },
+        {
+          "teamId": "montpellier",
+          "projectedRank": 11,
+          "confidence": 0.46
+        },
+        {
+          "teamId": "stade-francais",
+          "projectedRank": 1,
+          "confidence": 0.46
+        },
+        {
+          "teamId": "clermont",
+          "projectedRank": 8,
+          "confidence": 0.46
+        },
+        {
+          "teamId": "racing-92",
+          "projectedRank": 9,
+          "confidence": 0.46
+        },
+        {
+          "teamId": "castres",
+          "projectedRank": 3,
+          "confidence": 0.46
+        },
+        {
+          "teamId": "la-rochelle",
+          "projectedRank": 10,
+          "confidence": 0.46
+        },
+        {
+          "teamId": "bayonne",
+          "projectedRank": 6,
+          "confidence": 0.46
+        },
+        {
+          "teamId": "toulon",
+          "projectedRank": 7,
+          "confidence": 0.46
+        },
+        {
+          "teamId": "lyon",
+          "projectedRank": 13,
+          "confidence": 0.47
+        },
+        {
+          "teamId": "montauban",
+          "projectedRank": 12,
+          "confidence": 0.46
+        }
       ]
     }
   ]
