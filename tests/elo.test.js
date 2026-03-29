@@ -26,7 +26,7 @@ function makeStandings(count = 14) {
   const ids = [
     'toulouse', 'bordeaux-begles', 'la-rochelle', 'toulon',
     'racing-92', 'clermont', 'castres', 'lyon',
-    'montpellier', 'pau', 'perpignan', 'bayonne',
+    'montpellier', 'pau', 'montauban', 'bayonne',
     'stade-francais', 'vannes',
   ];
   return ids.slice(0, count).map((id, i) => ({

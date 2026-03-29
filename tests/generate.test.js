@@ -5,6 +5,7 @@ import {
   buildTeamEntry,
   buildPredictionEntry,
   mergePredictions,
+  mergeCalendarDates,
   buildSeasonData,
   ensureSeasonInIndex,
   loadExistingSeason,
@@ -45,7 +46,7 @@ function makeEloOutput(overrides = {}) {
       makeEloTeam({ id: 'lyon', currentRank: 8, projectedRank: 13, elo: 1482 }),
       makeEloTeam({ id: 'montpellier', currentRank: 9, projectedRank: 11, elo: 1486 }),
       makeEloTeam({ id: 'pau', currentRank: 10, projectedRank: 5, elo: 1513 }),
-      makeEloTeam({ id: 'perpignan', currentRank: 11, projectedRank: 14, elo: 1450 }),
+      makeEloTeam({ id: 'montauban', currentRank: 11, projectedRank: 14, elo: 1450 }),
       makeEloTeam({ id: 'bayonne', currentRank: 12, projectedRank: 6, elo: 1513 }),
       makeEloTeam({ id: 'stade-francais', currentRank: 13, projectedRank: 1, elo: 1500 }),
       makeEloTeam({ id: 'vannes', currentRank: 14, projectedRank: 12, elo: 1470 }),
@@ -213,7 +214,7 @@ describe('T5.4 : mapping id -> name', () => {
     const knownIds = [
       'toulouse', 'bordeaux-begles', 'la-rochelle', 'toulon',
       'racing-92', 'clermont', 'castres', 'lyon',
-      'montpellier', 'pau', 'perpignan', 'bayonne',
+      'montpellier', 'pau', 'montauban', 'bayonne',
       'stade-francais', 'vannes',
     ];
 
@@ -226,7 +227,7 @@ describe('T5.4 : mapping id -> name', () => {
   });
 
   it('getTeamName retourne l ID si l equipe n est pas dans le mapping', () => {
-    expect(getTeamName('montauban')).toBe('montauban');
+    expect(getTeamName('perpignan')).toBe('perpignan');
   });
 
   it('buildTeamEntry ajoute le name depuis TEAM_NAMES', () => {
@@ -438,11 +439,54 @@ describe('gestion des equipes manquantes', () => {
 
   it('gere les equipes hors mapping (fallback sur l ID)', () => {
     const eloOutput = makeEloOutput({
-      teams: [makeEloTeam({ id: 'montauban', currentRank: 1 })],
+      teams: [makeEloTeam({ id: 'perpignan', currentRank: 1 })],
     });
 
     const seasonData = buildSeasonData(eloOutput, []);
 
-    expect(seasonData.teams[0].name).toBe('montauban');
+    expect(seasonData.teams[0].name).toBe('perpignan');
+  });
+});
+
+// ─── mergeCalendarDates ───────────────────────────────────────────────────
+
+describe('T5.6 : mergeCalendarDates — preservation des dates', () => {
+  it('preserve les dates existantes quand les nouvelles sont vides', () => {
+    const newCal = [
+      { matchday: 23, date: '', home: 'la-rochelle', away: 'toulouse', difficulty: 0.85 },
+    ];
+    const existingCal = [
+      { matchday: 23, date: '2026-04-04T15:00:00Z', home: 'la-rochelle', away: 'toulouse', difficulty: 0.85 },
+    ];
+
+    const merged = mergeCalendarDates(newCal, existingCal);
+    expect(merged[0].date).toBe('2026-04-04T15:00:00Z');
+  });
+
+  it('garde la nouvelle date si elle est non-vide', () => {
+    const newCal = [
+      { matchday: 23, date: '2026-04-05T15:00:00Z', home: 'la-rochelle', away: 'toulouse', difficulty: 0.85 },
+    ];
+    const existingCal = [
+      { matchday: 23, date: '2026-04-04T15:00:00Z', home: 'la-rochelle', away: 'toulouse', difficulty: 0.85 },
+    ];
+
+    const merged = mergeCalendarDates(newCal, existingCal);
+    expect(merged[0].date).toBe('2026-04-05T15:00:00Z');
+  });
+
+  it('retourne le nouveau calendrier tel quel si pas d existant', () => {
+    const newCal = [
+      { matchday: 23, date: '', home: 'la-rochelle', away: 'toulouse', difficulty: 0.85 },
+    ];
+
+    const merged = mergeCalendarDates(newCal, []);
+    expect(merged[0].date).toBe('');
+  });
+
+  it('retourne le nouveau calendrier tel quel si existant est vide', () => {
+    const newCal = [{ matchday: 23, date: '', home: 'toulon', away: 'pau', difficulty: 0.5 }];
+    const merged = mergeCalendarDates(newCal, undefined);
+    expect(merged).toEqual(newCal);
   });
 });

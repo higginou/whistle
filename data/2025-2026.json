@@ -2,7 +2,7 @@
   "season": "2025-2026",
   "lastUpdated": "2026-03-28T08:00:00Z",
   "matchday": 22,
-  "brierScore": 0.21,
+  "brierScore": null,
   "teams": [
     {
       "id": "toulouse",
@@ -115,8 +115,8 @@
       "trend": "down"
     },
     {
-      "id": "perpignan",
-      "name": "USA Perpignan",
+      "id": "montauban",
+      "name": "US Montauban",
       "currentRank": 11,
       "projectedRank": 11,
       "elo": 1450,
@@ -197,7 +197,7 @@
         { "teamId": "lyon", "projectedRank": 8, "confidence": 0.55 },
         { "teamId": "montpellier", "projectedRank": 9, "confidence": 0.52 },
         { "teamId": "pau", "projectedRank": 10, "confidence": 0.48 },
-        { "teamId": "perpignan", "projectedRank": 11, "confidence": 0.45 },
+        { "teamId": "montauban", "projectedRank": 11, "confidence": 0.45 },
         { "teamId": "bayonne", "projectedRank": 12, "confidence": 0.42 },
         { "teamId": "stade-francais", "projectedRank": 13, "confidence": 0.38 },
         { "teamId": "vannes", "projectedRank": 14, "confidence": 0.35 }

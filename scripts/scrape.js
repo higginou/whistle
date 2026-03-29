@@ -194,11 +194,40 @@ function parseMatchCards($, matchday, results, calendar) {
     const scoreMatch = containerText.match(/(\d{1,3})\s*[-–]\s*(\d{1,3})/);
 
     // Extract date from container or page context
+    // Strategy 1: semantic date elements in the match container
     const dateEl = container
       .find('time, [datetime], [class*="date"]')
       .first();
-    let matchDate =
-      dateEl.attr('datetime') || parseFrenchDate(containerText) || '';
+    let matchDate = dateEl.attr('datetime') || '';
+
+    // Strategy 2: data- attributes on the container or its parents
+    if (!matchDate) {
+      const dataDate = container.attr('data-date')
+        || container.closest('[data-date]').attr('data-date')
+        || container.attr('data-datetime')
+        || container.closest('[data-datetime]').attr('data-datetime')
+        || '';
+      if (dataDate) matchDate = dataDate;
+    }
+
+    // Strategy 3: parse French date text from the container
+    if (!matchDate) {
+      matchDate = parseFrenchDate(containerText) || '';
+    }
+
+    // Strategy 4: look for date in the nearest preceding sibling or parent heading
+    if (!matchDate) {
+      const parent = container.parent();
+      const prevSiblings = container.prevAll().toArray();
+      for (const sib of prevSiblings) {
+        const parsed = parseFrenchDate($(sib).text());
+        if (parsed) { matchDate = parsed; break; }
+      }
+      if (!matchDate) {
+        const parentText = parent.closest('[class*="day"], [class*="round"], [class*="journee"]').text();
+        if (parentText) matchDate = parseFrenchDate(parentText) || '';
+      }
+    }
 
     if (scoreMatch) {
       const homeScore = parseInt(scoreMatch[1], 10);

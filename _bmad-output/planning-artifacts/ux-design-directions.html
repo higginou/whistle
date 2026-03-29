@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whistle — Design Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --violet-100: #f3e8ff;
+    --violet-200: #ddd6fe;
+    --violet-400: #a78bfa;
+    --violet-500: #8b5cf6;
+    --violet-600: #7c3aed;
+    --violet-700: #6d28d9;
+    --violet-800: #5b21b6;
+    --green-100: #dcfce7;
+    --green-400: #4ade80;
+    --green-500: #22c55e;
+    --green-600: #16a34a;
+    --grey-100: #f3f4f6;
+    --grey-200: #e5e7eb;
+    --grey-400: #9ca3af;
+    --grey-500: #6b7280;
+    --grey-700: #374151;
+    --grey-800: #1f2937;
+    --red-100: #fee2e2;
+    --red-400: #f87171;
+    --red-500: #ef4444;
+    --red-600: #dc2626;
+    --orange-400: #fb923c;
+    --surface: #faf8f5;
+    --surface-elevated: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: #1a1a2e;
+    color: var(--grey-800);
+    min-height: 100vh;
+  }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(26,26,46,0.95);
+    backdrop-filter: blur(12px);
+    padding: 16px 24px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    justify-content: center;
+    border-bottom: 2px solid var(--violet-600);
+  }
+  .nav h1 { width: 100%; text-align: center; color: var(--violet-400); font-size: 14px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .nav button {
+    background: transparent; border: 1px solid var(--violet-600); color: var(--violet-400);
+    padding: 8px 16px; border-radius: 20px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600;
+    transition: all 0.2s;
+  }
+  .nav button:hover, .nav button.active { background: var(--violet-600); color: white; }
+
+  /* ===== MOCKUP FRAME ===== */
+  .showcase { display: flex; justify-content: center; padding: 32px 16px; min-height: calc(100vh - 100px); }
+  .phone-frame {
+    width: 390px; height: 780px;
+    border-radius: 40px;
+    border: 3px solid #333;
+    overflow: hidden;
+    box-shadow: 0 25px 80px rgba(139,92,246,0.3), 0 0 0 1px rgba(255,255,255,0.1);
+    position: relative;
+    background: var(--surface);
+  }
+  .phone-frame::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 120px; height: 28px; background: #1a1a2e; border-radius: 0 0 16px 16px; z-index: 10;
+  }
+  .screen { width: 100%; height: 100%; overflow-y: auto; position: relative; }
+  .mockup { display: none; height: 100%; }
+  .mockup.active { display: block; }
+
+  /* ===== DIRECTION 1 : Card Hero ===== */
+  .d1 { background: var(--surface); padding: 40px 16px 16px; }
+  .d1 .hero-card {
+    background: linear-gradient(135deg, var(--violet-600), var(--violet-800));
+    border-radius: 16px; padding: 24px; color: white; margin-bottom: 16px;
+    box-shadow: 0 8px 32px rgba(124,58,237,0.3);
+  }
+  .d1 .hero-card .team-name { font-size: 14px; font-weight: 600; opacity: 0.8; letter-spacing: 1px; text-transform: uppercase; }
+  .d1 .hero-card .position-row { display: flex; align-items: baseline; gap: 12px; margin: 8px 0; }
+  .d1 .hero-card .position-current { font-size: 48px; font-weight: 800; }
+  .d1 .hero-card .position-arrow { font-size: 20px; color: var(--green-400); }
+  .d1 .hero-card .position-projected { font-size: 28px; font-weight: 700; opacity: 0.9; }
+  .d1 .hero-card .probabilities { display: flex; gap: 8px; margin-top: 12px; }
+  .d1 .hero-card .prob-badge { background: rgba(255,255,255,0.2); border-radius: 8px; padding: 6px 10px; font-size: 12px; font-weight: 600; }
+  .d1 .hero-card .prob-badge.highlight { background: rgba(74,222,128,0.3); }
+  .d1 .hero-card .explanation { font-size: 13px; margin-top: 12px; opacity: 0.85; line-height: 1.5; }
+  .d1 .project-btn {
+    width: 100%; padding: 14px; background: var(--violet-600); color: white; border: none;
+    border-radius: 12px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer;
+    margin-bottom: 16px; transition: transform 0.15s; box-shadow: 0 4px 16px rgba(124,58,237,0.3);
+  }
+  .d1 .project-btn:active { transform: scale(0.97); }
+  .d1 .ranking { display: flex; flex-direction: column; gap: 6px; }
+  .d1 .rank-row {
+    display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+    background: var(--surface-elevated); border-radius: 12px; min-height: 48px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06); transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .d1 .rank-row.zone-europe { border-left: 3px solid var(--violet-500); }
+  .d1 .rank-row.zone-top6 { border-left: 3px solid var(--green-500); }
+  .d1 .rank-row.zone-mid { border-left: 3px solid var(--grey-400); }
+  .d1 .rank-row.zone-relegation { border-left: 3px solid var(--red-500); }
+  .d1 .rank-pos { font-size: 18px; font-weight: 800; width: 28px; text-align: center; color: var(--grey-700); }
+  .d1 .rank-logo { width: 28px; height: 28px; border-radius: 50%; background: var(--grey-200); }
+  .d1 .rank-name { flex: 1; font-size: 14px; font-weight: 600; }
+  .d1 .rank-name.favorite { color: var(--violet-600); }
+  .d1 .rank-delta { font-size: 13px; font-weight: 700; }
+  .d1 .rank-delta.up { color: var(--green-600); }
+  .d1 .rank-delta.down { color: var(--red-500); }
+  .d1 .rank-delta.same { color: var(--grey-400); }
+  .d1 .rank-conf { width: 32px; height: 4px; border-radius: 2px; background: var(--grey-200); overflow: hidden; }
+  .d1 .rank-conf .fill { height: 100%; border-radius: 2px; }
+
+  /* ===== DIRECTION 2 : Full-Width Zones ===== */
+  .d2 { background: var(--surface); padding: 40px 0 0; }
+  .d2 .header { padding: 0 16px 16px; }
+  .d2 .header .greeting { font-size: 13px; color: var(--grey-500); font-weight: 600; }
+  .d2 .header .team-line { display: flex; align-items: baseline; gap: 8px; margin-top: 4px; }
+  .d2 .header .team-line h2 { font-size: 22px; font-weight: 800; color: var(--violet-700); }
+  .d2 .header .badge-new { background: var(--violet-100); color: var(--violet-600); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 10px; }
+  .d2 .stats-row { display: flex; gap: 8px; padding: 0 16px 16px; }
+  .d2 .stat-card { flex: 1; background: var(--surface-elevated); border-radius: 12px; padding: 12px; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .d2 .stat-card .stat-value { font-size: 24px; font-weight: 800; }
+  .d2 .stat-card .stat-value.violet { color: var(--violet-600); }
+  .d2 .stat-card .stat-value.green { color: var(--green-600); }
+  .d2 .stat-card .stat-label { font-size: 11px; color: var(--grey-500); font-weight: 600; margin-top: 2px; }
+  .d2 .zone-section { padding: 2px 0; }
+  .d2 .zone-header { padding: 6px 16px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .d2 .zone-header.europe { background: var(--violet-100); color: var(--violet-700); }
+  .d2 .zone-header.top6 { background: var(--green-100); color: var(--green-600); }
+  .d2 .zone-header.mid { background: var(--grey-100); color: var(--grey-500); }
+  .d2 .zone-header.relegation { background: var(--red-100); color: var(--red-600); }
+  .d2 .zone-teams { background: var(--surface-elevated); }
+  .d2 .team-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--grey-100); }
+  .d2 .team-row:last-child { border-bottom: none; }
+  .d2 .team-row .pos { font-size: 16px; font-weight: 800; width: 24px; color: var(--grey-500); }
+  .d2 .team-row .logo { width: 32px; height: 32px; border-radius: 50%; background: var(--grey-200); }
+  .d2 .team-row .info { flex: 1; }
+  .d2 .team-row .info .name { font-size: 14px; font-weight: 700; }
+  .d2 .team-row .info .name.fav { color: var(--violet-600); }
+  .d2 .team-row .info .meta { font-size: 11px; color: var(--grey-500); }
+  .d2 .team-row .delta { font-size: 14px; font-weight: 800; }
+  .d2 .fab {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--violet-600); color: white; border: none; padding: 14px 32px;
+    border-radius: 28px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 8px 24px rgba(124,58,237,0.4); z-index: 5;
+  }
+
+  /* ===== DIRECTION 3 : Minimal/Typographic ===== */
+  .d3 { background: #fefefe; padding: 48px 20px 20px; font-family: 'Quicksand', sans-serif; }
+  .d3 .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+  .d3 .top-bar .logo { font-size: 18px; font-weight: 700; color: var(--violet-600); letter-spacing: 1px; }
+  .d3 .top-bar .journee { font-size: 12px; color: var(--grey-500); font-weight: 600; }
+  .d3 .big-number { text-align: center; margin-bottom: 24px; }
+  .d3 .big-number .pos { font-size: 72px; font-weight: 700; color: var(--violet-700); line-height: 1; }
+  .d3 .big-number .label { font-size: 14px; color: var(--grey-500); font-weight: 600; margin-top: 4px; }
+  .d3 .big-number .projected { font-size: 14px; color: var(--green-600); font-weight: 700; margin-top: 8px; }
+  .d3 .prob-row { display: flex; justify-content: center; gap: 16px; margin-bottom: 32px; }
+  .d3 .prob-item { text-align: center; }
+  .d3 .prob-item .value { font-size: 20px; font-weight: 700; }
+  .d3 .prob-item .label { font-size: 10px; color: var(--grey-500); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .d3 .divider { height: 1px; background: var(--grey-200); margin: 0 -20px 16px; }
+  .d3 .mini-ranking { display: flex; flex-direction: column; gap: 4px; }
+  .d3 .mini-row { display: flex; align-items: center; gap: 8px; padding: 8px 0; }
+  .d3 .mini-row .rank { font-size: 13px; font-weight: 700; width: 20px; color: var(--grey-400); }
+  .d3 .mini-row .bar { flex: 1; height: 28px; border-radius: 6px; display: flex; align-items: center; padding: 0 10px; font-size: 12px; font-weight: 600; color: white; }
+  .d3 .mini-row .bar.europe { background: var(--violet-500); }
+  .d3 .mini-row .bar.top6 { background: var(--green-500); }
+  .d3 .mini-row .bar.mid { background: var(--grey-400); }
+  .d3 .mini-row .bar.relegation { background: var(--red-400); }
+  .d3 .mini-row .bar.fav { box-shadow: 0 0 0 2px var(--violet-600), 0 0 12px rgba(139,92,246,0.3); }
+  .d3 .cta-area { text-align: center; margin-top: 24px; }
+  .d3 .cta-area button {
+    background: none; border: 2px solid var(--violet-600); color: var(--violet-600);
+    padding: 12px 40px; border-radius: 28px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer;
+  }
+
+  /* ===== DIRECTION 4 : Race Track ===== */
+  .d4 { background: var(--surface); padding: 40px 16px 16px; }
+  .d4 .d4-header { margin-bottom: 16px; }
+  .d4 .d4-header h2 { font-size: 18px; font-weight: 800; color: var(--grey-800); }
+  .d4 .d4-header .sub { font-size: 13px; color: var(--grey-500); }
+  .d4 .fav-strip {
+    background: linear-gradient(90deg, var(--violet-600), var(--violet-500));
+    border-radius: 12px; padding: 16px; color: white; margin-bottom: 16px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .d4 .fav-strip .left .name { font-size: 16px; font-weight: 700; }
+  .d4 .fav-strip .left .trend { font-size: 12px; opacity: 0.8; }
+  .d4 .fav-strip .right { text-align: right; }
+  .d4 .fav-strip .right .big { font-size: 32px; font-weight: 800; }
+  .d4 .fav-strip .right .small { font-size: 12px; opacity: 0.8; }
+  .d4 .track { position: relative; margin: 16px 0; }
+  .d4 .track .zone-bg {
+    position: absolute; left: 0; right: 0; border-radius: 8px; opacity: 0.15;
+  }
+  .d4 .track-row {
+    display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+    position: relative; z-index: 1; min-height: 44px;
+  }
+  .d4 .track-row .pos { font-size: 14px; font-weight: 800; width: 22px; color: var(--grey-500); }
+  .d4 .track-row .dot { width: 24px; height: 24px; border-radius: 50%; background: var(--grey-300); flex-shrink: 0; }
+  .d4 .track-row .dot.fav { background: var(--violet-500); box-shadow: 0 0 8px rgba(139,92,246,0.4); }
+  .d4 .track-row .name { font-size: 13px; font-weight: 600; flex: 1; }
+  .d4 .track-row .progress-bar { width: 80px; height: 6px; background: var(--grey-200); border-radius: 3px; overflow: hidden; }
+  .d4 .track-row .progress-bar .fill { height: 100%; border-radius: 3px; }
+  .d4 .track-row .delta-chip { font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 6px; }
+  .d4 .track-row .delta-chip.up { background: var(--green-100); color: var(--green-600); }
+  .d4 .track-row .delta-chip.down { background: var(--red-100); color: var(--red-600); }
+  .d4 .track-row .delta-chip.same { background: var(--grey-100); color: var(--grey-500); }
+  .d4 .bottom-cta {
+    position: absolute; bottom: 20px; left: 16px; right: 16px;
+    background: var(--violet-600); color: white; border: none; padding: 14px;
+    border-radius: 14px; font-family: inherit; font-size: 15px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 6px 20px rgba(124,58,237,0.35);
+  }
+
+  /* ===== DIRECTION 5 : Game UI ===== */
+  .d5 { background: linear-gradient(180deg, #f8f5ff 0%, var(--surface) 30%); padding: 40px 16px 16px; }
+  .d5 .game-header { text-align: center; margin-bottom: 16px; }
+  .d5 .game-header .whistle-logo { font-size: 22px; font-weight: 800; color: var(--violet-600); letter-spacing: 2px; }
+  .d5 .game-header .season { font-size: 12px; color: var(--grey-500); font-weight: 600; }
+  .d5 .score-card {
+    background: var(--surface-elevated); border-radius: 16px; padding: 20px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06); margin-bottom: 12px; text-align: center;
+    border: 2px solid var(--violet-100);
+  }
+  .d5 .score-card .team { font-size: 13px; font-weight: 700; color: var(--violet-600); text-transform: uppercase; letter-spacing: 1px; }
+  .d5 .score-card .positions { display: flex; justify-content: center; align-items: center; gap: 16px; margin: 12px 0; }
+  .d5 .score-card .positions .current { font-size: 40px; font-weight: 800; color: var(--grey-700); }
+  .d5 .score-card .positions .arrow-anim { font-size: 24px; color: var(--green-500); animation: bounce 1.5s infinite; }
+  .d5 .score-card .positions .projected { font-size: 40px; font-weight: 800; color: var(--violet-600); }
+  @keyframes bounce { 0%,100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+  .d5 .score-card .xp-bar { height: 8px; background: var(--grey-200); border-radius: 4px; overflow: hidden; margin: 12px 0 8px; }
+  .d5 .score-card .xp-bar .fill { height: 100%; background: linear-gradient(90deg, var(--violet-500), var(--violet-400)); border-radius: 4px; }
+  .d5 .score-card .xp-label { font-size: 11px; color: var(--grey-500); font-weight: 600; }
+  .d5 .model-status {
+    background: var(--surface-elevated); border-radius: 12px; padding: 12px 16px; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+  .d5 .model-status .emoji { font-size: 24px; }
+  .d5 .model-status .text { flex: 1; }
+  .d5 .model-status .text .title { font-size: 13px; font-weight: 700; }
+  .d5 .model-status .text .desc { font-size: 11px; color: var(--grey-500); }
+  .d5 .game-ranking { display: flex; flex-direction: column; gap: 4px; }
+  .d5 .game-row {
+    display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+    background: var(--surface-elevated); border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .d5 .game-row.fav { border: 2px solid var(--violet-400); background: var(--violet-100); }
+  .d5 .game-row .medal { font-size: 16px; width: 24px; text-align: center; }
+  .d5 .game-row .gname { flex: 1; font-size: 13px; font-weight: 600; }
+  .d5 .game-row .pts { font-size: 12px; font-weight: 700; color: var(--grey-500); }
+  .d5 .game-row .chip { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 4px; }
+  .d5 .game-row .chip.up { background: var(--green-100); color: var(--green-600); }
+  .d5 .game-row .chip.down { background: var(--red-100); color: var(--red-600); }
+  .d5 .reveal-btn {
+    width: 100%; margin-top: 16px; padding: 16px;
+    background: linear-gradient(135deg, var(--violet-600), var(--violet-500));
+    color: white; border: none; border-radius: 14px;
+    font-family: inherit; font-size: 16px; font-weight: 800; cursor: pointer;
+    box-shadow: 0 6px 24px rgba(124,58,237,0.35);
+    letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  /* ===== DIRECTION 6 : Split View ===== */
+  .d6 { background: var(--surface); padding: 40px 16px 16px; }
+  .d6 .d6-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .d6 .d6-top .logo { font-size: 16px; font-weight: 800; color: var(--violet-600); }
+  .d6 .d6-top .pill { font-size: 11px; background: var(--green-100); color: var(--green-600); padding: 4px 10px; border-radius: 10px; font-weight: 700; }
+  .d6 .split-header { text-align: center; margin-bottom: 12px; }
+  .d6 .split-header .label { font-size: 11px; color: var(--grey-500); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+  .d6 .split-columns { display: flex; gap: 4px; margin-bottom: 12px; }
+  .d6 .split-columns .col-header { flex: 1; text-align: center; font-size: 11px; font-weight: 700; color: var(--grey-500); padding: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .d6 .split-columns .col-header.actual { background: var(--grey-100); border-radius: 8px 8px 0 0; }
+  .d6 .split-columns .col-header.projected { background: var(--violet-100); border-radius: 8px 8px 0 0; color: var(--violet-600); }
+  .d6 .split-row {
+    display: flex; gap: 4px; margin-bottom: 2px;
+  }
+  .d6 .split-cell {
+    flex: 1; display: flex; align-items: center; gap: 6px; padding: 10px 8px;
+    background: var(--surface-elevated); border-radius: 6px; min-height: 40px;
+  }
+  .d6 .split-cell.actual { }
+  .d6 .split-cell.projected { background: #faf5ff; }
+  .d6 .split-cell .pos { font-size: 14px; font-weight: 800; width: 20px; color: var(--grey-500); }
+  .d6 .split-cell .sname { font-size: 12px; font-weight: 600; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .d6 .split-cell .sname.fav { color: var(--violet-600); font-weight: 700; }
+  .d6 .split-cell.projected .pos { color: var(--violet-600); }
+  .d6 .arrow-col { width: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; color: var(--grey-400); }
+  .d6 .transform-btn {
+    width: 100%; padding: 14px; background: var(--violet-600); color: white;
+    border: none; border-radius: 12px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+    margin-top: 12px;
+  }
+
+  /* ===== DESCRIPTION PANEL ===== */
+  .desc-panel {
+    max-width: 500px; margin: 0 auto; padding: 24px 16px;
+    color: rgba(255,255,255,0.85); font-size: 14px; line-height: 1.7;
+  }
+  .desc-panel h3 { color: var(--violet-400); font-size: 16px; margin-bottom: 8px; }
+  .desc-panel .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .desc-panel .tag { background: rgba(139,92,246,0.2); color: var(--violet-400); padding: 4px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <h1>Whistle — Design Directions</h1>
+  <button class="active" onclick="show(1)">1. Card Hero</button>
+  <button onclick="show(2)">2. Zone Bands</button>
+  <button onclick="show(3)">3. Minimal Typo</button>
+  <button onclick="show(4)">4. Race Track</button>
+  <button onclick="show(5)">5. Game UI</button>
+  <button onclick="show(6)">6. Split View</button>
+</nav>
+
+<div class="showcase">
+  <div>
+    <div class="phone-frame">
+      <div class="screen">
+
+        <!-- DIRECTION 1 -->
+        <div class="mockup d1 active" id="d1">
+          <div class="hero-card">
+            <div class="team-name">La Rochelle</div>
+            <div class="position-row">
+              <span class="position-current">7e</span>
+              <span class="position-arrow">&#10230;</span>
+              <span class="position-projected">5e</span>
+            </div>
+            <div class="probabilities">
+              <span class="prob-badge">Europe 15%</span>
+              <span class="prob-badge highlight">Top 6 62%</span>
+              <span class="prob-badge">Maintien 0%</span>
+            </div>
+            <div class="explanation">Le modele projette une remontee : victoire bonifiee a domicile + defaite de Bordeaux.</div>
+          </div>
+          <button class="project-btn">Projeter le classement</button>
+          <div class="ranking">
+            <div class="rank-row zone-europe"><span class="rank-pos">1</span><div class="rank-logo"></div><span class="rank-name">Toulouse</span><span class="rank-delta same">=</span><div class="rank-conf"><div class="fill" style="width:90%;background:var(--green-500)"></div></div></div>
+            <div class="rank-row zone-europe"><span class="rank-pos">2</span><div class="rank-logo"></div><span class="rank-name">Bordeaux</span><span class="rank-delta down">&#8595;1</span><div class="rank-conf"><div class="fill" style="width:75%;background:var(--green-500)"></div></div></div>
+            <div class="rank-row zone-top6"><span class="rank-pos">3</span><div class="rank-logo"></div><span class="rank-name">Toulon</span><span class="rank-delta up">&#8593;1</span><div class="rank-conf"><div class="fill" style="width:70%;background:var(--green-500)"></div></div></div>
+            <div class="rank-row zone-top6"><span class="rank-pos">4</span><div class="rank-logo"></div><span class="rank-name">La Rochelle</span><span class="rank-delta up">&#8593;2</span><div class="rank-conf"><div class="fill" style="width:55%;background:var(--orange-400)"></div></div></div>
+            <div class="rank-row zone-top6"><span class="rank-pos">5</span><div class="rank-logo"></div><span class="rank-name">Racing 92</span><span class="rank-delta down">&#8595;1</span><div class="rank-conf"><div class="fill" style="width:50%;background:var(--orange-400)"></div></div></div>
+            <div class="rank-row zone-top6"><span class="rank-pos">6</span><div class="rank-logo"></div><span class="rank-name">Clermont</span><span class="rank-delta same">=</span><div class="rank-conf"><div class="fill" style="width:45%;background:var(--orange-400)"></div></div></div>
+            <div class="rank-row zone-mid"><span class="rank-pos">7</span><div class="rank-logo"></div><span class="rank-name">Castres</span><span class="rank-delta down">&#8595;2</span><div class="rank-conf"><div class="fill" style="width:40%;background:var(--orange-400)"></div></div></div>
+            <div class="rank-row zone-mid"><span class="rank-pos">8</span><div class="rank-logo"></div><span class="rank-name">Lyon</span><span class="rank-delta up">&#8593;1</span><div class="rank-conf"><div class="fill" style="width:45%;background:var(--orange-400)"></div></div></div>
+          </div>
+        </div>
+
+        <!-- DIRECTION 2 -->
+        <div class="mockup d2" id="d2">
+          <div class="header">
+            <div class="greeting">Bonjour higgin</div>
+            <div class="team-line">
+              <h2>La Rochelle</h2>
+              <span class="badge-new">J16 Nouveau</span>
+            </div>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card"><div class="stat-value violet">7e</div><div class="stat-label">Actuel</div></div>
+            <div class="stat-card"><div class="stat-value green">5e &#8593;</div><div class="stat-label">Projete</div></div>
+            <div class="stat-card"><div class="stat-value" style="color:var(--violet-600)">62%</div><div class="stat-label">Top 6</div></div>
+          </div>
+          <div class="zone-section">
+            <div class="zone-header europe">Europe</div>
+            <div class="zone-teams">
+              <div class="team-row"><span class="pos">1</span><div class="logo"></div><div class="info"><div class="name">Toulouse</div><div class="meta">Elo 1680 &middot; Confiance haute</div></div><div class="delta" style="color:var(--grey-400)">=</div></div>
+              <div class="team-row"><span class="pos">2</span><div class="logo"></div><div class="info"><div class="name">Bordeaux</div><div class="meta">Elo 1620 &middot; Confiance haute</div></div><div class="delta" style="color:var(--red-500)">&#8595;1</div></div>
+            </div>
+          </div>
+          <div class="zone-section">
+            <div class="zone-header top6">Top 6</div>
+            <div class="zone-teams">
+              <div class="team-row"><span class="pos">3</span><div class="logo"></div><div class="info"><div class="name">Toulon</div><div class="meta">Elo 1590</div></div><div class="delta" style="color:var(--green-600)">&#8593;1</div></div>
+              <div class="team-row"><span class="pos">4</span><div class="logo"></div><div class="info"><div class="name fav">La Rochelle</div><div class="meta">Elo 1575 &middot; Forme &#8593;</div></div><div class="delta" style="color:var(--green-600)">&#8593;2</div></div>
+              <div class="team-row"><span class="pos">5</span><div class="logo"></div><div class="info"><div class="name">Racing 92</div><div class="meta">Elo 1560</div></div><div class="delta" style="color:var(--red-500)">&#8595;1</div></div>
+              <div class="team-row"><span class="pos">6</span><div class="logo"></div><div class="info"><div class="name">Clermont</div><div class="meta">Elo 1545</div></div><div class="delta" style="color:var(--grey-400)">=</div></div>
+            </div>
+          </div>
+          <div class="zone-section">
+            <div class="zone-header mid">Ventre mou</div>
+            <div class="zone-teams">
+              <div class="team-row"><span class="pos">7</span><div class="logo"></div><div class="info"><div class="name">Castres</div><div class="meta">Elo 1520</div></div><div class="delta" style="color:var(--red-500)">&#8595;2</div></div>
+              <div class="team-row"><span class="pos">8</span><div class="logo"></div><div class="info"><div class="name">Lyon</div><div class="meta">Elo 1510</div></div><div class="delta" style="color:var(--green-600)">&#8593;1</div></div>
+            </div>
+          </div>
+          <button class="fab">Projeter</button>
+        </div>
+
+        <!-- DIRECTION 3 -->
+        <div class="mockup d3" id="d3">
+          <div class="top-bar">
+            <span class="logo">whistle</span>
+            <span class="journee">Journee 16</span>
+          </div>
+          <div class="big-number">
+            <div class="pos">7</div>
+            <div class="label">Position actuelle de La Rochelle</div>
+            <div class="projected">&#8594; Projete 5e (+2)</div>
+          </div>
+          <div class="prob-row">
+            <div class="prob-item"><div class="value" style="color:var(--violet-600)">15%</div><div class="label">Europe</div></div>
+            <div class="prob-item"><div class="value" style="color:var(--green-600)">62%</div><div class="label">Top 6</div></div>
+            <div class="prob-item"><div class="value" style="color:var(--grey-400)">23%</div><div class="label">Milieu</div></div>
+            <div class="prob-item"><div class="value" style="color:var(--red-400)">0%</div><div class="label">Maintien</div></div>
+          </div>
+          <div class="divider"></div>
+          <div class="mini-ranking">
+            <div class="mini-row"><span class="rank">1</span><div class="bar europe" style="width:95%">Toulouse</div></div>
+            <div class="mini-row"><span class="rank">2</span><div class="bar europe" style="width:88%">Bordeaux</div></div>
+            <div class="mini-row"><span class="rank">3</span><div class="bar top6" style="width:82%">Toulon</div></div>
+            <div class="mini-row"><span class="rank">4</span><div class="bar top6 fav" style="width:78%">La Rochelle</div></div>
+            <div class="mini-row"><span class="rank">5</span><div class="bar top6" style="width:75%">Racing 92</div></div>
+            <div class="mini-row"><span class="rank">6</span><div class="bar top6" style="width:72%">Clermont</div></div>
+            <div class="mini-row"><span class="rank">7</span><div class="bar mid" style="width:65%">Castres</div></div>
+            <div class="mini-row"><span class="rank">8</span><div class="bar mid" style="width:62%">Lyon</div></div>
+            <div class="mini-row"><span class="rank">9</span><div class="bar mid" style="width:58%">Montpellier</div></div>
+            <div class="mini-row"><span class="rank">10</span><div class="bar mid" style="width:54%">Pau</div></div>
+            <div class="mini-row"><span class="rank">11</span><div class="bar mid" style="width:50%">Stade Francais</div></div>
+            <div class="mini-row"><span class="rank">12</span><div class="bar mid" style="width:46%">Bayonne</div></div>
+            <div class="mini-row"><span class="rank">13</span><div class="bar relegation" style="width:38%">Perpignan</div></div>
+            <div class="mini-row"><span class="rank">14</span><div class="bar relegation" style="width:32%">Vannes</div></div>
+          </div>
+          <div class="cta-area"><button>Projeter</button></div>
+        </div>
+
+        <!-- DIRECTION 4 -->
+        <div class="mockup d4" id="d4">
+          <div class="d4-header">
+            <h2>Classement TOP 14</h2>
+            <div class="sub">Journee 16 &middot; Mis a jour lundi</div>
+          </div>
+          <div class="fav-strip">
+            <div class="left">
+              <div class="name">La Rochelle</div>
+              <div class="trend">&#8593; En forme &middot; 62% top 6</div>
+            </div>
+            <div class="right">
+              <div class="big">5e</div>
+              <div class="small">projete (+2)</div>
+            </div>
+          </div>
+          <div class="track">
+            <div class="track-row"><span class="pos">1</span><div class="dot"></div><span class="name">Toulouse</span><div class="progress-bar"><div class="fill" style="width:95%;background:var(--violet-500)"></div></div><span class="delta-chip same">=</span></div>
+            <div class="track-row"><span class="pos">2</span><div class="dot"></div><span class="name">Bordeaux</span><div class="progress-bar"><div class="fill" style="width:88%;background:var(--violet-500)"></div></div><span class="delta-chip down">-1</span></div>
+            <div class="track-row"><span class="pos">3</span><div class="dot"></div><span class="name">Toulon</span><div class="progress-bar"><div class="fill" style="width:82%;background:var(--green-500)"></div></div><span class="delta-chip up">+1</span></div>
+            <div class="track-row"><span class="pos">4</span><div class="dot fav"></div><span class="name" style="color:var(--violet-600);font-weight:700">La Rochelle</span><div class="progress-bar"><div class="fill" style="width:78%;background:var(--violet-500)"></div></div><span class="delta-chip up">+2</span></div>
+            <div class="track-row"><span class="pos">5</span><div class="dot"></div><span class="name">Racing 92</span><div class="progress-bar"><div class="fill" style="width:75%;background:var(--green-500)"></div></div><span class="delta-chip down">-1</span></div>
+            <div class="track-row"><span class="pos">6</span><div class="dot"></div><span class="name">Clermont</span><div class="progress-bar"><div class="fill" style="width:72%;background:var(--green-500)"></div></div><span class="delta-chip same">=</span></div>
+            <div class="track-row"><span class="pos">7</span><div class="dot"></div><span class="name">Castres</span><div class="progress-bar"><div class="fill" style="width:65%;background:var(--grey-400)"></div></div><span class="delta-chip down">-2</span></div>
+            <div class="track-row"><span class="pos">8</span><div class="dot"></div><span class="name">Lyon</span><div class="progress-bar"><div class="fill" style="width:62%;background:var(--grey-400)"></div></div><span class="delta-chip up">+1</span></div>
+            <div class="track-row"><span class="pos">9</span><div class="dot"></div><span class="name">Montpellier</span><div class="progress-bar"><div class="fill" style="width:58%;background:var(--grey-400)"></div></div><span class="delta-chip same">=</span></div>
+            <div class="track-row"><span class="pos">10</span><div class="dot"></div><span class="name">Pau</span><div class="progress-bar"><div class="fill" style="width:54%;background:var(--grey-400)"></div></div><span class="delta-chip same">=</span></div>
+            <div class="track-row"><span class="pos">11</span><div class="dot"></div><span class="name">Stade Francais</span><div class="progress-bar"><div class="fill" style="width:50%;background:var(--grey-400)"></div></div><span class="delta-chip down">-1</span></div>
+            <div class="track-row"><span class="pos">12</span><div class="dot"></div><span class="name">Bayonne</span><div class="progress-bar"><div class="fill" style="width:46%;background:var(--grey-400)"></div></div><span class="delta-chip up">+1</span></div>
+            <div class="track-row"><span class="pos">13</span><div class="dot"></div><span class="name">Perpignan</span><div class="progress-bar"><div class="fill" style="width:38%;background:var(--red-400)"></div></div><span class="delta-chip same">=</span></div>
+            <div class="track-row"><span class="pos">14</span><div class="dot"></div><span class="name">Vannes</span><div class="progress-bar"><div class="fill" style="width:32%;background:var(--red-400)"></div></div><span class="delta-chip same">=</span></div>
+          </div>
+          <button class="bottom-cta">Projeter le classement final</button>
+        </div>
+
+        <!-- DIRECTION 5 -->
+        <div class="mockup d5" id="d5">
+          <div class="game-header">
+            <div class="whistle-logo">WHISTLE</div>
+            <div class="season">Saison 2025-2026 &middot; J16</div>
+          </div>
+          <div class="score-card">
+            <div class="team">La Rochelle</div>
+            <div class="positions">
+              <span class="current">7e</span>
+              <span class="arrow-anim">&#10230;</span>
+              <span class="projected">5e</span>
+            </div>
+            <div class="xp-bar"><div class="fill" style="width:62%"></div></div>
+            <div class="xp-label">62% de chances top 6</div>
+          </div>
+          <div class="model-status">
+            <div class="emoji">&#9989;</div>
+            <div class="text">
+              <div class="title">Le modele a vu juste</div>
+              <div class="desc">3 predictions correctes sur 4 la semaine derniere</div>
+            </div>
+          </div>
+          <div class="model-status">
+            <div class="emoji">&#128161;</div>
+            <div class="text">
+              <div class="title">Pourquoi La Rochelle monte</div>
+              <div class="desc">Victoire bonifiee + defaite Bordeaux = +8% top 6</div>
+            </div>
+          </div>
+          <div class="game-ranking">
+            <div class="game-row"><span class="medal">&#129351;</span><span class="gname">Toulouse</span><span class="pts">72 pts</span><span class="chip same" style="background:var(--grey-100);color:var(--grey-500)">=</span></div>
+            <div class="game-row"><span class="medal">&#129352;</span><span class="gname">Bordeaux</span><span class="pts">65 pts</span><span class="chip down">&#8595;1</span></div>
+            <div class="game-row"><span class="medal">&#129353;</span><span class="gname">Toulon</span><span class="pts">61 pts</span><span class="chip up">&#8593;1</span></div>
+            <div class="game-row fav"><span class="medal">4</span><span class="gname" style="color:var(--violet-600)">La Rochelle</span><span class="pts">58 pts</span><span class="chip up">&#8593;2</span></div>
+            <div class="game-row"><span class="medal">5</span><span class="gname">Racing 92</span><span class="pts">55 pts</span><span class="chip down">&#8595;1</span></div>
+            <div class="game-row"><span class="medal">6</span><span class="gname">Clermont</span><span class="pts">52 pts</span><span class="chip same" style="background:var(--grey-100);color:var(--grey-500)">=</span></div>
+          </div>
+          <button class="reveal-btn">&#9654; Reveler la projection</button>
+        </div>
+
+        <!-- DIRECTION 6 -->
+        <div class="mockup d6" id="d6">
+          <div class="d6-top">
+            <span class="logo">Whistle</span>
+            <span class="pill">J16 &middot; Nouveau</span>
+          </div>
+          <div class="split-header"><span class="label">Actuel vs Projete</span></div>
+          <div class="split-columns">
+            <div class="col-header actual">Classement actuel</div>
+            <div style="width:20px"></div>
+            <div class="col-header projected">Classement projete</div>
+          </div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">1</span><span class="sname">Toulouse</span></div><div class="arrow-col">&#8594;</div><div class="split-cell projected"><span class="pos">1</span><span class="sname">Toulouse</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">2</span><span class="sname">Bordeaux</span></div><div class="arrow-col">&#8600;</div><div class="split-cell projected"><span class="pos">2</span><span class="sname">Toulon</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">3</span><span class="sname">Toulon</span></div><div class="arrow-col">&#8599;</div><div class="split-cell projected"><span class="pos">3</span><span class="sname">Bordeaux</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">4</span><span class="sname">Racing 92</span></div><div class="arrow-col">&#8600;</div><div class="split-cell projected"><span class="pos">4</span><span class="sname fav">La Rochelle</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">5</span><span class="sname">Clermont</span></div><div class="arrow-col">&#8599;</div><div class="split-cell projected"><span class="pos">5</span><span class="sname">Racing 92</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">6</span><span class="sname">Castres</span></div><div class="arrow-col">&#8594;</div><div class="split-cell projected"><span class="pos">6</span><span class="sname">Clermont</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">7</span><span class="sname fav">La Rochelle</span></div><div class="arrow-col">&#8599;</div><div class="split-cell projected"><span class="pos">7</span><span class="sname">Castres</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">8</span><span class="sname">Lyon</span></div><div class="arrow-col">&#8594;</div><div class="split-cell projected"><span class="pos">8</span><span class="sname">Lyon</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">9</span><span class="sname">Montpellier</span></div><div class="arrow-col">&#8594;</div><div class="split-cell projected"><span class="pos">9</span><span class="sname">Montpellier</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">10</span><span class="sname">Pau</span></div><div class="arrow-col">&#8594;</div><div class="split-cell projected"><span class="pos">10</span><span class="sname">Pau</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">11</span><span class="sname">Stade Francais</span></div><div class="arrow-col">&#8594;</div><div class="split-cell projected"><span class="pos">11</span><span class="sname">Bayonne</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">12</span><span class="sname">Bayonne</span></div><div class="arrow-col">&#8599;</div><div class="split-cell projected"><span class="pos">12</span><span class="sname">Stade Francais</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">13</span><span class="sname">Perpignan</span></div><div class="arrow-col">&#8594;</div><div class="split-cell projected"><span class="pos">13</span><span class="sname">Perpignan</span></div></div>
+          <div class="split-row"><div class="split-cell actual"><span class="pos">14</span><span class="sname">Vannes</span></div><div class="arrow-col">&#8594;</div><div class="split-cell projected"><span class="pos">14</span><span class="sname">Vannes</span></div></div>
+          <button class="transform-btn">Animer la transformation</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="desc-panel" id="desc">
+      <h3 id="desc-title">Direction 1 : Card Hero</h3>
+      <p id="desc-text">Fiche La Rochelle en carte hero gradient violet dominante. Le classement en dessous avec bordures laterales colorees par zone. Bouton "Projeter" pleine largeur entre la carte et le classement. Approche chaleureuse, la carte hero cree un lien emotionnel fort avec l'equipe favorite.</p>
+      <div class="tags" id="desc-tags">
+        <span class="tag">Hero card</span>
+        <span class="tag">Gradient violet</span>
+        <span class="tag">Bordures zones</span>
+        <span class="tag">Emotionnel</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const descriptions = {
+  1: {
+    title: "Direction 1 : Card Hero",
+    text: "Fiche La Rochelle en carte hero avec gradient violet dominant. Classement en dessous avec bordures laterales colorees par zone et barre de confiance. Bouton 'Projeter' pleine largeur. Approche chaleureuse — la carte hero cree un lien emotionnel avec l'equipe favorite. C'est la direction la plus 'app mobile classique'.",
+    tags: ["Hero card", "Gradient violet", "Bordures zones", "Emotionnel", "App classique"]
+  },
+  2: {
+    title: "Direction 2 : Zone Bands",
+    text: "Classement organise par bandes de zones pleine largeur (Europe, Top 6, Ventre mou, Maintien). Stats La Rochelle en haut en 3 cartes compactes. FAB violet flottant pour projeter. Approche informationnelle claire — les zones sont le premier niveau de lecture. Plus proche de l'univers 'classement sportif' traditionnel.",
+    tags: ["Bandes zones", "Stats compactes", "FAB flottant", "Informatif", "Sportif"]
+  },
+  3: {
+    title: "Direction 3 : Minimal Typographique",
+    text: "Position geante au centre (typographie Quicksand), probabilites en dessous, classement en barres horizontales proportionnelles a la force. Bouton outline sobre. Approche ultra-epuree — le chiffre '7' domine tout. Minimalisme radical, presque editorial. Les barres colorees encodent la zone ET la force relative.",
+    tags: ["Typo geante", "Barres horizontales", "Minimaliste", "Editorial", "Quicksand"]
+  },
+  4: {
+    title: "Direction 4 : Race Track",
+    text: "Le classement comme une piste de course — chaque equipe a un point (dot) et une barre de progression qui encode sa force Elo relative. Strip violet compact pour La Rochelle en haut. Chips de delta colorees. CTA sticky en bas. Approche 'course en cours' — la metaphore sportive la plus directe.",
+    tags: ["Piste de course", "Progress bars", "Dots", "Delta chips", "Metaphore sportive"]
+  },
+  5: {
+    title: "Direction 5 : Game UI",
+    text: "Interface inspiree jeu video — score card centrale avec fleche animee entre position actuelle et projetee. Barre XP pour la probabilite top 6. Statut du modele en cartes avec emojis. Medailles pour le podium. Bouton 'Reveler' en majuscules. C'est la direction la plus ludique et la plus alignee avec l'angle jeu video du projet.",
+    tags: ["Game UI", "Barre XP", "Emojis", "Medailles", "Ludique", "Reveal"]
+  },
+  6: {
+    title: "Direction 6 : Split View",
+    text: "Vue divisee en deux colonnes : classement actuel a gauche, classement projete a droite. Fleches entre les colonnes montrent les mouvements. Bouton 'Animer la transformation'. Approche comparative directe — on voit le avant/apres cote a cote. Tres lisible mais moins emotionnel que les autres directions.",
+    tags: ["Split view", "Avant/apres", "Comparatif", "Fleches", "Lisible"]
+  }
+};
+
+function show(n) {
+  document.querySelectorAll('.mockup').forEach(m => m.classList.remove('active'));
+  document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('d'+n).classList.add('active');
+  document.querySelectorAll('.nav button')[n-1].classList.add('active');
+  const d = descriptions[n];
+  document.getElementById('desc-title').textContent = d.title;
+  document.getElementById('desc-text').textContent = d.text;
+  document.getElementById('desc-tags').innerHTML = d.tags.map(t => '<span class="tag">'+t+'</span>').join('');
+}
+</script>
+
+</body>
+</html>

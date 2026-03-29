@@ -38,7 +38,7 @@ export const TEAM_NAMES = {
   'lyon': 'LOU Rugby',
   'montpellier': 'Montpellier Herault Rugby',
   'pau': 'Section Paloise',
-  'perpignan': 'USA Perpignan',
+  'montauban': 'US Montauban',
   'bayonne': 'Aviron Bayonnais',
   'stade-francais': 'Stade Francais Paris',
   'vannes': 'Rugby Club Vannetais',
@@ -157,7 +157,7 @@ export function mergePredictions(existingPredictions, newPrediction) {
  * @param {object[]} existingPredictions - Predictions from existing season file
  * @returns {object} Complete season JSON object
  */
-export function buildSeasonData(eloOutput, existingPredictions) {
+export function buildSeasonData(eloOutput, existingPredictions, existingCalendar = []) {
   const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
   const teams = eloOutput.teams.map(buildTeamEntry);
 
@@ -168,6 +168,7 @@ export function buildSeasonData(eloOutput, existingPredictions) {
   );
 
   const predictions = mergePredictions(existingPredictions, newPrediction);
+  const calendar = mergeCalendarDates(eloOutput.calendar, existingCalendar);
 
   return {
     season: SEASON_ID,
@@ -175,9 +176,37 @@ export function buildSeasonData(eloOutput, existingPredictions) {
     matchday: eloOutput.matchday,
     brierScore: null,
     teams,
-    calendar: eloOutput.calendar,
+    calendar,
     predictions,
   };
+}
+
+/**
+ * Merge calendar entries, preserving existing dates when new ones are empty.
+ * Matches are identified by matchday + home + away.
+ * @param {object[]} newCalendar - Calendar from elo-output (may have empty dates)
+ * @param {object[]} existingCalendar - Calendar from existing season file
+ * @returns {object[]} Merged calendar with best available dates
+ */
+export function mergeCalendarDates(newCalendar, existingCalendar) {
+  if (!existingCalendar || existingCalendar.length === 0) return newCalendar;
+  if (!newCalendar || newCalendar.length === 0) return newCalendar;
+
+  const existingByKey = new Map();
+  for (const entry of existingCalendar) {
+    const key = `${entry.matchday}-${entry.home}-${entry.away}`;
+    existingByKey.set(key, entry);
+  }
+
+  return newCalendar.map((entry) => {
+    if (entry.date) return entry;
+    const key = `${entry.matchday}-${entry.home}-${entry.away}`;
+    const existing = existingByKey.get(key);
+    if (existing?.date) {
+      return { ...entry, date: existing.date };
+    }
+    return entry;
+  });
 }
 
 // ─── Seasons Index ────────────────────────────────────────────────────────
@@ -238,12 +267,13 @@ export async function main() {
     process.exit(1);
   }
 
-  // Load existing season file (for predictions history)
+  // Load existing season file (for predictions history and calendar dates)
   const existingSeason = loadExistingSeason(seasonPath);
   const existingPredictions = existingSeason.predictions ?? [];
+  const existingCalendar = existingSeason.calendar ?? [];
 
   // Build season data
-  const seasonData = buildSeasonData(eloOutput, existingPredictions);
+  const seasonData = buildSeasonData(eloOutput, existingPredictions, existingCalendar);
 
   // Write season file
   try {

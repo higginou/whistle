@@ -18,7 +18,7 @@ const EXPECTED_TEAM_IDS = [
   'lyon',
   'montpellier',
   'pau',
-  'perpignan',
+  'montauban',
   'bayonne',
   'stade-francais',
   'vannes',

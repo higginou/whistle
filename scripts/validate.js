@@ -55,7 +55,6 @@ const REQUIRED_STANDING_FIELDS = [
 
 const REQUIRED_RESULT_FIELDS = [
   'matchday',
-  'date',
   'home',
   'away',
   'homeScore',
@@ -108,7 +107,13 @@ export function validateStandings(standings) {
     return errors;
   }
 
-  if (standings.length !== EXPECTED_TEAM_COUNT) {
+  // Standings may be empty or partial when LNR renders the table via JavaScript.
+  // The pipeline computes rankings from results, so incomplete standings are not blocking.
+  if (standings.length > 0 && standings.length < EXPECTED_TEAM_COUNT) {
+    console.warn(
+      `⚠️ standings contient ${standings.length} equipes au lieu de ${EXPECTED_TEAM_COUNT} (non-bloquant)`,
+    );
+  } else if (standings.length > EXPECTED_TEAM_COUNT) {
     errors.push(
       `standings contient ${standings.length} equipes au lieu de ${EXPECTED_TEAM_COUNT}`,
     );
@@ -255,7 +260,8 @@ export function validateDates(results, calendar) {
       const prefix = `results[${i}]`;
       const dateVal = entry.date;
 
-      if (dateVal === undefined || dateVal === null) continue; // checked by required fields
+      // date is optional in results (scraping may not extract dates reliably)
+      if (dateVal === undefined || dateVal === null || dateVal === '') continue;
 
       if (!isValidISODate(dateVal)) {
         errors.push(

@@ -126,6 +126,11 @@ export function applyDecay(results, currentMatchday) {
  * Compute Elo ratings for all teams by iterating through match results
  * in chronological order.
  *
+ * NOTE: standings are used only for the team list and currentRank.
+ * When the LNR standings page is JS-rendered (empty scrape), the pipeline
+ * should provide standings derived from results (team IDs + rank by points).
+ * The Elo computation itself depends only on results, not standings data.
+ *
  * @param {object[]} standings - Team standings (used for team list)
  * @param {object[]} results - Match results sorted by matchday
  * @returns {{ elos: Map<string, number>, eloHistories: Map<string, number[]> }}
