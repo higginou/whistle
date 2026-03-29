@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score Card — Variant C (Card-Based)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body {
+    font-family: "Nunito", sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #1f2937;
+    background-color: #faf8f5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+  }
+
+  :root {
+    --w-color-europe: #6d28d9;
+    --w-color-top6: #16a34a;
+    --w-color-mid: #6b7280;
+    --w-color-relegation: #dc2626;
+    --w-color-europe-bg: #f3e8ff;
+    --w-color-top6-bg: #dcfce7;
+    --w-color-mid-bg: #f3f4f6;
+    --w-color-relegation-bg: #fef2f2;
+    --w-color-primary: #6d28d9;
+    --w-color-surface: #faf8f5;
+    --w-color-surface-elevated: #ffffff;
+    --w-color-text-primary: #1f2937;
+    --w-color-text-secondary: #6b7280;
+    --w-space-xs: 0.25rem;
+    --w-space-sm: 0.5rem;
+    --w-space-md: 1rem;
+    --w-space-lg: 1.5rem;
+    --w-space-xl: 2rem;
+    --w-space-2xl: 3rem;
+    --w-text-hero: 2rem;
+    --w-text-h1: 1.5rem;
+    --w-text-h2: 1.25rem;
+    --w-text-body: 1rem;
+    --w-text-label: 0.875rem;
+    --w-text-caption: 0.75rem;
+    --w-radius-card: 12px;
+    --w-shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  #app {
+    max-width: 430px;
+    width: 100%;
+    min-width: 360px;
+    padding: 0 var(--w-space-md);
+    min-height: 100vh;
+  }
+
+  .variant-label {
+    text-align: center;
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-secondary);
+    padding: var(--w-space-md) 0 var(--w-space-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+
+  /* === Score Card Outer === */
+  .w-score-card {
+    background: linear-gradient(145deg, #7c3aed 0%, #6d28d9 40%, #5b21b6 100%);
+    border-radius: 16px;
+    color: #fff;
+    margin-top: var(--w-space-md);
+    min-height: 40dvh;
+    box-shadow: 0 4px 20px rgba(109, 40, 217, 0.3), var(--w-shadow-card);
+    padding: var(--w-space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--w-space-md);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative circles */
+  .w-score-card::before,
+  .w-score-card::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .w-score-card::before { width: 180px; height: 180px; top: -60px; right: -40px; }
+  .w-score-card::after { width: 120px; height: 120px; bottom: -30px; left: -30px; }
+
+  /* Header */
+  .w-score-card__header {
+    display: flex;
+    align-items: center;
+    gap: var(--w-space-sm);
+    position: relative;
+    z-index: 1;
+  }
+
+  .w-score-card__team-name {
+    font-size: var(--w-text-h1);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .w-score-card__badge-slot {
+    display: inline-flex;
+  }
+
+  /* === Mini cards inside hero === */
+  .w-score-card__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .w-mini-card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .w-mini-card--full {
+    grid-column: 1 / -1;
+  }
+
+  .w-mini-card__label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.6;
+  }
+
+  .w-mini-card__value {
+    font-weight: 800;
+    line-height: 1.1;
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+  }
+
+  .w-mini-card__value--big {
+    font-size: 2.2rem;
+  }
+
+  .w-mini-card__value--medium {
+    font-size: var(--w-text-h2);
+  }
+
+  /* Position card special layout */
+  .w-mini-card--position {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--w-space-sm);
+    justify-content: center;
+    padding: var(--w-space-md) 12px;
+  }
+
+  .w-mini-card__position-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .w-mini-card__pos-num {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    font-feature-settings: "tnum";
+  }
+
+  .w-mini-card__pos-num sup {
+    font-size: 0.35em;
+    vertical-align: super;
+  }
+
+  .w-mini-card__pos-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+  }
+
+  .w-mini-card__arrow {
+    font-size: 1.3rem;
+    opacity: 0.5;
+    animation: arrowSlide 2s ease-in-out infinite;
+  }
+
+  @keyframes arrowSlide {
+    0%, 100% { opacity: 0.3; transform: translateX(0); }
+    50% { opacity: 0.8; transform: translateX(3px); }
+  }
+
+  /* Tendance card */
+  .w-mini-card--tendance .w-mini-card__value {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .w-mini-card__trend-symbol {
+    font-size: 1.4rem;
+    opacity: 0.7;
+  }
+
+  /* XP card */
+  .w-mini-card--xp {
+    cursor: pointer;
+    touch-action: manipulation;
+    min-height: 48px;
+  }
+
+  .w-mini-card__xp-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--w-space-sm);
+  }
+
+  .w-mini-card__xp-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .w-mini-card__xp-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #a78bfa, #c4b5fd);
+    transition: width 0.5s ease-out;
+  }
+
+  .w-mini-card__xp-pct {
+    font-size: var(--w-text-h2);
+    font-weight: 800;
+    min-width: 42px;
+    text-align: right;
+  }
+
+  /* Zones detail (inside XP card) */
+  .w-mini-card__zones {
+    display: none;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: 6px;
+  }
+
+  .w-mini-card__zones.is-open {
+    display: flex;
+  }
+
+  .w-mini-card__zone {
+    font-size: 11px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .w-mini-card__zone-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  /* Match cards row */
+  .w-mini-card--matches {
+    gap: 8px;
+  }
+
+  .w-mini-card__match-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .w-match-pill {
+    flex: 1;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-height: 48px;
+    touch-action: manipulation;
+  }
+
+  .w-match-pill__name {
+    font-size: var(--w-text-label);
+    font-weight: 700;
+  }
+
+  .w-match-pill__detail {
+    font-size: 10px;
+    opacity: 0.7;
+  }
+
+  .w-match-pill__difficulty {
+    display: flex;
+    gap: 2px;
+  }
+
+  .w-match-pill__difficulty span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+  }
+
+  .w-match-pill__difficulty span.active {
+    background: #fbbf24;
+  }
+
+  /* Explication card */
+  .w-mini-card--explication {
+    border: 1px solid rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.06);
+  }
+
+  .w-mini-card__explication-text {
+    font-size: var(--w-text-label);
+    line-height: 1.5;
+    opacity: 0.85;
+  }
+
+  .w-mini-card__explication-icon {
+    font-size: 1rem;
+    opacity: 0.6;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .w-mini-card__arrow { animation: none; opacity: 0.5; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <p class="variant-label">Variant C — Card-Based</p>
+
+  <article class="w-score-card" aria-label="Fiche La Rochelle">
+    <div class="w-score-card__header">
+      <h1 class="w-score-card__team-name">Stade Rochelais</h1>
+      <span class="w-score-card__badge-slot"><!-- badge story 2-5 --></span>
+    </div>
+
+    <div class="w-score-card__grid">
+      <!-- Position mini-card (full width) -->
+      <div class="w-mini-card w-mini-card--position w-mini-card--full">
+        <div class="w-mini-card__position-group">
+          <span class="w-mini-card__pos-label">Actuel</span>
+          <span class="w-mini-card__pos-num">9<sup>e</sup></span>
+        </div>
+        <span class="w-mini-card__arrow" aria-hidden="true">&#10132;</span>
+        <div class="w-mini-card__position-group">
+          <span class="w-mini-card__pos-label">Projete</span>
+          <span class="w-mini-card__pos-num" style="opacity:0.7">10<sup>e</sup></span>
+        </div>
+      </div>
+
+      <!-- Tendance mini-card -->
+      <div class="w-mini-card w-mini-card--tendance">
+        <span class="w-mini-card__label">Tendance</span>
+        <span class="w-mini-card__value w-mini-card__value--medium">
+          <span class="w-mini-card__trend-symbol">=</span> Stable
+        </span>
+      </div>
+
+      <!-- Elo mini-card -->
+      <div class="w-mini-card">
+        <span class="w-mini-card__label">Elo</span>
+        <span class="w-mini-card__value w-mini-card__value--medium" style="font-feature-settings:'tnum'; font-variant-numeric: tabular-nums;">1487</span>
+        <span style="font-size:11px; opacity:0.5; font-weight:600;">Confiance 46%</span>
+      </div>
+
+      <!-- XP / Top 6 mini-card (full width) -->
+      <div class="w-mini-card w-mini-card--xp w-mini-card--full"
+           role="button"
+           tabindex="0"
+           aria-label="Probabilite top 6 : 0%. Appuyer pour voir le detail par zone."
+           onclick="toggleZones()"
+           onkeydown="if(event.key==='Enter')toggleZones()">
+        <span class="w-mini-card__label">Probabilite Top 6</span>
+        <div class="w-mini-card__xp-row">
+          <div class="w-mini-card__xp-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div class="w-mini-card__xp-fill" style="width: 0%;"></div>
+          </div>
+          <span class="w-mini-card__xp-pct">0%</span>
+        </div>
+        <div class="w-mini-card__zones" id="zones-panel">
+          <span class="w-mini-card__zone"><span class="w-mini-card__zone-dot" style="background:#6d28d9"></span> Europe 0%</span>
+          <span class="w-mini-card__zone"><span class="w-mini-card__zone-dot" style="background:#16a34a"></span> Top 6 0%</span>
+          <span class="w-mini-card__zone"><span class="w-mini-card__zone-dot" style="background:#6b7280"></span> Milieu 100%</span>
+          <span class="w-mini-card__zone"><span class="w-mini-card__zone-dot" style="background:#dc2626"></span> Releg. 0%</span>
+        </div>
+      </div>
+
+      <!-- Matches mini-card (full width) -->
+      <div class="w-mini-card w-mini-card--matches w-mini-card--full">
+        <span class="w-mini-card__label">Prochains matchs</span>
+        <div class="w-mini-card__match-row">
+          <div class="w-match-pill">
+            <span class="w-match-pill__name">Toulouse</span>
+            <span class="w-match-pill__detail">Exterieur</span>
+            <div class="w-match-pill__difficulty">
+              <span class="active"></span><span class="active"></span><span class="active"></span><span class="active"></span><span></span>
+            </div>
+          </div>
+          <div class="w-match-pill">
+            <span class="w-match-pill__name">Bayonne</span>
+            <span class="w-match-pill__detail">Domicile</span>
+            <div class="w-match-pill__difficulty">
+              <span class="active"></span><span class="active"></span><span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="w-match-pill">
+            <span class="w-match-pill__name">Bordeaux</span>
+            <span class="w-match-pill__detail">Exterieur</span>
+            <div class="w-match-pill__difficulty">
+              <span class="active"></span><span class="active"></span><span class="active"></span><span class="active"></span><span class="active"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explication mini-card (full width) -->
+      <div class="w-mini-card w-mini-card--explication w-mini-card--full">
+        <span class="w-mini-card__label"><span class="w-mini-card__explication-icon">&#9881;</span> Analyse du modele</span>
+        <p class="w-mini-card__explication-text">
+          9e avec un Elo de 1487, le Stade Rochelais reste ancre en milieu de tableau. La derniere defaite confirme une dynamique insuffisante pour viser les phases finales. Projection : 10e en fin de saison.
+        </p>
+      </div>
+    </div>
+  </article>
+</div>
+
+<script>
+  function toggleZones() {
+    document.getElementById('zones-panel').classList.toggle('is-open');
+  }
+</script>
+</body>
+</html>

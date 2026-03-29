@@ -1,0 +1,315 @@
+/* === Score Card Hero === */
+.w-score-card {
+  background: linear-gradient(145deg, #7c3aed 0%, #6d28d9 40%, #5b21b6 100%);
+  border-radius: 16px;
+  color: #fff;
+  min-height: 40dvh;
+  box-shadow:
+    0 4px 20px rgba(109, 40, 217, 0.3),
+    var(--w-shadow-card);
+  padding: var(--w-space-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--w-space-md);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative circles */
+.w-score-card::before,
+.w-score-card::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+  pointer-events: none;
+}
+
+.w-score-card::before {
+  width: 180px;
+  height: 180px;
+  top: -60px;
+  right: -40px;
+}
+
+.w-score-card::after {
+  width: 120px;
+  height: 120px;
+  bottom: -30px;
+  left: -30px;
+}
+
+/* Header */
+.w-score-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--w-space-sm);
+  position: relative;
+  z-index: 1;
+}
+
+.w-score-card__team-name {
+  font-size: var(--w-text-h1);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.w-score-card__badge-slot {
+  display: inline-flex;
+}
+
+/* === Mini cards grid === */
+.w-score-card__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.w-mini-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.w-mini-card--full {
+  grid-column: 1 / -1;
+}
+
+.w-mini-card__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.6;
+}
+
+.w-mini-card__value {
+  font-weight: 800;
+  line-height: 1.1;
+  font-feature-settings: "tnum";
+  font-variant-numeric: tabular-nums;
+}
+
+.w-mini-card__value--medium {
+  font-size: var(--w-text-h2);
+}
+
+/* Position card */
+.w-mini-card--position {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--w-space-sm);
+  justify-content: center;
+  padding: var(--w-space-md) 12px;
+}
+
+.w-mini-card__position-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.w-mini-card__pos-num {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+  font-feature-settings: "tnum";
+}
+
+.w-mini-card__pos-num sup {
+  font-size: 0.35em;
+  vertical-align: super;
+}
+
+.w-mini-card__pos-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.6;
+}
+
+.w-mini-card__arrow {
+  font-size: 1.3rem;
+  opacity: 0.5;
+  animation: w-arrow-slide 2s ease-in-out infinite;
+}
+
+@keyframes w-arrow-slide {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(3px);
+  }
+}
+
+/* Tendance card */
+.w-mini-card--tendance .w-mini-card__value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.w-mini-card__trend-symbol {
+  font-size: 1.4rem;
+  opacity: 0.7;
+}
+
+/* Confidence line */
+.w-mini-card__confidence {
+  font-size: 11px;
+  opacity: 0.5;
+  font-weight: 600;
+}
+
+/* XP / Top 6 card */
+.w-mini-card--xp {
+  cursor: pointer;
+  touch-action: manipulation;
+  min-height: 48px;
+}
+
+.w-mini-card__xp-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--w-space-sm);
+}
+
+.w-mini-card__xp-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.w-mini-card__xp-fill {
+  height: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, #a78bfa, #c4b5fd);
+  transition: width 0.5s ease-out;
+}
+
+.w-mini-card__xp-pct {
+  font-size: var(--w-text-h2);
+  font-weight: 800;
+  min-width: 42px;
+  text-align: right;
+}
+
+/* Zones detail panel */
+.w-mini-card__zones {
+  display: none;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 6px;
+}
+
+.w-mini-card__zones.is-open {
+  display: flex;
+}
+
+.w-mini-card__zone {
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.w-mini-card__zone-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+/* Match pills */
+.w-mini-card--matches {
+  gap: 8px;
+}
+
+.w-mini-card__match-row {
+  display: flex;
+  gap: 8px;
+}
+
+.w-match-pill {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-height: 48px;
+  touch-action: manipulation;
+}
+
+.w-match-pill__name {
+  font-size: var(--w-text-label);
+  font-weight: 700;
+}
+
+.w-match-pill__detail {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.w-match-pill__difficulty {
+  display: flex;
+  gap: 2px;
+}
+
+.w-match-pill__difficulty span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.w-match-pill__difficulty span.active {
+  background: #fbbf24;
+}
+
+/* Explication card */
+.w-mini-card--explication {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.w-mini-card__explication-text {
+  font-size: var(--w-text-label);
+  line-height: 1.5;
+  opacity: 0.85;
+}
+
+.w-mini-card__explication-icon {
+  font-size: 1rem;
+  opacity: 0.6;
+}
+
+/* === Reduced Motion === */
+@media (prefers-reduced-motion: reduce) {
+  .w-mini-card__arrow {
+    animation: none;
+    opacity: 0.5;
+  }
+
+  .w-mini-card__xp-fill {
+    transition: none;
+  }
+}

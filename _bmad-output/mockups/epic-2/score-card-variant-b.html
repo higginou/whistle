@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Score Card — Variant B (Split Layout)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body {
+    font-family: "Nunito", sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #1f2937;
+    background-color: #faf8f5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+  }
+
+  :root {
+    --w-color-europe: #6d28d9;
+    --w-color-top6: #16a34a;
+    --w-color-mid: #6b7280;
+    --w-color-relegation: #dc2626;
+    --w-color-europe-bg: #f3e8ff;
+    --w-color-top6-bg: #dcfce7;
+    --w-color-mid-bg: #f3f4f6;
+    --w-color-relegation-bg: #fef2f2;
+    --w-color-primary: #6d28d9;
+    --w-color-surface: #faf8f5;
+    --w-color-surface-elevated: #ffffff;
+    --w-color-text-primary: #1f2937;
+    --w-color-text-secondary: #6b7280;
+    --w-space-xs: 0.25rem;
+    --w-space-sm: 0.5rem;
+    --w-space-md: 1rem;
+    --w-space-lg: 1.5rem;
+    --w-space-xl: 2rem;
+    --w-space-2xl: 3rem;
+    --w-text-hero: 2rem;
+    --w-text-h1: 1.5rem;
+    --w-text-h2: 1.25rem;
+    --w-text-body: 1rem;
+    --w-text-label: 0.875rem;
+    --w-text-caption: 0.75rem;
+    --w-radius-card: 12px;
+    --w-shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  #app {
+    max-width: 430px;
+    width: 100%;
+    min-width: 360px;
+    padding: 0 var(--w-space-md);
+    min-height: 100vh;
+  }
+
+  .variant-label {
+    text-align: center;
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-secondary);
+    padding: var(--w-space-md) 0 var(--w-space-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+
+  /* === Score Card === */
+  .w-score-card {
+    background: linear-gradient(145deg, #7c3aed 0%, #6d28d9 40%, #5b21b6 100%);
+    border-radius: var(--w-radius-card);
+    color: #fff;
+    margin-top: var(--w-space-md);
+    min-height: 40dvh;
+    box-shadow: 0 4px 16px rgba(109, 40, 217, 0.25), var(--w-shadow-card);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header with team name */
+  .w-score-card__header {
+    padding: var(--w-space-lg) var(--w-space-lg) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--w-space-sm);
+  }
+
+  .w-score-card__team-name {
+    font-size: var(--w-text-h1);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  .w-score-card__badge-slot {
+    display: inline-flex;
+    min-width: 0;
+  }
+
+  /* === Split section === */
+  .w-score-card__split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: var(--w-space-md) var(--w-space-lg);
+    flex: 1;
+  }
+
+  /* Left: Big position numbers */
+  .w-score-card__left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--w-space-xs);
+    position: relative;
+    border-right: 1px solid rgba(255,255,255,0.12);
+    padding-right: var(--w-space-md);
+  }
+
+  .w-score-card__rank-current {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1;
+    font-feature-settings: "tnum";
+    position: relative;
+  }
+
+  .w-score-card__rank-current sup {
+    font-size: 0.35em;
+    vertical-align: super;
+  }
+
+  .w-score-card__rank-current-label {
+    font-size: var(--w-text-caption);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.7;
+  }
+
+  .w-score-card__arrow-down {
+    font-size: 1.2rem;
+    opacity: 0.6;
+    animation: arrowBounce 1.5s ease-in-out infinite;
+  }
+
+  @keyframes arrowBounce {
+    0%, 100% { transform: translateY(0); opacity: 0.4; }
+    50% { transform: translateY(4px); opacity: 0.9; }
+  }
+
+  .w-score-card__rank-projected {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    opacity: 0.75;
+    font-feature-settings: "tnum";
+  }
+
+  .w-score-card__rank-projected sup {
+    font-size: 0.4em;
+    vertical-align: super;
+  }
+
+  .w-score-card__rank-projected-label {
+    font-size: var(--w-text-caption);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.5;
+  }
+
+  /* Right: stacked info */
+  .w-score-card__right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--w-space-md);
+    padding-left: var(--w-space-md);
+  }
+
+  .w-score-card__info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .w-score-card__info-label {
+    font-size: var(--w-text-caption);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+  }
+
+  .w-score-card__info-value {
+    font-size: var(--w-text-h2);
+    font-weight: 700;
+  }
+
+  .w-score-card__info-value--stable {
+    color: rgba(255,255,255,0.85);
+  }
+
+  /* XP bar in right column */
+  .w-score-card__xp-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .w-score-card__xp-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    overflow: visible;
+    cursor: pointer;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    touch-action: manipulation;
+  }
+
+  .w-score-card__xp-fill {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, #a78bfa, #c4b5fd);
+    transition: width 0.6s ease-out;
+  }
+
+  .w-score-card__explication-inline {
+    font-size: var(--w-text-label);
+    line-height: 1.5;
+    opacity: 0.85;
+    padding-left: var(--w-space-md);
+    border-left: 2px solid rgba(255,255,255,0.2);
+  }
+
+  /* Zones overlay */
+  .w-score-card__zones-panel {
+    display: none;
+    padding: var(--w-space-sm) var(--w-space-lg);
+    gap: var(--w-space-sm);
+    flex-wrap: wrap;
+    background: rgba(0,0,0,0.1);
+  }
+
+  .w-score-card__zones-panel.is-open {
+    display: flex;
+  }
+
+  .w-score-card__zone-tag {
+    font-size: var(--w-text-caption);
+    font-weight: 600;
+    background: rgba(255,255,255,0.12);
+    border-radius: 6px;
+    padding: 4px 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .w-score-card__zone-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  /* === Match Cards (below split) === */
+  .w-score-card__matches {
+    padding: 0 var(--w-space-lg) var(--w-space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--w-space-sm);
+  }
+
+  .w-score-card__matches-title {
+    font-size: var(--w-text-label);
+    font-weight: 700;
+    opacity: 0.9;
+  }
+
+  .w-score-card__match-cards {
+    display: flex;
+    gap: var(--w-space-sm);
+  }
+
+  .w-score-card__match-card {
+    flex: 1;
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 10px;
+    min-height: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    touch-action: manipulation;
+  }
+
+  .w-score-card__match-name {
+    font-size: var(--w-text-label);
+    font-weight: 700;
+  }
+
+  .w-score-card__match-info {
+    font-size: 11px;
+    opacity: 0.75;
+  }
+
+  .w-score-card__match-dots {
+    display: flex;
+    gap: 2px;
+    margin-top: 2px;
+  }
+
+  .w-score-card__match-dots span {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+  }
+
+  .w-score-card__match-dots span.on {
+    background: #fbbf24;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .w-score-card__arrow-down { animation: none; opacity: 0.6; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <p class="variant-label">Variant B — Split Layout</p>
+
+  <article class="w-score-card" aria-label="Fiche La Rochelle">
+    <div class="w-score-card__header">
+      <h1 class="w-score-card__team-name">Stade Rochelais</h1>
+      <span class="w-score-card__badge-slot"><!-- badge story 2-5 --></span>
+    </div>
+
+    <div class="w-score-card__split">
+      <!-- Left: Position numbers -->
+      <div class="w-score-card__left">
+        <span class="w-score-card__rank-current-label">Actuel</span>
+        <span class="w-score-card__rank-current">9<sup>e</sup></span>
+        <span class="w-score-card__arrow-down" aria-hidden="true">&#9660;</span>
+        <span class="w-score-card__rank-projected">10<sup>e</sup></span>
+        <span class="w-score-card__rank-projected-label">Projete</span>
+      </div>
+
+      <!-- Right: Stacked info -->
+      <div class="w-score-card__right">
+        <div class="w-score-card__info-item">
+          <span class="w-score-card__info-label">Tendance</span>
+          <span class="w-score-card__info-value w-score-card__info-value--stable">= Stable</span>
+        </div>
+
+        <div class="w-score-card__info-item">
+          <span class="w-score-card__info-label">Top 6</span>
+          <div class="w-score-card__xp-mini">
+            <span class="w-score-card__info-value" style="font-size:var(--w-text-h2)">0%</span>
+            <div class="w-score-card__xp-bar"
+                 role="progressbar"
+                 aria-label="Probabilite top 6 : 0%"
+                 aria-valuenow="0"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+                 tabindex="0"
+                 onclick="toggleZones()"
+                 onkeydown="if(event.key==='Enter')toggleZones()">
+              <div class="w-score-card__xp-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-score-card__info-item">
+          <span class="w-score-card__info-label">Elo</span>
+          <span class="w-score-card__info-value" style="font-feature-settings:'tnum'; font-variant-numeric: tabular-nums;">1487</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone details (toggled) -->
+    <div class="w-score-card__zones-panel" id="zones-panel">
+      <span class="w-score-card__zone-tag"><span class="w-score-card__zone-dot" style="background:#6d28d9"></span> Europe 0%</span>
+      <span class="w-score-card__zone-tag"><span class="w-score-card__zone-dot" style="background:#16a34a"></span> Top 6 0%</span>
+      <span class="w-score-card__zone-tag"><span class="w-score-card__zone-dot" style="background:#6b7280"></span> Milieu 100%</span>
+      <span class="w-score-card__zone-tag"><span class="w-score-card__zone-dot" style="background:#dc2626"></span> Relegation 0%</span>
+    </div>
+
+    <!-- Explication -->
+    <div style="padding: 0 var(--w-space-lg);">
+      <p class="w-score-card__explication-inline">
+        Tendance stable, derniere defaite en J20. Le modele voit un maintien en milieu de tableau avec un Elo de 1487 — insuffisant pour viser le top 6.
+      </p>
+    </div>
+
+    <!-- Match cards below -->
+    <div class="w-score-card__matches">
+      <span class="w-score-card__matches-title">Prochains matchs</span>
+      <div class="w-score-card__match-cards">
+        <div class="w-score-card__match-card">
+          <span class="w-score-card__match-name">Toulouse</span>
+          <span class="w-score-card__match-info">Ext.</span>
+          <div class="w-score-card__match-dots">
+            <span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span></span>
+          </div>
+        </div>
+        <div class="w-score-card__match-card">
+          <span class="w-score-card__match-name">Bayonne</span>
+          <span class="w-score-card__match-info">Dom.</span>
+          <div class="w-score-card__match-dots">
+            <span class="on"></span><span class="on"></span><span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="w-score-card__match-card">
+          <span class="w-score-card__match-name">Bordeaux</span>
+          <span class="w-score-card__match-info">Ext.</span>
+          <div class="w-score-card__match-dots">
+            <span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span><span class="on"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </article>
+</div>
+
+<script>
+  function toggleZones() {
+    document.getElementById('zones-panel').classList.toggle('is-open');
+  }
+</script>
+</body>
+</html>
