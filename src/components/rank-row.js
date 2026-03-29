@@ -94,6 +94,7 @@ export function render(listElement, team) {
 
   const row = document.createElement('div')
   row.className = `w-rank-row${isFavorite ? ' w-rank-row--favorite' : ''}`
+  row.dataset.teamId = team.id
   row.setAttribute(
     'aria-label',
     `${rank}${ordinalSuffix(rank)}, ${team.name}, Elo ${team.elo}, ${trendLabel}, confiance ${confLabel}`,

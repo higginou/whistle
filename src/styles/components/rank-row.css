@@ -93,3 +93,20 @@
 .w-rank-row__delta--stable {
   color: var(--w-color-text-secondary);
 }
+
+/* Glow effect for big movers (|delta| >= 3) during reveal animation */
+.w-rank-row--glow {
+  box-shadow: 0 0 16px rgba(109, 40, 217, 0.45), 0 0 4px rgba(109, 40, 217, 0.25);
+  transition: box-shadow 300ms ease;
+}
+
+/* Favorite team gets a gold glow instead */
+.w-rank-row--favorite.w-rank-row--glow {
+  box-shadow: 0 0 16px rgba(255, 215, 0, 0.5), 0 0 4px rgba(255, 215, 0, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w-rank-row--glow {
+    transition: none;
+  }
+}

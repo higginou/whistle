@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whistle — Reveal Button: FAB Flottant</title>
+<style>
+  /* ===== Whistle Design Tokens ===== */
+  :root {
+    --w-color-europe: #6d28d9;
+    --w-color-top6: #16a34a;
+    --w-color-mid: #6b7280;
+    --w-color-relegation: #dc2626;
+    --w-color-europe-bg: #f3e8ff;
+    --w-color-top6-bg: #dcfce7;
+    --w-color-mid-bg: #f3f4f6;
+    --w-color-relegation-bg: #fef2f2;
+    --w-color-primary: #6d28d9;
+    --w-color-primary-dark: #5b21b6;
+    --w-color-surface: #faf8f5;
+    --w-color-surface-elevated: #ffffff;
+    --w-color-text-primary: #1f2937;
+    --w-color-text-secondary: #6b7280;
+    --w-color-success: #16a34a;
+    --w-color-danger: #dc2626;
+    --w-color-confidence-high: #16a34a;
+    --w-color-confidence-mid: #f59e0b;
+    --w-color-confidence-low: #fca5a5;
+    --w-space-xs: 0.25rem;
+    --w-space-sm: 0.5rem;
+    --w-space-md: 1rem;
+    --w-space-lg: 1.5rem;
+    --w-space-xl: 2rem;
+    --w-space-2xl: 3rem;
+    --w-text-hero: 2rem;
+    --w-text-h1: 1.5rem;
+    --w-text-h2: 1.25rem;
+    --w-text-body: 1rem;
+    --w-text-label: 0.875rem;
+    --w-text-caption: 0.75rem;
+    --w-radius-card: 12px;
+    --w-radius-button: 14px;
+    --w-shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  }
+
+  /* ===== Base Reset ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--w-color-surface);
+    color: var(--w-color-text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== Page Layout ===== */
+  .w-page { max-width: 430px; margin: 0 auto; padding: var(--w-space-md); padding-bottom: var(--w-space-2xl); }
+  .w-page__title {
+    font-size: var(--w-text-h1);
+    font-weight: 700;
+    margin-bottom: var(--w-space-lg);
+    text-align: center;
+  }
+  .w-variant-label {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-secondary);
+    text-align: center;
+    margin-bottom: var(--w-space-md);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  /* ===== Zone Group ===== */
+  .w-zone-group {
+    margin-bottom: var(--w-space-lg);
+    border-radius: var(--w-radius-card);
+    overflow: hidden;
+    box-shadow: var(--w-shadow-card);
+  }
+  .w-zone-group__header {
+    font-size: var(--w-text-label);
+    font-weight: 700;
+    padding: var(--w-space-sm) var(--w-space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--w-space-sm);
+    margin: 0;
+  }
+  .w-zone-group__header::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .w-zone-group--qualif { background: var(--w-color-europe-bg); }
+  .w-zone-group--qualif .w-zone-group__header { color: var(--w-color-europe); }
+  .w-zone-group--qualif .w-zone-group__header::before { background: var(--w-color-europe); }
+  .w-zone-group--top6 { background: var(--w-color-top6-bg); }
+  .w-zone-group--top6 .w-zone-group__header { color: var(--w-color-top6); }
+  .w-zone-group--top6 .w-zone-group__header::before { background: var(--w-color-top6); }
+  .w-zone-group--mid { background: var(--w-color-mid-bg); }
+  .w-zone-group--mid .w-zone-group__header { color: var(--w-color-mid); }
+  .w-zone-group--mid .w-zone-group__header::before { background: var(--w-color-mid); }
+  .w-zone-group--relegation { background: var(--w-color-relegation-bg); }
+  .w-zone-group--relegation .w-zone-group__header { color: var(--w-color-relegation); }
+  .w-zone-group--relegation .w-zone-group__header::before { background: var(--w-color-relegation); }
+  .w-zone-group__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: rgba(0,0,0,0.06);
+  }
+
+  /* ===== Rank Row ===== */
+  .w-rank-row {
+    display: flex;
+    align-items: center;
+    gap: var(--w-space-sm);
+    min-height: 48px;
+    padding: var(--w-space-sm) var(--w-space-md);
+    background: var(--w-color-surface-elevated);
+    touch-action: manipulation;
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    will-change: auto;
+  }
+  .w-rank-row--favorite {
+    background: color-mix(in srgb, var(--w-color-europe-bg) 50%, var(--w-color-surface-elevated));
+    border-left: 4px solid var(--w-color-primary);
+    padding-left: calc(var(--w-space-md) - 4px);
+  }
+  .w-rank-row--favorite .w-rank-row__name {
+    color: var(--w-color-primary);
+    font-weight: 700;
+  }
+  .w-rank-row--glow {
+    box-shadow: 0 0 12px rgba(109, 40, 217, 0.35), 0 0 4px rgba(109, 40, 217, 0.2);
+    z-index: 2;
+    position: relative;
+  }
+  .w-rank-row--animating { will-change: transform, opacity; }
+  .w-rank-row__position {
+    font-size: var(--w-text-body);
+    font-weight: 700;
+    font-feature-settings: "tnum";
+    min-width: 1.5rem;
+    text-align: center;
+    color: var(--w-color-text-secondary);
+  }
+  .w-rank-row__logo {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .w-rank-row__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .w-rank-row__name {
+    font-size: var(--w-text-label);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .w-rank-row__elo {
+    font-size: var(--w-text-caption);
+    color: var(--w-color-text-secondary);
+    font-feature-settings: "tnum";
+  }
+  .w-rank-row__delta {
+    font-size: var(--w-text-caption);
+    font-weight: 600;
+    min-width: 1.5rem;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .w-rank-row__delta--up { color: var(--w-color-success); }
+  .w-rank-row__delta--down { color: var(--w-color-danger); }
+  .w-rank-row__delta--stable { color: var(--w-color-text-secondary); }
+  .w-rank-row__confidence {
+    width: 32px;
+    height: 4px;
+    border-radius: 2px;
+    background: #e5e7eb;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .w-rank-row__confidence-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* ===== Reveal Button — FAB Floating ===== */
+  .w-reveal-fab {
+    position: fixed;
+    bottom: var(--w-space-lg);
+    right: var(--w-space-lg);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--w-space-sm);
+  }
+
+  .w-reveal-fab__label {
+    background: var(--w-color-text-primary);
+    color: #fff;
+    font-size: var(--w-text-caption);
+    font-weight: 600;
+    padding: var(--w-space-xs) var(--w-space-sm);
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+  }
+  .w-reveal-fab:hover .w-reveal-fab__label,
+  .w-reveal-fab:focus-within .w-reveal-fab__label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .w-reveal-button {
+    width: 60px;
+    height: 60px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--w-color-primary), var(--w-color-primary-dark));
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+    transition: transform 50ms ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    box-shadow:
+      0 4px 16px rgba(109, 40, 217, 0.35),
+      0 2px 6px rgba(109, 40, 217, 0.2);
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  /* Glow pulse animation on the FAB */
+  .w-reveal-button::before {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--w-color-primary), var(--w-color-primary-dark));
+    opacity: 0.4;
+    z-index: -1;
+    animation: fab-pulse 2.5s ease-in-out infinite;
+  }
+
+  @keyframes fab-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.3; }
+    50% { transform: scale(1.12); opacity: 0.1; }
+  }
+
+  .w-reveal-button:hover:not(:disabled) {
+    box-shadow:
+      0 6px 24px rgba(109, 40, 217, 0.45),
+      0 4px 10px rgba(109, 40, 217, 0.3);
+    transform: scale(1.08);
+  }
+  .w-reveal-button:active:not(:disabled) {
+    transform: scale(0.93);
+  }
+  .w-reveal-button:focus-visible {
+    outline: 3px solid var(--w-color-primary);
+    outline-offset: 4px;
+  }
+
+  .w-reveal-button--animating {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+  .w-reveal-button--animating::before {
+    animation: none;
+    opacity: 0;
+  }
+
+  .w-reveal-button--replay {
+    background: var(--w-color-surface-elevated);
+    border: 2px solid var(--w-color-primary);
+    color: var(--w-color-primary);
+    box-shadow:
+      0 2px 8px rgba(0,0,0,0.1),
+      0 1px 3px rgba(0,0,0,0.06);
+  }
+  .w-reveal-button--replay::before {
+    animation: none;
+    opacity: 0;
+  }
+  .w-reveal-button--replay:hover:not(:disabled) {
+    background: var(--w-color-europe-bg);
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.2);
+    transform: scale(1.08);
+  }
+
+  /* SVG icon inside FAB */
+  .w-reveal-button svg {
+    width: 26px;
+    height: 26px;
+    fill: currentColor;
+  }
+
+  /* ===== State Demo ===== */
+  .w-states-demo {
+    display: flex;
+    gap: var(--w-space-sm);
+    flex-wrap: wrap;
+    margin-bottom: var(--w-space-xl);
+    justify-content: center;
+  }
+  .w-states-demo button {
+    font-size: var(--w-text-caption);
+    padding: var(--w-space-xs) var(--w-space-sm);
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    cursor: pointer;
+  }
+  .w-states-demo button.active {
+    background: var(--w-color-primary);
+    color: #fff;
+    border-color: var(--w-color-primary);
+  }
+
+  /* ===== Reduced Motion ===== */
+  @media (prefers-reduced-motion: reduce) {
+    .w-rank-row { transition: opacity 0.01s !important; }
+    .w-reveal-button { transition: none !important; }
+    .w-reveal-button::before { animation: none !important; opacity: 0 !important; }
+    .w-rank-row--glow { box-shadow: 0 0 0 2px var(--w-color-primary); }
+  }
+</style>
+</head>
+<body>
+<div class="w-page">
+  <p class="w-variant-label">Variante C — FAB Flottant (Material style)</p>
+  <h1 class="w-page__title">Classement TOP 14</h1>
+
+  <div class="w-states-demo">
+    <button class="active" data-state="default">Defaut</button>
+    <button data-state="hover">Hover</button>
+    <button data-state="animating">Animation</button>
+    <button data-state="replay">Rejouer</button>
+  </div>
+
+  <div id="standings" class="w-standings-section"></div>
+</div>
+
+<!-- Floating Action Button -->
+<div class="w-reveal-fab">
+  <span class="w-reveal-fab__label" id="fabLabel">Reveler la projection</span>
+  <button id="revealBtn" class="w-reveal-button" type="button" aria-label="Reveler la projection">
+    <!-- Play/reveal icon -->
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M8 5v14l11-7z"/>
+    </svg>
+  </button>
+</div>
+
+<script>
+// ===== Team Data =====
+const TEAMS = [
+  { id: 'toulouse', name: 'Stade Toulousain', currentRank: 1, projectedRank: 1, elo: 1892, confidence: 0.92, trend: 'stable', color: '#c41e3a' },
+  { id: 'bordeaux-begles', name: 'Union Bordeaux-Begles', currentRank: 2, projectedRank: 3, elo: 1845, confidence: 0.78, trend: 'down', color: '#5a2d82' },
+  { id: 'la-rochelle', name: 'Stade Rochelais', currentRank: 3, projectedRank: 2, elo: 1830, confidence: 0.74, trend: 'up', color: '#ffd700' },
+  { id: 'toulon', name: 'RC Toulon', currentRank: 4, projectedRank: 5, elo: 1790, confidence: 0.68, trend: 'down', color: '#cc0000' },
+  { id: 'racing-92', name: 'Racing 92', currentRank: 5, projectedRank: 4, elo: 1775, confidence: 0.65, trend: 'up', color: '#1e3a5f' },
+  { id: 'castres', name: 'Castres Olympique', currentRank: 6, projectedRank: 8, elo: 1755, confidence: 0.58, trend: 'down', color: '#003da5' },
+  { id: 'clermont', name: 'ASM Clermont', currentRank: 7, projectedRank: 6, elo: 1740, confidence: 0.55, trend: 'up', color: '#ffe100' },
+  { id: 'lyon', name: 'LOU Rugby', currentRank: 8, projectedRank: 7, elo: 1725, confidence: 0.52, trend: 'up', color: '#e30613' },
+  { id: 'pau', name: 'Section Paloise', currentRank: 9, projectedRank: 10, elo: 1710, confidence: 0.48, trend: 'down', color: '#006a4e' },
+  { id: 'montpellier', name: 'Montpellier HR', currentRank: 10, projectedRank: 9, elo: 1695, confidence: 0.45, trend: 'up', color: '#003da5' },
+  { id: 'stade-francais', name: 'Stade Francais', currentRank: 11, projectedRank: 12, elo: 1680, confidence: 0.42, trend: 'down', color: '#ff69b4' },
+  { id: 'perpignan', name: 'USAP Perpignan', currentRank: 12, projectedRank: 11, elo: 1665, confidence: 0.38, trend: 'up', color: '#8b0000' },
+  { id: 'bayonne', name: 'Aviron Bayonnais', currentRank: 13, projectedRank: 14, elo: 1640, confidence: 0.32, trend: 'down', color: '#003da5' },
+  { id: 'vannes', name: 'RC Vannes', currentRank: 14, projectedRank: 13, elo: 1620, confidence: 0.28, trend: 'up', color: '#e30613' },
+];
+
+const ZONES = [
+  { key: 'qualif', label: 'Demi-finales', minRank: 1, maxRank: 2 },
+  { key: 'top6', label: 'Phases finales', minRank: 3, maxRank: 6 },
+  { key: 'mid', label: 'Ventre mou', minRank: 7, maxRank: 12 },
+  { key: 'relegation', label: 'Maintien', minRank: 13, maxRank: 14 },
+];
+
+const FAVORITE = 'la-rochelle';
+
+function getInitials(name) {
+  return name.split(/[\s-]+/).map(w => w[0]).join('').slice(0, 2).toUpperCase();
+}
+
+function getDelta(trend) {
+  if (trend === 'up') return { text: '\u2191', cls: 'up' };
+  if (trend === 'down') return { text: '\u2193', cls: 'down' };
+  return { text: '=', cls: 'stable' };
+}
+
+function getConfColor(c) {
+  if (c > 0.7) return 'var(--w-color-confidence-high)';
+  if (c >= 0.4) return 'var(--w-color-confidence-mid)';
+  return 'var(--w-color-confidence-low)';
+}
+
+function renderStandings() {
+  const container = document.getElementById('standings');
+  container.innerHTML = '';
+
+  for (const zone of ZONES) {
+    const teams = TEAMS.filter(t => t.currentRank >= zone.minRank && t.currentRank <= zone.maxRank);
+    if (!teams.length) continue;
+
+    const section = document.createElement('section');
+    section.className = `w-zone-group w-zone-group--${zone.key}`;
+
+    const h2 = document.createElement('h2');
+    h2.className = 'w-zone-group__header';
+    h2.textContent = zone.label;
+    section.appendChild(h2);
+
+    const ul = document.createElement('ul');
+    ul.className = 'w-zone-group__list';
+
+    for (const team of teams) {
+      const li = document.createElement('li');
+      const delta = getDelta(team.trend);
+      const isFav = team.id === FAVORITE;
+
+      const row = document.createElement('div');
+      row.className = `w-rank-row${isFav ? ' w-rank-row--favorite' : ''}`;
+      row.dataset.teamId = team.id;
+      row.dataset.currentRank = team.currentRank;
+
+      row.innerHTML = `
+        <span class="w-rank-row__position">${team.currentRank}</span>
+        <span class="w-rank-row__logo" style="background:${team.color}" aria-hidden="true">${getInitials(team.name)}</span>
+        <div class="w-rank-row__info">
+          <span class="w-rank-row__name">${team.name}</span>
+          <span class="w-rank-row__elo">Elo ${team.elo}</span>
+        </div>
+        <span class="w-rank-row__delta w-rank-row__delta--${delta.cls}" aria-hidden="true">${delta.text}</span>
+        <div class="w-rank-row__confidence">
+          <div class="w-rank-row__confidence-fill" style="width:${team.confidence * 100}%;background:${getConfColor(team.confidence)}"></div>
+        </div>
+      `;
+
+      li.appendChild(row);
+      ul.appendChild(li);
+    }
+
+    section.appendChild(ul);
+    container.appendChild(section);
+  }
+}
+
+// ===== Animation Engine =====
+let isAnimating = false;
+let isRevealed = false;
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function getRowHeight() {
+  const row = document.querySelector('.w-rank-row');
+  return row ? row.getBoundingClientRect().height + 1 : 49;
+}
+
+function getSpringParams(absDelta) {
+  if (absDelta === 0) return null;
+  if (absDelta === 1) return { duration: 400, easing: 'cubic-bezier(0.34, 1.56, 0.64, 1)' };
+  if (absDelta === 2) return { duration: 600, easing: 'cubic-bezier(0.22, 1.8, 0.36, 1)' };
+  return { duration: 800, easing: 'cubic-bezier(0.16, 2.2, 0.3, 1)' };
+}
+
+async function revealProjection() {
+  if (isAnimating) return;
+  isAnimating = true;
+
+  const btn = document.getElementById('revealBtn');
+  const label = document.getElementById('fabLabel');
+  btn.disabled = true;
+  btn.setAttribute('aria-busy', 'true');
+  btn.setAttribute('aria-label', 'Projection en cours...');
+  btn.classList.add('w-reveal-button--animating');
+  btn.classList.remove('w-reveal-button--replay');
+  label.textContent = 'Projection en cours...';
+
+  // Spinner icon during animation
+  btn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true" style="animation: spin 1s linear infinite"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1-.25 1.94-.7 2.76l1.47 1.47C19.54 14.9 20 13.5 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1 .25-1.94.7-2.76L5.23 7.77C4.46 9.1 4 10.5 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>`;
+
+  const rows = document.querySelectorAll('.w-rank-row');
+  const rowHeight = getRowHeight();
+
+  const animList = [];
+  let laRochelle = null;
+
+  rows.forEach(row => {
+    const teamId = row.dataset.teamId;
+    const team = TEAMS.find(t => t.id === teamId);
+    if (!team) return;
+    const delta = team.projectedRank - team.currentRank;
+    const entry = { row, team, delta };
+    if (teamId === FAVORITE) {
+      laRochelle = entry;
+    } else {
+      animList.push(entry);
+    }
+  });
+  if (laRochelle) animList.push(laRochelle);
+
+  const promises = [];
+
+  for (let i = 0; i < animList.length; i++) {
+    const { row, team, delta } = animList[i];
+    const absDelta = Math.abs(delta);
+    const params = getSpringParams(absDelta);
+    if (!params) continue;
+
+    const translateY = delta * rowHeight;
+    const isLR = team.id === FAVORITE;
+    const delay = isLR ? (animList.length - 1) * 30 + 100 : i * 30;
+
+    if (absDelta >= 3) row.classList.add('w-rank-row--glow');
+    row.classList.add('w-rank-row--animating');
+
+    const p = new Promise(resolve => {
+      setTimeout(() => {
+        if (reducedMotion) {
+          row.style.transform = `translateY(${translateY}px)`;
+          row.querySelector('.w-rank-row__position').textContent = team.projectedRank;
+          resolve();
+        } else {
+          row.style.transition = `transform ${params.duration}ms ${params.easing}`;
+          row.style.transform = `translateY(${translateY}px)`;
+          row.addEventListener('transitionend', function handler(e) {
+            if (e.propertyName !== 'transform') return;
+            row.removeEventListener('transitionend', handler);
+            row.querySelector('.w-rank-row__position').textContent = team.projectedRank;
+            resolve();
+          });
+        }
+      }, delay);
+    });
+    promises.push(p);
+  }
+
+  await Promise.all(promises);
+
+  rows.forEach(row => {
+    row.classList.remove('w-rank-row--animating');
+    row.classList.remove('w-rank-row--glow');
+  });
+
+  isAnimating = false;
+  isRevealed = true;
+  btn.disabled = false;
+  btn.removeAttribute('aria-busy');
+  btn.setAttribute('aria-label', 'Rejouer la projection');
+  btn.classList.remove('w-reveal-button--animating');
+  btn.classList.add('w-reveal-button--replay');
+  label.textContent = 'Rejouer';
+  // Replay icon
+  btn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>`;
+}
+
+function resetProjection() {
+  const rows = document.querySelectorAll('.w-rank-row');
+  rows.forEach(row => {
+    const team = TEAMS.find(t => t.id === row.dataset.teamId);
+    if (!team) return;
+    row.style.transition = 'transform 0.3s ease';
+    row.style.transform = 'translateY(0)';
+    row.querySelector('.w-rank-row__position').textContent = team.currentRank;
+  });
+  isRevealed = false;
+}
+
+document.getElementById('revealBtn').addEventListener('click', async () => {
+  if (isAnimating) return;
+  if (isRevealed) {
+    resetProjection();
+    const btn = document.getElementById('revealBtn');
+    const label = document.getElementById('fabLabel');
+    btn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>`;
+    btn.classList.remove('w-reveal-button--replay');
+    btn.setAttribute('aria-label', 'Reveler la projection');
+    label.textContent = 'Reveler la projection';
+    await new Promise(r => setTimeout(r, 350));
+    revealProjection();
+  } else {
+    revealProjection();
+  }
+});
+
+// ===== Spin keyframe (for animating state) =====
+const style = document.createElement('style');
+style.textContent = `@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`;
+document.head.appendChild(style);
+
+// ===== State Demo =====
+document.querySelectorAll('.w-states-demo button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.w-states-demo button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const state = btn.dataset.state;
+    const revealBtn = document.getElementById('revealBtn');
+    const label = document.getElementById('fabLabel');
+
+    revealBtn.classList.remove('w-reveal-button--animating', 'w-reveal-button--replay');
+    revealBtn.disabled = false;
+    revealBtn.removeAttribute('aria-busy');
+
+    switch (state) {
+      case 'default':
+        revealBtn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>`;
+        revealBtn.setAttribute('aria-label', 'Reveler la projection');
+        label.textContent = 'Reveler la projection';
+        break;
+      case 'hover':
+        revealBtn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>`;
+        revealBtn.style.transform = 'scale(1.08)';
+        revealBtn.style.boxShadow = '0 6px 24px rgba(109,40,217,0.45), 0 4px 10px rgba(109,40,217,0.3)';
+        label.textContent = 'Reveler la projection';
+        label.style.opacity = '1';
+        label.style.transform = 'translateY(0)';
+        setTimeout(() => {
+          revealBtn.style.transform = '';
+          revealBtn.style.boxShadow = '';
+          label.style.opacity = '';
+          label.style.transform = '';
+        }, 1500);
+        break;
+      case 'animating':
+        revealBtn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true" style="animation: spin 1s linear infinite"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1-.25 1.94-.7 2.76l1.47 1.47C19.54 14.9 20 13.5 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1 .25-1.94.7-2.76L5.23 7.77C4.46 9.1 4 10.5 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>`;
+        revealBtn.classList.add('w-reveal-button--animating');
+        revealBtn.disabled = true;
+        revealBtn.setAttribute('aria-busy', 'true');
+        label.textContent = 'Projection en cours...';
+        break;
+      case 'replay':
+        revealBtn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>`;
+        revealBtn.classList.add('w-reveal-button--replay');
+        revealBtn.setAttribute('aria-label', 'Rejouer la projection');
+        label.textContent = 'Rejouer';
+        break;
+    }
+  });
+});
+
+renderStandings();
+</script>
+</body>
+</html>

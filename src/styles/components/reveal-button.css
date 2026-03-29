@@ -1,0 +1,78 @@
+/* Reveal button — sticky CTA at bottom of viewport */
+
+.w-reveal-button {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: var(--w-space-md) var(--w-space-lg);
+  border: none;
+  border-radius: var(--w-radius-button, 14px);
+  background: linear-gradient(
+    135deg,
+    var(--w-color-primary),
+    #5b21b6
+  );
+  color: #fff;
+  font-family: inherit;
+  font-size: var(--w-text-body);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 50ms ease, box-shadow 150ms ease;
+  box-shadow:
+    0 0 12px rgba(109, 40, 217, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.15);
+  position: relative;
+  z-index: 10;
+}
+
+/* Glow intensifies on hover/focus */
+.w-reveal-button:hover,
+.w-reveal-button:focus-visible {
+  box-shadow:
+    0 0 20px rgba(109, 40, 217, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Focus visible outline (WCAG AA) */
+.w-reveal-button:focus-visible {
+  outline: 3px solid var(--w-color-primary);
+  outline-offset: 3px;
+}
+
+/* Animating state */
+.w-reveal-button--animating {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Replay state */
+.w-reveal-button--replay {
+  background: transparent;
+  border: 2px solid var(--w-color-primary);
+  color: var(--w-color-primary);
+  box-shadow: 0 0 8px rgba(109, 40, 217, 0.2);
+}
+
+.w-reveal-button--replay:hover,
+.w-reveal-button--replay:focus-visible {
+  background: rgba(109, 40, 217, 0.08);
+  box-shadow: 0 0 16px rgba(109, 40, 217, 0.35);
+}
+
+/* Sticky bottom container */
+.w-reveal-section {
+  position: sticky;
+  bottom: var(--w-space-md);
+  z-index: 10;
+  padding: 0;
+}
+
+/* Reduced motion: no scale transition */
+@media (prefers-reduced-motion: reduce) {
+  .w-reveal-button {
+    transition: none;
+  }
+}
