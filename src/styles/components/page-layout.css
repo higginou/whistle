@@ -1,0 +1,6 @@
+.w-page-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--w-space-lg);
+  padding-block: var(--w-space-lg);
+}
