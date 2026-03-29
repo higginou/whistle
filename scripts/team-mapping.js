@@ -110,4 +110,38 @@ export const VALID_TEAM_IDS = [
   'vannes',
 ];
 
+/**
+ * Mapping from Rugbyrama idalgo URL slugs to internal Whistle IDs.
+ * Most slugs match directly; only non-trivial mappings are listed.
+ * @type {Record<string, string>}
+ */
+export const IDALGO_SLUG_TO_ID = {
+  'stade-toulousain': 'toulouse',
+  'stade-francais': 'stade-francais',
+  'bordeaux-begles': 'bordeaux-begles',
+  'la-rochelle': 'la-rochelle',
+  'racing-92': 'racing-92',
+  'clermont': 'clermont',
+  'castres': 'castres',
+  'lyon': 'lyon',
+  'montpellier': 'montpellier',
+  'pau': 'pau',
+  'toulon': 'toulon',
+  'perpignan': 'perpignan',
+  'bayonne': 'bayonne',
+  'montauban': 'montauban',
+  'vannes': 'vannes',
+};
+
+/**
+ * Resolve a Rugbyrama idalgo team slug to its internal Whistle ID.
+ * @param {string} slug - Team slug from Rugbyrama URL (e.g., "stade-toulousain")
+ * @returns {string|null} Internal team ID or null if unrecognized
+ */
+export function resolveIdalgoSlug(slug) {
+  if (!slug || typeof slug !== 'string') return null;
+  const normalized = slug.toLowerCase().trim();
+  return IDALGO_SLUG_TO_ID[normalized] || null;
+}
+
 export { TEAM_NAME_TO_ID };

@@ -4,7 +4,7 @@ import {
   parseStandings,
   parseFrenchDate,
   resolveTeamsFromSlug,
-} from '../scripts/scrape.js';
+} from '../scripts/scrape-lnr.js';
 import { resolveTeamId, VALID_TEAM_IDS } from '../scripts/team-mapping.js';
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────

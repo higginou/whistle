@@ -136,42 +136,22 @@ describe('pipeline.yml — sequential script execution', () => {
 
 // ─── Fallback mechanism ────────────────────────────────────────────────────
 
-describe('pipeline.yml — fallback scraping mechanism', () => {
-  it('LNR scrape step has continue-on-error: true', () => {
+describe('pipeline.yml — scraping step', () => {
+  it('has a single scrape step calling node scripts/scrape.js', () => {
     const wf = loadWorkflow();
-    const lnrStep = wf.jobs.pipeline.steps.find(
-      (s) => /scrape lnr/i.test(s.name),
+    const scrapeStep = wf.jobs.pipeline.steps.find(
+      (s) => /scrape/i.test(s.name),
     );
-    expect(lnrStep).toBeDefined();
-    expect(lnrStep['continue-on-error']).toBe(true);
+    expect(scrapeStep).toBeDefined();
+    expect(scrapeStep.run).toMatch(/node scripts\/scrape\.js/);
   });
 
-  it('fallback step runs only if LNR step fails', () => {
+  it('fallback is handled in code, not in workflow YAML', () => {
     const wf = loadWorkflow();
     const fallbackStep = wf.jobs.pipeline.steps.find(
       (s) => /fallback/i.test(s.name),
     );
-    expect(fallbackStep).toBeDefined();
-    expect(fallbackStep.if).toMatch(/failure/);
-  });
-
-  it('fallback step uses SCRAPE_SOURCE=api-sports', () => {
-    const wf = loadWorkflow();
-    const fallbackStep = wf.jobs.pipeline.steps.find(
-      (s) => /fallback/i.test(s.name),
-    );
-    expect(fallbackStep.run).toMatch(/SCRAPE_SOURCE=api-sports/);
-    expect(fallbackStep.run).toMatch(/scrape\.js/);
-  });
-
-  it('check step fails pipeline if both sources fail', () => {
-    const wf = loadWorkflow();
-    const checkStep = wf.jobs.pipeline.steps.find(
-      (s) => /check scraping/i.test(s.name),
-    );
-    expect(checkStep).toBeDefined();
-    expect(checkStep.if).toMatch(/failure/);
-    expect(checkStep.run).toMatch(/exit 1/);
+    expect(fallbackStep).toBeUndefined();
   });
 });
 
@@ -259,7 +239,7 @@ describe('pipeline.yml — alerting on consecutive failures', () => {
 // ─── T6.2 : Referenced scripts exist ───────────────────────────────────────
 
 describe('pipeline — referenced scripts exist', () => {
-  const scripts = ['scrape.js', 'validate.js', 'elo.js', 'generate.js'];
+  const scripts = ['scrape.js', 'scrape-rugbyrama.js', 'scrape-lnr.js', 'validate.js', 'elo.js', 'generate.js'];
 
   for (const script of scripts) {
     it(`scripts/${script} exists`, () => {
@@ -271,11 +251,14 @@ describe('pipeline — referenced scripts exist', () => {
 
 // ─── T6.3 : Scrape source dispatch ────────────────────────────────────────
 
-describe('scrape.js — fallback source support', () => {
-  it('exports getScrapeSources listing available sources', async () => {
-    const { getScrapeSources } = await import('../scripts/scrape.js');
-    const sources = getScrapeSources();
-    expect(sources).toContain('lnr');
-    expect(sources).toContain('api-sports');
+describe('scrape.js — orchestrator imports', () => {
+  it('scrape-rugbyrama.js exports scrapeRugbyrama', async () => {
+    const mod = await import('../scripts/scrape-rugbyrama.js');
+    expect(typeof mod.scrapeRugbyrama).toBe('function');
+  });
+
+  it('scrape-lnr.js exports scrapeLnr', async () => {
+    const mod = await import('../scripts/scrape-lnr.js');
+    expect(typeof mod.scrapeLnr).toBe('function');
   });
 });
