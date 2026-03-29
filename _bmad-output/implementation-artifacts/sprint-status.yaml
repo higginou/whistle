@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-03-28
-last_updated: 2026-03-29 (story 2-1 ready-for-dev)
+last_updated: 2026-03-29 (story 2-2 done)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -56,7 +56,7 @@ development_status:
   # Epic 2 : Score Card & Situation Equipe Favorite
   epic-2: in-progress
   2-1-design-tokens-et-fondation-visuelle: done
-  2-2-store-detat-fetch-donnees-et-router: backlog
+  2-2-store-detat-fetch-donnees-et-router: done
   2-3-layout-page-principale-et-structure-html-semantique: backlog
   2-4-score-card-hero-la-rochelle: backlog
   2-5-badge-nouvelle-journee: backlog
