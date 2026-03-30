@@ -1,21 +1,67 @@
-/** @module router — Minimal History API router (~20 lines) */
+/** @module router — History API router for tabs and sheets */
 
 import { set } from './store.js'
 
-/** Push a bottom-sheet state into history and update store. */
-function pushSheet(sheetId) {
+/** Ordered tab IDs matching bottom nav order. */
+const TAB_IDS = ['classements', 'projection', 'duels', 'donjon', 'oracle']
+
+/**
+ * Derive active tab from current pathname.
+ * Works with or without a base path (e.g., /whistle/).
+ * @returns {string} tab ID
+ */
+export function tabFromCurrentPath() {
+  const pathname = window.location.pathname
+  for (const id of TAB_IDS) {
+    if (id === 'classements') continue
+    if (pathname.endsWith(`/${id}`)) return id
+  }
+  return 'classements'
+}
+
+/**
+ * Push a tab navigation state.
+ * Builds path by replacing the current tab suffix.
+ * @param {string} tabId
+ */
+export function pushTab(tabId) {
+  const base = window.location.pathname.replace(
+    /\/(projection|duels|donjon|oracle)$/,
+    '',
+  )
+  const suffix = tabId === 'classements' ? '' : `/${tabId}`
+  const path = `${base}${suffix}` || '/'
+  history.pushState({ tab: tabId }, '', path)
+  set('activeTab', tabId)
+}
+
+/**
+ * Push a bottom-sheet state on top of current tab URL.
+ * @param {string} sheetId
+ */
+export function pushSheet(sheetId) {
   history.pushState({ sheet: sheetId }, '')
   set('activeSheet', sheetId)
 }
 
-/** Handle back navigation — close any open sheet. */
-function onPopState() {
-  set('activeSheet', null)
+/**
+ * Handle back navigation. Inspects event.state to distinguish sheet vs tab pops.
+ * - state has `sheet` → sheet pop: close sheet
+ * - state has `tab` (but no `sheet`) → tab pop: sync activeTab store from state
+ * - state is null → initial load or unknown: sync activeTab from current pathname
+ * app.js MUST NOT add its own popstate listener — it listens to the activeTab store event.
+ */
+function onPopState(event) {
+  if (event.state?.sheet) {
+    set('activeSheet', null)
+  } else {
+    // Tab pop or initial replaceState: sync store from state.tab or current pathname
+    const tabId = event.state?.tab ?? tabFromCurrentPath()
+    set('activeTab', tabId)
+  }
 }
 
 /** Initialize router (call once at startup). */
-function init() {
+export function init() {
   window.addEventListener('popstate', onPopState)
 }
-
-export { pushSheet, init }
