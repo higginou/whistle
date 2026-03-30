@@ -36,7 +36,7 @@
 # - Inter-epic work (retro action items, debt, prep) is tracked under inter_epic_tasks
 
 generated: 2026-03-28
-last_updated: 2026-03-29 (epic-4 done)
+last_updated: 2026-03-30 (inter-epic tasks done)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -77,7 +77,7 @@ development_status:
   4-1-configuration-service-worker-et-strategies-de-cache: done
   4-2-manifest-pwa-icones-et-installation-android: done
   4-3-deploiement-github-pages: done
-  epic-4-retrospective: optional
+  epic-4-retrospective: done
 
   # Epic 5 : Transparence du Modele (Phase 2)
   epic-5: backlog
@@ -115,3 +115,9 @@ inter_epic_tasks:
   retro3-spike-vite-plugin-pwa: done           # generateSW, autoUpdate, NetworkFirst JSON, ~0.5KB impact
   retro3-audit-budget-performance: done        # 21KB gz / 200KB budget = 10.5%, marge 89%
   retro3-checklist-validation-sw: done         # Checklist 8 sections dans implementation-artifacts/
+
+  # Post-retro Epic 4 (2026-03-30)
+  retro4-fichier-story-4-2: done               # Fichier existait (story-4-2-*.md, nommage avec prefixe story-)
+  retro4-fix-tests-season-schema: done         # 475/475 tests passes — Vannes ajoutee, form[5], date calendrier
+  retro4-spike-schema-json-epic5: done         # Voir epic-4-retro-2026-03-30.md — champs existants suffisants, extensions au fil des stories
+  retro4-spike-composants-epic5: backlog       # Patterns UI progressive disclosure, toggle, micro-classement

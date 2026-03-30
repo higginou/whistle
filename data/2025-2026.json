@@ -17,9 +17,7 @@
         "mid": 0,
         "relegation": 0
       },
-      "form": [
-        "W"
-      ],
+      "form": ["W", "W", "L", "W", "W"],
       "trend": "stable"
     },
     {
@@ -35,9 +33,7 @@
         "mid": 0,
         "relegation": 0
       },
-      "form": [
-        "W"
-      ],
+      "form": ["W", "L", "W", "W", "L"],
       "trend": "stable"
     },
     {
@@ -53,9 +49,7 @@
         "mid": 0,
         "relegation": 0
       },
-      "form": [
-        "W"
-      ],
+      "form": ["W", "W", "W", "L", "W"],
       "trend": "stable"
     },
     {
@@ -71,9 +65,7 @@
         "mid": 1,
         "relegation": 0
       },
-      "form": [
-        "L"
-      ],
+      "form": ["L", "W", "L", "L", "W"],
       "trend": "stable"
     },
     {
@@ -89,7 +81,7 @@
         "mid": 0,
         "relegation": 0.3595
       },
-      "form": [],
+      "form": ["W", "W", "W", "L", "W"],
       "trend": "stable"
     },
     {
@@ -105,7 +97,7 @@
         "mid": 0.5199,
         "relegation": 0
       },
-      "form": [],
+      "form": ["L", "W", "W", "L", "L"],
       "trend": "stable"
     },
     {
@@ -121,9 +113,7 @@
         "mid": 1,
         "relegation": 0
       },
-      "form": [
-        "L"
-      ],
+      "form": ["L", "L", "W", "L", "W"],
       "trend": "stable"
     },
     {
@@ -139,9 +129,7 @@
         "mid": 0,
         "relegation": 0
       },
-      "form": [
-        "W"
-      ],
+      "form": ["W", "W", "L", "W", "W"],
       "trend": "stable"
     },
     {
@@ -157,9 +145,7 @@
         "mid": 1,
         "relegation": 0
       },
-      "form": [
-        "L"
-      ],
+      "form": ["L", "W", "L", "L", "W"],
       "trend": "stable"
     },
     {
@@ -175,9 +161,7 @@
         "mid": 0.1206,
         "relegation": 0
       },
-      "form": [
-        "W"
-      ],
+      "form": ["W", "L", "W", "W", "W"],
       "trend": "stable"
     },
     {
@@ -193,9 +177,7 @@
         "mid": 1,
         "relegation": 0
       },
-      "form": [
-        "L"
-      ],
+      "form": ["L", "W", "L", "W", "L"],
       "trend": "stable"
     },
     {
@@ -211,9 +193,7 @@
         "mid": 0.3595,
         "relegation": 0.6405
       },
-      "form": [
-        "L"
-      ],
+      "form": ["L", "L", "W", "L", "L"],
       "trend": "stable"
     },
     {
@@ -229,16 +209,30 @@
         "mid": 1,
         "relegation": 0
       },
-      "form": [
-        "L"
-      ],
+      "form": ["L", "W", "L", "L", "W"],
       "trend": "stable"
+    },
+    {
+      "id": "vannes",
+      "name": "RC Vannes",
+      "currentRank": 14,
+      "projectedRank": 14,
+      "elo": 1462,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0,
+        "top6": 0,
+        "mid": 0,
+        "relegation": 1
+      },
+      "form": ["L", "L", "L", "W", "L"],
+      "trend": "down"
     }
   ],
   "calendar": [
     {
       "matchday": 20,
-      "date": "",
+      "date": "2026-03-29T14:00:00Z",
       "home": "stade-francais",
       "away": "clermont",
       "difficulty": 0.41
@@ -388,6 +382,11 @@
         {
           "teamId": "montauban",
           "projectedRank": 12,
+          "confidence": 0.46
+        },
+        {
+          "teamId": "vannes",
+          "projectedRank": 14,
           "confidence": 0.46
         }
       ]
