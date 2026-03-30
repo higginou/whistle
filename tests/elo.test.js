@@ -18,6 +18,8 @@ import {
   computeTrend,
   computeNeighborGap,
   roundDecimal,
+  generateRecalibrations,
+  RECALIBRATION_MATCHDAYS,
 } from '../scripts/elo.js';
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
@@ -633,5 +635,48 @@ describe('computeNeighborGap', () => {
     ];
     // la-rochelle (index 1): gap to toulouse=50, gap to toulon=150 -> min=50
     expect(computeNeighborGap(teams, 1)).toBe(50);
+  });
+});
+
+// ─── generateRecalibrations ───────────────────────────────────────────────
+
+describe('generateRecalibrations', () => {
+  it('returns empty for non-recalibration matchday', () => {
+    expect(generateRecalibrations(10)).toEqual([]);
+    expect(generateRecalibrations(1)).toEqual([]);
+    expect(generateRecalibrations(20)).toEqual([]);
+  });
+
+  it('generates mid-season recalibration at J13', () => {
+    const result = generateRecalibrations(13);
+    expect(result).toHaveLength(1);
+    expect(result[0].matchday).toBe(13);
+    expect(result[0].type).toBe('recalibration');
+    expect(result[0].parameter).toBe('temporalDecay');
+  });
+
+  it('generates end-of-season recalibration at J26', () => {
+    const result = generateRecalibrations(26);
+    expect(result).toHaveLength(1);
+    expect(result[0].matchday).toBe(26);
+    expect(result[0].type).toBe('recalibration');
+    expect(result[0].parameter).toBe('kFactor');
+  });
+
+  it('recalibration entries have all required fields', () => {
+    for (const md of RECALIBRATION_MATCHDAYS) {
+      const result = generateRecalibrations(md);
+      for (const entry of result) {
+        expect(typeof entry.matchday).toBe('number');
+        expect(typeof entry.date).toBe('string');
+        expect(typeof entry.title).toBe('string');
+        expect(typeof entry.description).toBe('string');
+        expect(['positive', 'neutral', 'negative']).toContain(entry.impact);
+        expect(typeof entry.parameter).toBe('string');
+        expect(typeof entry.oldValue).toBe('number');
+        expect(typeof entry.newValue).toBe('number');
+        expect(entry.type).toBe('recalibration');
+      }
+    }
   });
 });

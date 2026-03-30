@@ -275,6 +275,50 @@ describe('AC5 : structure des predictions', () => {
   });
 });
 
+// --- AC-5.2 : Structure des corrections ---
+
+describe('AC-5.2 : structure des corrections', () => {
+  it('corrections est un tableau', () => {
+    expect(Array.isArray(seasonData.corrections)).toBe(true);
+  });
+
+  it('chaque correction a tous les champs requis', () => {
+    for (const c of seasonData.corrections) {
+      expect(Number.isInteger(c.matchday)).toBe(true);
+      expect(c.matchday).toBeGreaterThan(0);
+
+      expect(typeof c.date).toBe('string');
+      expect(c.date).toMatch(ISO_8601_RE);
+
+      expect(typeof c.title).toBe('string');
+      expect(c.title.length).toBeGreaterThan(0);
+
+      expect(typeof c.description).toBe('string');
+      expect(c.description.length).toBeGreaterThan(0);
+
+      expect(['positive', 'neutral', 'negative']).toContain(c.impact);
+
+      expect(typeof c.parameter).toBe('string');
+      expect(c.parameter.length).toBeGreaterThan(0);
+
+      expect(typeof c.oldValue).toBe('number');
+      expect(typeof c.newValue).toBe('number');
+
+      expect(['correction', 'recalibration']).toContain(c.type);
+    }
+  });
+
+  it('contient au moins 3 entrees', () => {
+    expect(seasonData.corrections.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('les corrections sont triees par matchday croissant', () => {
+    for (let i = 1; i < seasonData.corrections.length; i++) {
+      expect(seasonData.corrections[i].matchday).toBeGreaterThanOrEqual(seasonData.corrections[i - 1].matchday);
+    }
+  });
+});
+
 // --- AC6 : Budget taille ---
 
 describe('AC6 : budget taille du fichier', () => {

@@ -17,7 +17,13 @@
         "mid": 0,
         "relegation": 0
       },
-      "form": ["W", "W", "L", "W", "W"],
+      "form": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
       "trend": "stable"
     },
     {
@@ -33,7 +39,13 @@
         "mid": 0,
         "relegation": 0
       },
-      "form": ["W", "L", "W", "W", "L"],
+      "form": [
+        "W",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
       "trend": "stable"
     },
     {
@@ -49,7 +61,13 @@
         "mid": 0,
         "relegation": 0
       },
-      "form": ["W", "W", "W", "L", "W"],
+      "form": [
+        "W",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
       "trend": "stable"
     },
     {
@@ -65,7 +83,13 @@
         "mid": 1,
         "relegation": 0
       },
-      "form": ["L", "W", "L", "L", "W"],
+      "form": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "W"
+      ],
       "trend": "stable"
     },
     {
@@ -81,7 +105,13 @@
         "mid": 0,
         "relegation": 0.3595
       },
-      "form": ["W", "W", "W", "L", "W"],
+      "form": [
+        "W",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
       "trend": "stable"
     },
     {
@@ -97,7 +127,13 @@
         "mid": 0.5199,
         "relegation": 0
       },
-      "form": ["L", "W", "W", "L", "L"],
+      "form": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
       "trend": "stable"
     },
     {
@@ -113,7 +149,13 @@
         "mid": 1,
         "relegation": 0
       },
-      "form": ["L", "L", "W", "L", "W"],
+      "form": [
+        "L",
+        "L",
+        "W",
+        "L",
+        "W"
+      ],
       "trend": "stable"
     },
     {
@@ -129,7 +171,13 @@
         "mid": 0,
         "relegation": 0
       },
-      "form": ["W", "W", "L", "W", "W"],
+      "form": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
       "trend": "stable"
     },
     {
@@ -145,7 +193,13 @@
         "mid": 1,
         "relegation": 0
       },
-      "form": ["L", "W", "L", "L", "W"],
+      "form": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "W"
+      ],
       "trend": "stable"
     },
     {
@@ -161,7 +215,13 @@
         "mid": 0.1206,
         "relegation": 0
       },
-      "form": ["W", "L", "W", "W", "W"],
+      "form": [
+        "W",
+        "L",
+        "W",
+        "W",
+        "W"
+      ],
       "trend": "stable"
     },
     {
@@ -177,7 +237,13 @@
         "mid": 1,
         "relegation": 0
       },
-      "form": ["L", "W", "L", "W", "L"],
+      "form": [
+        "L",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
       "trend": "stable"
     },
     {
@@ -193,7 +259,13 @@
         "mid": 0.3595,
         "relegation": 0.6405
       },
-      "form": ["L", "L", "W", "L", "L"],
+      "form": [
+        "L",
+        "L",
+        "W",
+        "L",
+        "L"
+      ],
       "trend": "stable"
     },
     {
@@ -209,7 +281,13 @@
         "mid": 1,
         "relegation": 0
       },
-      "form": ["L", "W", "L", "L", "W"],
+      "form": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "W"
+      ],
       "trend": "stable"
     },
     {
@@ -225,7 +303,13 @@
         "mid": 0,
         "relegation": 1
       },
-      "form": ["L", "L", "L", "W", "L"],
+      "form": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
       "trend": "down"
     }
   ],
@@ -390,6 +474,41 @@
           "confidence": 0.46
         }
       ]
+    }
+  ],
+  "corrections": [
+    {
+      "matchday": 8,
+      "date": "2025-11-10T00:00:00Z",
+      "title": "Facteur domicile recalibre",
+      "description": "L'avantage domicile de La Rochelle passe de 1.20 a 1.35 — Marcel Deflandre est une forteresse",
+      "impact": "positive",
+      "parameter": "homeFactor.la-rochelle",
+      "oldValue": 1.2,
+      "newValue": 1.35,
+      "type": "correction"
+    },
+    {
+      "matchday": 13,
+      "date": "2026-01-12T00:00:00Z",
+      "title": "Recalibrage mi-saison",
+      "description": "L'Oracle ajuste ses coefficients a mi-parcours — la decroissance temporelle s'affine pour mieux suivre la forme recente",
+      "impact": "neutral",
+      "parameter": "temporalDecay",
+      "oldValue": 0.92,
+      "newValue": 0.88,
+      "type": "recalibration"
+    },
+    {
+      "matchday": 16,
+      "date": "2026-02-08T00:00:00Z",
+      "title": "Bonus offensif sous-estime",
+      "description": "Le poids du bonus offensif etait trop faible — les equipes joueuses n'etaient pas assez recompensees",
+      "impact": "negative",
+      "parameter": "bonusWeight",
+      "oldValue": 0.15,
+      "newValue": 0.22,
+      "type": "correction"
     }
   ]
 }

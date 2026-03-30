@@ -6,6 +6,7 @@ import {
   buildPredictionEntry,
   mergePredictions,
   mergeCalendarDates,
+  mergeCorrections,
   buildSeasonData,
   ensureSeasonInIndex,
   loadExistingSeason,
@@ -488,5 +489,67 @@ describe('T5.6 : mergeCalendarDates — preservation des dates', () => {
     const newCal = [{ matchday: 23, date: '', home: 'toulon', away: 'pau', difficulty: 0.5 }];
     const merged = mergeCalendarDates(newCal, undefined);
     expect(merged).toEqual(newCal);
+  });
+});
+
+// ─── mergeCorrections ─────────────────────────────────────────────────────
+
+describe('mergeCorrections', () => {
+  const c1 = { matchday: 8, parameter: 'homeFactor', type: 'correction', oldValue: 1, newValue: 1.5, date: '2025-11-10T00:00:00Z', title: 'A', description: 'D', impact: 'positive' };
+  const c2 = { matchday: 13, parameter: 'temporalDecay', type: 'recalibration', oldValue: 0.9, newValue: 0.8, date: '2026-01-12T00:00:00Z', title: 'B', description: 'D', impact: 'neutral' };
+
+  it('returns existing when incoming is empty', () => {
+    expect(mergeCorrections([c1], [])).toEqual([c1]);
+  });
+
+  it('returns existing when incoming is null', () => {
+    expect(mergeCorrections([c1], null)).toEqual([c1]);
+  });
+
+  it('appends new corrections', () => {
+    const result = mergeCorrections([c1], [c2]);
+    expect(result).toHaveLength(2);
+    expect(result[0].matchday).toBe(8);
+    expect(result[1].matchday).toBe(13);
+  });
+
+  it('deduplicates by matchday+parameter', () => {
+    const result = mergeCorrections([c1], [{ ...c1, title: 'Updated' }]);
+    expect(result).toHaveLength(1);
+    expect(result[0].title).toBe('A'); // keeps existing
+  });
+
+  it('sorts by matchday ascending', () => {
+    const result = mergeCorrections([c2], [c1]);
+    expect(result[0].matchday).toBe(8);
+    expect(result[1].matchday).toBe(13);
+  });
+});
+
+// ─── buildSeasonData: corrections propagation ─────────────────────────────
+
+describe('buildSeasonData corrections', () => {
+  it('includes corrections from elo-output', () => {
+    const eloOutput = {
+      matchday: 13,
+      teams: [{ id: 'toulouse', currentRank: 1, projectedRank: 1, elo: 1500, confidence: 0.5, zones: { europe: 0.5, top6: 0.3, mid: 0.15, relegation: 0.05 }, form: ['W', 'W', 'W', 'W', 'W'], trend: 'up', eloHistory: [1500] }],
+      calendar: [],
+      corrections: [{ matchday: 13, parameter: 'decay', type: 'recalibration', oldValue: 0.05, newValue: 0.045, date: '2026-01-12T00:00:00Z', title: 'R', description: 'D', impact: 'neutral' }],
+    };
+    const result = buildSeasonData(eloOutput, [], [], []);
+    expect(result.corrections).toHaveLength(1);
+    expect(result.corrections[0].type).toBe('recalibration');
+  });
+
+  it('merges existing and new corrections without duplicates', () => {
+    const existing = [{ matchday: 8, parameter: 'p', type: 'correction', oldValue: 1, newValue: 2, date: '2025-11-10T00:00:00Z', title: 'E', description: 'D', impact: 'positive' }];
+    const eloOutput = {
+      matchday: 13,
+      teams: [{ id: 'toulouse', currentRank: 1, projectedRank: 1, elo: 1500, confidence: 0.5, zones: { europe: 0.5, top6: 0.3, mid: 0.15, relegation: 0.05 }, form: ['W', 'W', 'W', 'W', 'W'], trend: 'up', eloHistory: [1500] }],
+      calendar: [],
+      corrections: [{ matchday: 8, parameter: 'p', type: 'correction', oldValue: 1, newValue: 2, date: '2025-11-10T00:00:00Z', title: 'Dup', description: 'D', impact: 'positive' }],
+    };
+    const result = buildSeasonData(eloOutput, [], [], existing);
+    expect(result.corrections).toHaveLength(1);
   });
 });

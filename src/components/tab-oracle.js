@@ -193,10 +193,120 @@ function renderFactorCards() {
 function formatDate(isoString) {
   try {
     const d = new Date(isoString)
+    if (Number.isNaN(d.getTime())) return ''
     return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
   } catch {
     return ''
   }
+}
+
+// ─── Journal Icons (SVG paths) ───────────────────────────────────────────
+
+const JOURNAL_ICONS = {
+  correction: '<path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6-7.1 7.1-1.6-1.6a1 1 0 00-1.4 0"/><path d="M2 22l4-2-2-2z"/>',
+  recalibration: '<path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/>',
+}
+
+const IMPACT_LABELS = { positive: 'Positif', neutral: 'Neutre', negative: 'Negatif' }
+
+/**
+ * Render a single journal page (grimoire entry).
+ * @param {object} entry - Correction entry from JSON
+ * @param {number} index - Entry index for stagger delay
+ * @returns {string} HTML string
+ */
+function renderJournalPage(entry, index) {
+  const matchdayLabel = `J${esc(String(entry.matchday))}`
+  const dateLabel = formatDate(entry.date)
+  const icon = JOURNAL_ICONS[entry.type] ?? JOURNAL_ICONS.correction
+  const typeLabel = entry.type === 'recalibration' ? 'Recalibrage' : 'Correction'
+  const impactLabel = IMPACT_LABELS[entry.impact] ?? 'Neutre'
+  const oldVal = typeof entry.oldValue === 'number' && !Number.isNaN(entry.oldValue) ? esc(String(entry.oldValue)) : '?'
+  const newVal = typeof entry.newValue === 'number' && !Number.isNaN(entry.newValue) ? esc(String(entry.newValue)) : '?'
+
+  return `
+    <article class="w-oracle-journal-page" aria-label="${esc(entry.type === 'recalibration' ? 'Recalibrage' : 'Correction')} du ${esc(dateLabel)}, journee ${entry.matchday}" data-journal-delay="${index}">
+      <div class="w-oracle-journal-page-inner">
+        <div class="w-oracle-journal-page-corner" aria-hidden="true"></div>
+        <div class="w-oracle-journal-page-header">
+          <div class="w-oracle-journal-page-date-block">
+            <span class="w-oracle-journal-page-matchday">${matchdayLabel}</span>
+            <span class="w-oracle-journal-page-date">${esc(dateLabel)}</span>
+          </div>
+          <span class="w-oracle-journal-type-badge w-oracle-journal-type-badge--${esc(entry.type)}">
+            <svg viewBox="0 0 24 24" aria-hidden="true">${icon}</svg>
+            ${esc(typeLabel)}
+          </span>
+        </div>
+        <h3 class="w-oracle-journal-page-title">${esc(entry.title)}</h3>
+        <p class="w-oracle-journal-page-desc">${esc(entry.description)}</p>
+        <div class="w-oracle-journal-page-footer">
+          <span class="w-oracle-journal-impact w-oracle-journal-impact--${esc(entry.impact)}" aria-label="Impact ${esc(impactLabel.toLowerCase())}">${esc(impactLabel)}</span>
+          <div class="w-oracle-journal-page-diff">
+            <span class="w-oracle-journal-page-old">${oldVal}</span>
+            <span class="w-oracle-journal-page-arrow" aria-hidden="true">&#10140;</span>
+            <span class="w-oracle-journal-page-new">${newVal}</span>
+            <span class="w-oracle-journal-page-param">${esc(entry.parameter)}</span>
+          </div>
+        </div>
+      </div>
+    </article>`
+}
+
+/**
+ * Render the journal section with toggle and entries.
+ * @param {object[]} corrections - Array of correction entries from season JSON
+ * @returns {string} HTML string for the full journal section
+ */
+export function renderJournalSection(corrections) {
+  const entries = Array.isArray(corrections) && corrections.length > 0
+    ? corrections
+    : null
+
+  const pagesHtml = entries
+    ? entries
+        .sort((a, b) => a.matchday - b.matchday)
+        .map((entry, i) => renderJournalPage(entry, i))
+        .join('')
+    : ''
+
+  const emptyHtml = `
+    <div class="w-oracle-journal-empty">
+      <div class="w-oracle-journal-empty-quill" aria-hidden="true">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+        </svg>
+      </div>
+      <p class="w-oracle-journal-empty-text">L'Oracle n'a pas encore eu besoin de se corriger — patience, ca viendra</p>
+    </div>`
+
+  const sealHtml = entries ? `
+    <div class="w-oracle-journal-seal">
+      <div class="w-oracle-journal-seal-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <p class="w-oracle-journal-seal-text">Scelle par l'Oracle — saison 2025-2026</p>
+    </div>` : ''
+
+  return `
+    <section class="w-oracle-journal" aria-label="Journal de l'Oracle">
+      <button class="w-oracle-journal-toggle" aria-expanded="false" aria-controls="w-oracle-journal-content" tabindex="0">
+        <svg class="w-oracle-journal-toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+          <path d="M12 13V7m-3 3l3-3 3 3"/>
+        </svg>
+        <span>Ouvrir le grimoire</span>
+      </button>
+      <div id="w-oracle-journal-content" class="w-oracle-journal-content" hidden>
+        <div class="w-oracle-journal-grimoire-header">
+          <span class="w-oracle-journal-grimoire-title">Journal de l'Oracle</span>
+          <p class="w-oracle-journal-grimoire-sub">Les corrections et recalibrages du modele</p>
+        </div>
+        ${entries ? pagesHtml : emptyHtml}
+        ${sealHtml}
+      </div>
+    </section>`
 }
 
 /**
@@ -205,11 +315,14 @@ function formatDate(isoString) {
  * @param {object} season
  */
 export function render(container, season) {
+  container.innerHTML = ''
+
   const matchday = season?.matchday ?? 0
   const totalMatchdays = 26
   const brierScore = season?.brierScore ?? null
   const lastUpdated = season?.lastUpdated ? formatDate(season.lastUpdated) : ''
   const predRate = computePredictionRate(season)
+  const corrections = season?.corrections ?? []
 
   const wrapper = document.createElement('div')
   wrapper.className = 'w-oracle-container'
@@ -235,6 +348,8 @@ export function render(container, season) {
       <div class="w-oracle-grid">
         ${renderFactorCards()}
       </div>
+
+      ${renderJournalSection(corrections)}
 
       ${lastUpdated ? `<footer class="w-oracle-footer" aria-label="Derniere mise a jour: ${esc(lastUpdated)}">
         <span class="w-oracle-footer-dot" aria-hidden="true"></span>
@@ -267,4 +382,48 @@ export function render(container, season) {
       setTimeout(() => { fill.style.transform = `scaleX(${target})` }, 500 + i * 100)
     })
   })
+
+  // ── Journal toggle (expand/collapse) ──
+  const toggle = wrapper.querySelector('.w-oracle-journal-toggle')
+  const content = wrapper.querySelector('#w-oracle-journal-content')
+  if (toggle && content) {
+    const label = toggle.querySelector('span')
+
+    const handleToggle = () => {
+      const expanded = toggle.getAttribute('aria-expanded') === 'true'
+      toggle.setAttribute('aria-expanded', String(!expanded))
+
+      if (expanded) {
+        content.hidden = true
+        if (label) label.textContent = 'Ouvrir le grimoire'
+      } else {
+        content.hidden = false
+        if (label) label.textContent = 'Refermer le grimoire'
+
+        // Stagger animate journal pages (80ms between entries)
+        const prefersReduced = typeof window.matchMedia === 'function'
+          && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        if (!prefersReduced) {
+          const pages = content.querySelectorAll('.w-oracle-journal-page')
+          pages.forEach((page, i) => {
+            page.style.opacity = '0'
+            page.style.transform = 'translateY(12px)'
+            setTimeout(() => {
+              page.style.transition = 'opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), transform 0.5s cubic-bezier(0.22, 1, 0.36, 1)'
+              page.style.opacity = '1'
+              page.style.transform = 'translateY(0)'
+            }, 80 * i)
+          })
+        }
+      }
+    }
+
+    toggle.addEventListener('click', handleToggle)
+    toggle.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault()
+        handleToggle()
+      }
+    })
+  }
 }

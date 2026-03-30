@@ -157,7 +157,7 @@ export function mergePredictions(existingPredictions, newPrediction) {
  * @param {object[]} existingPredictions - Predictions from existing season file
  * @returns {object} Complete season JSON object
  */
-export function buildSeasonData(eloOutput, existingPredictions, existingCalendar = []) {
+export function buildSeasonData(eloOutput, existingPredictions, existingCalendar = [], existingCorrections = []) {
   const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
   const teams = eloOutput.teams.map(buildTeamEntry);
 
@@ -169,6 +169,7 @@ export function buildSeasonData(eloOutput, existingPredictions, existingCalendar
 
   const predictions = mergePredictions(existingPredictions, newPrediction);
   const calendar = mergeCalendarDates(eloOutput.calendar, existingCalendar);
+  const corrections = mergeCorrections(existingCorrections, eloOutput.corrections ?? []);
 
   return {
     season: SEASON_ID,
@@ -178,7 +179,32 @@ export function buildSeasonData(eloOutput, existingPredictions, existingCalendar
     teams,
     calendar,
     predictions,
+    corrections,
   };
+}
+
+/**
+ * Merge corrections arrays. Existing corrections are preserved, new ones
+ * are appended if they don't already exist (matched by matchday + parameter).
+ * @param {object[]} existing - Corrections from existing season file
+ * @param {object[]} incoming - New corrections from elo-output (recalibrations)
+ * @returns {object[]} Merged corrections sorted by matchday
+ */
+export function mergeCorrections(existing, incoming) {
+  if (!incoming || incoming.length === 0) return existing;
+
+  const keys = new Set(existing.map((c) => `${c.matchday}-${c.parameter}`));
+  const merged = [...existing];
+
+  for (const c of incoming) {
+    const key = `${c.matchday}-${c.parameter}`;
+    if (!keys.has(key)) {
+      merged.push(c);
+      keys.add(key);
+    }
+  }
+
+  return merged.sort((a, b) => a.matchday - b.matchday);
 }
 
 /**
@@ -267,13 +293,14 @@ export async function main() {
     process.exit(1);
   }
 
-  // Load existing season file (for predictions history and calendar dates)
+  // Load existing season file (for predictions history, calendar dates, and corrections)
   const existingSeason = loadExistingSeason(seasonPath);
   const existingPredictions = existingSeason.predictions ?? [];
   const existingCalendar = existingSeason.calendar ?? [];
+  const existingCorrections = existingSeason.corrections ?? [];
 
   // Build season data
-  const seasonData = buildSeasonData(eloOutput, existingPredictions, existingCalendar);
+  const seasonData = buildSeasonData(eloOutput, existingPredictions, existingCalendar, existingCorrections);
 
   // Write season file
   try {

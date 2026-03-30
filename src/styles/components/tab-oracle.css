@@ -450,6 +450,405 @@
   100% { opacity: 1; transform: rotateY(0deg) scale(1); }
 }
 
+/* ── Journal: Grimoire Tokens ── */
+.w-oracle-container {
+  --w-grimoire-parchment: #1a1726;
+  --w-grimoire-parchment-light: #201c2e;
+  --w-grimoire-ink: #c8bfda;
+  --w-grimoire-edge: rgba(251, 191, 36, 0.08);
+  --w-grimoire-fold: rgba(251, 191, 36, 0.04);
+  --w-oracle-green-soft: rgba(34, 197, 94, 0.12);
+  --w-oracle-orange-soft: rgba(245, 158, 11, 0.12);
+  --w-oracle-gray-soft: rgba(107, 98, 121, 0.15);
+}
+
+/* ── Journal Section ── */
+.w-oracle-journal {
+  position: relative;
+  z-index: 1;
+  margin-bottom: 20px;
+}
+
+/* ── Journal Toggle Button ── */
+.w-oracle-journal-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--w-grimoire-parchment), var(--w-grimoire-parchment-light));
+  border: 1px solid var(--w-grimoire-edge);
+  border-bottom: 2px solid rgba(251, 191, 36, 0.12);
+  border-radius: 12px;
+  color: var(--w-oracle-gold);
+  font-family: 'Crimson Pro', serif;
+  font-size: 15px;
+  font-weight: 600;
+  font-style: italic;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.w-oracle-journal-toggle:hover {
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
+.w-oracle-journal-toggle:active {
+  transform: scale(0.97);
+}
+
+.w-oracle-journal-toggle:focus-visible {
+  outline: 2px solid var(--w-oracle-violet);
+  outline-offset: 2px;
+}
+
+.w-oracle-journal-toggle-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--w-oracle-gold);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.w-oracle-journal-toggle[aria-expanded="true"] .w-oracle-journal-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* ── Journal Content ── */
+.w-oracle-journal-content[hidden] {
+  display: none;
+}
+
+/* ── Grimoire Header ── */
+.w-oracle-journal-grimoire-header {
+  text-align: center;
+  margin: 20px 0 16px;
+}
+
+.w-oracle-journal-grimoire-header::before,
+.w-oracle-journal-grimoire-header::after {
+  content: '~';
+  color: var(--w-oracle-gold);
+  opacity: 0.4;
+  font-size: 16px;
+  margin: 0 8px;
+}
+
+.w-oracle-journal-grimoire-title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 18px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--w-oracle-gold);
+  letter-spacing: 0.5px;
+  display: inline;
+}
+
+.w-oracle-journal-grimoire-sub {
+  font-size: 11px;
+  color: var(--w-oracle-text-muted);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* ── Journal Page (Entry Card) ── */
+.w-oracle-journal-page {
+  position: relative;
+  margin-bottom: 14px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Stacked pages effect */
+.w-oracle-journal-page::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: -3px;
+  bottom: -3px;
+  background: var(--w-grimoire-parchment);
+  border-radius: 4px;
+  border: 1px solid var(--w-grimoire-edge);
+  z-index: -1;
+  transform: rotate(0.5deg);
+}
+
+.w-oracle-journal-page::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 5px;
+  right: -5px;
+  bottom: -5px;
+  background: rgba(26, 23, 38, 0.6);
+  border-radius: 4px;
+  border: 1px solid var(--w-grimoire-fold);
+  z-index: -2;
+  transform: rotate(1deg);
+}
+
+.w-oracle-journal-page-inner {
+  background: var(--w-grimoire-parchment);
+  border: 1px solid var(--w-grimoire-edge);
+  border-left: 3px solid var(--w-oracle-gold);
+  border-radius: 4px;
+  padding: 16px 16px 14px;
+  position: relative;
+}
+
+/* Corner fold */
+.w-oracle-journal-page-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+}
+
+.w-oracle-journal-page-corner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 24px 24px 0;
+  border-color: transparent var(--w-oracle-bg-elevated) transparent transparent;
+}
+
+.w-oracle-journal-page-corner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(225deg, transparent 50%, var(--w-grimoire-parchment-light) 50%);
+  border-bottom: 1px solid var(--w-grimoire-edge);
+  border-left: 1px solid var(--w-grimoire-edge);
+}
+
+/* Entry header */
+.w-oracle-journal-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.w-oracle-journal-page-date-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.w-oracle-journal-page-matchday {
+  font-family: 'Crimson Pro', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--w-oracle-gold);
+  line-height: 1;
+  text-shadow: 0 0 12px var(--w-oracle-gold-glow);
+}
+
+.w-oracle-journal-page-date {
+  font-size: 10px;
+  color: var(--w-oracle-text-muted);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+/* Type badge */
+.w-oracle-journal-type-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.w-oracle-journal-type-badge svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-oracle-journal-type-badge--correction {
+  background: var(--w-oracle-violet-soft);
+  color: var(--w-oracle-violet);
+}
+
+.w-oracle-journal-type-badge--recalibration {
+  background: var(--w-oracle-orange-soft);
+  color: var(--w-oracle-orange);
+}
+
+/* Entry title */
+.w-oracle-journal-page-title {
+  font-family: 'Crimson Pro', serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--w-oracle-text);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+/* Entry description (oracle voice) */
+.w-oracle-journal-page-desc {
+  font-family: 'Crimson Pro', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--w-grimoire-ink);
+  line-height: 1.6;
+  margin-bottom: 12px;
+  padding-left: 12px;
+  border-left: 2px solid var(--w-grimoire-edge);
+}
+
+/* Footer: impact + diff */
+.w-oracle-journal-page-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--w-grimoire-edge);
+}
+
+.w-oracle-journal-impact {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+.w-oracle-journal-impact--positive {
+  background: var(--w-oracle-green-soft);
+  color: var(--w-oracle-green);
+  box-shadow: 0 0 8px var(--w-oracle-green-glow);
+}
+
+.w-oracle-journal-impact--neutral {
+  background: var(--w-oracle-gray-soft);
+  color: var(--w-oracle-text-dim);
+}
+
+.w-oracle-journal-impact--negative {
+  background: var(--w-oracle-orange-soft);
+  color: var(--w-oracle-orange);
+  box-shadow: 0 0 8px var(--w-oracle-orange-glow);
+}
+
+.w-oracle-journal-page-diff {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.w-oracle-journal-page-old {
+  color: var(--w-oracle-text-muted);
+  text-decoration: line-through;
+}
+
+.w-oracle-journal-page-arrow {
+  color: var(--w-oracle-gold);
+  font-size: 10px;
+}
+
+.w-oracle-journal-page-new {
+  color: var(--w-oracle-text);
+  font-weight: 800;
+  text-shadow: 0 0 6px var(--w-oracle-violet-glow);
+}
+
+.w-oracle-journal-page-param {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  color: var(--w-oracle-text-muted);
+  margin-left: 4px;
+  opacity: 0.7;
+}
+
+/* ── Wax Seal ── */
+.w-oracle-journal-seal {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 16px;
+}
+
+.w-oracle-journal-seal-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--w-oracle-violet), var(--w-oracle-violet-dim));
+  box-shadow: 0 0 20px var(--w-oracle-violet-glow), inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 6px;
+}
+
+.w-oracle-journal-seal-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--w-oracle-gold);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-oracle-journal-seal-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 11px;
+  font-style: italic;
+  color: var(--w-oracle-text-muted);
+}
+
+/* ── Journal Empty State ── */
+.w-oracle-journal-empty {
+  text-align: center;
+  padding: 40px 20px;
+  border-radius: 4px;
+  margin-top: 16px;
+  background: var(--w-grimoire-parchment);
+  border: 1px solid var(--w-grimoire-edge);
+  border-left: 3px solid var(--w-oracle-gold);
+}
+
+.w-oracle-journal-empty-quill {
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.w-oracle-journal-empty-text {
+  font-family: 'Crimson Pro', serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--w-grimoire-ink);
+  line-height: 1.6;
+}
+
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   .w-oracle-legendary { animation: none; }
@@ -460,4 +859,7 @@
   .w-oracle-card-bar-fill { transition: none; transform: none; }
   .w-oracle-card--revealed { animation: none; opacity: 1; transform: none; }
   .w-oracle-card { transition: none; }
+  .w-oracle-journal-toggle-icon { transition: none; }
+  .w-oracle-journal-toggle { transition: none; }
+  .w-oracle-journal-page { transition: none; opacity: 1; transform: none; }
 }

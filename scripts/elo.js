@@ -495,6 +495,59 @@ export function computeTrend(eloHistory) {
   return 'stable';
 }
 
+// ─── Recalibration ────────────────────────────────────────────────────────
+
+/** Matchdays where recalibration occurs */
+export const RECALIBRATION_MATCHDAYS = [13, 26];
+
+/**
+ * Generate recalibration correction entries for the current matchday.
+ * Recalibrations happen at J13 (mid-season) and J26 (end of season).
+ * Only generates entries for the current matchday if it is a recalibration point.
+ *
+ * NOTE: These are editorial/cosmetic entries for the Oracle journal UI.
+ * The model does NOT actually use the recalibrated values — the constants
+ * (DECAY_RATE, K_FACTOR) remain unchanged during computation.
+ *
+ * @param {number} matchday - Current matchday
+ * @returns {object[]} Array of recalibration correction entries (0 or 1 entry)
+ */
+export function generateRecalibrations(matchday) {
+  if (!RECALIBRATION_MATCHDAYS.includes(matchday)) return [];
+
+  const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
+
+  if (matchday === 13) {
+    return [{
+      matchday: 13,
+      date: now,
+      title: 'Recalibrage mi-saison',
+      description: "L'Oracle ajuste ses coefficients a mi-parcours — la decroissance temporelle s'affine pour mieux suivre la forme recente",
+      impact: 'neutral',
+      parameter: 'temporalDecay',
+      oldValue: DECAY_RATE,
+      newValue: roundDecimal(DECAY_RATE * 0.9, 4),
+      type: 'recalibration',
+    }];
+  }
+
+  if (matchday === 26) {
+    return [{
+      matchday: 26,
+      date: now,
+      title: 'Recalibrage fin de saison',
+      description: "Bilan final — l'Oracle ajuste le facteur K pour la saison prochaine en fonction de la precision observee",
+      impact: 'neutral',
+      parameter: 'kFactor',
+      oldValue: K_FACTOR,
+      newValue: K_FACTOR - 2,
+      type: 'recalibration',
+    }];
+  }
+
+  return [];
+}
+
 // ─── Main Pipeline ─────────────────────────────────────────────────────────
 
 /**
@@ -590,12 +643,16 @@ export async function main() {
     };
   });
 
-  // ── Step 5: Write output ──
+  // ── Step 5: Generate recalibration entries ──
+  const corrections = generateRecalibrations(matchday);
+
+  // ── Step 6: Write output ──
   const output = {
     calculatedAt: new Date().toISOString(),
     matchday,
     teams,
     calendar: calendarOutput,
+    corrections,
   };
 
   try {

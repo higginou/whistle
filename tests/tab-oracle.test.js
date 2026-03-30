@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach } from 'vitest'
-import { computePredictionRate, getBrierQuality, render } from '../src/components/tab-oracle.js'
+import { computePredictionRate, getBrierQuality, render, renderJournalSection } from '../src/components/tab-oracle.js'
 
 describe('computePredictionRate', () => {
   it('returns correct/total/rate for nominal data', () => {
@@ -189,5 +189,175 @@ describe('tab-oracle render', () => {
     render(container, season)
     const brierless = container.querySelector('.w-oracle-brierless')
     expect(brierless).not.toBeNull()
+  })
+
+  it('renders journal section with toggle', () => {
+    const season = {
+      matchday: 20,
+      lastUpdated: '2026-03-29T08:50:25Z',
+      brierScore: null,
+      teams: [],
+      predictions: [],
+      corrections: [],
+    }
+    render(container, season)
+    const toggle = container.querySelector('.w-oracle-journal-toggle')
+    expect(toggle).not.toBeNull()
+    expect(toggle.getAttribute('aria-expanded')).toBe('false')
+  })
+
+  it('renders journal pages when corrections exist', () => {
+    const season = {
+      matchday: 20,
+      lastUpdated: '2026-03-29T08:50:25Z',
+      brierScore: null,
+      teams: [],
+      predictions: [],
+      corrections: [
+        { matchday: 8, date: '2025-11-10T00:00:00Z', title: 'Test fix', description: 'Desc', impact: 'positive', parameter: 'test', oldValue: 1.0, newValue: 1.5, type: 'correction' },
+        { matchday: 13, date: '2026-01-12T00:00:00Z', title: 'Recal', description: 'Desc2', impact: 'neutral', parameter: 'decay', oldValue: 0.9, newValue: 0.8, type: 'recalibration' },
+      ],
+    }
+    render(container, season)
+    const pages = container.querySelectorAll('.w-oracle-journal-page')
+    expect(pages.length).toBe(2)
+  })
+
+  it('renders empty state when corrections is empty', () => {
+    const season = {
+      matchday: 20,
+      lastUpdated: '2026-03-29T08:50:25Z',
+      brierScore: null,
+      teams: [],
+      predictions: [],
+      corrections: [],
+    }
+    render(container, season)
+    const empty = container.querySelector('.w-oracle-journal-empty')
+    expect(empty).not.toBeNull()
+    expect(empty.textContent).toContain('pas encore eu besoin de se corriger')
+  })
+
+  it('renders empty state when corrections is absent', () => {
+    const season = {
+      matchday: 20,
+      lastUpdated: '2026-03-29T08:50:25Z',
+      brierScore: null,
+      teams: [],
+      predictions: [],
+    }
+    render(container, season)
+    const empty = container.querySelector('.w-oracle-journal-empty')
+    expect(empty).not.toBeNull()
+  })
+
+  it('renders empty state when corrections is null', () => {
+    const season = {
+      matchday: 20,
+      lastUpdated: '2026-03-29T08:50:25Z',
+      brierScore: null,
+      teams: [],
+      predictions: [],
+      corrections: null,
+    }
+    render(container, season)
+    const empty = container.querySelector('.w-oracle-journal-empty')
+    expect(empty).not.toBeNull()
+  })
+
+  it('toggle expands and collapses journal content', () => {
+    const season = {
+      matchday: 20,
+      lastUpdated: '2026-03-29T08:50:25Z',
+      brierScore: null,
+      teams: [],
+      predictions: [],
+      corrections: [
+        { matchday: 8, date: '2025-11-10T00:00:00Z', title: 'Fix', description: 'D', impact: 'positive', parameter: 'p', oldValue: 1, newValue: 2, type: 'correction' },
+      ],
+    }
+    render(container, season)
+    const toggle = container.querySelector('.w-oracle-journal-toggle')
+    const content = container.querySelector('#w-oracle-journal-content')
+
+    expect(content.hidden).toBe(true)
+    toggle.click()
+    expect(toggle.getAttribute('aria-expanded')).toBe('true')
+    expect(content.hidden).toBe(false)
+
+    toggle.click()
+    expect(toggle.getAttribute('aria-expanded')).toBe('false')
+    expect(content.hidden).toBe(true)
+  })
+})
+
+describe('renderJournalSection', () => {
+  it('renders correction type badge', () => {
+    const html = renderJournalSection([
+      { matchday: 5, date: '2025-10-01T00:00:00Z', title: 'T', description: 'D', impact: 'positive', parameter: 'p', oldValue: 1, newValue: 2, type: 'correction' },
+    ])
+    expect(html).toContain('w-oracle-journal-type-badge--correction')
+    expect(html).toContain('Correction')
+  })
+
+  it('renders recalibration type badge', () => {
+    const html = renderJournalSection([
+      { matchday: 13, date: '2026-01-12T00:00:00Z', title: 'R', description: 'D', impact: 'neutral', parameter: 'p', oldValue: 0.9, newValue: 0.8, type: 'recalibration' },
+    ])
+    expect(html).toContain('w-oracle-journal-type-badge--recalibration')
+    expect(html).toContain('Recalibrage')
+  })
+
+  it('renders impact badges correctly', () => {
+    const entries = [
+      { matchday: 1, date: '2025-09-01T00:00:00Z', title: 'T', description: 'D', impact: 'positive', parameter: 'p', oldValue: 1, newValue: 2, type: 'correction' },
+      { matchday: 2, date: '2025-09-15T00:00:00Z', title: 'T', description: 'D', impact: 'neutral', parameter: 'p', oldValue: 1, newValue: 2, type: 'correction' },
+      { matchday: 3, date: '2025-10-01T00:00:00Z', title: 'T', description: 'D', impact: 'negative', parameter: 'p', oldValue: 1, newValue: 2, type: 'correction' },
+    ]
+    const html = renderJournalSection(entries)
+    expect(html).toContain('w-oracle-journal-impact--positive')
+    expect(html).toContain('w-oracle-journal-impact--neutral')
+    expect(html).toContain('w-oracle-journal-impact--negative')
+  })
+
+  it('sorts entries by matchday ascending', () => {
+    const entries = [
+      { matchday: 16, date: '2026-02-08T00:00:00Z', title: 'Late', description: 'D', impact: 'negative', parameter: 'p', oldValue: 1, newValue: 2, type: 'correction' },
+      { matchday: 8, date: '2025-11-10T00:00:00Z', title: 'Early', description: 'D', impact: 'positive', parameter: 'p', oldValue: 1, newValue: 2, type: 'correction' },
+    ]
+    const html = renderJournalSection(entries)
+    const earlyIdx = html.indexOf('Early')
+    const lateIdx = html.indexOf('Late')
+    expect(earlyIdx).toBeLessThan(lateIdx)
+  })
+
+  it('renders old/new values with NaN guard', () => {
+    const html = renderJournalSection([
+      { matchday: 5, date: '2025-10-01T00:00:00Z', title: 'T', description: 'D', impact: 'positive', parameter: 'p', oldValue: Number.NaN, newValue: 1.5, type: 'correction' },
+    ])
+    expect(html).toContain('?')
+    expect(html).toContain('1.5')
+  })
+
+  it('escapes HTML in title and description', () => {
+    const html = renderJournalSection([
+      { matchday: 5, date: '2025-10-01T00:00:00Z', title: '<script>alert(1)</script>', description: 'a&b', impact: 'positive', parameter: 'p', oldValue: 1, newValue: 2, type: 'correction' },
+    ])
+    expect(html).not.toContain('<script>')
+    expect(html).toContain('&lt;script&gt;')
+    expect(html).toContain('a&amp;b')
+  })
+
+  it('renders seal when entries exist', () => {
+    const html = renderJournalSection([
+      { matchday: 5, date: '2025-10-01T00:00:00Z', title: 'T', description: 'D', impact: 'positive', parameter: 'p', oldValue: 1, newValue: 2, type: 'correction' },
+    ])
+    expect(html).toContain('w-oracle-journal-seal')
+    expect(html).toContain('Scelle par')
+  })
+
+  it('does not render seal for empty state', () => {
+    const html = renderJournalSection([])
+    expect(html).not.toContain('w-oracle-journal-seal')
   })
 })
