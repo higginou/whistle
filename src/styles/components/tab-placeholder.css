@@ -1,0 +1,28 @@
+.w-tab-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  padding: var(--w-space-xl);
+  text-align: center;
+  gap: var(--w-space-md);
+}
+
+.w-tab-placeholder__icon {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.w-tab-placeholder__title {
+  font-size: var(--w-text-h2);
+  font-weight: 700;
+  color: var(--w-text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.w-tab-placeholder__desc {
+  font-size: var(--w-text-body);
+  color: rgba(255, 255, 255, 0.25);
+  line-height: 1.6;
+  max-width: 280px;
+}
