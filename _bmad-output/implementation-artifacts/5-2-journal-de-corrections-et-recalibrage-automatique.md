@@ -1,6 +1,6 @@
 # Story 5.2 : Journal de corrections et recalibrage automatique
 
-Status: review
+Status: done
 
 ui-structural: true
 
