@@ -172,4 +172,18 @@ describe('store', () => {
       expect(called).toBe(false)
     })
   })
+
+  describe('activeTab', () => {
+    it('has initial value classements', () => {
+      expect(get('activeTab')).toBe('classements')
+    })
+
+    it('dispatches tab-changed event on set', () => {
+      let received = null
+      const unsub = on('activeTab', (event) => { received = event.detail })
+      set('activeTab', 'projection')
+      expect(received).toEqual({ value: 'projection', previous: 'classements' })
+      unsub()
+    })
+  })
 })

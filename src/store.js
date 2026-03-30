@@ -7,6 +7,7 @@ const EVENT_NAMES = {
   selectedTeam: 'team-selected',
   dataFresh: 'data-fresh',
   dataStale: 'data-stale',
+  activeTab: 'tab-changed',
 }
 
 const INITIAL_STATE = {
@@ -16,6 +17,7 @@ const INITIAL_STATE = {
   selectedTeam: null,
   dataFresh: false,
   dataStale: null,
+  activeTab: 'classements',
 }
 
 const state = { ...INITIAL_STATE }
