@@ -1,0 +1,22 @@
+.w-projection-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--w-space-sm);
+  padding: var(--w-space-md) var(--w-space-md) var(--w-space-sm);
+  font-size: var(--w-text-caption);
+  color: var(--w-text-secondary);
+}
+
+.w-projection-progress__value {
+  font-weight: 700;
+  color: var(--w-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.w-projection-progress__sep {
+  color: rgba(255, 255, 255, 0.15);
+}
+
+.w-projection-standings {
+  padding: 0 var(--w-space-md);
+}
