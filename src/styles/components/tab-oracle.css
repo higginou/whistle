@@ -1,0 +1,463 @@
+/* ── Oracle Tab: Card Collection ── */
+
+.w-oracle-container {
+  width: 100%;
+  max-width: 430px;
+  padding: 16px 16px 40px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Ambient glow */
+.w-oracle-container::before {
+  content: '';
+  position: fixed;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, var(--w-oracle-gold-glow) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0.2;
+  z-index: 0;
+}
+
+/* ── Tokens ── */
+.w-oracle-container {
+  --w-oracle-bg-elevated: #13111d;
+  --w-oracle-violet: #7c3aed;
+  --w-oracle-violet-dim: #5b21b6;
+  --w-oracle-violet-glow: rgba(124, 58, 237, 0.45);
+  --w-oracle-violet-soft: rgba(124, 58, 237, 0.12);
+  --w-oracle-green: #22c55e;
+  --w-oracle-green-glow: rgba(34, 197, 94, 0.4);
+  --w-oracle-orange: #f59e0b;
+  --w-oracle-orange-glow: rgba(245, 158, 11, 0.35);
+  --w-oracle-red: #ef4444;
+  --w-oracle-gold: #fbbf24;
+  --w-oracle-gold-glow: rgba(251, 191, 36, 0.45);
+  --w-oracle-text: #f0edf6;
+  --w-oracle-text-dim: #9d95ab;
+  --w-oracle-text-muted: #6b6279;
+  --w-oracle-border: rgba(124, 58, 237, 0.18);
+}
+
+/* ── Header ── */
+.w-oracle-header {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-level-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(124, 58, 237, 0.1));
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 20px;
+  padding: 5px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--w-oracle-gold);
+  margin-bottom: 8px;
+}
+
+.w-oracle-title {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--w-oracle-gold), var(--w-oracle-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.w-oracle-subtitle {
+  font-size: 13px;
+  color: var(--w-oracle-text-dim);
+  margin-top: 2px;
+}
+
+/* ── Legendary Card (Brier Score) ── */
+.w-oracle-legendary {
+  position: relative;
+  z-index: 1;
+  border-radius: 16px;
+  padding: 2px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--w-oracle-gold), var(--w-oracle-violet), var(--w-oracle-green));
+  background-size: 200% 200%;
+  animation: w-oracle-border-shift 4s ease-in-out infinite;
+}
+
+.w-oracle-legendary-inner {
+  background: var(--w-oracle-bg-elevated);
+  border-radius: 14px;
+  padding: 24px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.w-oracle-legendary-inner::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(from 0deg, transparent, rgba(251, 191, 36, 0.06), transparent, rgba(124, 58, 237, 0.06), transparent);
+  animation: w-oracle-holo-spin 8s linear infinite;
+  pointer-events: none;
+}
+
+.w-oracle-legendary-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--w-oracle-gold);
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.w-oracle-legendary-badge svg {
+  fill: var(--w-oracle-gold);
+}
+
+.w-oracle-legendary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+.w-oracle-legendary-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.w-oracle-legendary-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--w-oracle-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.w-oracle-legendary-value {
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--w-oracle-text);
+  text-shadow: 0 0 30px var(--w-oracle-gold-glow);
+  animation: w-oracle-score-glow 3s ease-in-out infinite;
+}
+
+.w-oracle-legendary-quality {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+  border-radius: 10px;
+}
+
+.w-oracle-quality--bon {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--w-oracle-green);
+  box-shadow: 0 0 16px var(--w-oracle-green-glow);
+}
+
+.w-oracle-quality--moyen {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--w-oracle-orange);
+  box-shadow: 0 0 16px var(--w-oracle-orange-glow);
+}
+
+.w-oracle-quality--faible {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--w-oracle-red);
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.35);
+}
+
+.w-oracle-legendary-bar {
+  margin-top: 16px;
+  position: relative;
+}
+
+.w-oracle-legendary-bar-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.w-oracle-legendary-bar-fill {
+  height: 100%;
+  width: 100%;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--w-oracle-gold), var(--w-oracle-green));
+  box-shadow: 0 0 12px var(--w-oracle-gold-glow);
+  transform-origin: left;
+  transition: transform 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.w-oracle-legendary-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--w-oracle-text-muted);
+  font-weight: 600;
+}
+
+/* ── Brierless State ── */
+.w-oracle-brierless {
+  position: relative;
+  z-index: 1;
+  border-radius: 16px;
+  padding: 2px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, rgba(107, 98, 121, 0.3), rgba(107, 98, 121, 0.1));
+}
+
+.w-oracle-brierless-inner {
+  background: var(--w-oracle-bg-elevated);
+  border-radius: 14px;
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.w-oracle-brierless-icon {
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+
+.w-oracle-brierless-text {
+  font-size: 14px;
+  color: var(--w-oracle-text-dim);
+  line-height: 1.5;
+}
+
+/* ── Prediction Rate Card ── */
+.w-oracle-predict-card {
+  position: relative;
+  z-index: 1;
+  border-radius: 14px;
+  padding: 1px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--w-oracle-violet), rgba(124, 58, 237, 0.3));
+}
+
+.w-oracle-predict-inner {
+  background: var(--w-oracle-bg-elevated);
+  border-radius: 13px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.w-oracle-predict-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-oracle-text);
+}
+
+.w-oracle-predict-sub {
+  font-size: 11px;
+  color: var(--w-oracle-text-muted);
+  margin-top: 2px;
+}
+
+.w-oracle-predict-value {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--w-oracle-violet);
+  text-shadow: 0 0 14px var(--w-oracle-violet-glow);
+}
+
+/* ── Factor Cards Grid ── */
+.w-oracle-grid-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--w-oracle-text-muted);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 20px;
+}
+
+.w-oracle-card {
+  border-radius: 14px;
+  padding: 1px;
+  cursor: default;
+  transition: transform 0.2s ease;
+}
+
+.w-oracle-card:focus-visible {
+  outline: 2px solid var(--w-oracle-violet);
+  outline-offset: 2px;
+}
+
+.w-oracle-card--rarity-high {
+  background: linear-gradient(135deg, var(--w-oracle-violet), rgba(124, 58, 237, 0.4));
+  box-shadow: 0 0 20px var(--w-oracle-violet-glow);
+}
+
+.w-oracle-card--rarity-mid {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.5), rgba(124, 58, 237, 0.2));
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.2);
+}
+
+.w-oracle-card--rarity-low {
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(124, 58, 237, 0.1));
+}
+
+.w-oracle-card-inner {
+  background: var(--w-oracle-bg-elevated);
+  border-radius: 13px;
+  padding: 16px 14px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.w-oracle-card-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--w-oracle-violet-soft);
+  color: var(--w-oracle-violet);
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.2);
+}
+
+.w-oracle-card-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-oracle-card-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-oracle-text);
+  line-height: 1.3;
+}
+
+.w-oracle-card-desc {
+  font-size: 10px;
+  color: var(--w-oracle-text-muted);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.w-oracle-card-bar {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+.w-oracle-card-bar-fill {
+  height: 100%;
+  width: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--w-oracle-violet-dim), var(--w-oracle-violet));
+  box-shadow: 0 0 6px var(--w-oracle-violet-glow);
+  transform-origin: left;
+  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Flip reveal animation ── */
+.w-oracle-card--revealed {
+  animation: w-oracle-card-reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── Footer ── */
+.w-oracle-footer {
+  text-align: center;
+  font-size: 11px;
+  color: var(--w-oracle-text-muted);
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-footer-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--w-oracle-green);
+  box-shadow: 0 0 8px var(--w-oracle-green-glow);
+  margin-right: 6px;
+  vertical-align: middle;
+  animation: w-oracle-blink 2s ease-in-out infinite;
+}
+
+/* ── Keyframes ── */
+@keyframes w-oracle-border-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes w-oracle-holo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes w-oracle-score-glow {
+  0%, 100% { text-shadow: 0 0 30px var(--w-oracle-gold-glow); }
+  50% { text-shadow: 0 0 50px var(--w-oracle-gold-glow), 0 0 80px rgba(251, 191, 36, 0.15); }
+}
+
+@keyframes w-oracle-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes w-oracle-card-reveal {
+  0% { opacity: 0; transform: rotateY(90deg) scale(0.9); }
+  60% { transform: rotateY(-5deg) scale(1.02); }
+  100% { opacity: 1; transform: rotateY(0deg) scale(1); }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .w-oracle-legendary { animation: none; }
+  .w-oracle-legendary-inner::before { animation: none; }
+  .w-oracle-legendary-value { animation: none; text-shadow: none; }
+  .w-oracle-footer-dot { animation: none; }
+  .w-oracle-legendary-bar-fill,
+  .w-oracle-card-bar-fill { transition: none; transform: none; }
+  .w-oracle-card--revealed { animation: none; opacity: 1; transform: none; }
+  .w-oracle-card { transition: none; }
+}

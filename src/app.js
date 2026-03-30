@@ -19,6 +19,7 @@ import { render as renderSuccesSheet, open as openSucces, updateBadge } from './
 import { render as renderProjection } from './components/tab-projection.js'
 import { render as renderPlaceholder } from './components/tab-placeholder.js'
 import { render as renderDonjon } from './components/tab-donjon.js'
+import { render as renderOracle } from './components/tab-oracle.js'
 import { computeAchievements } from './components/achievement-card.js'
 
 const appEl = document.querySelector('#app')
@@ -71,10 +72,7 @@ function renderTabContent(tabId, container) {
       renderDonjon(container, season)
       break
     case 'oracle':
-      renderPlaceholder(container, {
-        title: 'Oracle',
-        description: 'Transparence du modèle Elo : Brier Score, historique des prédictions, sources de données. Bientôt disponible.',
-      })
+      if (season) renderOracle(container, season)
       break
   }
 }
