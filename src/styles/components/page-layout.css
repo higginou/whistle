@@ -1,6 +1,90 @@
-.w-page-layout {
+/* App shell */
+.w-app-shell {
   display: flex;
   flex-direction: column;
-  gap: var(--w-space-lg);
-  padding-block: var(--w-space-lg);
+  min-height: 100dvh;
+  background: var(--w-bg-page);
+}
+
+/* App header */
+.w-app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px var(--w-space-md);
+  background: rgba(19, 13, 31, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.w-app-header__logo {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--w-accent);
+}
+
+.w-succes-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(192, 132, 252, 0.25);
+  background: rgba(192, 132, 252, 0.1);
+  color: var(--w-accent);
+  cursor: pointer;
+  touch-action: manipulation;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.w-succes-btn:active {
+  transform: scale(0.97);
+}
+
+.w-succes-btn__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: #7c3aed;
+  border: 2px solid var(--w-bg-page);
+  font-size: 8px;
+  font-weight: 800;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+/* Tab viewport */
+.w-tab-viewport {
+  flex: 1;
+  overflow: hidden;
+  padding-bottom: calc(var(--w-nav-height) + env(safe-area-inset-bottom, 0px));
+  position: relative;
+}
+
+/* Individual tab view containers */
+.w-tab-view {
+  width: 100%;
+  will-change: transform, opacity;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w-succes-btn:active {
+    transform: none;
+  }
 }
