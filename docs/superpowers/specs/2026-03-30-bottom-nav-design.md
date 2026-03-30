@@ -33,9 +33,13 @@ Two navigation layers coexist:
 
 **`popstate` handler logic:**
 ```
-if sheet open → close sheet (existing)
-else          → browser handles back (navigates to previous tab)
+if event.state.sheet exists → close sheet (existing)
+else                        → browser handles back (navigates to previous tab)
 ```
+
+The router inspects `event.state` — not whether a sheet is visually open — to distinguish sheet pops from tab pops. Sheet `pushState` always uses the current tab pathname with `{ sheet: sheetId }` state; tab `pushState` uses the tab pathname with `{ tab: tabId }` state. This ensures a sheet pop never consumes a tab history entry.
+
+`event.state === null` (initial load, or states pushed without an object) is treated as a tab pop — fall through to browser back behavior, no sheet is closed.
 
 **URL routing table:**
 ```
@@ -46,7 +50,7 @@ else          → browser handles back (navigates to previous tab)
 /oracle      → Oracle
 ```
 
-GitHub Pages compatibility: already handled by the 404.html redirect from story 4-3.
+GitHub Pages compatibility: already handled by the 404.html redirect from story 4-3. During `router.js` modification, verify that the 404.html redirect shim calls `history.replaceState` with a state object (not `null`) so the null-check in `onPopState` behaves correctly on initial load.
 
 ## Tab Contents
 
@@ -58,9 +62,12 @@ GitHub Pages compatibility: already handled by the 404.html redirect from story 
 
 ### Projection (`/projection`)
 - **Projected final standings** — always shown, no reveal interaction needed
-- Reuses existing rank-row and confidence-bar components
+- Reuses existing rank-row and confidence-bar components; teams sorted by `team.projectedRank`
 - Reuses existing zone-group layout
 - New: **season progress indicator** — "Journée X / 26 — confiance globale: X%"
+  - `X` = `season.matchday` (integer, existing JSON field — the field is `matchday`, not `currentMatchday`)
+  - `confiance globale` = mean of all `team.confidence` values (0–1 decimal, displayed as %)
+- Data sourced from `store.get('season')` — same pattern as all other components
 - No reveal button (this view IS the revealed state)
 
 ### Duels (`/duels`) — Placeholder
@@ -80,8 +87,8 @@ GitHub Pages compatibility: already handled by the 404.html redirect from story 
 
 ### Succès (header icon)
 - Trophy icon top-right, all tabs
-- Badge showing achievement count
-- Opens a bottom sheet with existing `achievement-card.js` content
+- Badge count = `computeAchievements(season).length` — achievements are computed dynamically from season data (no `achievements` field in JSON; `computeAchievements` is an existing export from `achievement-card.js`); badge re-computed when `season` store event fires
+- Opens a bottom sheet rendering `computeAchievements(season)` cards via existing `achievement-card.js`
 
 ## Visual Design
 
@@ -105,7 +112,10 @@ GitHub Pages compatibility: already handled by the 404.html redirect from story 
 - Min height: 56px + safe area inset bottom
 
 ### Tab Transitions
-- Direction: slide horizontal (left/right matching tab position in nav)
+- Direction: new tab index > previous tab index → slide left (enter from right); otherwise → slide right (enter from left)
+- Direction logic lives in `app.js`, which compares `activeTab` index against the previous value stored in a module-level variable `prevTabIndex`; the computed direction (`'left' | 'right'`) is passed to the transition function
+- `activeTab` store key stores only the current tab; `prevTabIndex` is a local variable in `app.js`, not in the store
+- **Initial load / direct URL navigation**: `prevTabIndex` is initialised to the index of the tab matching the current URL pathname; no transition animation plays on first render (instant render, no slide)
 - Duration: 280ms
 - Easing: `cubic-bezier(0.16, 1, 0.3, 1)`
 - Properties: `transform: translateX()` + `opacity` only (no layout properties)
@@ -129,15 +139,23 @@ src/components/succes-sheet.js      — Succès bottom sheet (wraps achievement-
 ### Modified files
 ```
 src/router.js           — +tab routing (pushState/popstate extended, ~+35 lines)
-src/app.js              — orchestrates tab rendering, listens to activeTab store key
-src/components/page-layout.js  — adds header with Succès icon + padding-bottom for nav
+src/app.js              — orchestrates tab rendering, listens to activeTab store key;
+                          existing `renderFullLayout()` is replaced: each tab gets its own
+                          render function called when that tab becomes active; Classements
+                          tab renders the existing score-card + zone-group + reveal-button
+                          components (same as today, just scoped to that tab's container)
+src/components/page-layout.js  — existing file (renders <main class="w-page-layout">);
+                                  extended to add app header with Succès icon and
+                                  padding-bottom equal to nav bar height + safe area
 src/store.js            — adds activeTab key
 src/styles/tokens.css   — adds --w-bg-page, --w-bg-surface, --w-bg-elevated (prune nuit)
 ```
 
 ### Store changes
-New key: `activeTab` (string) — `'classements' | 'projection' | 'duels' | 'donjon' | 'oracle'`
-Event: `tab-changed`
+Add to `EVENT_NAMES`: `activeTab: 'tab-changed'`
+Add to `INITIAL_STATE`: `activeTab: 'classements'`
+
+The initial value must be `'classements'` (not `null`) so that `prevTabIndex` in `app.js` is always computable from the first render.
 
 ### Existing components untouched
 `score-card.js`, `rank-row.js`, `zone-group.js`, `confidence-bar.js`, `bottom-sheet.js`, `reveal-button.js`, `badge.js`, `empty-state.js`
@@ -145,7 +163,7 @@ Event: `tab-changed`
 ## Accessibility
 
 - Bottom nav: `role="navigation"`, `aria-label="Navigation principale"`
-- Each nav item: `role="link"` or `<a>` with `aria-current="page"` on active
+- Each nav item: native `<a href="...">` element (no explicit `role` needed); `aria-current="page"` on the active item
 - Succès icon: `aria-label="Succès — X obtenus"`
 - Tab content regions: `role="main"` with `aria-label` per tab
 - Focus moves to tab content heading on tab switch
