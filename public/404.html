@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Whistle</title>
+    <script>
+      // Redirect to the SPA root while preserving the intended path.
+      // Uses replaceState with a non-null state object so onPopState
+      // in router.js sees state !== null on initial load.
+      var path = window.location.pathname;
+      history.replaceState({ redirected: true }, '', path);
+      window.location.replace('/whistle/');
+    </script>
+  </head>
+</html>
