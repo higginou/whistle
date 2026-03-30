@@ -1,0 +1,62 @@
+.w-donjon-header {
+  padding: var(--w-space-md) var(--w-space-md) var(--w-space-sm);
+}
+
+.w-donjon-title {
+  font-size: var(--w-text-h2);
+  font-weight: 700;
+  color: var(--w-text-primary);
+  letter-spacing: 0.04em;
+}
+
+.w-donjon-subtitle {
+  font-size: var(--w-text-caption);
+  color: var(--w-text-secondary);
+  margin-top: var(--w-space-xs);
+}
+
+.w-donjon-list {
+  list-style: none;
+  padding: 0 var(--w-space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--w-space-xs);
+}
+
+.w-donjon-item {
+  display: flex;
+  align-items: center;
+  gap: var(--w-space-sm);
+  padding: 12px var(--w-space-md);
+  border-radius: var(--w-radius-card);
+  background: var(--w-bg-surface);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  min-height: 48px;
+}
+
+.w-donjon-item--past {
+  opacity: 0.5;
+}
+
+.w-donjon-item--current {
+  border-color: rgba(192, 132, 252, 0.35);
+  background: rgba(192, 132, 252, 0.08);
+}
+
+.w-donjon-item__num {
+  font-size: var(--w-text-caption);
+  font-weight: 700;
+  color: var(--w-text-secondary);
+  font-variant-numeric: tabular-nums;
+  width: 20px;
+}
+
+.w-donjon-item__label {
+  flex: 1;
+  font-size: var(--w-text-body);
+  color: var(--w-text-primary);
+}
+
+.w-donjon-item__status {
+  font-size: 12px;
+}
