@@ -117,11 +117,11 @@ describe('Base styles (base.css)', () => {
   });
 
   it('applies surface color to body background', () => {
-    expect(baseCSS).toContain('--w-color-surface');
+    expect(baseCSS).toContain('--w-bg-page');
   });
 
   it('applies text-primary to body color', () => {
-    expect(baseCSS).toContain('--w-color-text-primary');
+    expect(baseCSS).toContain('--w-text-primary');
   });
 
   it('sets Nunito as font-family', () => {

@@ -20,8 +20,8 @@ body {
   font-size: var(--w-text-body);
   font-weight: 400;
   line-height: 1.5;
-  color: var(--w-color-text-primary);
-  background-color: var(--w-color-surface);
+  color: var(--w-text-primary);
+  background-color: var(--w-bg-page);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
