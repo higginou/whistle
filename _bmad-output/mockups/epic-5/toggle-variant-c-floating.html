@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toggle Mode — Variant C : Flottant bas-droite</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --w-bg-page: #130d1f;
+  --w-bg-surface: #1e1035;
+  --w-bg-elevated: #2e1a55;
+  --w-accent: #c084fc;
+  --w-violet: #7c3aed;
+  --w-violet-dim: #5b21b6;
+  --w-violet-glow: rgba(124, 58, 237, 0.4);
+  --w-text: #f0edf6;
+  --w-text-dim: #9d95ab;
+  --w-text-muted: #6b6279;
+  --w-space-xs: 0.25rem;
+  --w-space-sm: 0.5rem;
+  --w-space-md: 1rem;
+  --w-space-lg: 1.5rem;
+  --w-nav-height: 60px;
+  --w-radius-btn: 14px;
+  --w-font: 'Nunito', sans-serif;
+}
+
+body {
+  font-family: var(--w-font);
+  background: var(--w-bg-page);
+  color: var(--w-text);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  width: 100%;
+  max-width: 430px;
+  position: relative;
+}
+
+/* ── Header (unchanged — no toggle here) ── */
+.w-app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px var(--w-space-md);
+  background: rgba(19, 13, 31, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.w-app-header__logo {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--w-accent);
+}
+
+.w-succes-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid rgba(192, 132, 252, 0.25);
+  background: rgba(192, 132, 252, 0.1);
+  color: var(--w-accent);
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* ── VARIANT C : Floating toggle bas-droite ── */
+.w-view-fab {
+  position: fixed;
+  bottom: calc(var(--w-nav-height) + 16px + env(safe-area-inset-bottom, 0px));
+  right: 16px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: rgba(30, 16, 53, 0.95);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 24px;
+  padding: 4px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 20px rgba(124, 58, 237, 0.15);
+}
+
+.w-view-fab__option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--w-font);
+  color: var(--w-text-muted);
+  background: transparent;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: color 0.2s ease-out, background 0.2s ease-out;
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+
+.w-view-fab__option[aria-checked="true"] {
+  color: #fff;
+  background: var(--w-violet);
+  box-shadow: 0 2px 12px rgba(124, 58, 237, 0.5);
+}
+
+.w-view-fab__option:focus-visible {
+  outline: 2px solid var(--w-accent);
+  outline-offset: 2px;
+}
+
+.w-view-fab__option:active {
+  transform: scale(0.95);
+}
+
+.w-view-fab__icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* ── Simulated bottom nav ── */
+.w-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: var(--w-nav-height);
+  background: rgba(19, 13, 31, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  z-index: 40;
+}
+
+.w-bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: var(--w-text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
+  justify-content: center;
+}
+
+.w-bottom-nav__item--active {
+  color: var(--w-accent);
+}
+
+/* ── Demo content ── */
+.demo-content {
+  padding: var(--w-space-md);
+  padding-bottom: calc(var(--w-nav-height) + 80px);
+}
+
+.demo-card {
+  background: var(--w-bg-surface);
+  border: 1px solid rgba(124, 58, 237, 0.15);
+  border-radius: var(--w-radius-btn);
+  padding: var(--w-space-lg);
+  margin-bottom: var(--w-space-md);
+}
+
+.demo-card__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--w-accent);
+  margin-bottom: var(--w-space-sm);
+}
+
+.demo-card__text {
+  font-size: 13px;
+  color: var(--w-text-dim);
+  line-height: 1.5;
+}
+
+.demo-detail {
+  margin-top: var(--w-space-sm);
+  padding-top: var(--w-space-sm);
+  border-top: 1px solid rgba(124, 58, 237, 0.1);
+  font-size: 12px;
+  color: var(--w-text-muted);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.25s ease-out, max-height 0.25s ease-out;
+}
+
+.demo-detail.visible {
+  opacity: 1;
+  max-height: 100px;
+}
+
+.mode-label {
+  text-align: center;
+  margin-top: var(--w-space-lg);
+  font-size: 12px;
+  color: var(--w-text-muted);
+  font-style: italic;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w-view-fab__option { transition: none; }
+  .demo-detail { transition: none; }
+  .w-view-fab__option:active { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header sans toggle -->
+  <header class="w-app-header" role="banner">
+    <span class="w-app-header__logo" aria-label="Whistle">Whistle</span>
+    <button class="w-succes-btn" aria-label="Succes" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+        <path d="M8 21h8M12 17v4M17 3H7l1 7a4 4 0 008 0l1-7z"/>
+        <path d="M17 3c0 0 2 0 2 3s-2 4-2 4M7 3c0 0-2 0-2 3s2 4 2 4"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Demo content -->
+  <div class="demo-content">
+    <div class="demo-card">
+      <div class="demo-card__title">La Rochelle — 2e</div>
+      <div class="demo-card__text">Projection : 1er &middot; Tendance : &#8593;</div>
+      <div class="demo-detail" id="detail-1">
+        Elo : 1847 &middot; Confiance : 78% &middot; Forme : V V D V V
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card__title">Oracle — Niveau Augure</div>
+      <div class="demo-card__text">Prediction prochaine journee : La Rochelle bat Toulouse</div>
+      <div class="demo-detail" id="detail-2">
+        Brier Score : 0.182 (bon) &middot; Facteurs : domicile +12, forme +8
+      </div>
+    </div>
+
+    <div class="demo-card">
+      <div class="demo-card__title">Classement projete</div>
+      <div class="demo-card__text">14 equipes &middot; 6 qualifiees &middot; J18</div>
+      <div class="demo-detail" id="detail-3">
+        Elo moyen : 1612 &middot; Ecart-type : 98
+      </div>
+    </div>
+
+    <div class="mode-label" id="mode-label">Mode Simple — l'essentiel</div>
+  </div>
+
+  <!-- Floating toggle -->
+  <div class="w-view-fab" role="radiogroup" aria-label="Mode d'affichage">
+    <button class="w-view-fab__option" role="radio" aria-checked="true" id="mode-simple">
+      <svg class="w-view-fab__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      Simple
+    </button>
+    <button class="w-view-fab__option" role="radio" aria-checked="false" id="mode-detail">
+      <svg class="w-view-fab__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="8" y1="6" x2="21" y2="6"/>
+        <line x1="8" y1="12" x2="21" y2="12"/>
+        <line x1="8" y1="18" x2="21" y2="18"/>
+        <line x1="3" y1="6" x2="3.01" y2="6"/>
+        <line x1="3" y1="12" x2="3.01" y2="12"/>
+        <line x1="3" y1="18" x2="3.01" y2="18"/>
+      </svg>
+      Detail
+    </button>
+  </div>
+
+  <!-- Simulated bottom nav -->
+  <nav class="w-bottom-nav" aria-label="Navigation principale">
+    <button class="w-bottom-nav__item w-bottom-nav__item--active" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M3 12l9-9 9 9"/><path d="M9 21V12h6v9"/></svg>
+      Accueil
+    </button>
+    <button class="w-bottom-nav__item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+      Classement
+    </button>
+    <button class="w-bottom-nav__item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Oracle
+    </button>
+  </nav>
+</div>
+
+<script>
+const simple = document.getElementById('mode-simple');
+const detail = document.getElementById('mode-detail');
+const details = document.querySelectorAll('.demo-detail');
+const label = document.getElementById('mode-label');
+
+function setMode(mode) {
+  const isDetail = mode === 'detaille';
+  simple.setAttribute('aria-checked', !isDetail);
+  detail.setAttribute('aria-checked', isDetail);
+  details.forEach(d => d.classList.toggle('visible', isDetail));
+  label.textContent = isDetail
+    ? 'Mode Detail — tout est visible'
+    : "Mode Simple — l'essentiel";
+}
+
+simple.addEventListener('click', () => setMode('simple'));
+detail.addEventListener('click', () => setMode('detaille'));
+
+[simple, detail].forEach(btn => {
+  btn.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault(); detail.focus(); setMode('detaille');
+    }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault(); simple.focus(); setMode('simple');
+    }
+  });
+});
+</script>
+</body>
+</html>

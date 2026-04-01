@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 import { describe, it, expect, beforeEach } from 'vitest'
+import { set, reset } from '../src/store.js'
 import { computePredictionRate, getBrierQuality, render, renderJournalSection } from '../src/components/tab-oracle.js'
 
 describe('computePredictionRate', () => {
@@ -92,6 +93,8 @@ describe('tab-oracle render', () => {
   let container
 
   beforeEach(() => {
+    reset()
+    set('viewMode', 'detaille')
     container = document.createElement('div')
   })
 
@@ -359,5 +362,81 @@ describe('renderJournalSection', () => {
   it('does not render seal for empty state', () => {
     const html = renderJournalSection([])
     expect(html).not.toContain('w-oracle-journal-seal')
+  })
+})
+
+describe('tab-oracle render — viewMode simple', () => {
+  let container
+
+  beforeEach(() => {
+    reset()
+    set('viewMode', 'simple')
+    container = document.createElement('div')
+  })
+
+  it('hides Brier card in simple mode', () => {
+    const season = {
+      matchday: 20,
+      lastUpdated: '2026-03-29T08:50:25Z',
+      brierScore: 0.23,
+      teams: [{ id: 'toulouse', currentRank: 1, elo: 1514, confidence: 0.46, form: ['W', 'W'], trend: 'stable', zones: { europe: 0, top6: 1, mid: 0, relegation: 0 } }],
+      predictions: [],
+    }
+    render(container, season)
+    expect(container.querySelector('.w-oracle-legendary')).toBeNull()
+    expect(container.querySelector('.w-oracle-brierless')).toBeNull()
+  })
+
+  it('hides factor cards in simple mode', () => {
+    const season = {
+      matchday: 20,
+      lastUpdated: '2026-03-29T08:50:25Z',
+      brierScore: 0.3,
+      teams: [],
+      predictions: [],
+    }
+    render(container, season)
+    expect(container.querySelectorAll('.w-oracle-card').length).toBe(0)
+  })
+
+  it('hides journal section in simple mode', () => {
+    const season = {
+      matchday: 20,
+      lastUpdated: '2026-03-29T08:50:25Z',
+      brierScore: null,
+      teams: [],
+      predictions: [],
+      corrections: [
+        { matchday: 8, date: '2025-11-10T00:00:00Z', title: 'Fix', description: 'D', impact: 'positive', parameter: 'p', oldValue: 1, newValue: 2, type: 'correction' },
+      ],
+    }
+    render(container, season)
+    expect(container.querySelector('.w-oracle-journal')).toBeNull()
+  })
+
+  it('still shows prediction card in simple mode', () => {
+    const season = {
+      matchday: 20,
+      lastUpdated: '2026-03-29T08:50:25Z',
+      brierScore: 0.23,
+      teams: [],
+      predictions: [],
+    }
+    render(container, season)
+    expect(container.querySelector('.w-oracle-predict-card')).not.toBeNull()
+  })
+
+  it('still shows header (level pill + title + journee) in simple mode', () => {
+    const season = {
+      matchday: 20,
+      lastUpdated: '2026-03-29T08:50:25Z',
+      brierScore: null,
+      teams: [],
+      predictions: [],
+    }
+    render(container, season)
+    expect(container.querySelector('.w-oracle-level-pill')).not.toBeNull()
+    expect(container.querySelector('.w-oracle-title')).not.toBeNull()
+    expect(container.querySelector('.w-oracle-subtitle')).not.toBeNull()
   })
 })

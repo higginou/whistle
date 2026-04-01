@@ -1,4 +1,5 @@
 import '../styles/components/page-layout.css'
+import { render as renderViewModeToggle } from './view-mode-toggle.js'
 
 const TROPHY_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
   stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -18,13 +19,21 @@ export function render() {
   shell.innerHTML = `
     <header class="w-app-header" role="banner">
       <span class="w-app-header__logo" aria-label="Whistle">Whistle</span>
-      <button class="w-succes-btn" aria-label="Succès — 0 obtenus" type="button">
-        ${TROPHY_SVG}
-        <span class="w-succes-btn__badge" aria-hidden="true" hidden>0</span>
-      </button>
+      <div class="w-app-header__right"></div>
     </header>
     <div class="w-tab-viewport" role="main" aria-label="Classements"></div>
   `
+
+  // Render toggle + success button into header right section
+  const headerRight = shell.querySelector('.w-app-header__right')
+  renderViewModeToggle(headerRight)
+
+  const succesBtn = document.createElement('button')
+  succesBtn.className = 'w-succes-btn'
+  succesBtn.setAttribute('aria-label', 'Succès — 0 obtenus')
+  succesBtn.setAttribute('type', 'button')
+  succesBtn.innerHTML = `${TROPHY_SVG}<span class="w-succes-btn__badge" aria-hidden="true" hidden>0</span>`
+  headerRight.appendChild(succesBtn)
 
   return shell
 }

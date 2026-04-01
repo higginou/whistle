@@ -8,6 +8,7 @@ const EVENT_NAMES = {
   dataFresh: 'data-fresh',
   dataStale: 'data-stale',
   activeTab: 'tab-changed',
+  viewMode: 'mode-changed',
 }
 
 const INITIAL_STATE = {
@@ -18,6 +19,7 @@ const INITIAL_STATE = {
   dataFresh: false,
   dataStale: null,
   activeTab: 'classements',
+  viewMode: 'simple',
 }
 
 const state = { ...INITIAL_STATE }

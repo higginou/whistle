@@ -1,6 +1,7 @@
 /** @module bottom-sheet — Team detail dialog (gaming variant B2) */
 
 import '../styles/components/bottom-sheet.css'
+import { get } from '../store.js'
 
 const TEAM_COLORS = {
   toulouse: '#c41e3a',
@@ -22,6 +23,15 @@ const TEAM_COLORS = {
 const DIFFICULTY_DOTS = 5
 const MAX_UPCOMING = 5
 const CLOSE_TIMEOUT = 250
+
+/**
+ * Escape HTML special characters to prevent XSS.
+ * @param {string} str
+ * @returns {string}
+ */
+function esc(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
 
 /** Elo tier thresholds */
 const ELO_MIN = 1350
@@ -133,6 +143,7 @@ let isClosing = false
  * @returns {string}
  */
 function buildContent(team, season) {
+  const isDetaille = get('viewMode') === 'detaille'
   const initials = getInitials(team.name)
   const bgColor = TEAM_COLORS[team.id] ?? '#6b7280'
   const tier = computeTier(team.elo)
@@ -191,7 +202,7 @@ function buildContent(team, season) {
           return `
           <div class="w-sheet-calendar__match">
             <div>
-              <div class="w-sheet-calendar__opponent">${opponentName}</div>
+              <div class="w-sheet-calendar__opponent">${esc(opponentName)}</div>
               <div class="w-sheet-calendar__venue">${venue}</div>
             </div>
             <div class="w-sheet-calendar__difficulty">${dots}</div>
@@ -205,6 +216,38 @@ function buildContent(team, season) {
     ? `<div class="w-sheet-form__streak w-sheet-form__streak--${streak.cls}" aria-label="Tendance ${streak.cls === 'up' ? 'positive' : streak.cls === 'down' ? 'negative' : 'neutre'}">${streak.text}</div>`
     : ''
 
+  const heroEloHtml = isDetaille
+    ? `<div class="w-sheet-hero__elo">Elo <strong>${team.elo}</strong></div>
+        <div class="w-sheet-tier" aria-label="Niveau de force : ${tier.label}">
+          <span class="w-sheet-tier__label">${tier.label}</span>
+          <div class="w-sheet-tier__bar" role="meter" aria-valuenow="${tier.pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Puissance ${tier.pct}%">
+            <div class="w-sheet-tier__bar-fill" style="width:${tier.pct}%"></div>
+          </div>
+        </div>`
+    : ''
+
+  const confidenceHtml = isDetaille
+    ? `<div class="w-sheet-progression__confidence">
+          <span class="w-sheet-progression__confidence-value">${confidencePct}%</span>
+          <span class="w-sheet-progression__confidence-label">Confiance</span>
+        </div>`
+    : ''
+
+  const zonesHtml = isDetaille
+    ? `<p class="w-section-title">Probabilites par zone</p>
+      <div class="w-sheet-zones" aria-label="Probabilites par zone">
+        ${zoneCards}
+      </div>`
+    : ''
+
+  const formHtml = isDetaille
+    ? `<div class="w-sheet-form" aria-label="Forme recente">
+        <p class="w-section-title">Forme recente</p>
+        <div class="w-sheet-form__dots">${formDots}</div>
+        ${streakHTML}
+      </div>`
+    : ''
+
   return `
     <div class="w-bottom-sheet__bg" aria-hidden="true"></div>
     <div class="w-hud-corner w-hud-corner--tl" aria-hidden="true"></div>
@@ -215,15 +258,9 @@ function buildContent(team, season) {
     <button class="w-bottom-sheet__close" aria-label="Fermer">\u00D7</button>
     <div class="w-bottom-sheet__content">
       <div class="w-sheet-hero">
-        <div class="w-sheet-hero__logo" aria-hidden="true" style="background:${bgColor}">${initials}</div>
-        <div class="w-sheet-hero__name">${team.name}</div>
-        <div class="w-sheet-hero__elo">Elo <strong>${team.elo}</strong></div>
-        <div class="w-sheet-tier" aria-label="Niveau de force : ${tier.label}">
-          <span class="w-sheet-tier__label">${tier.label}</span>
-          <div class="w-sheet-tier__bar" role="meter" aria-valuenow="${tier.pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Puissance ${tier.pct}%">
-            <div class="w-sheet-tier__bar-fill" style="width:${tier.pct}%"></div>
-          </div>
-        </div>
+        <div class="w-sheet-hero__logo" aria-hidden="true" style="background:${bgColor}">${esc(initials)}</div>
+        <div class="w-sheet-hero__name">${esc(team.name)}</div>
+        ${heroEloHtml}
       </div>
 
       <div class="w-sheet-progression">
@@ -239,22 +276,12 @@ function buildContent(team, season) {
           <span class="w-sheet-progression__rank-label">Projete</span>
           <span class="w-sheet-progression__rank-num w-sheet-progression__rank-num--${prog.cls}">${team.projectedRank}<sup>${ordinal(team.projectedRank)}</sup></span>
         </div>
-        <div class="w-sheet-progression__confidence">
-          <span class="w-sheet-progression__confidence-value">${confidencePct}%</span>
-          <span class="w-sheet-progression__confidence-label">Confiance</span>
-        </div>
+        ${confidenceHtml}
       </div>
 
-      <p class="w-section-title">Probabilites par zone</p>
-      <div class="w-sheet-zones" aria-label="Probabilites par zone">
-        ${zoneCards}
-      </div>
+      ${zonesHtml}
 
-      <div class="w-sheet-form" aria-label="Forme recente">
-        <p class="w-section-title">Forme recente</p>
-        <div class="w-sheet-form__dots">${formDots}</div>
-        ${streakHTML}
-      </div>
+      ${formHtml}
 
       <div class="w-sheet-calendar" aria-label="Prochains matchs">
         <p class="w-section-title">Prochains matchs</p>
@@ -296,13 +323,13 @@ function open(team, season) {
   if (dialog.open) {
     // Already open — just replace content
     dialog.innerHTML = buildContent(team, season)
-    dialog.setAttribute('aria-label', `Fiche equipe ${team.name}`)
+    dialog.setAttribute('aria-label', `Fiche equipe ${esc(team.name)}`)
     bindInternalEvents()
     return
   }
 
   dialog.innerHTML = buildContent(team, season)
-  dialog.setAttribute('aria-label', `Fiche equipe ${team.name}`)
+  dialog.setAttribute('aria-label', `Fiche equipe ${esc(team.name)}`)
   dialog.classList.remove('w-bottom-sheet--closing')
   dialog.showModal()
   bindInternalEvents()

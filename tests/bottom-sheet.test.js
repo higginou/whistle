@@ -1,4 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
+import { set, reset } from '../src/store.js'
 import { computeTier, filterUpcomingForTeam, buildContent } from '../src/components/bottom-sheet.js'
 
 /** Minimal team factory */
@@ -122,6 +123,11 @@ describe('bottom-sheet — filterUpcomingForTeam', () => {
 })
 
 describe('bottom-sheet — buildContent', () => {
+  beforeEach(() => {
+    reset()
+    set('viewMode', 'detaille')
+  })
+
   it('includes team name in output', () => {
     const team = makeTeam()
     const season = makeSeason()

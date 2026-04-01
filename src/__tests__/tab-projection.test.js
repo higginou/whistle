@@ -3,6 +3,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 vi.mock('../components/zone-group.js', () => ({ render: vi.fn() }))
 
+import { set, reset } from '../store.js'
 import { render } from '../components/tab-projection.js'
 import { render as renderZoneGroups } from '../components/zone-group.js'
 
@@ -19,6 +20,8 @@ describe('tab-projection', () => {
   let container
 
   beforeEach(() => {
+    reset()
+    set('viewMode', 'detaille')
     renderZoneGroups.mockClear()
     container = document.createElement('div')
     render(container, MOCK_SEASON)

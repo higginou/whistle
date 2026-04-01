@@ -21,6 +21,12 @@
   -webkit-backdrop-filter: blur(20px);
 }
 
+.w-app-header__right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .w-app-header__logo {
   font-size: 18px;
   font-weight: 800;

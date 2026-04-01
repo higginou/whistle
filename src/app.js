@@ -33,6 +33,26 @@ let prevTabIndex = 0
 // Tab view cache: tabId → div element
 const tabViews = new Map()
 
+// Restore viewMode from localStorage at boot
+const savedMode = localStorage.getItem('w-viewMode')
+if (savedMode === 'simple' || savedMode === 'detaille') {
+  set('viewMode', savedMode)
+}
+
+// Persist viewMode changes to localStorage
+on('viewMode', (event) => {
+  localStorage.setItem('w-viewMode', event.detail.value)
+})
+
+// Invalidate tab cache and re-render active tab when viewMode changes
+on('viewMode', () => {
+  if (!viewport) return
+  const activeTab = get('activeTab')
+  tabViews.forEach((view) => { view.remove() })
+  tabViews.clear()
+  if (activeTab) showTab(activeTab, true)
+})
+
 function getTabIndex(tabId) {
   return TAB_ORDER.indexOf(tabId)
 }

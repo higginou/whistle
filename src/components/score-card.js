@@ -7,6 +7,15 @@ const MAX_UPCOMING = 3
 const DIFFICULTY_DOTS = 5
 
 /**
+ * Escape HTML special characters to prevent XSS.
+ * @param {string} str
+ * @returns {string}
+ */
+function esc(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
+
+/**
  * Extract La Rochelle data from season object.
  * @param {object} season
  * @returns {object|null}
@@ -131,6 +140,7 @@ function teamName(id, teams) {
  * @returns {string}
  */
 function buildHTML(team, season) {
+  const isDetaille = get('viewMode') === 'detaille'
   const { symbol, label } = trendDisplay(team.trend)
   const top6Pct = Math.round(team.zones.top6 * 100)
   const matches = filterUpcomingMatches(season.calendar)
@@ -143,7 +153,7 @@ function buildHTML(team, season) {
     const venue = isHome ? 'Domicile' : 'Exterieur'
     return `
       <div class="w-match-pill">
-        <span class="w-match-pill__name">${opponentName}</span>
+        <span class="w-match-pill__name">${esc(opponentName)}</span>
         <span class="w-match-pill__detail">${venue}</span>
         <div class="w-match-pill__difficulty">${difficultyDots(m.difficulty ?? 0.5)}</div>
       </div>`
@@ -174,11 +184,11 @@ function buildHTML(team, season) {
         </span>
       </div>
 
-      <div class="w-mini-card">
+      ${isDetaille ? `<div class="w-mini-card">
         <span class="w-mini-card__label">Elo</span>
         <span class="w-mini-card__value w-mini-card__value--medium w-tabular">${team.elo}</span>
         <span class="w-mini-card__confidence">Confiance ${toPercent(team.confidence)}</span>
-      </div>
+      </div>` : ''}
 
       <div class="w-mini-card w-mini-card--xp w-mini-card--full"
            role="button"
@@ -206,7 +216,7 @@ function buildHTML(team, season) {
 
       <div class="w-mini-card w-mini-card--explication w-mini-card--full">
         <span class="w-mini-card__label"><span class="w-mini-card__explication-icon">&#9881;</span> Analyse du modele</span>
-        <p class="w-mini-card__explication-text">${explanation}</p>
+        <p class="w-mini-card__explication-text">${esc(explanation)}</p>
       </div>
     </div>`
 }
@@ -288,7 +298,7 @@ export function render(container) {
           <circle cx="12" cy="12" r="10"/>
           <polyline points="12 6 12 12 16 14"/>
         </svg>
-        Derniere mise a jour : ${formatDateFr(value)}
+        Derniere mise a jour : ${esc(formatDateFr(value))}
       `
     } else {
       staleEl.hidden = true

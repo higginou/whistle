@@ -1,6 +1,6 @@
 import '../styles/components/rank-row.css'
 import { render as renderConfidenceBar } from './confidence-bar.js'
-import { set } from '../store.js'
+import { get, set } from '../store.js'
 import { pushSheet } from '../router.js'
 
 const FAVORITE_TEAM = 'la-rochelle'
@@ -91,6 +91,7 @@ export function render(listElement, team) {
   const trendLabel = getTrendLabel(team.trend)
   const confLabel = getConfidenceLabel(team.confidence)
   const rank = team.currentRank
+  const isDetaille = get('viewMode') === 'detaille'
 
   const li = document.createElement('li')
 
@@ -148,10 +149,12 @@ export function render(listElement, team) {
   nameSpan.textContent = team.name
   info.appendChild(nameSpan)
 
-  const eloSpan = document.createElement('span')
-  eloSpan.className = 'w-rank-row__elo'
-  eloSpan.textContent = `Elo ${team.elo}`
-  info.appendChild(eloSpan)
+  if (isDetaille) {
+    const eloSpan = document.createElement('span')
+    eloSpan.className = 'w-rank-row__elo'
+    eloSpan.textContent = `Elo ${team.elo}`
+    info.appendChild(eloSpan)
+  }
 
   row.appendChild(info)
 
@@ -162,8 +165,10 @@ export function render(listElement, team) {
   deltaSpan.setAttribute('aria-hidden', 'true')
   row.appendChild(deltaSpan)
 
-  // Confidence bar
-  renderConfidenceBar(row, team.confidence)
+  // Confidence bar (detaille mode only)
+  if (isDetaille) {
+    renderConfidenceBar(row, team.confidence)
+  }
 
   li.appendChild(row)
   listElement.appendChild(li)

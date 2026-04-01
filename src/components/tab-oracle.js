@@ -1,4 +1,5 @@
 import '../styles/components/tab-oracle.css'
+import { get } from '../store.js'
 
 function esc(str) {
   return String(str)
@@ -323,11 +324,25 @@ export function render(container, season) {
   const lastUpdated = season?.lastUpdated ? formatDate(season.lastUpdated) : ''
   const predRate = computePredictionRate(season)
   const corrections = season?.corrections ?? []
+  const isDetaille = get('viewMode') === 'detaille'
 
   const wrapper = document.createElement('div')
   wrapper.className = 'w-oracle-container'
 
   const levelLabel = matchday >= 20 ? 'Confirme' : matchday >= 10 ? 'Apprenti' : 'Novice'
+
+  const brierHtml = isDetaille
+    ? (brierScore != null ? renderBrierCard(brierScore) : renderBrierless())
+    : ''
+
+  const factorsHtml = isDetaille
+    ? `<h2 class="w-oracle-grid-title">Collection de facteurs</h2>
+      <div class="w-oracle-grid">
+        ${renderFactorCards()}
+      </div>`
+    : ''
+
+  const journalHtml = isDetaille ? renderJournalSection(corrections) : ''
 
   wrapper.innerHTML = `
     <section aria-label="Transparence du modele">
@@ -340,16 +355,13 @@ export function render(container, season) {
         <p class="w-oracle-subtitle" aria-label="Journee ${matchday} sur ${totalMatchdays}">J${esc(String(matchday))} / ${totalMatchdays}</p>
       </header>
 
-      ${brierScore != null ? renderBrierCard(brierScore) : renderBrierless()}
+      ${brierHtml}
 
       ${renderPredictionCard(predRate)}
 
-      <h2 class="w-oracle-grid-title">Collection de facteurs</h2>
-      <div class="w-oracle-grid">
-        ${renderFactorCards()}
-      </div>
+      ${factorsHtml}
 
-      ${renderJournalSection(corrections)}
+      ${journalHtml}
 
       ${lastUpdated ? `<footer class="w-oracle-footer" aria-label="Derniere mise a jour: ${esc(lastUpdated)}">
         <span class="w-oracle-footer-dot" aria-hidden="true"></span>

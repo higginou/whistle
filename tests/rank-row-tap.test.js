@@ -4,6 +4,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 // Mock store and router before importing rank-row
 vi.mock('../src/store.js', () => ({
   set: vi.fn(),
+  get: vi.fn((key) => key === 'viewMode' ? 'detaille' : undefined),
 }))
 vi.mock('../src/router.js', () => ({
   pushSheet: vi.fn(),
