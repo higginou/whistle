@@ -259,7 +259,8 @@ function buildContent(team, season) {
     <div class="w-bottom-sheet__content">
       <div class="w-sheet-hero">
         <div class="w-sheet-hero__logo" aria-hidden="true" style="background:${bgColor}">${esc(initials)}</div>
-        <div class="w-sheet-hero__name">${esc(team.name)}</div>
+        <div class="w-sheet-hero__name">${esc(team.name)}${team.promoted ? ' <span class="w-sheet-badge-promu" aria-label="Equipe promue de Pro D2">Promu</span>' : ''}</div>
+        ${typeof team.tiebreaker === 'string' && team.tiebreaker.startsWith('h2h') && isDetaille ? '<div class="w-sheet-badge-h2h" aria-label="Classement departage par confrontation directe"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Departage H2H</div>' : ''}
         ${heroEloHtml}
       </div>
 

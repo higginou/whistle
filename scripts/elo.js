@@ -136,13 +136,16 @@ export function applyDecay(results, currentMatchday) {
  * @returns {{ elos: Map<string, number>, eloHistories: Map<string, number[]> }}
  */
 export function computeEloRatings(standings, results) {
-  // Initialize all teams at INITIAL_ELO
+  // Initialize all teams — promoted teams get a decoted starting Elo
   const elos = new Map();
   const eloHistories = new Map();
 
   for (const team of standings) {
-    elos.set(team.id, INITIAL_ELO);
-    eloHistories.set(team.id, [INITIAL_ELO]);
+    const initialElo = PROMOTED_TEAMS.includes(team.id)
+      ? Math.round(INITIAL_ELO * PROMOTED_DECOTE)
+      : INITIAL_ELO;
+    elos.set(team.id, initialElo);
+    eloHistories.set(team.id, [initialElo]);
   }
 
   // Sort results by matchday for chronological processing
@@ -548,6 +551,136 @@ export function generateRecalibrations(matchday) {
   return [];
 }
 
+// ─── Head-to-Head & Tiebreaker ────────────────────────────────────────
+
+/**
+ * Compute head-to-head records for every pair of teams from match results.
+ *
+ * @param {object[]} results - Match results with home, away, homeScore, awayScore
+ * @returns {Map<string, { wins: number, draws: number, losses: number, pointsFor: number, pointsAgainst: number }>}
+ *   Keys are "teamA:teamB" (alphabetically ordered), values contain record from teamA's perspective.
+ *   Also stores reverse key "teamB:teamA" for teamB's perspective.
+ */
+export function computeHeadToHead(results) {
+  const h2h = new Map();
+
+  for (const r of results) {
+    if (r.homeScore == null || r.awayScore == null) continue;
+
+    const home = r.home;
+    const away = r.away;
+
+    // Ensure entries exist for both perspectives
+    const keyHA = `${home}:${away}`;
+    const keyAH = `${away}:${home}`;
+
+    if (!h2h.has(keyHA)) {
+      h2h.set(keyHA, { wins: 0, draws: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 });
+    }
+    if (!h2h.has(keyAH)) {
+      h2h.set(keyAH, { wins: 0, draws: 0, losses: 0, pointsFor: 0, pointsAgainst: 0 });
+    }
+
+    const homeRec = h2h.get(keyHA);
+    const awayRec = h2h.get(keyAH);
+
+    homeRec.pointsFor += r.homeScore;
+    homeRec.pointsAgainst += r.awayScore;
+    awayRec.pointsFor += r.awayScore;
+    awayRec.pointsAgainst += r.homeScore;
+
+    if (r.homeScore > r.awayScore) {
+      homeRec.wins++;
+      awayRec.losses++;
+    } else if (r.homeScore < r.awayScore) {
+      homeRec.losses++;
+      awayRec.wins++;
+    } else {
+      homeRec.draws++;
+      awayRec.draws++;
+    }
+  }
+
+  return h2h;
+}
+
+/**
+ * Apply head-to-head tiebreaker to teams sharing the same currentRank points.
+ * Groups teams with identical standing points, then re-orders within each group
+ * by H2H win balance (wins - losses among the tied teams).
+ *
+ * Mutates `teams` array in place by updating `currentRank` for tied teams.
+ * Returns the set of team IDs that were reordered by tiebreaker.
+ *
+ * @param {object[]} teams - Array of team objects with { id, currentRank } (sorted by currentRank)
+ * @param {object[]} standings - Standings from scraped data with { id, points }
+ * @param {Map<string, object>} h2hMap - Head-to-head map from computeHeadToHead
+ * @returns {Set<string>} Team IDs that were resolved by H2H tiebreaker
+ */
+export function applyTiebreaker(teams, standings, h2hMap) {
+  // Returns Map<teamId, groupIndex> so the frontend can distinguish groups
+  const tiebreakerTeams = new Map();
+  let groupIndex = 0;
+
+  // Build points lookup from standings
+  const pointsById = new Map();
+  for (const s of standings) {
+    pointsById.set(s.id, s.points);
+  }
+
+  // Group teams by points
+  const groups = new Map();
+  for (const team of teams) {
+    const pts = pointsById.get(team.id) ?? 0;
+    if (!groups.has(pts)) groups.set(pts, []);
+    groups.get(pts).push(team);
+  }
+
+  for (const [, group] of groups) {
+    if (group.length < 2) continue;
+
+    // Compute H2H balance within the group
+    const balances = group.map((team) => {
+      let balance = 0;
+      for (const other of group) {
+        if (other.id === team.id) continue;
+        const key = `${team.id}:${other.id}`;
+        const rec = h2hMap.get(key);
+        if (rec) balance += rec.wins - rec.losses;
+      }
+      return { team, balance };
+    });
+
+    // Sort by H2H balance descending
+    balances.sort((a, b) => b.balance - a.balance);
+
+    // Check if any actual reordering happens (not all same balance)
+    const allSame = balances.every((b) => b.balance === balances[0].balance);
+    if (allSame) continue;
+
+    // Assign ranks: use the lowest rank in the group as base
+    const baseRank = Math.min(...group.map((t) => t.currentRank));
+    groupIndex++;
+    for (let i = 0; i < balances.length; i++) {
+      balances[i].team.currentRank = baseRank + i;
+      tiebreakerTeams.set(balances[i].team.id, groupIndex);
+    }
+  }
+
+  return tiebreakerTeams;
+}
+
+// ─── Promoted Teams ───────────────────────────────────────────────────
+
+/** Elo decote multiplier for promoted teams */
+export const PROMOTED_DECOTE = 0.85;
+
+/** Teams promoted for the 2025-2026 season */
+export const PROMOTED_TEAMS = ['vannes'];
+
+/** Number of matchdays during which promoted confidence is capped */
+const PROMOTED_CONFIDENCE_MATCHDAYS = 5;
+
 // ─── Main Pipeline ─────────────────────────────────────────────────────────
 
 /**
@@ -580,6 +713,9 @@ export async function main() {
   // ── Step 1: Compute Elo ratings ──
   const { elos, eloHistories } = computeEloRatings(standings, results);
 
+  // ── Step 1b: Compute head-to-head records ──
+  const h2hMap = computeHeadToHead(results);
+
   // ── Step 2: Monte Carlo projection ──
   const { rankCounts } = simulateSeason(
     elos,
@@ -605,11 +741,18 @@ export async function main() {
     const teamIndex = sortedByElo.findIndex((t) => t.id === teamId);
     const neighborGap = computeNeighborGap(sortedByElo, teamIndex);
 
-    const confidence = calculateConfidence(matchday, TOTAL_MATCHDAYS, neighborGap);
+    let confidence = calculateConfidence(matchday, TOTAL_MATCHDAYS, neighborGap);
+
+    // Promoted teams: cap confidence during early season
+    const isPromoted = PROMOTED_TEAMS.includes(teamId);
+    if (isPromoted && matchday <= PROMOTED_CONFIDENCE_MATCHDAYS) {
+      confidence = Math.min(confidence, EARLY_SEASON_MAX_CONFIDENCE);
+    }
+
     const form = computeForm(teamId, results);
     const trend = computeTrend(history);
 
-    return {
+    const entry = {
       id: teamId,
       currentRank: standing.rank,
       elo,
@@ -625,7 +768,23 @@ export async function main() {
       trend,
       eloHistory: history,
     };
+
+    if (isPromoted) entry.promoted = true;
+
+    return entry;
   });
+
+  // ── Step 3b: Apply H2H tiebreaker ──
+  const tiebreakerMap = applyTiebreaker(teams, standings, h2hMap);
+  for (const team of teams) {
+    const groupId = tiebreakerMap.get(team.id);
+    if (groupId != null) {
+      team.tiebreaker = `h2h-${groupId}`;
+    }
+  }
+
+  // ── Step 3c: Build headToHead output ──
+  const headToHead = buildHeadToHeadOutput(h2hMap, results);
 
   // ── Step 4: Calendar with difficulty ──
   const calendarOutput = calendar.map((match) => {
@@ -653,6 +812,7 @@ export async function main() {
     teams,
     calendar: calendarOutput,
     corrections,
+    headToHead,
   };
 
   try {
@@ -674,6 +834,62 @@ export async function main() {
   console.log(`  Simulations    : ${NUM_SIMULATIONS}`);
   console.log(`  Sortie         : ${outputPath}`);
   console.log('');
+}
+
+// ─── H2H Output Builder ──────────────────────────────────────────────────
+
+/**
+ * Build the headToHead array for the JSON output from the h2h map and results.
+ * Each entry represents a pair of teams with their match records.
+ *
+ * @param {Map<string, object>} h2hMap - Head-to-head map from computeHeadToHead
+ * @param {object[]} results - Match results
+ * @returns {object[]} Array of { teams, matches, record } objects
+ */
+export function buildHeadToHeadOutput(h2hMap, results) {
+  // Collect unique team pairs (alphabetically ordered)
+  const pairsSeen = new Set();
+  const output = [];
+
+  for (const key of h2hMap.keys()) {
+    const [teamA, teamB] = key.split(':');
+    const pairKey = [teamA, teamB].sort().join(':');
+    if (pairsSeen.has(pairKey)) continue;
+    pairsSeen.add(pairKey);
+
+    const [first, second] = pairKey.split(':');
+    const recFirst = h2hMap.get(`${first}:${second}`);
+    const recSecond = h2hMap.get(`${second}:${first}`);
+
+    if (!recFirst || !recSecond) continue;
+
+    // Find matches between these two teams
+    const matches = results
+      .filter(
+        (r) =>
+          (r.home === first && r.away === second) ||
+          (r.home === second && r.away === first),
+      )
+      .filter((r) => r.homeScore != null && r.awayScore != null)
+      .map((r) => ({
+        matchday: r.matchday,
+        home: r.home,
+        away: r.away,
+        scoreHome: r.homeScore,
+        scoreAway: r.awayScore,
+      }));
+
+    output.push({
+      teams: [first, second],
+      matches,
+      record: {
+        [first]: { w: recFirst.wins, d: recFirst.draws, l: recFirst.losses },
+        [second]: { w: recSecond.wins, d: recSecond.draws, l: recSecond.losses },
+      },
+    });
+  }
+
+  return output;
 }
 
 // ─── Helpers ───────────────────────────────────────────────────────────────

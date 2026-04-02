@@ -553,3 +553,60 @@ describe('buildSeasonData corrections', () => {
     expect(result.corrections).toHaveLength(1);
   });
 });
+
+// ─── Story 5-4 : promoted + tiebreaker + headToHead ─────────────────────
+
+describe('buildTeamEntry with promoted and tiebreaker', () => {
+  it('includes promoted: true when set on elo team', () => {
+    const eloTeam = makeEloTeam({ id: 'vannes', promoted: true });
+    const entry = buildTeamEntry(eloTeam);
+    expect(entry.promoted).toBe(true);
+  });
+
+  it('omits promoted when not set on elo team', () => {
+    const eloTeam = makeEloTeam({ id: 'toulouse' });
+    const entry = buildTeamEntry(eloTeam);
+    expect(entry).not.toHaveProperty('promoted');
+  });
+
+  it('includes tiebreaker when set on elo team', () => {
+    const eloTeam = makeEloTeam({ id: 'toulouse', tiebreaker: 'h2h-1' });
+    const entry = buildTeamEntry(eloTeam);
+    expect(entry.tiebreaker).toBe('h2h-1');
+  });
+
+  it('omits tiebreaker when not set', () => {
+    const eloTeam = makeEloTeam({ id: 'toulouse' });
+    const entry = buildTeamEntry(eloTeam);
+    expect(entry).not.toHaveProperty('tiebreaker');
+  });
+});
+
+describe('buildSeasonData with headToHead', () => {
+  it('includes headToHead in season data when present', () => {
+    const eloOutput = makeEloOutput({
+      headToHead: [
+        {
+          teams: ['la-rochelle', 'toulouse'],
+          matches: [{ matchday: 5, home: 'la-rochelle', away: 'toulouse', scoreHome: 24, scoreAway: 18 }],
+          record: { 'la-rochelle': { w: 1, d: 0, l: 0 }, toulouse: { w: 0, d: 0, l: 1 } },
+        },
+      ],
+    });
+    const seasonData = buildSeasonData(eloOutput, []);
+    expect(seasonData).toHaveProperty('headToHead');
+    expect(seasonData.headToHead).toHaveLength(1);
+  });
+
+  it('omits headToHead when array is empty', () => {
+    const eloOutput = makeEloOutput({ headToHead: [] });
+    const seasonData = buildSeasonData(eloOutput, []);
+    expect(seasonData).not.toHaveProperty('headToHead');
+  });
+
+  it('omits headToHead when not provided', () => {
+    const eloOutput = makeEloOutput();
+    const seasonData = buildSeasonData(eloOutput, []);
+    expect(seasonData).not.toHaveProperty('headToHead');
+  });
+});

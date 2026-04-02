@@ -231,4 +231,42 @@ describe('bottom-sheet — buildContent', () => {
     expect(html).toContain('w-hud-corner--bl')
     expect(html).toContain('w-hud-corner--br')
   })
+
+  it('shows promoted badge when team.promoted is true', () => {
+    const team = makeTeam({ promoted: true })
+    const season = makeSeason({ promoted: true })
+    const html = buildContent(team, season)
+    expect(html).toContain('w-sheet-badge-promu')
+    expect(html).toContain('Promu')
+  })
+
+  it('does not show promoted badge when team has no promoted flag', () => {
+    const team = makeTeam()
+    const season = makeSeason()
+    const html = buildContent(team, season)
+    expect(html).not.toContain('w-sheet-badge-promu')
+  })
+
+  it('shows H2H badge in detaille mode when team has tiebreaker', () => {
+    const team = makeTeam({ tiebreaker: 'h2h-1' })
+    const season = makeSeason({ tiebreaker: 'h2h-1' })
+    const html = buildContent(team, season)
+    expect(html).toContain('w-sheet-badge-h2h')
+    expect(html).toContain('Departage H2H')
+  })
+
+  it('does not show H2H badge when team has no tiebreaker', () => {
+    const team = makeTeam()
+    const season = makeSeason()
+    const html = buildContent(team, season)
+    expect(html).not.toContain('w-sheet-badge-h2h')
+  })
+
+  it('does not show H2H badge in simple mode even with tiebreaker', () => {
+    set('viewMode', 'simple')
+    const team = makeTeam({ tiebreaker: 'h2h-1' })
+    const season = makeSeason({ tiebreaker: 'h2h-1' })
+    const html = buildContent(team, season)
+    expect(html).not.toContain('w-sheet-badge-h2h')
+  })
 })

@@ -149,6 +149,14 @@ export function render(listElement, team) {
   nameSpan.textContent = team.name
   info.appendChild(nameSpan)
 
+  if (team.promoted) {
+    const promuTag = document.createElement('span')
+    promuTag.className = 'w-rank-row__promu'
+    promuTag.textContent = 'P'
+    promuTag.setAttribute('aria-label', 'Equipe promue')
+    info.appendChild(promuTag)
+  }
+
   if (isDetaille) {
     const eloSpan = document.createElement('span')
     eloSpan.className = 'w-rank-row__elo'

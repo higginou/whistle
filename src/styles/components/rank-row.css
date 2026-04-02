@@ -74,6 +74,21 @@
   gap: var(--w-space-xs);
 }
 
+.w-rank-row__promu {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--w-orange, #f59e0b);
+  background: rgba(245, 158, 11, 0.12);
+  border-radius: 3px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
 .w-rank-row__delta {
   font-size: var(--w-text-caption);
   font-weight: 600;

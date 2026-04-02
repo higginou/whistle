@@ -319,6 +319,39 @@ describe('AC-5.2 : structure des corrections', () => {
   });
 });
 
+// --- AC-5.4 : Structure des champs promoted, tiebreaker, headToHead (optionnels) ---
+
+describe('AC-5.4 : champs optionnels promoted/tiebreaker/headToHead', () => {
+  it('promoted est un boolean quand present', () => {
+    for (const team of seasonData.teams) {
+      if (team.promoted !== undefined) {
+        expect(typeof team.promoted).toBe('boolean');
+      }
+    }
+  });
+
+  it('tiebreaker est une string quand present', () => {
+    for (const team of seasonData.teams) {
+      if (team.tiebreaker !== undefined) {
+        expect(typeof team.tiebreaker).toBe('string');
+        expect(team.tiebreaker).toMatch(/^h2h-\d+$/);
+      }
+    }
+  });
+
+  it('headToHead est un tableau quand present', () => {
+    if (seasonData.headToHead !== undefined) {
+      expect(Array.isArray(seasonData.headToHead)).toBe(true);
+      for (const entry of seasonData.headToHead) {
+        expect(Array.isArray(entry.teams)).toBe(true);
+        expect(entry.teams).toHaveLength(2);
+        expect(entry).toHaveProperty('matches');
+        expect(entry).toHaveProperty('record');
+      }
+    }
+  });
+});
+
 // --- AC6 : Budget taille ---
 
 describe('AC6 : budget taille du fichier', () => {

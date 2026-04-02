@@ -20,6 +20,7 @@ import { render as renderProjection } from './components/tab-projection.js'
 import { render as renderPlaceholder } from './components/tab-placeholder.js'
 import { render as renderDonjon } from './components/tab-donjon.js'
 import { render as renderOracle } from './components/tab-oracle.js'
+import { render as renderDuels } from './components/tab-duels.js'
 import { computeAchievements } from './components/achievement-card.js'
 
 const appEl = document.querySelector('#app')
@@ -83,10 +84,7 @@ function renderTabContent(tabId, container) {
       if (season) renderProjection(container, season)
       break
     case 'duels':
-      renderPlaceholder(container, {
-        title: 'Duels',
-        description: 'Micro-classement des confrontations directes entre équipes. Bientôt disponible.',
-      })
+      if (season) renderDuels(container, season)
       break
     case 'donjon':
       renderDonjon(container, season)

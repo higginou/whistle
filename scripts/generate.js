@@ -98,7 +98,7 @@ export function getTeamName(teamId) {
  * @returns {object} Team entry for the season file
  */
 export function buildTeamEntry(eloTeam) {
-  return {
+  const entry = {
     id: eloTeam.id,
     name: getTeamName(eloTeam.id),
     currentRank: eloTeam.currentRank,
@@ -109,6 +109,11 @@ export function buildTeamEntry(eloTeam) {
     form: eloTeam.form,
     trend: eloTeam.trend,
   };
+
+  if (eloTeam.promoted) entry.promoted = true;
+  if (eloTeam.tiebreaker) entry.tiebreaker = eloTeam.tiebreaker;
+
+  return entry;
 }
 
 /**
@@ -171,7 +176,7 @@ export function buildSeasonData(eloOutput, existingPredictions, existingCalendar
   const calendar = mergeCalendarDates(eloOutput.calendar, existingCalendar);
   const corrections = mergeCorrections(existingCorrections, eloOutput.corrections ?? []);
 
-  return {
+  const season = {
     season: SEASON_ID,
     lastUpdated: now,
     matchday: eloOutput.matchday,
@@ -181,6 +186,12 @@ export function buildSeasonData(eloOutput, existingPredictions, existingCalendar
     predictions,
     corrections,
   };
+
+  if (Array.isArray(eloOutput.headToHead) && eloOutput.headToHead.length > 0) {
+    season.headToHead = eloOutput.headToHead;
+  }
+
+  return season;
 }
 
 /**

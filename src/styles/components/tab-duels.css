@@ -1,0 +1,312 @@
+/* ── Tab Duels : Micro-classement H2H ── */
+
+.w-duels-container {
+  padding-bottom: 24px;
+}
+
+.w-duels-header {
+  padding: 20px 16px 8px;
+  text-align: center;
+}
+
+.w-duels-header__label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--w-text-muted);
+  margin-bottom: 4px;
+}
+
+.w-duels-header__heading {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--w-accent), var(--w-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.w-duels-header__sub {
+  font-size: 12px;
+  color: var(--w-text-dim);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ── Tiebreak Group ── */
+
+.w-group {
+  margin: 0 16px 16px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius);
+  overflow: hidden;
+}
+
+.w-group__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--w-border);
+}
+
+.w-group__title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-text);
+}
+
+.w-group__ranks {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+}
+
+.w-group__pts-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--w-violet);
+  background: var(--w-violet-soft);
+  border-radius: var(--w-radius-xs);
+  padding: 3px 8px;
+}
+
+/* ── Simple Mode: Mini Ranking ── */
+
+.w-mini-rank {
+  padding: 0;
+}
+
+.w-mini-rank__row {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  gap: 10px;
+}
+
+.w-mini-rank__row:nth-child(even) {
+  background: var(--w-bg-row-alt);
+}
+
+.w-mini-rank__pos {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.w-mini-rank__pos--1 {
+  background: var(--w-violet-soft);
+  color: var(--w-accent);
+}
+
+.w-mini-rank__pos--2 {
+  background: var(--w-gray-soft);
+  color: var(--w-text-dim);
+}
+
+.w-mini-rank__pos--3 {
+  background: var(--w-gray-soft);
+  color: var(--w-text-muted);
+}
+
+.w-mini-rank__name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-text);
+}
+
+.w-mini-rank__name--favorite {
+  color: var(--w-accent);
+}
+
+.w-mini-rank__result {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.w-mini-rank__result--ahead {
+  color: var(--w-green);
+}
+
+.w-mini-rank__result--behind {
+  color: var(--w-text-muted);
+}
+
+/* ── Detail Mode: H2H Table ── */
+
+.w-h2h-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.w-h2h-table th,
+.w-h2h-table td {
+  padding: 8px 6px;
+  text-align: center;
+  font-size: 11px;
+  border-bottom: 1px solid var(--w-border-subtle);
+}
+
+.w-h2h-table th {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--w-text-muted);
+  background: var(--w-bg-elevated);
+  padding: 8px 6px;
+}
+
+.w-h2h-table th:first-child,
+.w-h2h-table td:first-child {
+  text-align: left;
+  padding-left: 14px;
+}
+
+.w-h2h-table td {
+  color: var(--w-text-dim);
+  font-weight: 600;
+}
+
+.w-h2h-table td:first-child {
+  font-weight: 700;
+  color: var(--w-text);
+  font-size: 12px;
+}
+
+.w-h2h-table tr:last-child td {
+  border-bottom: none;
+}
+
+.w-h2h-cell--win {
+  color: var(--w-green) !important;
+  font-weight: 700 !important;
+}
+
+.w-h2h-cell--loss {
+  color: var(--w-red) !important;
+  font-weight: 700 !important;
+}
+
+.w-h2h-cell--draw {
+  color: var(--w-orange) !important;
+  font-weight: 700 !important;
+}
+
+.w-h2h-vs {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--w-text-muted);
+  letter-spacing: 0.3px;
+}
+
+/* ── Badge Promu ── */
+
+.w-badge-promu {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--w-orange);
+  background: var(--w-orange-soft);
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* ── Promoted Team Note ── */
+
+.w-promoted-note {
+  margin: 0 16px 16px;
+  padding: 10px 14px;
+  background: var(--w-orange-soft);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--w-radius-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.w-promoted-note__icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.w-promoted-note__icon svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--w-orange);
+  fill: none;
+  stroke-width: 2;
+}
+
+.w-promoted-note__text {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--w-orange);
+  line-height: 1.4;
+}
+
+/* ── Empty State ── */
+
+.w-duels-empty {
+  margin: 0 16px 16px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius);
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.w-duels-empty__icon {
+  margin-bottom: 12px;
+  opacity: 0.35;
+}
+
+.w-duels-empty__icon svg {
+  width: 40px;
+  height: 40px;
+  stroke: var(--w-text-dim);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.w-duels-empty__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--w-text-dim);
+  margin-bottom: 4px;
+}
+
+.w-duels-empty__text {
+  font-size: 12px;
+  color: var(--w-text-muted);
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w-group,
+  .w-promoted-note,
+  .w-duels-empty {
+    transition: none;
+  }
+}

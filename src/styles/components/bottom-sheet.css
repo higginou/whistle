@@ -234,6 +234,39 @@ dialog.w-bottom-sheet.w-bottom-sheet--closing::backdrop {
   font-variant-numeric: tabular-nums;
 }
 
+.w-sheet-badge-promu {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--w-orange, #f59e0b);
+  background: rgba(245, 158, 11, 0.12);
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.w-sheet-badge-h2h {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--w-violet, #7c3aed);
+  margin-top: 4px;
+}
+
+.w-sheet-badge-h2h svg {
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 /* ===== XP / Strength tier bar ===== */
 .w-sheet-tier {
   display: flex;

@@ -72,3 +72,25 @@ describe('rank-row — tap interaction', () => {
     expect(row.classList.contains('is-pressed')).toBe(false)
   })
 })
+
+describe('rank-row — promoted badge', () => {
+  let ul
+
+  beforeEach(() => {
+    vi.clearAllMocks()
+    ul = document.createElement('ul')
+  })
+
+  it('shows promu tag when team.promoted is true', () => {
+    render(ul, makeTeam({ promoted: true }))
+    const badge = ul.querySelector('.w-rank-row__promu')
+    expect(badge).not.toBeNull()
+    expect(badge.textContent).toBe('P')
+    expect(badge.getAttribute('aria-label')).toContain('promue')
+  })
+
+  it('does not show promu tag when team has no promoted flag', () => {
+    render(ul, makeTeam())
+    expect(ul.querySelector('.w-rank-row__promu')).toBeNull()
+  })
+})

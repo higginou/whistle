@@ -20,6 +20,11 @@ import {
   roundDecimal,
   generateRecalibrations,
   RECALIBRATION_MATCHDAYS,
+  computeHeadToHead,
+  applyTiebreaker,
+  buildHeadToHeadOutput,
+  PROMOTED_DECOTE,
+  PROMOTED_TEAMS,
 } from '../scripts/elo.js';
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
@@ -177,12 +182,16 @@ describe('applyDecay', () => {
 // ─── computeEloRatings ────────────────────────────────────────────────────
 
 describe('computeEloRatings', () => {
-  it('initializes all teams at INITIAL_ELO with no results', () => {
+  it('initializes all teams at INITIAL_ELO (or decoted for promoted) with no results', () => {
     const standings = makeStandings(14);
     const { elos } = computeEloRatings(standings, []);
     expect(elos.size).toBe(14);
-    for (const elo of elos.values()) {
-      expect(elo).toBe(INITIAL_ELO);
+    for (const [id, elo] of elos.entries()) {
+      if (id === 'vannes') {
+        expect(elo).toBe(Math.round(INITIAL_ELO * 0.85));
+      } else {
+        expect(elo).toBe(INITIAL_ELO);
+      }
     }
   });
 
@@ -202,8 +211,9 @@ describe('computeEloRatings', () => {
 
     const { elos } = computeEloRatings(standings, results);
     const totalElo = [...elos.values()].reduce((sum, e) => sum + e, 0);
-    // Should be close to 14 * INITIAL_ELO (rounding may cause slight drift)
-    expect(totalElo).toBeCloseTo(14 * INITIAL_ELO, -1);
+    // 13 regular teams + 1 promoted (vannes at 85% of INITIAL_ELO)
+    const expectedTotal = 13 * INITIAL_ELO + Math.round(INITIAL_ELO * 0.85);
+    expect(totalElo).toBeCloseTo(expectedTotal, -1);
   });
 
   it('builds eloHistory for each team', () => {
@@ -556,11 +566,17 @@ describe('early season handling', () => {
     const { elos, eloHistories } = computeEloRatings(standings, []);
 
     expect(elos.size).toBe(14);
-    for (const elo of elos.values()) {
-      expect(elo).toBe(INITIAL_ELO);
+    for (const [id, elo] of elos.entries()) {
+      // Promoted teams (vannes) start with decoted Elo
+      if (id === 'vannes') {
+        expect(elo).toBe(Math.round(INITIAL_ELO * 0.85));
+      } else {
+        expect(elo).toBe(INITIAL_ELO);
+      }
     }
-    for (const history of eloHistories.values()) {
-      expect(history).toEqual([INITIAL_ELO]);
+    for (const [id, history] of eloHistories.entries()) {
+      const expectedStart = id === 'vannes' ? Math.round(INITIAL_ELO * 0.85) : INITIAL_ELO;
+      expect(history).toEqual([expectedStart]);
     }
   });
 
@@ -678,5 +694,169 @@ describe('generateRecalibrations', () => {
         expect(entry.type).toBe('recalibration');
       }
     }
+  });
+});
+
+// ─── computeHeadToHead ───────────────────────────────────────────────────
+
+describe('computeHeadToHead', () => {
+  it('computes H2H record for 2 teams', () => {
+    const results = [
+      makeResult({ home: 'toulouse', away: 'la-rochelle', homeScore: 24, awayScore: 18 }),
+      makeResult({ matchday: 2, home: 'la-rochelle', away: 'toulouse', homeScore: 30, awayScore: 20 }),
+    ];
+
+    const h2h = computeHeadToHead(results);
+
+    const toul = h2h.get('toulouse:la-rochelle');
+    expect(toul).toEqual({ wins: 1, draws: 0, losses: 1, pointsFor: 44, pointsAgainst: 48 });
+
+    const lr = h2h.get('la-rochelle:toulouse');
+    expect(lr).toEqual({ wins: 1, draws: 0, losses: 1, pointsFor: 48, pointsAgainst: 44 });
+  });
+
+  it('handles 3+ teams correctly', () => {
+    const results = [
+      makeResult({ home: 'toulouse', away: 'la-rochelle', homeScore: 24, awayScore: 18 }),
+      makeResult({ home: 'toulouse', away: 'clermont', homeScore: 20, awayScore: 20 }),
+      makeResult({ home: 'la-rochelle', away: 'clermont', homeScore: 30, awayScore: 10 }),
+    ];
+
+    const h2h = computeHeadToHead(results);
+    expect(h2h.get('toulouse:la-rochelle').wins).toBe(1);
+    expect(h2h.get('toulouse:clermont').draws).toBe(1);
+    expect(h2h.get('la-rochelle:clermont').wins).toBe(1);
+    expect(h2h.get('clermont:la-rochelle').losses).toBe(1);
+  });
+
+  it('returns empty map when no results', () => {
+    const h2h = computeHeadToHead([]);
+    expect(h2h.size).toBe(0);
+  });
+
+  it('handles draws correctly', () => {
+    const results = [
+      makeResult({ home: 'toulouse', away: 'la-rochelle', homeScore: 20, awayScore: 20 }),
+    ];
+
+    const h2h = computeHeadToHead(results);
+    expect(h2h.get('toulouse:la-rochelle').draws).toBe(1);
+    expect(h2h.get('la-rochelle:toulouse').draws).toBe(1);
+  });
+
+  it('skips results with null scores', () => {
+    const results = [
+      { matchday: 1, home: 'toulouse', away: 'la-rochelle', homeScore: null, awayScore: null },
+    ];
+    const h2h = computeHeadToHead(results);
+    expect(h2h.size).toBe(0);
+  });
+});
+
+// ─── applyTiebreaker ─────────────────────────────────────────────────────
+
+describe('applyTiebreaker', () => {
+  it('resolves tie by H2H balance', () => {
+    const teams = [
+      { id: 'toulouse', currentRank: 5 },
+      { id: 'la-rochelle', currentRank: 6 },
+    ];
+    const standings = [
+      { id: 'toulouse', points: 50 },
+      { id: 'la-rochelle', points: 50 },
+    ];
+
+    const h2h = new Map();
+    h2h.set('toulouse:la-rochelle', { wins: 0, draws: 0, losses: 2 });
+    h2h.set('la-rochelle:toulouse', { wins: 2, draws: 0, losses: 0 });
+
+    const resolved = applyTiebreaker(teams, standings, h2h);
+
+    expect(teams.find((t) => t.id === 'la-rochelle').currentRank).toBe(5);
+    expect(teams.find((t) => t.id === 'toulouse').currentRank).toBe(6);
+    expect(resolved.has('toulouse')).toBe(true);
+    expect(resolved.has('la-rochelle')).toBe(true);
+  });
+
+  it('does not reorder when H2H balance is equal', () => {
+    const teams = [
+      { id: 'toulouse', currentRank: 5 },
+      { id: 'la-rochelle', currentRank: 6 },
+    ];
+    const standings = [
+      { id: 'toulouse', points: 50 },
+      { id: 'la-rochelle', points: 50 },
+    ];
+
+    const h2h = new Map();
+    h2h.set('toulouse:la-rochelle', { wins: 1, draws: 0, losses: 1 });
+    h2h.set('la-rochelle:toulouse', { wins: 1, draws: 0, losses: 1 });
+
+    const resolved = applyTiebreaker(teams, standings, h2h);
+    expect(resolved.size).toBe(0);
+  });
+
+  it('does not touch teams with different points', () => {
+    const teams = [
+      { id: 'toulouse', currentRank: 1 },
+      { id: 'la-rochelle', currentRank: 2 },
+    ];
+    const standings = [
+      { id: 'toulouse', points: 60 },
+      { id: 'la-rochelle', points: 50 },
+    ];
+
+    const resolved = applyTiebreaker(teams, standings, new Map());
+    expect(resolved.size).toBe(0);
+    expect(teams[0].currentRank).toBe(1);
+    expect(teams[1].currentRank).toBe(2);
+  });
+});
+
+// ─── Promoted teams ──────────────────────────────────────────────────────
+
+describe('promoted teams', () => {
+  it('vannes is in PROMOTED_TEAMS', () => {
+    expect(PROMOTED_TEAMS).toContain('vannes');
+  });
+
+  it('PROMOTED_DECOTE is 0.85', () => {
+    expect(PROMOTED_DECOTE).toBe(0.85);
+  });
+
+  it('promoted team starts with decoted Elo', () => {
+    const standings = makeStandings(14);
+    const { elos } = computeEloRatings(standings, []);
+    expect(elos.get('vannes')).toBe(Math.round(INITIAL_ELO * PROMOTED_DECOTE));
+  });
+
+  it('non-promoted team starts at INITIAL_ELO', () => {
+    const standings = makeStandings(14);
+    const { elos } = computeEloRatings(standings, []);
+    expect(elos.get('toulouse')).toBe(INITIAL_ELO);
+  });
+});
+
+// ─── buildHeadToHeadOutput ───────────────────────────────────────────────
+
+describe('buildHeadToHeadOutput', () => {
+  it('builds output from h2h map and results', () => {
+    const results = [
+      makeResult({ matchday: 5, home: 'la-rochelle', away: 'toulouse', homeScore: 24, awayScore: 18 }),
+    ];
+    const h2h = computeHeadToHead(results);
+    const output = buildHeadToHeadOutput(h2h, results);
+
+    expect(output).toHaveLength(1);
+    expect(output[0].teams).toEqual(['la-rochelle', 'toulouse']);
+    expect(output[0].matches).toHaveLength(1);
+    expect(output[0].matches[0].scoreHome).toBe(24);
+    expect(output[0].record['la-rochelle']).toEqual({ w: 1, d: 0, l: 0 });
+    expect(output[0].record.toulouse).toEqual({ w: 0, d: 0, l: 1 });
+  });
+
+  it('returns empty array when no H2H data', () => {
+    const output = buildHeadToHeadOutput(new Map(), []);
+    expect(output).toEqual([]);
   });
 });
