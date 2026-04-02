@@ -45,6 +45,12 @@ export const NUM_SIMULATIONS = 10000;
 /** Total matchdays in TOP 14 regular season */
 export const TOTAL_MATCHDAYS = 26;
 
+/** Probability of offensive bonus per match (~30% based on TOP 14 historical average) */
+export const OFFENSIVE_BONUS_PROB = 0.3;
+
+/** Maximum point margin for defensive bonus eligibility */
+export const DEFENSIVE_MARGIN = 5;
+
 /** Matchday threshold below which season is considered "early" */
 const EARLY_SEASON_THRESHOLD = 5;
 
@@ -217,11 +223,12 @@ export function simulateMatch(eloHome, eloAway, rng = Math.random) {
   let awayScore;
 
   if (roll < homeWinProb) {
-    // Home win
+    // Home win — variable margin between 1 and 30
+    const margin = Math.floor(rng() * 30) + 1;
+    homeScore = 20 + Math.floor(margin / 2);
+    awayScore = 20 - Math.ceil(margin / 2);
     homePoints = 4;
     awayPoints = 0;
-    homeScore = 25;
-    awayScore = 15;
   } else if (roll < homeWinProb + drawProb) {
     // Draw
     homePoints = 2;
@@ -229,11 +236,26 @@ export function simulateMatch(eloHome, eloAway, rng = Math.random) {
     homeScore = 20;
     awayScore = 20;
   } else {
-    // Away win
+    // Away win — variable margin between 1 and 30
+    const margin = Math.floor(rng() * 30) + 1;
+    awayScore = 20 + Math.floor(margin / 2);
+    homeScore = 20 - Math.ceil(margin / 2);
     homePoints = 0;
     awayPoints = 4;
-    homeScore = 15;
-    awayScore = 25;
+  }
+
+  // Defensive bonus: +1 to loser if margin ≤ DEFENSIVE_MARGIN
+  const margin = Math.abs(homeScore - awayScore);
+  if (margin > 0 && margin <= DEFENSIVE_MARGIN) {
+    if (homePoints === 0) homePoints += 1;
+    else if (awayPoints === 0) awayPoints += 1;
+  }
+
+  // Offensive bonus: ~30% chance, +1 to winner (or both if draw)
+  if (rng() < OFFENSIVE_BONUS_PROB) {
+    if (homeScore > awayScore) homePoints += 1;
+    else if (awayScore > homeScore) awayPoints += 1;
+    else { homePoints += 1; awayPoints += 1; }
   }
 
   // Calculate Elo change for the simulated result
@@ -253,6 +275,47 @@ export function simulateMatch(eloHome, eloAway, rng = Math.random) {
 }
 
 /**
+ * Compute rugby points from real match results including defensive bonus.
+ * Offensive bonus is NOT computed (no try data available from scraper).
+ *
+ * @param {object[]} results - Match results with home, away, homeScore, awayScore
+ * @returns {Map<string, number>} Team ID → accumulated rugby points
+ */
+export function computeResultBonuses(results) {
+  const points = new Map();
+
+  for (const r of results) {
+    if (r.homeScore == null || r.awayScore == null) continue;
+    if (!points.has(r.home)) points.set(r.home, 0);
+    if (!points.has(r.away)) points.set(r.away, 0);
+
+    const margin = Math.abs(r.homeScore - r.awayScore);
+
+    if (r.homeScore > r.awayScore) {
+      // Home win
+      points.set(r.home, points.get(r.home) + 4);
+      // Defensive bonus for away
+      if (margin <= DEFENSIVE_MARGIN) {
+        points.set(r.away, points.get(r.away) + 1);
+      }
+    } else if (r.homeScore < r.awayScore) {
+      // Away win
+      points.set(r.away, points.get(r.away) + 4);
+      // Defensive bonus for home
+      if (margin <= DEFENSIVE_MARGIN) {
+        points.set(r.home, points.get(r.home) + 1);
+      }
+    } else {
+      // Draw
+      points.set(r.home, points.get(r.home) + 2);
+      points.set(r.away, points.get(r.away) + 2);
+    }
+  }
+
+  return points;
+}
+
+/**
  * Run Monte Carlo simulation of remaining season matches.
  *
  * @param {Map<string, number>} currentElos - Current Elo ratings
@@ -266,6 +329,7 @@ export function simulateSeason(
   calendar,
   numSimulations,
   rng = Math.random,
+  initialPoints = null,
 ) {
   const teamIds = [...currentElos.keys()];
   const numTeams = teamIds.length;
@@ -285,7 +349,7 @@ export function simulateSeason(
     const simElos = new Map(currentElos);
     const simPoints = new Map();
     for (const id of teamIds) {
-      simPoints.set(id, 0);
+      simPoints.set(id, initialPoints?.get(id) ?? 0);
     }
 
     // Simulate each remaining match
@@ -716,11 +780,16 @@ export async function main() {
   // ── Step 1b: Compute head-to-head records ──
   const h2hMap = computeHeadToHead(results);
 
+  // ── Step 1c: Compute real rugby points from results ──
+  const realPoints = computeResultBonuses(results);
+
   // ── Step 2: Monte Carlo projection ──
   const { rankCounts } = simulateSeason(
     elos,
     calendar,
     NUM_SIMULATIONS,
+    Math.random,
+    realPoints,
   );
 
   // ── Step 3: Build team output ──

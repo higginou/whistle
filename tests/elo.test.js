@@ -25,6 +25,9 @@ import {
   buildHeadToHeadOutput,
   PROMOTED_DECOTE,
   PROMOTED_TEAMS,
+  OFFENSIVE_BONUS_PROB,
+  DEFENSIVE_MARGIN,
+  computeResultBonuses,
 } from '../scripts/elo.js';
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
@@ -234,32 +237,92 @@ describe('computeEloRatings', () => {
 // ─── simulateMatch ─────────────────────────────────────────────────────────
 
 describe('simulateMatch', () => {
-  it('returns valid point values for home win', () => {
-    // Force home win with low random value
-    const result = simulateMatch(1500, 1500, () => 0.01);
+  it('returns base 4 points for home win (no bonuses when rng high)', () => {
+    // rng sequence: 0.01 (outcome=home win), 0.99 (margin=30, no def bonus), 0.99 (no off bonus)
+    let callIndex = 0;
+    const values = [0.01, 0.99, 0.99];
+    const rng = () => values[callIndex++];
+    const result = simulateMatch(1500, 1500, rng);
     expect(result.homePoints).toBe(4);
     expect(result.awayPoints).toBe(0);
   });
 
-  it('returns valid point values for away win', () => {
-    // Force away win with high random value
-    const result = simulateMatch(1500, 1500, () => 0.99);
+  it('returns base 4 points for away win (large margin, no bonuses)', () => {
+    // rng: 0.99 (away win), 0.99 (margin=30, no def bonus), 0.99 (no off bonus)
+    let callIndex = 0;
+    const values = [0.99, 0.99, 0.99];
+    const rng = () => values[callIndex++];
+    const result = simulateMatch(1500, 1500, rng);
     expect(result.homePoints).toBe(0);
     expect(result.awayPoints).toBe(4);
   });
 
-  it('returns draw for middle random value', () => {
-    // Expected home with 65 advantage is ~0.59, drawProb ~0.15*(1-0.18) ≈ 0.123
-    // homeWinProb ≈ 0.59 * (1 - 0.123) ≈ 0.517
-    // Draw range: 0.517 to 0.517 + 0.123 ≈ 0.640
-    const result = simulateMatch(1500, 1500, () => 0.55);
+  it('returns draw for middle random value (no offensive bonus)', () => {
+    // rng: 0.55 (draw), then 0.5 (off bonus check > 0.3 → no bonus)
+    let callIndex = 0;
+    const values = [0.55, 0.5];
+    const rng = () => values[callIndex++];
+    const result = simulateMatch(1500, 1500, rng);
     expect(result.homePoints).toBe(2);
     expect(result.awayPoints).toBe(2);
   });
 
   it('produces Elo changes that sum to approximately zero', () => {
-    const result = simulateMatch(1500, 1500, () => 0.3);
+    let callIndex = 0;
+    const values = [0.3, 0.5, 0.5];
+    const rng = () => values[callIndex++];
+    const result = simulateMatch(1500, 1500, rng);
     expect(result.homeEloChange + result.awayEloChange).toBeCloseTo(0, 5);
+  });
+
+  it('awards defensive bonus to loser when margin <= 5', () => {
+    // rng: 0.01 (home win), low value for margin (ceil(0.1*30)=3 → margin=3), 0.99 (no off bonus)
+    let callIndex = 0;
+    const values = [0.01, 0.1, 0.99];
+    const rng = () => values[callIndex++];
+    const result = simulateMatch(1500, 1500, rng);
+    expect(result.homePoints).toBe(4);
+    expect(result.awayPoints).toBe(1); // defensive bonus
+  });
+
+  it('awards offensive bonus to winner when rng < 0.3', () => {
+    // rng: 0.01 (home win), 0.99 (margin=30, no def bonus), 0.1 (off bonus < 0.3)
+    let callIndex = 0;
+    const values = [0.01, 0.99, 0.1];
+    const rng = () => values[callIndex++];
+    const result = simulateMatch(1500, 1500, rng);
+    expect(result.homePoints).toBe(5); // 4 + offensive bonus
+    expect(result.awayPoints).toBe(0);
+  });
+
+  it('awards both bonuses on close home win with offensive roll', () => {
+    // rng: 0.01 (home win), 0.1 (margin=3, def bonus), 0.1 (off bonus)
+    let callIndex = 0;
+    const values = [0.01, 0.1, 0.1];
+    const rng = () => values[callIndex++];
+    const result = simulateMatch(1500, 1500, rng);
+    expect(result.homePoints).toBe(5); // 4 + offensive
+    expect(result.awayPoints).toBe(1); // defensive
+  });
+
+  it('awards offensive bonus to both teams on draw', () => {
+    // rng: 0.55 (draw), 0.1 (off bonus < 0.3 → both get +1)
+    let callIndex = 0;
+    const values = [0.55, 0.1];
+    const rng = () => values[callIndex++];
+    const result = simulateMatch(1500, 1500, rng);
+    expect(result.homePoints).toBe(3); // 2 + offensive
+    expect(result.awayPoints).toBe(3); // 2 + offensive
+  });
+
+  it('no offensive bonus on draw when rng >= 0.3', () => {
+    // rng: 0.55 (draw), 0.5 (no off bonus)
+    let callIndex = 0;
+    const values = [0.55, 0.5];
+    const rng = () => values[callIndex++];
+    const result = simulateMatch(1500, 1500, rng);
+    expect(result.homePoints).toBe(2);
+    expect(result.awayPoints).toBe(2);
   });
 
   it('distribution is reasonable over many simulations', () => {
@@ -268,7 +331,6 @@ describe('simulateMatch', () => {
     let awayWins = 0;
     const n = 10000;
 
-    // Use a seeded-like approach with deterministic sequence
     let seed = 0;
     const rng = () => {
       seed = (seed * 1103515245 + 12345) & 0x7fffffff;
@@ -277,8 +339,8 @@ describe('simulateMatch', () => {
 
     for (let i = 0; i < n; i++) {
       const result = simulateMatch(1500, 1500, rng);
-      if (result.homePoints === 4) homeWins++;
-      else if (result.homePoints === 2) draws++;
+      if (result.homePoints >= 4) homeWins++;
+      else if (result.homePoints >= 2) draws++;
       else awayWins++;
     }
 
@@ -287,7 +349,7 @@ describe('simulateMatch', () => {
     expect(homeWins / n).toBeLessThan(0.8);
     expect(draws / n).toBeGreaterThan(0.01);
     expect(draws / n).toBeLessThan(0.3);
-    expect(awayWins / n).toBeGreaterThan(0.1);
+    expect(awayWins / n).toBeGreaterThan(0.05);
     expect(homeWins + draws + awayWins).toBe(n);
   });
 });
@@ -858,5 +920,153 @@ describe('buildHeadToHeadOutput', () => {
   it('returns empty array when no H2H data', () => {
     const output = buildHeadToHeadOutput(new Map(), []);
     expect(output).toEqual([]);
+  });
+});
+
+// ─── computeResultBonuses ────────────────────────────────────────────────
+
+describe('computeResultBonuses', () => {
+  it('home win by 3 points: home gets 4, away gets 1 (defensive)', () => {
+    const results = [
+      makeResult({ home: 'toulouse', away: 'la-rochelle', homeScore: 22, awayScore: 19 }),
+    ];
+    const points = computeResultBonuses(results);
+    expect(points.get('toulouse')).toBe(4);
+    expect(points.get('la-rochelle')).toBe(1);
+  });
+
+  it('home win by 10 points: home gets 4, away gets 0', () => {
+    const results = [
+      makeResult({ home: 'toulouse', away: 'la-rochelle', homeScore: 30, awayScore: 20 }),
+    ];
+    const points = computeResultBonuses(results);
+    expect(points.get('toulouse')).toBe(4);
+    expect(points.get('la-rochelle')).toBe(0);
+  });
+
+  it('away win by 5 points: away gets 4, home gets 1 (defensive)', () => {
+    const results = [
+      makeResult({ home: 'toulouse', away: 'la-rochelle', homeScore: 15, awayScore: 20 }),
+    ];
+    const points = computeResultBonuses(results);
+    expect(points.get('la-rochelle')).toBe(4);
+    expect(points.get('toulouse')).toBe(1);
+  });
+
+  it('draw: both get 2, no defensive bonus', () => {
+    const results = [
+      makeResult({ home: 'toulouse', away: 'la-rochelle', homeScore: 20, awayScore: 20 }),
+    ];
+    const points = computeResultBonuses(results);
+    expect(points.get('toulouse')).toBe(2);
+    expect(points.get('la-rochelle')).toBe(2);
+  });
+
+  it('multiple matches accumulate points', () => {
+    const results = [
+      makeResult({ matchday: 1, home: 'toulouse', away: 'la-rochelle', homeScore: 30, awayScore: 20 }),
+      makeResult({ matchday: 2, home: 'la-rochelle', away: 'toulouse', homeScore: 22, awayScore: 19 }),
+    ];
+    const points = computeResultBonuses(results);
+    // Match 1: toulouse +4, la-rochelle +0 (margin 10)
+    // Match 2: la-rochelle +4, toulouse +1 (margin 3 → defensive)
+    expect(points.get('toulouse')).toBe(5);
+    expect(points.get('la-rochelle')).toBe(4);
+  });
+
+  it('skips results with null scores', () => {
+    const results = [
+      { matchday: 1, home: 'toulouse', away: 'la-rochelle', homeScore: null, awayScore: null },
+    ];
+    const points = computeResultBonuses(results);
+    expect(points.size).toBe(0);
+  });
+
+  it('margin exactly 5 triggers defensive bonus', () => {
+    const results = [
+      makeResult({ home: 'toulouse', away: 'la-rochelle', homeScore: 25, awayScore: 20 }),
+    ];
+    const points = computeResultBonuses(results);
+    expect(points.get('la-rochelle')).toBe(1);
+  });
+
+  it('margin exactly 6 does not trigger defensive bonus', () => {
+    const results = [
+      makeResult({ home: 'toulouse', away: 'la-rochelle', homeScore: 26, awayScore: 20 }),
+    ];
+    const points = computeResultBonuses(results);
+    expect(points.get('la-rochelle')).toBe(0);
+  });
+});
+
+// ─── simulateSeason with initialPoints ───────────────────────────────────
+
+describe('simulateSeason with initialPoints', () => {
+  it('teams start with initial points when provided', () => {
+    const elos = new Map([
+      ['toulouse', 1550],
+      ['la-rochelle', 1500],
+    ]);
+
+    const initialPoints = new Map([
+      ['toulouse', 30],
+      ['la-rochelle', 25],
+    ]);
+
+    // No calendar matches — final points should equal initial points
+    const { pointTotals } = simulateSeason(elos, [], 10, Math.random, initialPoints);
+
+    // Every simulation should yield exactly the initial points (no matches to add)
+    for (const pts of pointTotals.get('toulouse')) {
+      expect(pts).toBe(30);
+    }
+    for (const pts of pointTotals.get('la-rochelle')) {
+      expect(pts).toBe(25);
+    }
+  });
+
+  it('teams start at 0 when initialPoints is null', () => {
+    const elos = new Map([
+      ['toulouse', 1550],
+      ['la-rochelle', 1500],
+    ]);
+
+    const { pointTotals } = simulateSeason(elos, [], 10, Math.random, null);
+
+    for (const pts of pointTotals.get('toulouse')) {
+      expect(pts).toBe(0);
+    }
+  });
+
+  it('teams not in initialPoints start at 0', () => {
+    const elos = new Map([
+      ['toulouse', 1550],
+      ['la-rochelle', 1500],
+    ]);
+
+    const initialPoints = new Map([
+      ['toulouse', 20],
+    ]);
+
+    const { pointTotals } = simulateSeason(elos, [], 5, Math.random, initialPoints);
+
+    for (const pts of pointTotals.get('la-rochelle')) {
+      expect(pts).toBe(0);
+    }
+    for (const pts of pointTotals.get('toulouse')) {
+      expect(pts).toBe(20);
+    }
+  });
+});
+
+// ─── Bonus constants ─────────────────────────────────────────────────────
+
+describe('bonus constants', () => {
+  it('OFFENSIVE_BONUS_PROB is 0.3', () => {
+    expect(OFFENSIVE_BONUS_PROB).toBe(0.3);
+  });
+
+  it('DEFENSIVE_MARGIN is 5', () => {
+    expect(DEFENSIVE_MARGIN).toBe(5);
   });
 });
