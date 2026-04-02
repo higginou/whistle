@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oracle v2 — Mission Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --w-oracle-bg: #0a0910;
+  --w-oracle-bg-panel: #111019;
+  --w-oracle-bg-panel-alt: #161421;
+  --w-oracle-violet: #7c3aed;
+  --w-oracle-violet-dim: #5b21b6;
+  --w-oracle-violet-glow: rgba(124, 58, 237, 0.4);
+  --w-oracle-violet-soft: rgba(124, 58, 237, 0.1);
+  --w-oracle-green: #22c55e;
+  --w-oracle-green-glow: rgba(34, 197, 94, 0.4);
+  --w-oracle-cyan: #06b6d4;
+  --w-oracle-cyan-glow: rgba(6, 182, 212, 0.35);
+  --w-oracle-orange: #f59e0b;
+  --w-oracle-red: #ef4444;
+  --w-oracle-text: #e8e4f0;
+  --w-oracle-text-dim: #9d95ab;
+  --w-oracle-text-muted: #5e5670;
+  --w-oracle-border: rgba(124, 58, 237, 0.15);
+  --w-oracle-scanline: rgba(124, 58, 237, 0.03);
+  --w-oracle-font: 'Nunito', sans-serif;
+}
+
+body {
+  font-family: var(--w-oracle-font);
+  background: var(--w-oracle-bg);
+  color: var(--w-oracle-text);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.w-oracle-container {
+  width: 100%;
+  max-width: 430px;
+  padding: 16px 16px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Scanline overlay */
+.w-oracle-container::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    var(--w-oracle-scanline) 2px,
+    var(--w-oracle-scanline) 4px
+  );
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.5;
+}
+
+/* Ambient corner glow */
+.w-oracle-container::after {
+  content: '';
+  position: fixed;
+  top: -100px;
+  right: -60px;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(circle, var(--w-oracle-cyan-glow) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0.15;
+  z-index: 0;
+}
+
+/* ── Status Bar Header ── */
+.w-oracle-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--w-oracle-bg-panel);
+  border: 1px solid var(--w-oracle-border);
+  border-radius: 10px;
+  margin-bottom: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-status-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.w-oracle-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--w-oracle-green);
+  box-shadow: 0 0 10px var(--w-oracle-green-glow);
+  animation: w-oracle-blink 2s ease-in-out infinite;
+}
+
+.w-oracle-status-text {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--w-oracle-green);
+}
+
+.w-oracle-status-right {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--w-oracle-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Title ── */
+.w-oracle-header {
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-header-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--w-oracle-text-muted);
+  margin-bottom: 4px;
+}
+
+.w-oracle-title {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--w-oracle-cyan), var(--w-oracle-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.w-oracle-level-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--w-oracle-violet);
+  background: var(--w-oracle-violet-soft);
+  border: 1px solid var(--w-oracle-border);
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+
+/* ── Mission Score (Brier) ── */
+.w-oracle-mission-score {
+  background: var(--w-oracle-bg-panel);
+  border: 1px solid var(--w-oracle-border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+/* Left accent bar */
+.w-oracle-mission-score::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  background: linear-gradient(180deg, var(--w-oracle-cyan), var(--w-oracle-violet));
+  border-radius: 0 3px 3px 0;
+}
+
+.w-oracle-mission-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.w-oracle-mission-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--w-oracle-text-dim);
+}
+
+.w-oracle-mission-quality {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+
+.w-oracle-mission-quality--bon {
+  background: rgba(34, 197, 94, 0.12);
+  color: var(--w-oracle-green);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.w-oracle-mission-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.w-oracle-mission-value {
+  font-size: 54px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--w-oracle-text);
+  text-shadow: 0 0 28px var(--w-oracle-cyan-glow);
+  animation: w-oracle-score-pulse 3s ease-in-out infinite;
+}
+
+.w-oracle-mission-unit {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--w-oracle-text-muted);
+}
+
+/* Progress track */
+.w-oracle-mission-track {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.w-oracle-mission-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--w-oracle-cyan), var(--w-oracle-green));
+  box-shadow: 0 0 10px var(--w-oracle-cyan-glow);
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+
+.w-oracle-mission-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3));
+  animation: w-oracle-sweep 2.5s ease-in-out infinite;
+}
+
+.w-oracle-mission-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 9px;
+  color: var(--w-oracle-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Dual Stat Row (Predictions + Matchday) ── */
+.w-oracle-dual-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-dual-cell {
+  background: var(--w-oracle-bg-panel);
+  border: 1px solid var(--w-oracle-border);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+
+.w-oracle-dual-cell:focus-visible {
+  outline: 2px solid var(--w-oracle-violet);
+  outline-offset: 2px;
+}
+
+.w-oracle-dual-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--w-oracle-text-muted);
+  margin-bottom: 6px;
+}
+
+.w-oracle-dual-value {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--w-oracle-violet);
+  text-shadow: 0 0 12px var(--w-oracle-violet-glow);
+}
+
+.w-oracle-dual-sub {
+  font-size: 10px;
+  color: var(--w-oracle-text-muted);
+  margin-top: 2px;
+}
+
+/* ── Intel Briefing (Model Factors) ── */
+.w-oracle-intel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--w-oracle-text-muted);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-intel-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--w-oracle-border);
+}
+
+.w-oracle-intel {
+  background: var(--w-oracle-bg-panel);
+  border: 1px solid var(--w-oracle-border);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+  transition: background 0.15s ease;
+}
+
+.w-oracle-intel:focus-visible {
+  outline: 2px solid var(--w-oracle-violet);
+  outline-offset: 2px;
+}
+
+/* Left accent pip */
+.w-oracle-intel::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background: var(--w-oracle-violet);
+  border-radius: 0 3px 3px 0;
+  box-shadow: 0 0 8px var(--w-oracle-violet-glow);
+}
+
+.w-oracle-intel-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--w-oracle-violet-soft);
+  color: var(--w-oracle-violet);
+}
+
+.w-oracle-intel-icon svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-oracle-intel-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.w-oracle-intel-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-oracle-text);
+  margin-bottom: 2px;
+}
+
+.w-oracle-intel-desc {
+  font-size: 10px;
+  color: var(--w-oracle-text-muted);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.w-oracle-intel-progress {
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.w-oracle-intel-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--w-oracle-violet-dim), var(--w-oracle-cyan));
+  box-shadow: 0 0 6px var(--w-oracle-violet-glow);
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.w-oracle-intel-pct {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--w-oracle-text-dim);
+  flex-shrink: 0;
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ── Footer ── */
+.w-oracle-footer {
+  text-align: center;
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-footer-line {
+  width: 60px;
+  height: 1px;
+  background: var(--w-oracle-border);
+  margin: 0 auto 10px;
+}
+
+.w-oracle-footer-text {
+  font-size: 10px;
+  color: var(--w-oracle-text-muted);
+  letter-spacing: 0.5px;
+}
+
+/* ── Brierless State (uncomment to test) ── */
+/*
+.w-oracle-brierless {
+  background: var(--w-oracle-bg-panel);
+  border: 1px solid var(--w-oracle-border);
+  border-radius: 14px;
+  padding: 32px 20px;
+  text-align: center;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 1;
+}
+.w-oracle-brierless::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  background: var(--w-oracle-text-muted);
+  border-radius: 0 3px 3px 0;
+}
+.w-oracle-brierless-icon { margin-bottom: 12px; opacity: 0.4; }
+.w-oracle-brierless-text {
+  font-size: 13px;
+  color: var(--w-oracle-text-dim);
+  line-height: 1.5;
+}
+*/
+
+/* ── Animations ── */
+@keyframes w-oracle-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes w-oracle-score-pulse {
+  0%, 100% { text-shadow: 0 0 28px var(--w-oracle-cyan-glow); }
+  50% { text-shadow: 0 0 48px var(--w-oracle-cyan-glow), 0 0 80px rgba(6, 182, 212, 0.15); }
+}
+
+@keyframes w-oracle-sweep {
+  0%, 100% { opacity: 0.2; transform: translateX(-20px); }
+  50% { opacity: 0.6; transform: translateX(0); }
+}
+
+@keyframes w-oracle-slide-in {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes w-oracle-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.w-oracle-anim-slide {
+  animation: w-oracle-slide-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.w-oracle-anim-fade {
+  animation: w-oracle-fade-up 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.w-oracle-d1 { animation-delay: 0.03s; }
+.w-oracle-d2 { animation-delay: 0.08s; }
+.w-oracle-d3 { animation-delay: 0.14s; }
+.w-oracle-d4 { animation-delay: 0.2s; }
+.w-oracle-d5 { animation-delay: 0.26s; }
+.w-oracle-d6 { animation-delay: 0.32s; }
+.w-oracle-d7 { animation-delay: 0.38s; }
+.w-oracle-d8 { animation-delay: 0.44s; }
+.w-oracle-d9 { animation-delay: 0.5s; }
+.w-oracle-d10 { animation-delay: 0.56s; }
+.w-oracle-d11 { animation-delay: 0.62s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .w-oracle-anim-slide, .w-oracle-anim-fade { animation: none; opacity: 1; transform: none; }
+  .w-oracle-status-dot { animation: none; }
+  .w-oracle-mission-value { animation: none; }
+  .w-oracle-mission-fill::after { animation: none; }
+  .w-oracle-mission-fill, .w-oracle-intel-progress-fill { transition: none; }
+  .w-oracle-container::before { opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<div class="w-oracle-container" role="main" aria-label="Oracle - Briefing du modele de prediction">
+
+  <!-- Status Bar -->
+  <div class="w-oracle-status-bar w-oracle-anim-fade w-oracle-d1" role="status" aria-label="Oracle operationnel, journee 20 sur 26">
+    <div class="w-oracle-status-left">
+      <span class="w-oracle-status-dot" aria-hidden="true"></span>
+      <span class="w-oracle-status-text">Operationnel</span>
+    </div>
+    <span class="w-oracle-status-right">J20 / 26</span>
+  </div>
+
+  <!-- Header -->
+  <header class="w-oracle-header w-oracle-anim-fade w-oracle-d2">
+    <div class="w-oracle-header-label">Rapport de mission</div>
+    <h1 class="w-oracle-title">Oracle</h1>
+    <div class="w-oracle-level-tag" aria-label="Niveau Confirme">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      Confirme
+    </div>
+  </header>
+
+  <!-- Mission Score: Brier -->
+  <section class="w-oracle-mission-score w-oracle-anim-slide w-oracle-d3" aria-label="Score Brier: precision du modele">
+    <div class="w-oracle-mission-header">
+      <span class="w-oracle-mission-label">Score Brier</span>
+      <span class="w-oracle-mission-quality w-oracle-mission-quality--bon" aria-label="Qualite: bon">Bon</span>
+    </div>
+    <div class="w-oracle-mission-value-row">
+      <span class="w-oracle-mission-value" aria-label="0.23">0.23</span>
+      <span class="w-oracle-mission-unit">/ 1.00</span>
+    </div>
+    <div class="w-oracle-mission-track" role="progressbar" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100" aria-label="Precision 77 pourcent">
+      <div class="w-oracle-mission-fill" style="width: 77%;"></div>
+    </div>
+    <div class="w-oracle-mission-labels">
+      <span>Parfait</span>
+      <span>Aleatoire</span>
+    </div>
+  </section>
+
+  <!-- Brierless State (uncomment below, comment mission-score above) -->
+  <!--
+  <section class="w-oracle-brierless w-oracle-anim-slide w-oracle-d3" aria-label="Score Brier non disponible">
+    <div class="w-oracle-brierless-icon" aria-hidden="true">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4">
+        <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+      </svg>
+    </div>
+    <p class="w-oracle-brierless-text">Pas encore assez de donnees — l'Oracle se reveillera apres la journee 5</p>
+  </section>
+  -->
+
+  <!-- Dual Stats -->
+  <div class="w-oracle-dual-row">
+    <div class="w-oracle-dual-cell w-oracle-anim-fade w-oracle-d4" tabindex="0" aria-label="Predictions: 8 sur 12 correctes">
+      <div class="w-oracle-dual-label">Predictions</div>
+      <div class="w-oracle-dual-value">8/12</div>
+      <div class="w-oracle-dual-sub">67% correctes</div>
+    </div>
+    <div class="w-oracle-dual-cell w-oracle-anim-fade w-oracle-d5" tabindex="0" aria-label="Progression de saison: journee 20 sur 26">
+      <div class="w-oracle-dual-label">Saison</div>
+      <div class="w-oracle-dual-value">77%</div>
+      <div class="w-oracle-dual-sub">J20 / 26</div>
+    </div>
+  </div>
+
+  <!-- Intel Briefing: Model Factors -->
+  <h2 class="w-oracle-intel-title w-oracle-anim-fade w-oracle-d6">
+    Intel — Facteurs du modele
+  </h2>
+
+  <!-- Elo -->
+  <article class="w-oracle-intel w-oracle-anim-slide w-oracle-d7" tabindex="0" aria-label="Elo de base: note de depart, evolue a chaque resultat. Impact 85 pourcent.">
+    <div class="w-oracle-intel-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <div class="w-oracle-intel-body">
+      <div class="w-oracle-intel-name">Elo de base</div>
+      <div class="w-oracle-intel-desc">Note de depart, evolue a chaque resultat</div>
+      <div class="w-oracle-intel-progress"><div class="w-oracle-intel-progress-fill" style="width: 85%;"></div></div>
+    </div>
+    <div class="w-oracle-intel-pct">85%</div>
+  </article>
+
+  <!-- Forme -->
+  <article class="w-oracle-intel w-oracle-anim-slide w-oracle-d8" tabindex="0" aria-label="Forme recente: 5 derniers matchs, decroissance temporelle. Impact 72 pourcent.">
+    <div class="w-oracle-intel-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+    </div>
+    <div class="w-oracle-intel-body">
+      <div class="w-oracle-intel-name">Forme recente</div>
+      <div class="w-oracle-intel-desc">5 derniers matchs, decroissance temporelle</div>
+      <div class="w-oracle-intel-progress"><div class="w-oracle-intel-progress-fill" style="width: 72%;"></div></div>
+    </div>
+    <div class="w-oracle-intel-pct">72%</div>
+  </article>
+
+  <!-- Domicile -->
+  <article class="w-oracle-intel w-oracle-anim-slide w-oracle-d9" tabindex="0" aria-label="Avantage domicile: coefficient bonus equipe a domicile. Impact 60 pourcent.">
+    <div class="w-oracle-intel-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>
+    </div>
+    <div class="w-oracle-intel-body">
+      <div class="w-oracle-intel-name">Avantage domicile</div>
+      <div class="w-oracle-intel-desc">Coefficient bonus equipe a domicile</div>
+      <div class="w-oracle-intel-progress"><div class="w-oracle-intel-progress-fill" style="width: 60%;"></div></div>
+    </div>
+    <div class="w-oracle-intel-pct">60%</div>
+  </article>
+
+  <!-- Calendrier -->
+  <article class="w-oracle-intel w-oracle-anim-slide w-oracle-d10" tabindex="0" aria-label="Calendrier pondere: difficulte du calendrier restant. Impact 55 pourcent.">
+    <div class="w-oracle-intel-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/></svg>
+    </div>
+    <div class="w-oracle-intel-body">
+      <div class="w-oracle-intel-name">Calendrier pondere</div>
+      <div class="w-oracle-intel-desc">Difficulte du calendrier restant</div>
+      <div class="w-oracle-intel-progress"><div class="w-oracle-intel-progress-fill" style="width: 55%;"></div></div>
+    </div>
+    <div class="w-oracle-intel-pct">55%</div>
+  </article>
+
+  <!-- Confiance -->
+  <article class="w-oracle-intel w-oracle-anim-slide w-oracle-d11" tabindex="0" aria-label="Confiance: quantite de donnees et stabilite des predictions. Impact 68 pourcent.">
+    <div class="w-oracle-intel-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+    </div>
+    <div class="w-oracle-intel-body">
+      <div class="w-oracle-intel-name">Confiance</div>
+      <div class="w-oracle-intel-desc">Quantite de donnees + stabilite des predictions</div>
+      <div class="w-oracle-intel-progress"><div class="w-oracle-intel-progress-fill" style="width: 68%;"></div></div>
+    </div>
+    <div class="w-oracle-intel-pct">68%</div>
+  </article>
+
+  <!-- Zones -->
+  <article class="w-oracle-intel w-oracle-anim-slide w-oracle-d11" tabindex="0" aria-label="Zones de classement: probabilites derivees du Elo et calendrier. Impact 78 pourcent.">
+    <div class="w-oracle-intel-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </div>
+    <div class="w-oracle-intel-body">
+      <div class="w-oracle-intel-name">Zones de classement</div>
+      <div class="w-oracle-intel-desc">Probabilites derivees Elo + calendrier</div>
+      <div class="w-oracle-intel-progress"><div class="w-oracle-intel-progress-fill" style="width: 78%;"></div></div>
+    </div>
+    <div class="w-oracle-intel-pct">78%</div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="w-oracle-footer w-oracle-anim-fade w-oracle-d11" aria-label="Derniere mise a jour: 29 mars 2026">
+    <div class="w-oracle-footer-line" aria-hidden="true"></div>
+    <div class="w-oracle-footer-text">Derniere MAJ: 29 mars 2026</div>
+  </footer>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Animate progress bars
+  document.querySelectorAll('.w-oracle-intel-progress-fill, .w-oracle-mission-fill').forEach((fill, i) => {
+    if (reducedMotion) return;
+    const target = fill.style.width;
+    fill.style.width = '0%';
+    setTimeout(() => { fill.style.width = target; }, 400 + i * 80);
+  });
+
+  // Animated score counter
+  const scoreEl = document.querySelector('.w-oracle-mission-value');
+  if (scoreEl && !reducedMotion) {
+    const target = 0.23;
+    const duration = 1200;
+    const start = performance.now();
+    const animate = (now) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      scoreEl.textContent = (target * eased).toFixed(2);
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+    scoreEl.textContent = '0.00';
+    setTimeout(() => requestAnimationFrame(animate), 250);
+  }
+});
+</script>
+
+</body>
+</html>

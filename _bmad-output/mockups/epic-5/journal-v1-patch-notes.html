@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Journal de l'Oracle — Variante C: Patch Notes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --w-oracle-bg: #0b0a12;
+  --w-oracle-bg-elevated: #13111d;
+  --w-oracle-violet: #7c3aed;
+  --w-oracle-violet-dim: #5b21b6;
+  --w-oracle-violet-glow: rgba(124, 58, 237, 0.45);
+  --w-oracle-violet-soft: rgba(124, 58, 237, 0.12);
+  --w-oracle-green: #22c55e;
+  --w-oracle-green-glow: rgba(34, 197, 94, 0.4);
+  --w-oracle-green-soft: rgba(34, 197, 94, 0.12);
+  --w-oracle-orange: #f59e0b;
+  --w-oracle-orange-glow: rgba(245, 158, 11, 0.35);
+  --w-oracle-orange-soft: rgba(245, 158, 11, 0.12);
+  --w-oracle-gray-soft: rgba(107, 98, 121, 0.15);
+  --w-oracle-gold: #fbbf24;
+  --w-oracle-gold-glow: rgba(251, 191, 36, 0.45);
+  --w-oracle-text: #f0edf6;
+  --w-oracle-text-dim: #9d95ab;
+  --w-oracle-text-muted: #6b6279;
+  --w-oracle-border: rgba(124, 58, 237, 0.18);
+  --w-oracle-font: 'Nunito', sans-serif;
+  --w-oracle-font-mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+
+body {
+  font-family: var(--w-oracle-font);
+  background: var(--w-oracle-bg);
+  color: var(--w-oracle-text);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.w-oracle-container {
+  width: 100%;
+  max-width: 430px;
+  padding: 16px 16px 40px;
+}
+
+.w-oracle-journal-context {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--w-oracle-text-muted);
+  font-size: 12px;
+  border-bottom: 1px solid var(--w-oracle-border);
+  margin-bottom: 24px;
+}
+
+/* ── Toggle Button ── */
+.w-oracle-journal-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 24px;
+  background: var(--w-oracle-bg-elevated);
+  border: 1px solid var(--w-oracle-border);
+  border-radius: 8px;
+  color: var(--w-oracle-text-dim);
+  font-family: var(--w-oracle-font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.w-oracle-journal-toggle:hover {
+  border-color: var(--w-oracle-violet);
+}
+
+.w-oracle-journal-toggle:active {
+  transform: scale(0.97);
+}
+
+.w-oracle-journal-toggle:focus-visible {
+  outline: 2px solid var(--w-oracle-violet);
+  outline-offset: 2px;
+}
+
+.w-oracle-journal-toggle-chevron {
+  width: 14px;
+  height: 14px;
+  stroke: var(--w-oracle-violet);
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.w-oracle-journal-toggle[aria-expanded="true"] .w-oracle-journal-toggle-chevron {
+  transform: rotate(180deg);
+}
+
+.w-oracle-journal-toggle-prompt {
+  color: var(--w-oracle-violet);
+}
+
+/* ── Journal Content ── */
+.w-oracle-journal-content {
+  overflow: hidden;
+}
+
+.w-oracle-journal-content[hidden] {
+  display: none;
+}
+
+/* ── Patch Notes Header ── */
+.w-oracle-journal-patch-header {
+  margin: 20px 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.w-oracle-journal-patch-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--w-oracle-violet-soft), rgba(251, 191, 36, 0.08));
+  border: 1px solid var(--w-oracle-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.w-oracle-journal-patch-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--w-oracle-gold);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-oracle-journal-patch-title-block {
+  flex: 1;
+}
+
+.w-oracle-journal-patch-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--w-oracle-text);
+}
+
+.w-oracle-journal-patch-version {
+  font-family: var(--w-oracle-font-mono);
+  font-size: 10px;
+  color: var(--w-oracle-text-muted);
+  margin-top: 1px;
+}
+
+.w-oracle-journal-patch-count {
+  font-family: var(--w-oracle-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--w-oracle-violet);
+  background: var(--w-oracle-violet-soft);
+  padding: 3px 10px;
+  border-radius: 12px;
+}
+
+/* ── Patch Entry ── */
+.w-oracle-journal-patch {
+  margin-bottom: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--w-oracle-border);
+  background: var(--w-oracle-bg-elevated);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.w-oracle-journal-patch:last-of-type {
+  margin-bottom: 0;
+}
+
+/* Version/matchday tag bar */
+.w-oracle-journal-patch-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.w-oracle-journal-patch-tag {
+  font-family: var(--w-oracle-font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+.w-oracle-journal-patch-tag--version {
+  background: var(--w-oracle-violet-soft);
+  color: var(--w-oracle-violet);
+  border: 1px solid rgba(124, 58, 237, 0.25);
+}
+
+.w-oracle-journal-patch-tag--correction {
+  background: var(--w-oracle-violet-soft);
+  color: var(--w-oracle-violet);
+}
+
+.w-oracle-journal-patch-tag--recalibration {
+  background: var(--w-oracle-orange-soft);
+  color: var(--w-oracle-orange);
+}
+
+.w-oracle-journal-patch-tag--impact-positive {
+  background: var(--w-oracle-green-soft);
+  color: var(--w-oracle-green);
+  margin-left: auto;
+}
+
+.w-oracle-journal-patch-tag--impact-neutral {
+  background: var(--w-oracle-gray-soft);
+  color: var(--w-oracle-text-dim);
+  margin-left: auto;
+}
+
+.w-oracle-journal-patch-tag--impact-negative {
+  background: var(--w-oracle-orange-soft);
+  color: var(--w-oracle-orange);
+  margin-left: auto;
+}
+
+.w-oracle-journal-patch-date {
+  font-size: 10px;
+  color: var(--w-oracle-text-muted);
+  font-weight: 600;
+}
+
+/* Patch body */
+.w-oracle-journal-patch-body {
+  padding: 12px;
+}
+
+.w-oracle-journal-patch-entry-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--w-oracle-text);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.w-oracle-journal-patch-desc {
+  font-size: 11px;
+  color: var(--w-oracle-text-dim);
+  line-height: 1.5;
+  margin-bottom: 10px;
+  font-style: italic;
+}
+
+/* Diff block (terminal-style) */
+.w-oracle-journal-diff-block {
+  background: #0d0c16;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-family: var(--w-oracle-font-mono);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+.w-oracle-journal-diff-param {
+  color: var(--w-oracle-text-muted);
+  font-size: 10px;
+  margin-bottom: 4px;
+}
+
+.w-oracle-journal-diff-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.w-oracle-journal-diff-minus {
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.w-oracle-journal-diff-plus {
+  color: var(--w-oracle-green);
+  font-weight: 700;
+}
+
+.w-oracle-journal-diff-old {
+  color: #ef4444;
+  opacity: 0.7;
+  background: rgba(239, 68, 68, 0.08);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.w-oracle-journal-diff-new {
+  color: var(--w-oracle-green);
+  background: rgba(34, 197, 94, 0.08);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-weight: 700;
+}
+
+/* ── Summary Stats ── */
+.w-oracle-journal-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.w-oracle-journal-stat {
+  text-align: center;
+  padding: 10px 8px;
+  background: var(--w-oracle-bg-elevated);
+  border: 1px solid var(--w-oracle-border);
+  border-radius: 8px;
+}
+
+.w-oracle-journal-stat-value {
+  font-family: var(--w-oracle-font-mono);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.w-oracle-journal-stat-value--corrections {
+  color: var(--w-oracle-violet);
+  text-shadow: 0 0 10px var(--w-oracle-violet-glow);
+}
+
+.w-oracle-journal-stat-value--recalib {
+  color: var(--w-oracle-orange);
+  text-shadow: 0 0 10px var(--w-oracle-orange-glow);
+}
+
+.w-oracle-journal-stat-value--total {
+  color: var(--w-oracle-gold);
+  text-shadow: 0 0 10px var(--w-oracle-gold-glow);
+}
+
+.w-oracle-journal-stat-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--w-oracle-text-muted);
+  margin-top: 4px;
+}
+
+/* ── Empty State ── */
+.w-oracle-journal-empty {
+  text-align: center;
+  padding: 32px 20px;
+  margin-top: 16px;
+  background: var(--w-oracle-bg-elevated);
+  border: 1px dashed var(--w-oracle-border);
+  border-radius: 10px;
+}
+
+.w-oracle-journal-empty-terminal {
+  font-family: var(--w-oracle-font-mono);
+  font-size: 12px;
+  color: var(--w-oracle-text-muted);
+  margin-bottom: 12px;
+}
+
+.w-oracle-journal-empty-prompt {
+  color: var(--w-oracle-violet);
+}
+
+.w-oracle-journal-empty-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background: var(--w-oracle-violet);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: w-oracle-journal-blink 1s step-end infinite;
+}
+
+.w-oracle-journal-empty-text {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--w-oracle-text-dim);
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+/* ── Animations ── */
+@keyframes w-oracle-journal-slide-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes w-oracle-journal-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.w-oracle-journal-animate {
+  animation: w-oracle-journal-slide-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.w-oracle-journal-delay-1 { animation-delay: 0.05s; }
+.w-oracle-journal-delay-2 { animation-delay: 0.12s; }
+.w-oracle-journal-delay-3 { animation-delay: 0.2s; }
+.w-oracle-journal-delay-4 { animation-delay: 0.28s; }
+.w-oracle-journal-delay-5 { animation-delay: 0.36s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .w-oracle-journal-animate { animation: none; opacity: 1; transform: none; }
+  .w-oracle-journal-toggle-chevron { transition: none; }
+  .w-oracle-journal-empty-cursor { animation: none; opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="w-oracle-container" role="main" aria-label="Journal de l'Oracle - Patch Notes">
+
+  <div class="w-oracle-journal-context">
+    [ Contenu existant Oracle : Brier Score, Predictions, Factor Cards ]<br>
+    <small>Les elements ci-dessous representent la nouvelle section journal</small>
+  </div>
+
+  <!-- Toggle Button -->
+  <button
+    class="w-oracle-journal-toggle"
+    aria-expanded="false"
+    aria-controls="journal-content"
+    id="journal-toggle"
+  >
+    <span class="w-oracle-journal-toggle-prompt">$</span>
+    <span>oracle --changelog</span>
+    <svg class="w-oracle-journal-toggle-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+  </button>
+
+  <!-- Journal Content -->
+  <div id="journal-content" class="w-oracle-journal-content" hidden>
+
+    <!-- Patch Notes Header -->
+    <div class="w-oracle-journal-patch-header w-oracle-journal-animate w-oracle-journal-delay-1">
+      <div class="w-oracle-journal-patch-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8m8 4H8m2-8H8"/></svg>
+      </div>
+      <div class="w-oracle-journal-patch-title-block">
+        <div class="w-oracle-journal-patch-title">Patch Notes de l'Oracle</div>
+        <div class="w-oracle-journal-patch-version">saison 2025-2026 // build J20</div>
+      </div>
+      <span class="w-oracle-journal-patch-count">3</span>
+    </div>
+
+    <!-- Patch 1: J16 (most recent first) -->
+    <article class="w-oracle-journal-patch w-oracle-journal-animate w-oracle-journal-delay-2" aria-label="Patch journee 16 — correction negative">
+      <div class="w-oracle-journal-patch-bar">
+        <span class="w-oracle-journal-patch-tag w-oracle-journal-patch-tag--version">v0.16</span>
+        <span class="w-oracle-journal-patch-tag w-oracle-journal-patch-tag--correction">correction</span>
+        <span class="w-oracle-journal-patch-date">8 fev. 2026</span>
+        <span class="w-oracle-journal-patch-tag w-oracle-journal-patch-tag--impact-negative">negatif</span>
+      </div>
+      <div class="w-oracle-journal-patch-body">
+        <h3 class="w-oracle-journal-patch-entry-title">Bonus offensif sous-estime</h3>
+        <p class="w-oracle-journal-patch-desc">Le poids du bonus offensif etait trop faible — les equipes joueuses n'etaient pas assez recompensees</p>
+        <div class="w-oracle-journal-diff-block">
+          <div class="w-oracle-journal-diff-param">// bonusWeight</div>
+          <div class="w-oracle-journal-diff-line">
+            <span class="w-oracle-journal-diff-minus">-</span>
+            <span class="w-oracle-journal-diff-old">bonusWeight: 0.15</span>
+          </div>
+          <div class="w-oracle-journal-diff-line">
+            <span class="w-oracle-journal-diff-plus">+</span>
+            <span class="w-oracle-journal-diff-new">bonusWeight: 0.22</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Patch 2: J13 -->
+    <article class="w-oracle-journal-patch w-oracle-journal-animate w-oracle-journal-delay-3" aria-label="Patch journee 13 — recalibrage neutre">
+      <div class="w-oracle-journal-patch-bar">
+        <span class="w-oracle-journal-patch-tag w-oracle-journal-patch-tag--version">v0.13</span>
+        <span class="w-oracle-journal-patch-tag w-oracle-journal-patch-tag--recalibration">recalibrage</span>
+        <span class="w-oracle-journal-patch-date">12 janv. 2026</span>
+        <span class="w-oracle-journal-patch-tag w-oracle-journal-patch-tag--impact-neutral">neutre</span>
+      </div>
+      <div class="w-oracle-journal-patch-body">
+        <h3 class="w-oracle-journal-patch-entry-title">Recalibrage mi-saison</h3>
+        <p class="w-oracle-journal-patch-desc">L'Oracle ajuste ses coefficients a mi-parcours — la decroissance temporelle s'affine pour mieux suivre la forme recente</p>
+        <div class="w-oracle-journal-diff-block">
+          <div class="w-oracle-journal-diff-param">// temporalDecay</div>
+          <div class="w-oracle-journal-diff-line">
+            <span class="w-oracle-journal-diff-minus">-</span>
+            <span class="w-oracle-journal-diff-old">temporalDecay: 0.92</span>
+          </div>
+          <div class="w-oracle-journal-diff-line">
+            <span class="w-oracle-journal-diff-plus">+</span>
+            <span class="w-oracle-journal-diff-new">temporalDecay: 0.88</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Patch 3: J8 -->
+    <article class="w-oracle-journal-patch w-oracle-journal-animate w-oracle-journal-delay-4" aria-label="Patch journee 8 — correction positive">
+      <div class="w-oracle-journal-patch-bar">
+        <span class="w-oracle-journal-patch-tag w-oracle-journal-patch-tag--version">v0.8</span>
+        <span class="w-oracle-journal-patch-tag w-oracle-journal-patch-tag--correction">correction</span>
+        <span class="w-oracle-journal-patch-date">10 nov. 2025</span>
+        <span class="w-oracle-journal-patch-tag w-oracle-journal-patch-tag--impact-positive">positif</span>
+      </div>
+      <div class="w-oracle-journal-patch-body">
+        <h3 class="w-oracle-journal-patch-entry-title">Facteur domicile recalibre</h3>
+        <p class="w-oracle-journal-patch-desc">L'avantage domicile de La Rochelle passe de 1.20 a 1.35 — Marcel Deflandre est une forteresse</p>
+        <div class="w-oracle-journal-diff-block">
+          <div class="w-oracle-journal-diff-param">// homeFactor.la-rochelle</div>
+          <div class="w-oracle-journal-diff-line">
+            <span class="w-oracle-journal-diff-minus">-</span>
+            <span class="w-oracle-journal-diff-old">homeFactor: 1.20</span>
+          </div>
+          <div class="w-oracle-journal-diff-line">
+            <span class="w-oracle-journal-diff-plus">+</span>
+            <span class="w-oracle-journal-diff-new">homeFactor: 1.35</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Summary Stats -->
+    <div class="w-oracle-journal-stats w-oracle-journal-animate w-oracle-journal-delay-5">
+      <div class="w-oracle-journal-stat">
+        <div class="w-oracle-journal-stat-value w-oracle-journal-stat-value--corrections">2</div>
+        <div class="w-oracle-journal-stat-label">Corrections</div>
+      </div>
+      <div class="w-oracle-journal-stat">
+        <div class="w-oracle-journal-stat-value w-oracle-journal-stat-value--recalib">1</div>
+        <div class="w-oracle-journal-stat-label">Recalibrages</div>
+      </div>
+      <div class="w-oracle-journal-stat">
+        <div class="w-oracle-journal-stat-value w-oracle-journal-stat-value--total">3</div>
+        <div class="w-oracle-journal-stat-label">Total</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EMPTY STATE (uncomment below, comment entries above) -->
+  <!--
+  <div id="journal-content-empty" class="w-oracle-journal-content">
+    <div class="w-oracle-journal-patch-header w-oracle-journal-animate w-oracle-journal-delay-1">
+      <div class="w-oracle-journal-patch-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8m8 4H8m2-8H8"/></svg>
+      </div>
+      <div class="w-oracle-journal-patch-title-block">
+        <div class="w-oracle-journal-patch-title">Patch Notes de l'Oracle</div>
+        <div class="w-oracle-journal-patch-version">saison 2025-2026 // build J20</div>
+      </div>
+      <span class="w-oracle-journal-patch-count">0</span>
+    </div>
+    <div class="w-oracle-journal-empty w-oracle-journal-animate w-oracle-journal-delay-2">
+      <div class="w-oracle-journal-empty-terminal" aria-hidden="true">
+        <span class="w-oracle-journal-empty-prompt">$</span> oracle --changelog
+        <span class="w-oracle-journal-empty-cursor"></span>
+      </div>
+      <p class="w-oracle-journal-empty-text">L'Oracle n'a pas encore eu besoin de se corriger — patience, ca viendra</p>
+    </div>
+  </div>
+  -->
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.getElementById('journal-toggle');
+  const content = document.getElementById('journal-content');
+  const label = toggle.querySelector('span:nth-child(2)');
+
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+
+    if (expanded) {
+      content.hidden = true;
+      label.textContent = 'oracle --changelog';
+    } else {
+      content.hidden = false;
+      label.textContent = 'oracle --collapse';
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reducedMotion) {
+        content.querySelectorAll('.w-oracle-journal-animate').forEach(el => {
+          el.style.animation = 'none';
+          el.offsetHeight;
+          el.style.animation = '';
+        });
+      }
+    }
+  });
+});
+</script>
+
+</body>
+</html>

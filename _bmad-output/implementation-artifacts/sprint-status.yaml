@@ -36,7 +36,7 @@
 # - Inter-epic work (retro action items, debt, prep) is tracked under inter_epic_tasks
 
 generated: 2026-03-28
-last_updated: 2026-04-02 (5-4 done)
+last_updated: 2026-04-02 (6-1 review)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -88,8 +88,8 @@ development_status:
   epic-5-retrospective: optional
 
   # Epic 6 : Simulateur (Phase 2/3)
-  epic-6: backlog
-  6-1-selection-et-modification-de-resultats-de-matchs: backlog
+  epic-6: in-progress
+  6-1-selection-et-modification-de-resultats-de-matchs: review
   6-2-recalcul-instantane-et-animation-de-limpact: backlog
   epic-6-retrospective: optional
 

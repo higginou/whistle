@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oracle v2 — RPG Stats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --w-oracle-bg: #0f0d1a;
+  --w-oracle-bg-card: #1a1726;
+  --w-oracle-bg-card-hover: #221e30;
+  --w-oracle-violet: #7c3aed;
+  --w-oracle-violet-dim: #5b21b6;
+  --w-oracle-violet-glow: rgba(124, 58, 237, 0.4);
+  --w-oracle-violet-soft: rgba(124, 58, 237, 0.15);
+  --w-oracle-green: #22c55e;
+  --w-oracle-green-glow: rgba(34, 197, 94, 0.4);
+  --w-oracle-orange: #f59e0b;
+  --w-oracle-orange-glow: rgba(245, 158, 11, 0.4);
+  --w-oracle-red: #ef4444;
+  --w-oracle-red-glow: rgba(239, 68, 68, 0.4);
+  --w-oracle-text: #f0edf6;
+  --w-oracle-text-dim: #9d95ab;
+  --w-oracle-text-muted: #6b6279;
+  --w-oracle-border: rgba(124, 58, 237, 0.2);
+  --w-oracle-radius: 14px;
+  --w-oracle-font: 'Nunito', sans-serif;
+}
+
+body {
+  font-family: var(--w-oracle-font);
+  background: var(--w-oracle-bg);
+  color: var(--w-oracle-text);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Container ── */
+.w-oracle-container {
+  width: 100%;
+  max-width: 430px;
+  padding: 16px 16px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient background glow */
+.w-oracle-container::before {
+  content: '';
+  position: fixed;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, var(--w-oracle-violet-glow) 0%, transparent 70%);
+  pointer-events: none;
+  opacity: 0.35;
+  z-index: 0;
+}
+
+/* ── Header / Oracle Level Badge ── */
+.w-oracle-header {
+  text-align: center;
+  margin-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--w-oracle-violet-soft), rgba(124, 58, 237, 0.05));
+  border: 1px solid var(--w-oracle-border);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--w-oracle-violet);
+  margin-bottom: 8px;
+}
+
+.w-oracle-level-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.w-oracle-title {
+  font-size: 28px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--w-oracle-text), var(--w-oracle-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.w-oracle-matchday {
+  font-size: 13px;
+  color: var(--w-oracle-text-dim);
+  margin-top: 4px;
+}
+
+/* ── Power Level (Brier Score) ── */
+.w-oracle-power {
+  background: var(--w-oracle-bg-card);
+  border: 1px solid var(--w-oracle-border);
+  border-radius: var(--w-oracle-radius);
+  padding: 20px;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.w-oracle-power::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: var(--w-oracle-radius);
+  padding: 1px;
+  background: linear-gradient(135deg, var(--w-oracle-green), var(--w-oracle-violet));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.w-oracle-power-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.w-oracle-power-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--w-oracle-text-dim);
+}
+
+.w-oracle-power-quality {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+.w-oracle-power-quality--bon {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--w-oracle-green);
+  box-shadow: 0 0 12px var(--w-oracle-green-glow);
+}
+
+.w-oracle-power-quality--moyen {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--w-oracle-orange);
+  box-shadow: 0 0 12px var(--w-oracle-orange-glow);
+}
+
+.w-oracle-power-quality--faible {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--w-oracle-red);
+  box-shadow: 0 0 12px var(--w-oracle-red-glow);
+}
+
+.w-oracle-power-score {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.w-oracle-power-value {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--w-oracle-text);
+  text-shadow: 0 0 24px var(--w-oracle-green-glow);
+  animation: w-oracle-pulse 3s ease-in-out infinite;
+}
+
+.w-oracle-power-unit {
+  font-size: 14px;
+  color: var(--w-oracle-text-dim);
+  font-weight: 600;
+}
+
+/* XP bar for Brier Score */
+.w-oracle-xp-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.w-oracle-xp-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+
+.w-oracle-xp-fill--bon {
+  background: linear-gradient(90deg, var(--w-oracle-green), #4ade80);
+  box-shadow: 0 0 10px var(--w-oracle-green-glow);
+}
+
+.w-oracle-xp-fill--moyen {
+  background: linear-gradient(90deg, var(--w-oracle-orange), #fbbf24);
+  box-shadow: 0 0 10px var(--w-oracle-orange-glow);
+}
+
+.w-oracle-xp-fill--faible {
+  background: linear-gradient(90deg, var(--w-oracle-red), #f87171);
+  box-shadow: 0 0 10px var(--w-oracle-red-glow);
+}
+
+.w-oracle-xp-fill::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 20px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+  border-radius: 5px;
+  animation: w-oracle-xp-shimmer 2s ease-in-out infinite;
+}
+
+.w-oracle-xp-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--w-oracle-text-muted);
+  font-weight: 600;
+}
+
+/* ── Win Rate (Prediction Rate) ── */
+.w-oracle-winrate {
+  background: var(--w-oracle-bg-card);
+  border: 1px solid var(--w-oracle-border);
+  border-radius: var(--w-oracle-radius);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-winrate-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.w-oracle-winrate-label {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--w-oracle-text-dim);
+}
+
+.w-oracle-winrate-sub {
+  font-size: 11px;
+  color: var(--w-oracle-text-muted);
+}
+
+.w-oracle-winrate-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--w-oracle-violet);
+  text-shadow: 0 0 16px var(--w-oracle-violet-glow);
+  letter-spacing: -1px;
+}
+
+.w-oracle-winrate-pct {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--w-oracle-text-dim);
+  margin-left: 2px;
+}
+
+/* ── Stat Rows (Model Factors) ── */
+.w-oracle-stats-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--w-oracle-text-muted);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-stat {
+  background: var(--w-oracle-bg-card);
+  border: 1px solid var(--w-oracle-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  z-index: 1;
+  transition: background 0.2s ease;
+}
+
+.w-oracle-stat:focus-visible {
+  outline: 2px solid var(--w-oracle-violet);
+  outline-offset: 2px;
+}
+
+.w-oracle-stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+  background: var(--w-oracle-violet-soft);
+  color: var(--w-oracle-violet);
+  box-shadow: 0 0 12px var(--w-oracle-violet-glow);
+}
+
+.w-oracle-stat-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-oracle-stat-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.w-oracle-stat-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--w-oracle-text);
+  margin-bottom: 4px;
+}
+
+.w-oracle-stat-desc {
+  font-size: 11px;
+  color: var(--w-oracle-text-muted);
+  line-height: 1.4;
+}
+
+.w-oracle-stat-gauge {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.w-oracle-stat-gauge-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--w-oracle-violet-dim), var(--w-oracle-violet));
+  box-shadow: 0 0 6px var(--w-oracle-violet-glow);
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ── Footer ── */
+.w-oracle-footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 11px;
+  color: var(--w-oracle-text-muted);
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-footer-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--w-oracle-green);
+  box-shadow: 0 0 8px var(--w-oracle-green-glow);
+  margin-right: 6px;
+  vertical-align: middle;
+  animation: w-oracle-blink 2s ease-in-out infinite;
+}
+
+/* ── Brierless State (uncomment to test) ── */
+/*
+.w-oracle-brierless {
+  background: var(--w-oracle-bg-card);
+  border: 1px solid var(--w-oracle-border);
+  border-radius: var(--w-oracle-radius);
+  padding: 32px 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.w-oracle-brierless-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.w-oracle-brierless-text {
+  font-size: 14px;
+  color: var(--w-oracle-text-dim);
+  line-height: 1.5;
+}
+*/
+
+/* ── Animations ── */
+@keyframes w-oracle-pulse {
+  0%, 100% { text-shadow: 0 0 24px var(--w-oracle-green-glow); }
+  50% { text-shadow: 0 0 40px var(--w-oracle-green-glow), 0 0 60px rgba(34, 197, 94, 0.2); }
+}
+
+@keyframes w-oracle-xp-shimmer {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes w-oracle-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes w-oracle-fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.w-oracle-animate {
+  animation: w-oracle-fade-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Stagger delays */
+.w-oracle-animate-1 { animation-delay: 0.05s; }
+.w-oracle-animate-2 { animation-delay: 0.1s; }
+.w-oracle-animate-3 { animation-delay: 0.15s; }
+.w-oracle-animate-4 { animation-delay: 0.2s; }
+.w-oracle-animate-5 { animation-delay: 0.25s; }
+.w-oracle-animate-6 { animation-delay: 0.3s; }
+.w-oracle-animate-7 { animation-delay: 0.35s; }
+.w-oracle-animate-8 { animation-delay: 0.4s; }
+.w-oracle-animate-9 { animation-delay: 0.45s; }
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .w-oracle-animate { animation: none; opacity: 1; }
+  .w-oracle-power-value { animation: none; }
+  .w-oracle-xp-fill::after { animation: none; }
+  .w-oracle-footer-dot { animation: none; }
+  .w-oracle-xp-fill { transition: none; }
+  .w-oracle-stat-gauge-fill { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="w-oracle-container" role="main" aria-label="Oracle - Statistiques du modele de prediction">
+
+  <!-- Oracle Level Badge -->
+  <header class="w-oracle-header w-oracle-animate w-oracle-animate-1">
+    <div class="w-oracle-level-badge" aria-label="Niveau Oracle: Confirme">
+      <svg class="w-oracle-level-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 6v6l4 2"/>
+      </svg>
+      Niveau: Confirme
+    </div>
+    <h1 class="w-oracle-title">Oracle</h1>
+    <p class="w-oracle-matchday" aria-label="Journee 20 sur 26">J20 / 26</p>
+  </header>
+
+  <!-- Brier Score — Power Level Gauge -->
+  <section class="w-oracle-power w-oracle-animate w-oracle-animate-2" aria-label="Score Brier - precision du modele">
+    <div class="w-oracle-power-header">
+      <span class="w-oracle-power-label">Score Brier</span>
+      <span class="w-oracle-power-quality w-oracle-power-quality--bon" aria-label="Qualite: bon">Bon</span>
+    </div>
+    <div class="w-oracle-power-score">
+      <span class="w-oracle-power-value" aria-label="0.23">0.23</span>
+      <span class="w-oracle-power-unit">/ 1.00</span>
+    </div>
+    <div class="w-oracle-xp-track" role="progressbar" aria-valuenow="77" aria-valuemin="0" aria-valuemax="100" aria-label="Precision: 77 pourcent">
+      <div class="w-oracle-xp-fill w-oracle-xp-fill--bon" style="width: 77%;"></div>
+    </div>
+    <div class="w-oracle-xp-labels">
+      <span>Faible</span>
+      <span>Excellent</span>
+    </div>
+  </section>
+
+  <!-- Brierless State (uncomment below and comment out the section above to test) -->
+  <!--
+  <section class="w-oracle-brierless w-oracle-animate w-oracle-animate-2" aria-label="Score Brier non disponible">
+    <div class="w-oracle-brierless-icon" aria-hidden="true">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M12 6v6l4 2"/>
+      </svg>
+    </div>
+    <p class="w-oracle-brierless-text">Pas encore assez de donnees — l'Oracle se reveillera apres la journee 5</p>
+  </section>
+  -->
+
+  <!-- Prediction Rate — Win Rate -->
+  <section class="w-oracle-winrate w-oracle-animate w-oracle-animate-3" aria-label="Taux de prediction">
+    <div class="w-oracle-winrate-left">
+      <span class="w-oracle-winrate-label">Predictions</span>
+      <span class="w-oracle-winrate-sub">matchs correctement predits</span>
+    </div>
+    <div>
+      <span class="w-oracle-winrate-value">8/12</span>
+      <span class="w-oracle-winrate-pct">67%</span>
+    </div>
+  </section>
+
+  <!-- Model Factors — Stat Rows -->
+  <h2 class="w-oracle-stats-title w-oracle-animate w-oracle-animate-4">Facteurs du Modele</h2>
+
+  <!-- Elo de base -->
+  <article class="w-oracle-stat w-oracle-animate w-oracle-animate-5" tabindex="0" aria-label="Elo de base: note de depart de chaque equipe, evolue a chaque match">
+    <div class="w-oracle-stat-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <div class="w-oracle-stat-body">
+      <div class="w-oracle-stat-name">Elo de base</div>
+      <div class="w-oracle-stat-desc">Note de depart, evolue a chaque resultat</div>
+      <div class="w-oracle-stat-gauge"><div class="w-oracle-stat-gauge-fill" style="width: 85%;"></div></div>
+    </div>
+  </article>
+
+  <!-- Forme recente -->
+  <article class="w-oracle-stat w-oracle-animate w-oracle-animate-6" tabindex="0" aria-label="Forme recente: 5 derniers matchs, poids temporel degressif">
+    <div class="w-oracle-stat-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#0f0d1a" fill="none" stroke-width="1.5"/><circle cx="9" cy="10" r="1" fill="#0f0d1a"/><circle cx="15" cy="10" r="1" fill="#0f0d1a"/></svg>
+    </div>
+    <div class="w-oracle-stat-body">
+      <div class="w-oracle-stat-name">Forme recente</div>
+      <div class="w-oracle-stat-desc">5 derniers matchs, decroissance temporelle</div>
+      <div class="w-oracle-stat-gauge"><div class="w-oracle-stat-gauge-fill" style="width: 72%;"></div></div>
+    </div>
+  </article>
+
+  <!-- Facteur domicile/exterieur -->
+  <article class="w-oracle-stat w-oracle-animate w-oracle-animate-7" tabindex="0" aria-label="Avantage domicile: coefficient de bonus pour l'equipe a domicile">
+    <div class="w-oracle-stat-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>
+    </div>
+    <div class="w-oracle-stat-body">
+      <div class="w-oracle-stat-name">Avantage domicile</div>
+      <div class="w-oracle-stat-desc">Coefficient bonus equipe a domicile</div>
+      <div class="w-oracle-stat-gauge"><div class="w-oracle-stat-gauge-fill" style="width: 60%;"></div></div>
+    </div>
+  </article>
+
+  <!-- Calendrier pondere -->
+  <article class="w-oracle-stat w-oracle-animate w-oracle-animate-8" tabindex="0" aria-label="Calendrier pondere: difficulte du calendrier restant">
+    <div class="w-oracle-stat-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M16.24 7.76l-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/></svg>
+    </div>
+    <div class="w-oracle-stat-body">
+      <div class="w-oracle-stat-name">Calendrier pondere</div>
+      <div class="w-oracle-stat-desc">Difficulte du calendrier restant</div>
+      <div class="w-oracle-stat-gauge"><div class="w-oracle-stat-gauge-fill" style="width: 55%;"></div></div>
+    </div>
+  </article>
+
+  <!-- Confiance -->
+  <article class="w-oracle-stat w-oracle-animate w-oracle-animate-9" tabindex="0" aria-label="Confiance: calculee a partir de la quantite de donnees et stabilite des predictions">
+    <div class="w-oracle-stat-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+    </div>
+    <div class="w-oracle-stat-body">
+      <div class="w-oracle-stat-name">Confiance</div>
+      <div class="w-oracle-stat-desc">Quantite de donnees + stabilite des predictions</div>
+      <div class="w-oracle-stat-gauge"><div class="w-oracle-stat-gauge-fill" style="width: 68%;"></div></div>
+    </div>
+  </article>
+
+  <!-- Zones -->
+  <article class="w-oracle-stat w-oracle-animate w-oracle-animate-9" tabindex="0" aria-label="Zones de classement: probabilites derivees du Elo et du calendrier">
+    <div class="w-oracle-stat-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+    </div>
+    <div class="w-oracle-stat-body">
+      <div class="w-oracle-stat-name">Zones de classement</div>
+      <div class="w-oracle-stat-desc">Probabilites derivees du Elo + calendrier</div>
+      <div class="w-oracle-stat-gauge"><div class="w-oracle-stat-gauge-fill" style="width: 78%;"></div></div>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <footer class="w-oracle-footer w-oracle-animate w-oracle-animate-9" aria-label="Derniere mise a jour: 29 mars 2026">
+    <span class="w-oracle-footer-dot" aria-hidden="true"></span>
+    Derniere MAJ: 29 mars 2026
+  </footer>
+</div>
+
+<script>
+// Animate gauge fills on load
+document.addEventListener('DOMContentLoaded', () => {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Animate XP bar
+  const xpFill = document.querySelector('.w-oracle-xp-fill');
+  if (xpFill && !reducedMotion) {
+    const targetWidth = xpFill.style.width;
+    xpFill.style.width = '0%';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        xpFill.style.width = targetWidth;
+      });
+    });
+  }
+
+  // Animate stat gauges
+  document.querySelectorAll('.w-oracle-stat-gauge-fill').forEach((fill, i) => {
+    if (reducedMotion) return;
+    const targetWidth = fill.style.width;
+    fill.style.width = '0%';
+    setTimeout(() => {
+      fill.style.width = targetWidth;
+    }, 300 + i * 80);
+  });
+
+  // Animated score counter
+  const scoreEl = document.querySelector('.w-oracle-power-value');
+  if (scoreEl && !reducedMotion) {
+    const target = 0.23;
+    const duration = 1200;
+    const start = performance.now();
+    const animate = (now) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      scoreEl.textContent = (target * eased).toFixed(2);
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+    scoreEl.textContent = '0.00';
+    setTimeout(() => requestAnimationFrame(animate), 200);
+  }
+});
+</script>
+
+</body>
+</html>

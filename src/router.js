@@ -3,7 +3,7 @@
 import { set } from './store.js'
 
 /** Ordered tab IDs matching bottom nav order. */
-const TAB_IDS = ['classements', 'projection', 'duels', 'donjon', 'oracle']
+const TAB_IDS = ['classements', 'projection', 'duels', 'donjon', 'oracle', 'simulateur']
 
 /**
  * Derive active tab from current pathname.
@@ -26,7 +26,7 @@ export function tabFromCurrentPath() {
  */
 export function pushTab(tabId) {
   const base = window.location.pathname.replace(
-    /\/(projection|duels|donjon|oracle)$/,
+    /\/(projection|duels|donjon|oracle|simulateur)$/,
     '',
   )
   const suffix = tabId === 'classements' ? '' : `/${tabId}`

@@ -149,18 +149,18 @@ Use `bmad-dev-story` skill for story implementation with full context.
 A story is NOT "done" until ALL of the following are verified:
 
 1. **Tests auto green** — `npx vitest run` (all pass), `cargo test` from `src-tauri/` (all pass), `npx biome check .` (0 errors)
-2. **Tests manuels / E2E effectués** — Every manual validation task in the story is checked off, OR covered by an automated E2E test
+2. **Fichier story existe** — The story `.md` file MUST exist in `implementation-artifacts/` BEFORE the story can move to `review`. No story file = no review = no done. (Retro Epic 3: stories 3-1 and 3-5 were "done" without files, losing all traceability)
 3. **Statut fichier story** — The story `.md` file in `implementation-artifacts/` has `Status: done`
 4. **Statut sprint-status** — The story key in `sprint-status.yaml` is set to `done`
 5. **Review complétée** — Code review has been performed (via dev's code-review workflow or SM review)
 6. **Pas de régressions** — No existing test has been broken by the story's changes
 7. **Git commit effectué** — All story changes MUST be committed to git immediately when the story is marked done. No accumulating uncommitted work across stories. The commit message should reference the story (e.g., `feat: story 6-1 — créer un stash avec nom personnalisé`)
+8. **Checklist a11y (si `ui-structural: true`)** — Stories with `ui-structural: true` MUST verify before review: aria-labels on all interactive/semantic elements, tabindex on custom interactive elements, keyboard support (Enter/Space), `prefers-reduced-motion` handled in CSS and JS, focus-visible outline WCAG AA. (Retro Epic 3: 100% of reviewed stories had a11y findings)
+9. **Echappement innerHTML** — Any component that injects JSON data into the DOM via innerHTML MUST escape values (team names, dates, any external string). Use an `esc()` helper. (Retro Epic 3: XSS found in story 3-3)
 
 An **epic** is NOT "done" until, in addition to all stories being done:
 
-7. **E2E epic green (functional epics only)** — E2E tests covering the epic's critical user journeys exist and pass. The epic CANNOT be marked `done` in sprint-status without this gate.
-8. **Traçabilité E2E** — The retrospective or sprint-status must explicitly mention the number of E2E tests and their pass/fail status when the epic is marked done.
-9. **Corrections post-review** — If a code review returned "Changes Requested", the fixes MUST be documented in the story's completion notes before marking the story `done`. The link between review findings and applied corrections must be traceable.
+8. **Corrections post-review** — If a code review returned "Changes Requested", the fixes MUST be documented in the story's completion notes before marking the story `done`. The link between review findings and applied corrections must be traceable.
 
 **Transition flow:** `ready-for-dev` → `in-progress` → `review` → `done`
 - Dev sets `in-progress` when starting work
@@ -259,7 +259,7 @@ Always use Context7 when I need library/API documentation, code generation, setu
 - **A story flagged `ui-structural: true` CANNOT move to `in-progress` until `GO higgin: oui` is recorded**
 - **No explicit GO from higgin = no UI code written** — this is a hard gate, not a guideline
 - **GO = mot explicite uniquement** — l'orchestrateur ne marque `GO higgin: oui` que si higgin a écrit "GO" ou une validation explicitement non ambiguë. La première réponse de higgin ne doit JAMAIS être interprétée comme un GO sauf si elle contient le mot "GO". Toute autre réponse est traitée comme feedback nécessitant une itération.
-- **Maquettes produites par un agent délégué** — l'orchestrateur ne produit JAMAIS de maquettes lui-même (HTML/CSS/JS). Il dispatch la tâche à un agent dev ou UX designer dédié et attend le résultat. L'orchestrateur est un chef d'orchestre, pas un musicien.
+- **Maquettes produites par un agent délégué** — l'orchestrateur ne produit JAMAIS de maquettes lui-même (HTML/CSS/JS). Il dispatch la tâche à un agent dev ou UX designer dédié et attend le résultat. L'orchestrateur est un chef d'orchestre, pas un musicien. **Exception :** si un agent délégué a échoué à produire le travail demandé, l'orchestrateur a le droit de le faire lui-même plutôt que de boucler indéfiniment.
 - **Skill UI/UX obligatoire** — tout agent qui produit des maquettes (HTML/CSS/JS) ou prend des décisions de design UI DOIT utiliser le skill `ui-ux-pro-max` pour guider ses choix (style, couleurs, accessibilité, touch targets, empty states, etc.). Ce n'est pas optionnel.
 - The dev produces mockups, higgin reviews, chooses direction or requests iterations
 - Minor cosmetic adjustments (color tweaks, spacing) are NOT concerned — only structural changes

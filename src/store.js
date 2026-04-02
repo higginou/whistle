@@ -9,6 +9,7 @@ const EVENT_NAMES = {
   dataStale: 'data-stale',
   activeTab: 'tab-changed',
   viewMode: 'mode-changed',
+  simulatedResults: 'simulated-results-changed',
 }
 
 const INITIAL_STATE = {
@@ -20,6 +21,7 @@ const INITIAL_STATE = {
   dataStale: null,
   activeTab: 'classements',
   viewMode: 'simple',
+  simulatedResults: {},
 }
 
 const state = { ...INITIAL_STATE }

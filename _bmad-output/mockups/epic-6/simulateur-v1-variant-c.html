@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulateur — Variant C : Gaming / Swipe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --w-bg-page: #130d1f;
+  --w-bg-surface: #1a1128;
+  --w-bg-elevated: #231838;
+  --w-bg-row-alt: rgba(124, 58, 237, 0.04);
+  --w-accent: #c084fc;
+  --w-violet: #7c3aed;
+  --w-violet-dim: #5b21b6;
+  --w-violet-glow: rgba(124, 58, 237, 0.35);
+  --w-violet-soft: rgba(124, 58, 237, 0.1);
+  --w-green: #22c55e;
+  --w-green-soft: rgba(34, 197, 94, 0.12);
+  --w-orange: #f59e0b;
+  --w-orange-soft: rgba(245, 158, 11, 0.12);
+  --w-red: #dc2626;
+  --w-red-soft: rgba(220, 38, 38, 0.12);
+  --w-gray: #6b6279;
+  --w-gray-soft: rgba(107, 98, 121, 0.12);
+  --w-text: #f0edf6;
+  --w-text-dim: #9d95ab;
+  --w-text-muted: #5e5670;
+  --w-border: rgba(124, 58, 237, 0.15);
+  --w-border-subtle: rgba(255, 255, 255, 0.06);
+  --w-nav-height: 60px;
+  --w-font: 'Nunito', sans-serif;
+  --w-radius: 12px;
+  --w-radius-sm: 8px;
+  --w-radius-xs: 6px;
+}
+
+body {
+  font-family: var(--w-font);
+  background: var(--w-bg-page);
+  color: var(--w-text);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.w-container {
+  width: 100%;
+  max-width: 430px;
+  padding-bottom: calc(var(--w-nav-height) + 24px);
+}
+
+/* ── Header ── */
+.w-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(19, 13, 31, 0.92);
+  border-bottom: 1px solid var(--w-border-subtle);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.w-header__logo {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--w-accent);
+}
+
+.w-header__season {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+}
+
+/* ── Page Title ── */
+.w-page-title {
+  padding: 20px 16px 8px;
+}
+
+.w-page-title__label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--w-text-muted);
+  margin-bottom: 4px;
+}
+
+.w-page-title__heading {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--w-accent), var(--w-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.w-page-title__sub {
+  font-size: 12px;
+  color: var(--w-text-dim);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ── Counter + Reset ── */
+.w-sim-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  margin: 8px 16px 12px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius-sm);
+}
+
+.w-sim-bar__count {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-text);
+}
+
+.w-sim-bar__count span {
+  color: var(--w-accent);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.w-sim-bar__reset {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius-xs);
+  padding: 6px 12px;
+  font-family: var(--w-font);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-text-muted);
+  cursor: pointer;
+  min-height: 36px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-sim-bar__reset:hover,
+.w-sim-bar__reset:focus-visible {
+  color: var(--w-red);
+  border-color: var(--w-red);
+}
+
+.w-sim-bar__reset:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+.w-sim-bar__reset svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* ── Journée Label ── */
+.w-journee {
+  padding: 8px 16px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--w-text-muted);
+}
+
+/* ── Duel Card (Gaming) ── */
+.w-duel {
+  margin: 0 16px 14px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.w-duel.is-selected {
+  border-color: var(--w-violet);
+}
+
+/* Difficulty ribbon */
+.w-duel__ribbon {
+  height: 3px;
+  transition: background 0.2s ease;
+}
+
+/* Teams + selector zone */
+.w-duel__arena {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 12px 8px;
+  gap: 0;
+}
+
+/* Team zone (tappable) */
+.w-duel__team-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 4px;
+  border-radius: var(--w-radius-sm);
+  cursor: pointer;
+  min-height: 80px;
+  transition: background 0.15s ease, transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-duel__team-zone:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+.w-duel__team-zone:active {
+  transform: scale(0.96);
+}
+
+.w-duel__initials {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  background: var(--w-bg-elevated);
+  color: var(--w-text-dim);
+  border: 2px solid var(--w-border);
+  margin-bottom: 6px;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.w-duel__team-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--w-text-dim);
+  text-align: center;
+  line-height: 1.2;
+  transition: color 0.15s ease;
+}
+
+.w-duel__team-name.w-team--favorite {
+  color: var(--w-accent);
+}
+
+.w-duel__team-pts {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  margin-top: 2px;
+}
+
+/* Selected states for team zones */
+.w-duel__team-zone.is-winner .w-duel__initials {
+  background: var(--w-green-soft);
+  border-color: var(--w-green);
+  color: var(--w-green);
+}
+.w-duel__team-zone.is-winner .w-duel__team-name { color: var(--w-green); }
+
+.w-duel__team-zone.is-loser .w-duel__initials {
+  background: var(--w-red-soft);
+  border-color: rgba(220, 38, 38, 0.3);
+  color: var(--w-red);
+}
+
+/* Center vs zone */
+.w-duel__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 4px;
+}
+
+.w-duel__vs-badge {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--w-text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.w-duel__draw-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 32px;
+  border-radius: var(--w-radius-xs);
+  border: 1px solid var(--w-border);
+  background: var(--w-bg-elevated);
+  cursor: pointer;
+  font-family: var(--w-font);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--w-text-muted);
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease, transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-duel__draw-btn:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+.w-duel__draw-btn:active {
+  transform: scale(0.93);
+}
+
+.w-duel__draw-btn.is-draw {
+  background: var(--w-orange-soft);
+  border-color: var(--w-orange);
+  color: var(--w-orange);
+}
+
+.w-duel__diff {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+}
+
+/* ── Bonus Strip ── */
+.w-bonus-strip {
+  display: none;
+  padding: 8px 12px 10px;
+  border-top: 1px solid var(--w-border-subtle);
+  gap: 8px;
+  justify-content: center;
+}
+
+.w-bonus-strip.is-visible {
+  display: flex;
+}
+
+.w-bonus-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--w-border);
+  background: var(--w-bg-elevated);
+  cursor: pointer;
+  font-family: var(--w-font);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--w-text-muted);
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 32px;
+}
+
+.w-bonus-tag:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+.w-bonus-tag svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.w-bonus-tag.is-active {
+  background: var(--w-violet-soft);
+  border-color: var(--w-violet);
+  color: var(--w-accent);
+}
+
+.w-bonus-tag--def.is-active {
+  background: var(--w-orange-soft);
+  border-color: var(--w-orange);
+  color: var(--w-orange);
+}
+
+/* ── Bottom Nav ── */
+.w-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: var(--w-nav-height);
+  background: rgba(19, 13, 31, 0.95);
+  border-top: 1px solid var(--w-border-subtle);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 50;
+}
+
+.w-bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  text-decoration: none;
+  padding: 6px 12px;
+  min-width: 48px;
+  min-height: 48px;
+  justify-content: center;
+  border-radius: var(--w-radius-sm);
+  transition: color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-bottom-nav__item--active { color: var(--w-accent); }
+
+.w-bottom-nav__item svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-bottom-nav__item:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+/* ── Animations ── */
+@keyframes w-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.w-anim {
+  animation: w-fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.w-d1 { animation-delay: 0.05s; }
+.w-d2 { animation-delay: 0.1s; }
+.w-d3 { animation-delay: 0.15s; }
+.w-d4 { animation-delay: 0.2s; }
+.w-d5 { animation-delay: 0.25s; }
+.w-d6 { animation-delay: 0.3s; }
+.w-d7 { animation-delay: 0.35s; }
+.w-d8 { animation-delay: 0.4s; }
+.w-d9 { animation-delay: 0.45s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .w-anim { animation: none; opacity: 1; transform: none; }
+  .w-duel { transition: none; }
+  .w-duel__team-zone { transition: none; }
+  .w-duel__initials { transition: none; }
+  .w-duel__draw-btn { transition: none; }
+  .w-bonus-tag { transition: none; }
+  .w-duel__ribbon { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="w-container" role="main" aria-label="Simulateur de resultats">
+
+  <!-- Header -->
+  <header class="w-header">
+    <span class="w-header__logo">Whistle</span>
+    <span class="w-header__season">2025-26</span>
+  </header>
+
+  <!-- Page Title -->
+  <div class="w-page-title w-anim w-d1">
+    <div class="w-page-title__label">Scenarios what-if</div>
+    <h1 class="w-page-title__heading">Simulateur</h1>
+    <p class="w-page-title__sub">Choisissez vos pronostics et explorez l'impact sur le classement.</p>
+  </div>
+
+  <!-- Counter Bar -->
+  <div class="w-sim-bar w-anim w-d2" role="status" aria-live="polite">
+    <div class="w-sim-bar__count"><span id="sim-count">0</span> match(s) simule(s)</div>
+    <button class="w-sim-bar__reset" id="reset-btn" aria-label="Reinitialiser toutes les selections">
+      <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 1 3 6.7"/><polyline points="3 22 3 16 9 16"/></svg>
+      Reinitialiser
+    </button>
+  </div>
+
+  <!-- Journée -->
+  <div class="w-journee w-anim w-d3">Journee 21</div>
+
+  <!-- Duel Cards -->
+  <div id="duels-container"></div>
+
+  <!-- Bottom Nav -->
+  <nav class="w-bottom-nav" aria-label="Navigation principale">
+    <a href="#" class="w-bottom-nav__item" aria-label="Classement">
+      <svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M3 3l9 4 9-4"/></svg>
+      <span>Classement</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Succes">
+      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <span>Succes</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Duels">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Duels</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item w-bottom-nav__item--active" aria-label="Simulateur" aria-current="page">
+      <svg viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+      <span>Simul.</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Journal">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Journal</span>
+    </a>
+  </nav>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const matches = [
+    { home: 'Toulouse', away: 'La Rochelle', diff: 0.82, favHome: false, favAway: true, hInit: 'TLS', aInit: 'LR' },
+    { home: 'Bordeaux-Begles', away: 'Racing 92', diff: 0.55, favHome: false, favAway: false, hInit: 'UBB', aInit: 'R92' },
+    { home: 'Toulon', away: 'Clermont', diff: 0.48, favHome: false, favAway: false, hInit: 'RCT', aInit: 'ASM' },
+    { home: 'Castres', away: 'Stade Francais', diff: 0.35, favHome: false, favAway: false, hInit: 'CO', aInit: 'SF' },
+    { home: 'Lyon', away: 'Pau', diff: 0.42, favHome: false, favAway: false, hInit: 'LOU', aInit: 'PAU' },
+    { home: 'Bayonne', away: 'Perpignan', diff: 0.38, favHome: false, favAway: false, hInit: 'AB', aInit: 'USAP' },
+    { home: 'Vannes', away: 'Montpellier', diff: 0.61, favHome: false, favAway: false, hInit: 'RCV', aInit: 'MHR' }
+  ];
+
+  const container = document.getElementById('duels-container');
+  const countEl = document.getElementById('sim-count');
+  const resetBtn = document.getElementById('reset-btn');
+
+  const state = matches.map(() => ({ result: null, bonusOff: false, bonusDef: false }));
+
+  function getDiffColor(d) {
+    if (d >= 0.7) return 'var(--w-red)';
+    if (d >= 0.5) return 'var(--w-orange)';
+    return 'var(--w-green)';
+  }
+
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function render() {
+    container.innerHTML = '';
+    matches.forEach((m, i) => {
+      const s = state[i];
+      const delay = Math.min(i + 3, 9);
+      const duel = document.createElement('div');
+      duel.className = 'w-duel w-anim w-d' + delay + (s.result ? ' is-selected' : '');
+      duel.setAttribute('role', 'group');
+      duel.setAttribute('aria-label', esc(m.home) + ' contre ' + esc(m.away));
+
+      // Determine team classes
+      let homeZoneCls = '';
+      let awayZoneCls = '';
+      if (s.result === 'home') { homeZoneCls = ' is-winner'; awayZoneCls = ' is-loser'; }
+      else if (s.result === 'away') { awayZoneCls = ' is-winner'; homeZoneCls = ' is-loser'; }
+      else if (s.result === 'draw') { /* neither */ }
+
+      const homeFav = m.favAway ? '' : (m.favHome ? ' w-team--favorite' : '');
+      const awayFav = m.favAway ? ' w-team--favorite' : '';
+
+      // Bonus strip
+      let bonusHTML = '';
+      if (s.result) {
+        const isDraw = s.result === 'draw';
+        const showDef = !isDraw;
+
+        bonusHTML = '<div class="w-bonus-strip is-visible">';
+        bonusHTML += '<button class="w-bonus-tag' + (s.bonusOff ? ' is-active' : '') + '" data-match="' + i + '" data-bonus="off" aria-pressed="' + s.bonusOff + '">';
+        bonusHTML += '<svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>';
+        bonusHTML += 'Offensif +1';
+        bonusHTML += '</button>';
+
+        if (showDef) {
+          bonusHTML += '<button class="w-bonus-tag w-bonus-tag--def' + (s.bonusDef ? ' is-active' : '') + '" data-match="' + i + '" data-bonus="def" aria-pressed="' + s.bonusDef + '">';
+          bonusHTML += '<svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+          bonusHTML += 'Defensif +1';
+          bonusHTML += '</button>';
+        }
+
+        bonusHTML += '</div>';
+      }
+
+      duel.innerHTML =
+        '<div class="w-duel__ribbon" style="background:' + getDiffColor(m.diff) + '"></div>' +
+        '<div class="w-duel__arena">' +
+          '<div class="w-duel__team-zone' + homeZoneCls + '" tabindex="0" role="radio" aria-checked="' + (s.result === 'home') + '" aria-label="Victoire ' + esc(m.home) + '" data-match="' + i + '" data-result="home">' +
+            '<div class="w-duel__initials">' + esc(m.hInit) + '</div>' +
+            '<div class="w-duel__team-name' + homeFav + '">' + esc(m.home) + '</div>' +
+            '<div class="w-duel__team-pts">4 pts</div>' +
+          '</div>' +
+          '<div class="w-duel__center">' +
+            '<div class="w-duel__vs-badge">VS</div>' +
+            '<button class="w-duel__draw-btn' + (s.result === 'draw' ? ' is-draw' : '') + '" data-match="' + i + '" data-result="draw" role="radio" aria-checked="' + (s.result === 'draw') + '" aria-label="Match nul">Nul</button>' +
+            '<div class="w-duel__diff">' + Math.round(m.diff * 100) + '%</div>' +
+          '</div>' +
+          '<div class="w-duel__team-zone' + awayZoneCls + '" tabindex="0" role="radio" aria-checked="' + (s.result === 'away') + '" aria-label="Victoire ' + esc(m.away) + '" data-match="' + i + '" data-result="away">' +
+            '<div class="w-duel__initials">' + esc(m.aInit) + '</div>' +
+            '<div class="w-duel__team-name' + awayFav + '">' + esc(m.away) + '</div>' +
+            '<div class="w-duel__team-pts">4 pts</div>' +
+          '</div>' +
+        '</div>' +
+        bonusHTML;
+
+      container.appendChild(duel);
+    });
+
+    countEl.textContent = state.filter(s => s.result !== null).length;
+
+    // Bind team zone clicks
+    container.querySelectorAll('.w-duel__team-zone').forEach(zone => {
+      function handler() {
+        const idx = parseInt(zone.dataset.match);
+        const result = zone.dataset.result;
+        if (state[idx].result === result) {
+          state[idx].result = null;
+          state[idx].bonusOff = false;
+          state[idx].bonusDef = false;
+        } else {
+          state[idx].result = result;
+          state[idx].bonusOff = false;
+          state[idx].bonusDef = false;
+        }
+        render();
+      }
+      zone.addEventListener('click', handler);
+      zone.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handler(); }
+      });
+    });
+
+    // Bind draw buttons
+    container.querySelectorAll('.w-duel__draw-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.match);
+        if (state[idx].result === 'draw') {
+          state[idx].result = null;
+          state[idx].bonusOff = false;
+          state[idx].bonusDef = false;
+        } else {
+          state[idx].result = 'draw';
+          state[idx].bonusOff = false;
+          state[idx].bonusDef = false;
+        }
+        render();
+      });
+    });
+
+    // Bind bonus tags
+    container.querySelectorAll('.w-bonus-tag').forEach(tag => {
+      tag.addEventListener('click', () => {
+        const idx = parseInt(tag.dataset.match);
+        const bonus = tag.dataset.bonus;
+        if (bonus === 'off') state[idx].bonusOff = !state[idx].bonusOff;
+        else state[idx].bonusDef = !state[idx].bonusDef;
+        render();
+      });
+    });
+  }
+
+  resetBtn.addEventListener('click', () => {
+    state.forEach(s => { s.result = null; s.bonusOff = false; s.bonusDef = false; });
+    render();
+  });
+
+  render();
+});
+</script>
+
+</body>
+</html>

@@ -26,6 +26,11 @@ const TABS = [
     label: 'Oracle',
     icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="12" rx="10" ry="5"/><ellipse cx="12" cy="12" rx="10" ry="5" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="5" transform="rotate(120 12 12)"/></svg>',
   },
+  {
+    id: 'simulateur',
+    label: 'Simul.',
+    icon: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>',
+  },
 ]
 
 /**

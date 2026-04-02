@@ -67,8 +67,9 @@ export function render(container) {
       set('revealed', true)
       set('dataFresh', false)
       setReplay()
-    } catch {
-      setDefault()
+    } catch (err) {
+      console.error('[Whistle] Reveal animation failed:', err)
+      setReplay()
     }
   }
 
@@ -86,8 +87,9 @@ export function render(container) {
       await resetProjection(rankRows, season.teams)
       set('revealed', false)
       await handleReveal()
-    } catch {
-      setDefault()
+    } catch (err) {
+      console.error('[Whistle] Reveal animation failed:', err)
+      setReplay()
     }
   }
 

@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duels — Variant B : Cards par Groupe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --w-bg-page: #130d1f;
+  --w-bg-surface: #1a1128;
+  --w-bg-elevated: #231838;
+  --w-bg-card-inner: #1e1430;
+  --w-accent: #c084fc;
+  --w-violet: #7c3aed;
+  --w-violet-dim: #5b21b6;
+  --w-violet-glow: rgba(124, 58, 237, 0.35);
+  --w-violet-soft: rgba(124, 58, 237, 0.1);
+  --w-green: #22c55e;
+  --w-green-soft: rgba(34, 197, 94, 0.12);
+  --w-green-glow: rgba(34, 197, 94, 0.3);
+  --w-orange: #f59e0b;
+  --w-orange-soft: rgba(245, 158, 11, 0.12);
+  --w-red: #dc2626;
+  --w-red-soft: rgba(220, 38, 38, 0.12);
+  --w-gray: #6b6279;
+  --w-gray-soft: rgba(107, 98, 121, 0.1);
+  --w-text: #f0edf6;
+  --w-text-dim: #9d95ab;
+  --w-text-muted: #5e5670;
+  --w-border: rgba(124, 58, 237, 0.15);
+  --w-border-subtle: rgba(255, 255, 255, 0.06);
+  --w-nav-height: 60px;
+  --w-font: 'Nunito', sans-serif;
+  --w-radius: 14px;
+  --w-radius-sm: 10px;
+  --w-radius-xs: 6px;
+}
+
+body {
+  font-family: var(--w-font);
+  background: var(--w-bg-page);
+  color: var(--w-text);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.w-container {
+  width: 100%;
+  max-width: 430px;
+  padding-bottom: calc(var(--w-nav-height) + 24px);
+}
+
+/* ── Header ── */
+.w-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(19, 13, 31, 0.92);
+  border-bottom: 1px solid var(--w-border-subtle);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.w-header__logo {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--w-accent);
+}
+
+.w-header__season {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+}
+
+/* ── Page Title ── */
+.w-page-title {
+  padding: 20px 16px 8px;
+}
+
+.w-page-title__label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--w-text-muted);
+  margin-bottom: 4px;
+}
+
+.w-page-title__heading {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--w-accent), var(--w-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.w-page-title__sub {
+  font-size: 12px;
+  color: var(--w-text-dim);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ── Toggle Simple / Detaille ── */
+.w-toggle-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px 16px;
+}
+
+.w-toggle-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  transition: color 0.2s ease;
+}
+
+.w-toggle-label--active {
+  color: var(--w-accent);
+}
+
+.w-toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  background: var(--w-bg-elevated);
+  border: 1px solid var(--w-border);
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-toggle-switch[aria-checked="true"] {
+  background: var(--w-violet-dim);
+  border-color: var(--w-violet);
+}
+
+.w-toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--w-text-dim);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;
+}
+
+.w-toggle-switch[aria-checked="true"]::after {
+  transform: translateX(18px);
+  background: var(--w-accent);
+  box-shadow: 0 0 8px var(--w-violet-glow);
+}
+
+.w-toggle-switch:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+/* ── Duel Card ── */
+.w-duel-card {
+  margin: 0 16px 16px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Left accent bar */
+.w-duel-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  background: linear-gradient(180deg, var(--w-accent), var(--w-violet));
+  border-radius: 0 3px 3px 0;
+}
+
+.w-duel-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+}
+
+.w-duel-card__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.w-duel-card__title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--w-text);
+}
+
+.w-duel-card__subtitle {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+}
+
+.w-duel-card__pts {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--w-violet);
+  background: var(--w-violet-soft);
+  border-radius: var(--w-radius-xs);
+  padding: 4px 10px;
+}
+
+/* ── Simple Mode: Team matchup visual ── */
+.w-matchup {
+  padding: 12px 16px 16px;
+}
+
+.w-matchup__pair {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.w-matchup__pair + .w-matchup__pair {
+  border-top: 1px solid var(--w-border-subtle);
+}
+
+.w-matchup__rank {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.w-matchup__rank--1 {
+  background: var(--w-violet-soft);
+  color: var(--w-accent);
+  box-shadow: 0 0 8px var(--w-violet-glow);
+}
+
+.w-matchup__rank--2 {
+  background: var(--w-gray-soft);
+  color: var(--w-text-dim);
+}
+
+.w-matchup__rank--3 {
+  background: var(--w-gray-soft);
+  color: var(--w-text-muted);
+}
+
+.w-matchup__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+  background: var(--w-bg-elevated);
+  color: var(--w-text-dim);
+  border: 1px solid var(--w-border);
+}
+
+.w-matchup__avatar--favorite {
+  background: var(--w-violet-soft);
+  color: var(--w-accent);
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+.w-matchup__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.w-matchup__name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.w-matchup__name--favorite {
+  color: var(--w-accent);
+}
+
+.w-matchup__h2h-short {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  margin-top: 2px;
+}
+
+.w-matchup__status {
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.w-matchup__status--ahead {
+  color: var(--w-green);
+  background: var(--w-green-soft);
+}
+
+.w-matchup__status--behind {
+  color: var(--w-text-muted);
+  background: var(--w-gray-soft);
+}
+
+/* ── Detail Mode: H2H Matchup Grid ── */
+.w-detail-grid {
+  padding: 0 16px 16px;
+  display: none;
+}
+
+.w-detail-grid.is-visible {
+  display: block;
+}
+
+.w-detail-pair {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: var(--w-bg-card-inner);
+  border-radius: var(--w-radius-sm);
+  border: 1px solid var(--w-border-subtle);
+}
+
+.w-detail-pair:last-child {
+  margin-bottom: 0;
+}
+
+.w-detail-team {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-text);
+  min-width: 0;
+  flex: 1;
+}
+
+.w-detail-team--favorite {
+  color: var(--w-accent);
+}
+
+.w-detail-team--right {
+  text-align: right;
+}
+
+.w-detail-vs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 0 8px;
+}
+
+.w-detail-score {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.w-detail-vnd {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.w-detail-vnd__item {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 5px;
+}
+
+.w-detail-vnd__item--v {
+  background: var(--w-green-soft);
+  color: var(--w-green);
+}
+
+.w-detail-vnd__item--n {
+  background: var(--w-orange-soft);
+  color: var(--w-orange);
+}
+
+.w-detail-vnd__item--d {
+  background: var(--w-red-soft);
+  color: var(--w-red);
+}
+
+.w-detail-vnd__item--zero {
+  background: var(--w-gray-soft);
+  color: var(--w-text-muted);
+}
+
+.w-detail-vs-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--w-text-muted);
+}
+
+/* ── Badge Promu ── */
+.w-badge-promu {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--w-orange);
+  background: var(--w-orange-soft);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+/* ── Promoted Note Card ── */
+.w-promoted-note {
+  margin: 0 16px 16px;
+  padding: 12px 14px;
+  background: var(--w-orange-soft);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--w-radius-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.w-promoted-note__icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245, 158, 11, 0.15);
+  border-radius: 8px;
+}
+
+.w-promoted-note__icon svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--w-orange);
+  fill: none;
+  stroke-width: 2;
+}
+
+.w-promoted-note__body {
+  flex: 1;
+}
+
+.w-promoted-note__title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-orange);
+  margin-bottom: 2px;
+}
+
+.w-promoted-note__text {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(245, 158, 11, 0.75);
+  line-height: 1.4;
+}
+
+/* ── Empty State ── */
+.w-empty {
+  margin: 0 16px 16px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius);
+  padding: 36px 20px;
+  text-align: center;
+}
+
+.w-empty__icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--w-violet-soft);
+  border-radius: 16px;
+  opacity: 0.5;
+}
+
+.w-empty__icon svg {
+  width: 28px;
+  height: 28px;
+  stroke: var(--w-accent);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.w-empty__title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--w-text-dim);
+  margin-bottom: 4px;
+}
+
+.w-empty__text {
+  font-size: 12px;
+  color: var(--w-text-muted);
+  line-height: 1.5;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+/* ── Bottom Nav ── */
+.w-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: var(--w-nav-height);
+  background: rgba(19, 13, 31, 0.95);
+  border-top: 1px solid var(--w-border-subtle);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 50;
+}
+
+.w-bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  text-decoration: none;
+  padding: 6px 12px;
+  min-width: 48px;
+  min-height: 48px;
+  justify-content: center;
+  border-radius: var(--w-radius-sm);
+  transition: color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-bottom-nav__item--active {
+  color: var(--w-accent);
+}
+
+.w-bottom-nav__item svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-bottom-nav__item:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+/* ── Animations ── */
+@keyframes w-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.w-anim {
+  animation: w-fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.w-d1 { animation-delay: 0.05s; }
+.w-d2 { animation-delay: 0.1s; }
+.w-d3 { animation-delay: 0.15s; }
+.w-d4 { animation-delay: 0.2s; }
+.w-d5 { animation-delay: 0.25s; }
+.w-d6 { animation-delay: 0.3s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .w-anim { animation: none; opacity: 1; transform: none; }
+  .w-toggle-switch::after { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="w-container" role="main" aria-label="Duels - Micro-classement des egalites">
+
+  <!-- Header -->
+  <header class="w-header">
+    <span class="w-header__logo">Whistle</span>
+    <span class="w-header__season">2025-26</span>
+  </header>
+
+  <!-- Page Title -->
+  <div class="w-page-title w-anim w-d1">
+    <div class="w-page-title__label">Confrontations directes</div>
+    <h1 class="w-page-title__heading">Duels</h1>
+    <p class="w-page-title__sub">Departage des equipes a egalite de points par les resultats H2H.</p>
+  </div>
+
+  <!-- Toggle -->
+  <div class="w-toggle-bar w-anim w-d2" role="group" aria-label="Mode d'affichage">
+    <span class="w-toggle-label w-toggle-label--active" id="label-simple">Simple</span>
+    <div class="w-toggle-switch"
+         role="switch"
+         tabindex="0"
+         aria-checked="false"
+         aria-labelledby="label-simple label-detail"
+         id="mode-toggle"></div>
+    <span class="w-toggle-label" id="label-detail">Detaille</span>
+  </div>
+
+  <!-- Card 1: 2 teams tied (ranks 5-6) -->
+  <section class="w-duel-card w-anim w-d3" aria-label="Egalite rangs 5 et 6, 52 points">
+    <div class="w-duel-card__header">
+      <div class="w-duel-card__title-group">
+        <span class="w-duel-card__title">Rangs 5-6</span>
+        <span class="w-duel-card__subtitle">2 equipes a egalite</span>
+      </div>
+      <span class="w-duel-card__pts">52 pts</span>
+    </div>
+
+    <!-- Simple mode -->
+    <div class="w-matchup js-simple" role="list" aria-label="Classement H2H">
+      <div class="w-matchup__pair" role="listitem">
+        <span class="w-matchup__rank w-matchup__rank--1" aria-label="1er">1</span>
+        <div class="w-matchup__avatar w-matchup__avatar--favorite" aria-hidden="true">LR</div>
+        <div class="w-matchup__info">
+          <div class="w-matchup__name w-matchup__name--favorite">La Rochelle</div>
+          <div class="w-matchup__h2h-short">2V 0N 0D vs Bordeaux</div>
+        </div>
+        <span class="w-matchup__status w-matchup__status--ahead">Devant</span>
+      </div>
+      <div class="w-matchup__pair" role="listitem">
+        <span class="w-matchup__rank w-matchup__rank--2" aria-label="2e">2</span>
+        <div class="w-matchup__avatar" aria-hidden="true">UBB</div>
+        <div class="w-matchup__info">
+          <div class="w-matchup__name">Bordeaux-Begles</div>
+          <div class="w-matchup__h2h-short">0V 0N 2D vs La Rochelle</div>
+        </div>
+        <span class="w-matchup__status w-matchup__status--behind">Derriere</span>
+      </div>
+    </div>
+
+    <!-- Detail mode -->
+    <div class="w-detail-grid js-detail" aria-label="Detail des confrontations directes rangs 5-6">
+      <div class="w-detail-pair">
+        <span class="w-detail-team w-detail-team--favorite">La Rochelle</span>
+        <div class="w-detail-vs">
+          <div class="w-detail-vnd">
+            <span class="w-detail-vnd__item w-detail-vnd__item--v" title="Victoires">2</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--zero" title="Nuls">0</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--zero" title="Defaites">0</span>
+          </div>
+          <span class="w-detail-vs-label">vs</span>
+        </div>
+        <span class="w-detail-team w-detail-team--right">Bordeaux</span>
+      </div>
+      <div class="w-detail-pair">
+        <span class="w-detail-team">Bordeaux-Begles</span>
+        <div class="w-detail-vs">
+          <div class="w-detail-vnd">
+            <span class="w-detail-vnd__item w-detail-vnd__item--zero" title="Victoires">0</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--zero" title="Nuls">0</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--d" title="Defaites">2</span>
+          </div>
+          <span class="w-detail-vs-label">vs</span>
+        </div>
+        <span class="w-detail-team w-detail-team--right w-detail-team--favorite">La Rochelle</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Card 2: 3 teams tied (ranks 8-10) -->
+  <section class="w-duel-card w-anim w-d4" aria-label="Egalite rangs 8 a 10, 41 points">
+    <div class="w-duel-card__header">
+      <div class="w-duel-card__title-group">
+        <span class="w-duel-card__title">Rangs 8-10</span>
+        <span class="w-duel-card__subtitle">3 equipes a egalite</span>
+      </div>
+      <span class="w-duel-card__pts">41 pts</span>
+    </div>
+
+    <!-- Simple mode -->
+    <div class="w-matchup js-simple" role="list" aria-label="Classement H2H">
+      <div class="w-matchup__pair" role="listitem">
+        <span class="w-matchup__rank w-matchup__rank--1" aria-label="1er">1</span>
+        <div class="w-matchup__avatar" aria-hidden="true">LOU</div>
+        <div class="w-matchup__info">
+          <div class="w-matchup__name">Lyon</div>
+          <div class="w-matchup__h2h-short">Meilleur bilan H2H global</div>
+        </div>
+        <span class="w-matchup__status w-matchup__status--ahead">Devant</span>
+      </div>
+      <div class="w-matchup__pair" role="listitem">
+        <span class="w-matchup__rank w-matchup__rank--2" aria-label="2e">2</span>
+        <div class="w-matchup__avatar" aria-hidden="true">CO</div>
+        <div class="w-matchup__info">
+          <div class="w-matchup__name">Castres</div>
+          <div class="w-matchup__h2h-short">2V 1N 1D</div>
+        </div>
+        <span class="w-matchup__status w-matchup__status--behind">2e</span>
+      </div>
+      <div class="w-matchup__pair" role="listitem">
+        <span class="w-matchup__rank w-matchup__rank--3" aria-label="3e">3</span>
+        <div class="w-matchup__avatar" aria-hidden="true">SP</div>
+        <div class="w-matchup__info">
+          <div class="w-matchup__name">Pau</div>
+          <div class="w-matchup__h2h-short">1V 0N 3D</div>
+        </div>
+        <span class="w-matchup__status w-matchup__status--behind">3e</span>
+      </div>
+    </div>
+
+    <!-- Detail mode -->
+    <div class="w-detail-grid js-detail" aria-label="Detail des confrontations directes rangs 8-10">
+      <!-- Castres vs Lyon -->
+      <div class="w-detail-pair">
+        <span class="w-detail-team">Castres</span>
+        <div class="w-detail-vs">
+          <div class="w-detail-vnd">
+            <span class="w-detail-vnd__item w-detail-vnd__item--v" title="Victoires">1</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--n" title="Nuls">1</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--zero" title="Defaites">0</span>
+          </div>
+          <span class="w-detail-vs-label">vs</span>
+        </div>
+        <span class="w-detail-team w-detail-team--right">Lyon</span>
+      </div>
+      <!-- Castres vs Pau -->
+      <div class="w-detail-pair">
+        <span class="w-detail-team">Castres</span>
+        <div class="w-detail-vs">
+          <div class="w-detail-vnd">
+            <span class="w-detail-vnd__item w-detail-vnd__item--v" title="Victoires">1</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--zero" title="Nuls">0</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--d" title="Defaites">1</span>
+          </div>
+          <span class="w-detail-vs-label">vs</span>
+        </div>
+        <span class="w-detail-team w-detail-team--right">Pau</span>
+      </div>
+      <!-- Lyon vs Castres -->
+      <div class="w-detail-pair">
+        <span class="w-detail-team">Lyon</span>
+        <div class="w-detail-vs">
+          <div class="w-detail-vnd">
+            <span class="w-detail-vnd__item w-detail-vnd__item--zero" title="Victoires">0</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--n" title="Nuls">1</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--d" title="Defaites">1</span>
+          </div>
+          <span class="w-detail-vs-label">vs</span>
+        </div>
+        <span class="w-detail-team w-detail-team--right">Castres</span>
+      </div>
+      <!-- Lyon vs Pau -->
+      <div class="w-detail-pair">
+        <span class="w-detail-team">Lyon</span>
+        <div class="w-detail-vs">
+          <div class="w-detail-vnd">
+            <span class="w-detail-vnd__item w-detail-vnd__item--v" title="Victoires">2</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--zero" title="Nuls">0</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--zero" title="Defaites">0</span>
+          </div>
+          <span class="w-detail-vs-label">vs</span>
+        </div>
+        <span class="w-detail-team w-detail-team--right">Pau</span>
+      </div>
+      <!-- Pau vs Castres -->
+      <div class="w-detail-pair">
+        <span class="w-detail-team">Pau</span>
+        <div class="w-detail-vs">
+          <div class="w-detail-vnd">
+            <span class="w-detail-vnd__item w-detail-vnd__item--v" title="Victoires">1</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--zero" title="Nuls">0</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--d" title="Defaites">1</span>
+          </div>
+          <span class="w-detail-vs-label">vs</span>
+        </div>
+        <span class="w-detail-team w-detail-team--right">Castres</span>
+      </div>
+      <!-- Pau vs Lyon -->
+      <div class="w-detail-pair">
+        <span class="w-detail-team">Pau</span>
+        <div class="w-detail-vs">
+          <div class="w-detail-vnd">
+            <span class="w-detail-vnd__item w-detail-vnd__item--zero" title="Victoires">0</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--zero" title="Nuls">0</span>
+            <span class="w-detail-vnd__item w-detail-vnd__item--d" title="Defaites">2</span>
+          </div>
+          <span class="w-detail-vs-label">vs</span>
+        </div>
+        <span class="w-detail-team w-detail-team--right">Lyon</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Promoted Team Note -->
+  <div class="w-promoted-note w-anim w-d5" role="note" aria-label="Note sur Vannes, equipe promue">
+    <div class="w-promoted-note__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/></svg>
+    </div>
+    <div class="w-promoted-note__body">
+      <div class="w-promoted-note__title">Vannes <span class="w-badge-promu">Promu</span></div>
+      <div class="w-promoted-note__text">Equipe promue de Pro D2 — confiance plus faible du modele (peu d'historique H2H en TOP 14).</div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <section class="w-empty w-anim w-d6" aria-label="Aucun departage supplementaire">
+    <div class="w-empty__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </div>
+    <div class="w-empty__title">Aucun autre departage</div>
+    <div class="w-empty__text">Pas d'autre egalite de points necessitant un departage par confrontations directes.</div>
+  </section>
+
+  <!-- Bottom Nav -->
+  <nav class="w-bottom-nav" aria-label="Navigation principale">
+    <a href="#" class="w-bottom-nav__item" aria-label="Classement">
+      <svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M3 3l9 4 9-4"/></svg>
+      <span>Classement</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Succes">
+      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <span>Succes</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item w-bottom-nav__item--active" aria-label="Duels" aria-current="page">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Duels</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Oracle">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>Oracle</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Journal">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Journal</span>
+    </a>
+  </nav>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.getElementById('mode-toggle');
+  const simpleEls = document.querySelectorAll('.js-simple');
+  const detailEls = document.querySelectorAll('.js-detail');
+  const labelSimple = document.getElementById('label-simple');
+  const labelDetail = document.getElementById('label-detail');
+
+  function setMode(detailed) {
+    toggle.setAttribute('aria-checked', detailed ? 'true' : 'false');
+    simpleEls.forEach(el => el.style.display = detailed ? 'none' : '');
+    detailEls.forEach(el => el.classList.toggle('is-visible', detailed));
+    labelSimple.classList.toggle('w-toggle-label--active', !detailed);
+    labelDetail.classList.toggle('w-toggle-label--active', detailed);
+  }
+
+  toggle.addEventListener('click', () => {
+    const isDetailed = toggle.getAttribute('aria-checked') === 'true';
+    setMode(!isDetailed);
+  });
+
+  toggle.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const isDetailed = toggle.getAttribute('aria-checked') === 'true';
+      setMode(!isDetailed);
+    }
+  });
+
+  setMode(false);
+});
+</script>
+
+</body>
+</html>

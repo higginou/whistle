@@ -16,9 +16,9 @@ describe('bottom-nav', () => {
     expect(nav.getAttribute('aria-label')).toBe('Navigation principale')
   })
 
-  it('renders 5 tab links', () => {
+  it('renders 6 tab links', () => {
     const links = nav.querySelectorAll('a.w-bottom-nav__item')
-    expect(links).toHaveLength(5)
+    expect(links).toHaveLength(6)
   })
 
   it('marks active tab with aria-current=page', () => {
@@ -29,7 +29,7 @@ describe('bottom-nav', () => {
 
   it('inactive tabs have aria-current=false', () => {
     const inactive = nav.querySelectorAll('[aria-current="false"]')
-    expect(inactive).toHaveLength(4)
+    expect(inactive).toHaveLength(5)
   })
 
   it('update() changes active tab', () => {

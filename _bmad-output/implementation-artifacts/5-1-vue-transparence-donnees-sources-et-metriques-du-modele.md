@@ -1,6 +1,6 @@
 # Story 5.1 : Vue transparence — donnees sources et metriques du modele
 
-Status: review
+Status: done
 
 ui-structural: true
 

@@ -1,0 +1,17 @@
+{
+  "planPath": "docs/superpowers/plans/2026-03-30-bottom-nav.md",
+  "tasks": [
+    { "id": 10, "subject": "Task 1: Design tokens — prune nuit palette", "status": "pending" },
+    { "id": 11, "subject": "Task 2: Store — add activeTab key", "status": "pending", "blockedBy": [10] },
+    { "id": 12, "subject": "Task 3: Bottom nav component", "status": "pending", "blockedBy": [11] },
+    { "id": 13, "subject": "Task 4: Router — tab routing", "status": "pending", "blockedBy": [12] },
+    { "id": 14, "subject": "Task 5: Page layout — app shell", "status": "pending", "blockedBy": [13] },
+    { "id": 15, "subject": "Task 6: Tab placeholder component", "status": "pending", "blockedBy": [14] },
+    { "id": 16, "subject": "Task 7: Succès sheet component", "status": "pending", "blockedBy": [15] },
+    { "id": 17, "subject": "Task 8: Tab projection component", "status": "pending", "blockedBy": [15] },
+    { "id": 18, "subject": "Task 9: Tab donjon shell", "status": "pending", "blockedBy": [15] },
+    { "id": 19, "subject": "Task 10: App.js — tab orchestration + transitions", "status": "pending", "blockedBy": [16, 17, 18] },
+    { "id": 20, "subject": "Task 11: Final integration + smoke test", "status": "pending", "blockedBy": [19] }
+  ],
+  "lastUpdated": "2026-03-30T00:00:00Z"
+}

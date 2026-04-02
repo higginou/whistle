@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duels — Variant C : Liste Accordeon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --w-bg-page: #130d1f;
+  --w-bg-surface: #1a1128;
+  --w-bg-elevated: #231838;
+  --w-bg-inner: #1e1430;
+  --w-accent: #c084fc;
+  --w-violet: #7c3aed;
+  --w-violet-dim: #5b21b6;
+  --w-violet-glow: rgba(124, 58, 237, 0.35);
+  --w-violet-soft: rgba(124, 58, 237, 0.1);
+  --w-green: #22c55e;
+  --w-green-soft: rgba(34, 197, 94, 0.12);
+  --w-orange: #f59e0b;
+  --w-orange-soft: rgba(245, 158, 11, 0.12);
+  --w-red: #dc2626;
+  --w-red-soft: rgba(220, 38, 38, 0.12);
+  --w-gray: #6b6279;
+  --w-gray-soft: rgba(107, 98, 121, 0.1);
+  --w-text: #f0edf6;
+  --w-text-dim: #9d95ab;
+  --w-text-muted: #5e5670;
+  --w-border: rgba(124, 58, 237, 0.15);
+  --w-border-subtle: rgba(255, 255, 255, 0.06);
+  --w-nav-height: 60px;
+  --w-font: 'Nunito', sans-serif;
+  --w-radius: 14px;
+  --w-radius-sm: 10px;
+  --w-radius-xs: 6px;
+}
+
+body {
+  font-family: var(--w-font);
+  background: var(--w-bg-page);
+  color: var(--w-text);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.w-container {
+  width: 100%;
+  max-width: 430px;
+  padding-bottom: calc(var(--w-nav-height) + 24px);
+}
+
+/* ── Header ── */
+.w-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(19, 13, 31, 0.92);
+  border-bottom: 1px solid var(--w-border-subtle);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.w-header__logo {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--w-accent);
+}
+
+.w-header__season {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+}
+
+/* ── Page Title ── */
+.w-page-title {
+  padding: 20px 16px 8px;
+}
+
+.w-page-title__label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--w-text-muted);
+  margin-bottom: 4px;
+}
+
+.w-page-title__heading {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--w-accent), var(--w-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.w-page-title__sub {
+  font-size: 12px;
+  color: var(--w-text-dim);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ── Toggle Simple / Detaille ── */
+.w-toggle-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px 16px;
+}
+
+.w-toggle-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  transition: color 0.2s ease;
+}
+
+.w-toggle-label--active {
+  color: var(--w-accent);
+}
+
+.w-toggle-switch {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  background: var(--w-bg-elevated);
+  border: 1px solid var(--w-border);
+  border-radius: 13px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-toggle-switch[aria-checked="true"] {
+  background: var(--w-violet-dim);
+  border-color: var(--w-violet);
+}
+
+.w-toggle-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--w-text-dim);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;
+}
+
+.w-toggle-switch[aria-checked="true"]::after {
+  transform: translateX(18px);
+  background: var(--w-accent);
+  box-shadow: 0 0 8px var(--w-violet-glow);
+}
+
+.w-toggle-switch:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+/* ── Accordion Group ── */
+.w-accordion {
+  margin: 0 16px 12px;
+}
+
+.w-accordion__trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s ease, border-radius 0.2s ease;
+  text-align: left;
+  color: inherit;
+  font-family: inherit;
+  min-height: 48px;
+}
+
+.w-accordion__trigger:hover {
+  background: var(--w-bg-elevated);
+}
+
+.w-accordion__trigger:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+.w-accordion__trigger[aria-expanded="true"] {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: transparent;
+}
+
+.w-accordion__icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--w-violet-soft);
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.w-accordion__icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--w-accent);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-accordion__info {
+  flex: 1;
+  min-width: 0;
+}
+
+.w-accordion__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--w-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.w-accordion__teams-preview {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.w-accordion__meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.w-accordion__pts {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--w-violet);
+  background: var(--w-violet-soft);
+  border-radius: var(--w-radius-xs);
+  padding: 3px 8px;
+}
+
+.w-accordion__chevron {
+  width: 20px;
+  height: 20px;
+  stroke: var(--w-text-muted);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  flex-shrink: 0;
+}
+
+.w-accordion__trigger[aria-expanded="true"] .w-accordion__chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Accordion Panel ── */
+.w-accordion__panel {
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-top: none;
+  border-radius: 0 0 var(--w-radius) var(--w-radius);
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+}
+
+.w-accordion__panel.is-open {
+  opacity: 1;
+}
+
+.w-accordion__panel-inner {
+  padding: 4px 14px 14px;
+}
+
+/* ── Winner Banner (simple mode) ── */
+.w-winner-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  background: var(--w-green-soft);
+  border-radius: var(--w-radius-sm);
+  border: 1px solid rgba(34, 197, 94, 0.15);
+}
+
+.w-winner-banner__crown {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(34, 197, 94, 0.15);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.w-winner-banner__crown svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--w-green);
+  fill: none;
+  stroke-width: 2;
+}
+
+.w-winner-banner__text {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-green);
+}
+
+.w-winner-banner__name {
+  font-weight: 800;
+}
+
+.w-winner-banner__reason {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(34, 197, 94, 0.7);
+}
+
+/* ── Team List (simple mode) ── */
+.w-team-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.w-team-list__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--w-bg-inner);
+  border-radius: var(--w-radius-xs);
+}
+
+.w-team-list__rank {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.w-team-list__rank--1 {
+  background: var(--w-violet-soft);
+  color: var(--w-accent);
+}
+
+.w-team-list__rank--2 {
+  background: var(--w-gray-soft);
+  color: var(--w-text-dim);
+}
+
+.w-team-list__rank--3 {
+  background: var(--w-gray-soft);
+  color: var(--w-text-muted);
+}
+
+.w-team-list__name {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-text);
+}
+
+.w-team-list__name--favorite {
+  color: var(--w-accent);
+}
+
+.w-team-list__h2h {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  flex-shrink: 0;
+}
+
+/* ── Detail H2H rows ── */
+.w-h2h-detail {
+  display: none;
+}
+
+.w-h2h-detail.is-visible {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.w-h2h-detail__title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--w-text-muted);
+  padding: 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.w-h2h-detail__title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--w-border);
+}
+
+.w-h2h-detail__row {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  background: var(--w-bg-inner);
+  border-radius: var(--w-radius-xs);
+  gap: 8px;
+}
+
+.w-h2h-detail__team {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-text);
+  flex: 1;
+  min-width: 0;
+}
+
+.w-h2h-detail__team--favorite {
+  color: var(--w-accent);
+}
+
+.w-h2h-detail__team--right {
+  text-align: right;
+}
+
+.w-h2h-detail__vs {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--w-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.w-h2h-detail__vnd {
+  display: flex;
+  gap: 3px;
+}
+
+.w-h2h-detail__badge {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 5px;
+}
+
+.w-h2h-detail__badge--v {
+  background: var(--w-green-soft);
+  color: var(--w-green);
+}
+
+.w-h2h-detail__badge--n {
+  background: var(--w-orange-soft);
+  color: var(--w-orange);
+}
+
+.w-h2h-detail__badge--d {
+  background: var(--w-red-soft);
+  color: var(--w-red);
+}
+
+.w-h2h-detail__badge--zero {
+  background: var(--w-gray-soft);
+  color: var(--w-text-muted);
+}
+
+/* ── Badge Promu ── */
+.w-badge-promu {
+  display: inline-flex;
+  align-items: center;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--w-orange);
+  background: var(--w-orange-soft);
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+/* ── Promoted Note ── */
+.w-promoted-note {
+  margin: 4px 16px 12px;
+  padding: 10px 14px;
+  background: var(--w-orange-soft);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--w-radius-sm);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.w-promoted-note__icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245, 158, 11, 0.15);
+  border-radius: 8px;
+}
+
+.w-promoted-note__icon svg {
+  width: 14px;
+  height: 14px;
+  stroke: var(--w-orange);
+  fill: none;
+  stroke-width: 2;
+}
+
+.w-promoted-note__body {
+  flex: 1;
+}
+
+.w-promoted-note__title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-orange);
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.w-promoted-note__text {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(245, 158, 11, 0.7);
+  line-height: 1.4;
+}
+
+/* ── Divider ── */
+.w-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 16px 12px;
+}
+
+.w-divider__line {
+  flex: 1;
+  height: 1px;
+  background: var(--w-border);
+}
+
+.w-divider__text {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--w-text-muted);
+  white-space: nowrap;
+}
+
+/* ── Empty State ── */
+.w-empty {
+  margin: 0 16px 16px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius);
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.w-empty__icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--w-violet-soft);
+  border-radius: 14px;
+  opacity: 0.4;
+}
+
+.w-empty__icon svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--w-accent);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.w-empty__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--w-text-dim);
+  margin-bottom: 4px;
+}
+
+.w-empty__text {
+  font-size: 12px;
+  color: var(--w-text-muted);
+  line-height: 1.5;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+/* ── Bottom Nav ── */
+.w-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: var(--w-nav-height);
+  background: rgba(19, 13, 31, 0.95);
+  border-top: 1px solid var(--w-border-subtle);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 50;
+}
+
+.w-bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  text-decoration: none;
+  padding: 6px 12px;
+  min-width: 48px;
+  min-height: 48px;
+  justify-content: center;
+  border-radius: var(--w-radius-sm);
+  transition: color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-bottom-nav__item--active {
+  color: var(--w-accent);
+}
+
+.w-bottom-nav__item svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-bottom-nav__item:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+/* ── Animations ── */
+@keyframes w-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.w-anim {
+  animation: w-fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.w-d1 { animation-delay: 0.05s; }
+.w-d2 { animation-delay: 0.1s; }
+.w-d3 { animation-delay: 0.15s; }
+.w-d4 { animation-delay: 0.22s; }
+.w-d5 { animation-delay: 0.28s; }
+.w-d6 { animation-delay: 0.34s; }
+.w-d7 { animation-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .w-anim { animation: none; opacity: 1; transform: none; }
+  .w-toggle-switch::after { transition: none; }
+  .w-accordion__panel { transition: none; }
+  .w-accordion__chevron { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="w-container" role="main" aria-label="Duels - Micro-classement des egalites">
+
+  <!-- Header -->
+  <header class="w-header">
+    <span class="w-header__logo">Whistle</span>
+    <span class="w-header__season">2025-26</span>
+  </header>
+
+  <!-- Page Title -->
+  <div class="w-page-title w-anim w-d1">
+    <div class="w-page-title__label">Confrontations directes</div>
+    <h1 class="w-page-title__heading">Duels</h1>
+    <p class="w-page-title__sub">Departage des equipes a egalite de points par les resultats H2H.</p>
+  </div>
+
+  <!-- Toggle -->
+  <div class="w-toggle-bar w-anim w-d2" role="group" aria-label="Mode d'affichage">
+    <span class="w-toggle-label w-toggle-label--active" id="label-simple">Simple</span>
+    <div class="w-toggle-switch"
+         role="switch"
+         tabindex="0"
+         aria-checked="false"
+         aria-labelledby="label-simple label-detail"
+         id="mode-toggle"></div>
+    <span class="w-toggle-label" id="label-detail">Detaille</span>
+  </div>
+
+  <!-- Accordion 1: 2 teams tied (ranks 5-6) -->
+  <div class="w-accordion w-anim w-d3">
+    <button class="w-accordion__trigger js-accordion"
+            aria-expanded="true"
+            aria-controls="panel-1"
+            id="trigger-1">
+      <div class="w-accordion__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="w-accordion__info">
+        <div class="w-accordion__title">Rangs 5-6</div>
+        <div class="w-accordion__teams-preview">La Rochelle, Bordeaux-Begles</div>
+      </div>
+      <div class="w-accordion__meta">
+        <span class="w-accordion__pts">52 pts</span>
+      </div>
+      <svg class="w-accordion__chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="w-accordion__panel is-open" id="panel-1" role="region" aria-labelledby="trigger-1">
+      <div class="w-accordion__panel-inner">
+
+        <!-- Simple mode -->
+        <div class="js-simple">
+          <div class="w-winner-banner" aria-label="La Rochelle classe devant">
+            <div class="w-winner-banner__crown" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="w-winner-banner__text"><span class="w-winner-banner__name">La Rochelle</span> classe devant</div>
+              <div class="w-winner-banner__reason">2V 0N 0D en confrontation directe</div>
+            </div>
+          </div>
+          <div class="w-team-list" role="list">
+            <div class="w-team-list__item" role="listitem">
+              <span class="w-team-list__rank w-team-list__rank--1">1</span>
+              <span class="w-team-list__name w-team-list__name--favorite">La Rochelle</span>
+              <span class="w-team-list__h2h">2V 0D</span>
+            </div>
+            <div class="w-team-list__item" role="listitem">
+              <span class="w-team-list__rank w-team-list__rank--2">2</span>
+              <span class="w-team-list__name">Bordeaux-Begles</span>
+              <span class="w-team-list__h2h">0V 2D</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail mode -->
+        <div class="w-h2h-detail js-detail">
+          <div class="w-h2h-detail__title">Confrontations directes</div>
+          <div class="w-h2h-detail__row">
+            <span class="w-h2h-detail__team w-h2h-detail__team--favorite">La Rochelle</span>
+            <div class="w-h2h-detail__vnd">
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--v" title="Victoires">2</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--zero" title="Nuls">0</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--zero" title="Defaites">0</span>
+            </div>
+            <span class="w-h2h-detail__vs">vs</span>
+            <span class="w-h2h-detail__team w-h2h-detail__team--right">Bordeaux</span>
+          </div>
+          <div class="w-h2h-detail__row">
+            <span class="w-h2h-detail__team">Bordeaux-Begles</span>
+            <div class="w-h2h-detail__vnd">
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--zero" title="Victoires">0</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--zero" title="Nuls">0</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--d" title="Defaites">2</span>
+            </div>
+            <span class="w-h2h-detail__vs">vs</span>
+            <span class="w-h2h-detail__team w-h2h-detail__team--right w-h2h-detail__team--favorite">La Rochelle</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Accordion 2: 3 teams tied (ranks 8-10) -->
+  <div class="w-accordion w-anim w-d4">
+    <button class="w-accordion__trigger js-accordion"
+            aria-expanded="false"
+            aria-controls="panel-2"
+            id="trigger-2">
+      <div class="w-accordion__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </div>
+      <div class="w-accordion__info">
+        <div class="w-accordion__title">Rangs 8-10</div>
+        <div class="w-accordion__teams-preview">Lyon, Castres, Pau</div>
+      </div>
+      <div class="w-accordion__meta">
+        <span class="w-accordion__pts">41 pts</span>
+      </div>
+      <svg class="w-accordion__chevron" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="w-accordion__panel" id="panel-2" role="region" aria-labelledby="trigger-2">
+      <div class="w-accordion__panel-inner">
+
+        <!-- Simple mode -->
+        <div class="js-simple">
+          <div class="w-winner-banner" aria-label="Lyon classe devant">
+            <div class="w-winner-banner__crown" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14l-5-4.87 6.91-1.01L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="w-winner-banner__text"><span class="w-winner-banner__name">Lyon</span> classe devant</div>
+              <div class="w-winner-banner__reason">Meilleur bilan H2H global</div>
+            </div>
+          </div>
+          <div class="w-team-list" role="list">
+            <div class="w-team-list__item" role="listitem">
+              <span class="w-team-list__rank w-team-list__rank--1">1</span>
+              <span class="w-team-list__name">Lyon</span>
+              <span class="w-team-list__h2h">2V 1N 1D</span>
+            </div>
+            <div class="w-team-list__item" role="listitem">
+              <span class="w-team-list__rank w-team-list__rank--2">2</span>
+              <span class="w-team-list__name">Castres</span>
+              <span class="w-team-list__h2h">2V 1N 1D</span>
+            </div>
+            <div class="w-team-list__item" role="listitem">
+              <span class="w-team-list__rank w-team-list__rank--3">3</span>
+              <span class="w-team-list__name">Pau</span>
+              <span class="w-team-list__h2h">1V 0N 3D</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail mode -->
+        <div class="w-h2h-detail js-detail">
+          <div class="w-h2h-detail__title">Toutes les confrontations</div>
+          <!-- Castres vs Lyon -->
+          <div class="w-h2h-detail__row">
+            <span class="w-h2h-detail__team">Castres</span>
+            <div class="w-h2h-detail__vnd">
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--v" title="Victoires">1</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--n" title="Nuls">1</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--zero" title="Defaites">0</span>
+            </div>
+            <span class="w-h2h-detail__vs">vs</span>
+            <span class="w-h2h-detail__team w-h2h-detail__team--right">Lyon</span>
+          </div>
+          <!-- Castres vs Pau -->
+          <div class="w-h2h-detail__row">
+            <span class="w-h2h-detail__team">Castres</span>
+            <div class="w-h2h-detail__vnd">
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--v" title="Victoires">1</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--zero" title="Nuls">0</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--d" title="Defaites">1</span>
+            </div>
+            <span class="w-h2h-detail__vs">vs</span>
+            <span class="w-h2h-detail__team w-h2h-detail__team--right">Pau</span>
+          </div>
+          <!-- Lyon vs Castres -->
+          <div class="w-h2h-detail__row">
+            <span class="w-h2h-detail__team">Lyon</span>
+            <div class="w-h2h-detail__vnd">
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--zero" title="Victoires">0</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--n" title="Nuls">1</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--d" title="Defaites">1</span>
+            </div>
+            <span class="w-h2h-detail__vs">vs</span>
+            <span class="w-h2h-detail__team w-h2h-detail__team--right">Castres</span>
+          </div>
+          <!-- Lyon vs Pau -->
+          <div class="w-h2h-detail__row">
+            <span class="w-h2h-detail__team">Lyon</span>
+            <div class="w-h2h-detail__vnd">
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--v" title="Victoires">2</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--zero" title="Nuls">0</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--zero" title="Defaites">0</span>
+            </div>
+            <span class="w-h2h-detail__vs">vs</span>
+            <span class="w-h2h-detail__team w-h2h-detail__team--right">Pau</span>
+          </div>
+          <!-- Pau vs Castres -->
+          <div class="w-h2h-detail__row">
+            <span class="w-h2h-detail__team">Pau</span>
+            <div class="w-h2h-detail__vnd">
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--v" title="Victoires">1</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--zero" title="Nuls">0</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--d" title="Defaites">1</span>
+            </div>
+            <span class="w-h2h-detail__vs">vs</span>
+            <span class="w-h2h-detail__team w-h2h-detail__team--right">Castres</span>
+          </div>
+          <!-- Pau vs Lyon -->
+          <div class="w-h2h-detail__row">
+            <span class="w-h2h-detail__team">Pau</span>
+            <div class="w-h2h-detail__vnd">
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--zero" title="Victoires">0</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--zero" title="Nuls">0</span>
+              <span class="w-h2h-detail__badge w-h2h-detail__badge--d" title="Defaites">2</span>
+            </div>
+            <span class="w-h2h-detail__vs">vs</span>
+            <span class="w-h2h-detail__team w-h2h-detail__team--right">Lyon</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Promoted Team Note -->
+  <div class="w-promoted-note w-anim w-d5" role="note" aria-label="Note sur Vannes, equipe promue">
+    <div class="w-promoted-note__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/></svg>
+    </div>
+    <div class="w-promoted-note__body">
+      <div class="w-promoted-note__title">Vannes <span class="w-badge-promu">Promu</span></div>
+      <div class="w-promoted-note__text">Equipe promue de Pro D2 — confiance plus faible du modele (peu d'historique H2H en TOP 14).</div>
+    </div>
+  </div>
+
+  <!-- Divider + Empty State -->
+  <div class="w-divider w-anim w-d6">
+    <span class="w-divider__line" aria-hidden="true"></span>
+    <span class="w-divider__text">Autres egalites</span>
+    <span class="w-divider__line" aria-hidden="true"></span>
+  </div>
+
+  <section class="w-empty w-anim w-d7" aria-label="Aucun departage supplementaire">
+    <div class="w-empty__icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </div>
+    <div class="w-empty__title">Aucun autre departage</div>
+    <div class="w-empty__text">Toutes les autres positions sont departageees sans recours aux confrontations directes.</div>
+  </section>
+
+  <!-- Bottom Nav -->
+  <nav class="w-bottom-nav" aria-label="Navigation principale">
+    <a href="#" class="w-bottom-nav__item" aria-label="Classement">
+      <svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M3 3l9 4 9-4"/></svg>
+      <span>Classement</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Succes">
+      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <span>Succes</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item w-bottom-nav__item--active" aria-label="Duels" aria-current="page">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Duels</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Oracle">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      <span>Oracle</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Journal">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Journal</span>
+    </a>
+  </nav>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // ── Toggle logic ──
+  const toggle = document.getElementById('mode-toggle');
+  const simpleEls = document.querySelectorAll('.js-simple');
+  const detailEls = document.querySelectorAll('.js-detail');
+  const labelSimple = document.getElementById('label-simple');
+  const labelDetail = document.getElementById('label-detail');
+
+  function setMode(detailed) {
+    toggle.setAttribute('aria-checked', detailed ? 'true' : 'false');
+    simpleEls.forEach(el => el.style.display = detailed ? 'none' : '');
+    detailEls.forEach(el => el.classList.toggle('is-visible', detailed));
+    labelSimple.classList.toggle('w-toggle-label--active', !detailed);
+    labelDetail.classList.toggle('w-toggle-label--active', detailed);
+  }
+
+  toggle.addEventListener('click', () => {
+    const isDetailed = toggle.getAttribute('aria-checked') === 'true';
+    setMode(!isDetailed);
+  });
+
+  toggle.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      const isDetailed = toggle.getAttribute('aria-checked') === 'true';
+      setMode(!isDetailed);
+    }
+  });
+
+  setMode(false);
+
+  // ── Accordion logic ──
+  const triggers = document.querySelectorAll('.js-accordion');
+
+  triggers.forEach(trigger => {
+    const panelId = trigger.getAttribute('aria-controls');
+    const panel = document.getElementById(panelId);
+
+    // Set initial heights
+    if (trigger.getAttribute('aria-expanded') === 'true') {
+      panel.style.maxHeight = panel.scrollHeight + 'px';
+    }
+
+    trigger.addEventListener('click', () => {
+      const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+
+      if (isExpanded) {
+        // Collapse
+        trigger.setAttribute('aria-expanded', 'false');
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+        requestAnimationFrame(() => {
+          panel.style.maxHeight = '0';
+          panel.classList.remove('is-open');
+        });
+      } else {
+        // Expand
+        trigger.setAttribute('aria-expanded', 'true');
+        panel.classList.add('is-open');
+        panel.style.maxHeight = panel.scrollHeight + 'px';
+        panel.addEventListener('transitionend', function handler() {
+          panel.removeEventListener('transitionend', handler);
+          // Allow dynamic content height after animation
+          if (trigger.getAttribute('aria-expanded') === 'true') {
+            panel.style.maxHeight = 'none';
+          }
+        });
+      }
+    });
+  });
+
+  // Re-measure panels when mode toggles (content height changes)
+  toggle.addEventListener('click', () => {
+    setTimeout(() => {
+      triggers.forEach(trigger => {
+        if (trigger.getAttribute('aria-expanded') === 'true') {
+          const panelId = trigger.getAttribute('aria-controls');
+          const panel = document.getElementById(panelId);
+          panel.style.maxHeight = 'none';
+        }
+      });
+    }, 50);
+  });
+});
+</script>
+
+</body>
+</html>

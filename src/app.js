@@ -21,6 +21,7 @@ import { render as renderPlaceholder } from './components/tab-placeholder.js'
 import { render as renderDonjon } from './components/tab-donjon.js'
 import { render as renderOracle } from './components/tab-oracle.js'
 import { render as renderDuels } from './components/tab-duels.js'
+import { render as renderSimulateur } from './components/tab-simulateur.js'
 import { computeAchievements } from './components/achievement-card.js'
 
 const appEl = document.querySelector('#app')
@@ -91,6 +92,9 @@ function renderTabContent(tabId, container) {
       break
     case 'oracle':
       if (season) renderOracle(container, season)
+      break
+    case 'simulateur':
+      if (season) renderSimulateur(container, season)
       break
   }
 }

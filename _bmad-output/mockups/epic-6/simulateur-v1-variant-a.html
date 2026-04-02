@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulateur — Variant A : Cards empilées</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --w-bg-page: #130d1f;
+  --w-bg-surface: #1a1128;
+  --w-bg-elevated: #231838;
+  --w-bg-row-alt: rgba(124, 58, 237, 0.04);
+  --w-accent: #c084fc;
+  --w-violet: #7c3aed;
+  --w-violet-dim: #5b21b6;
+  --w-violet-glow: rgba(124, 58, 237, 0.35);
+  --w-violet-soft: rgba(124, 58, 237, 0.1);
+  --w-green: #22c55e;
+  --w-green-soft: rgba(34, 197, 94, 0.12);
+  --w-orange: #f59e0b;
+  --w-orange-soft: rgba(245, 158, 11, 0.12);
+  --w-red: #dc2626;
+  --w-red-soft: rgba(220, 38, 38, 0.12);
+  --w-gray: #6b6279;
+  --w-gray-soft: rgba(107, 98, 121, 0.12);
+  --w-text: #f0edf6;
+  --w-text-dim: #9d95ab;
+  --w-text-muted: #5e5670;
+  --w-border: rgba(124, 58, 237, 0.15);
+  --w-border-subtle: rgba(255, 255, 255, 0.06);
+  --w-nav-height: 60px;
+  --w-font: 'Nunito', sans-serif;
+  --w-radius: 12px;
+  --w-radius-sm: 8px;
+  --w-radius-xs: 6px;
+}
+
+body {
+  font-family: var(--w-font);
+  background: var(--w-bg-page);
+  color: var(--w-text);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.w-container {
+  width: 100%;
+  max-width: 430px;
+  padding-bottom: calc(var(--w-nav-height) + 24px);
+}
+
+/* ── Header ── */
+.w-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(19, 13, 31, 0.92);
+  border-bottom: 1px solid var(--w-border-subtle);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.w-header__logo {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--w-accent);
+}
+
+.w-header__season {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+}
+
+/* ── Page Title ── */
+.w-page-title {
+  padding: 20px 16px 8px;
+}
+
+.w-page-title__label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--w-text-muted);
+  margin-bottom: 4px;
+}
+
+.w-page-title__heading {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--w-accent), var(--w-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.w-page-title__sub {
+  font-size: 12px;
+  color: var(--w-text-dim);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ── Counter Bar ── */
+.w-sim-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  margin: 8px 16px 12px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius-sm);
+}
+
+.w-sim-bar__count {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-text);
+}
+
+.w-sim-bar__count span {
+  color: var(--w-accent);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.w-sim-bar__reset {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius-xs);
+  padding: 6px 12px;
+  font-family: var(--w-font);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-text-muted);
+  cursor: pointer;
+  min-height: 36px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-sim-bar__reset:hover,
+.w-sim-bar__reset:focus-visible {
+  color: var(--w-red);
+  border-color: var(--w-red);
+}
+
+.w-sim-bar__reset:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+.w-sim-bar__reset svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* ── Journée Label ── */
+.w-journee {
+  padding: 8px 16px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--w-text-muted);
+}
+
+/* ── Match Card ── */
+.w-match-card {
+  margin: 0 16px 12px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.w-match-card.is-selected {
+  border-color: var(--w-violet);
+}
+
+.w-match-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 14px 10px;
+}
+
+.w-match-card__teams {
+  flex: 1;
+}
+
+.w-match-card__versus {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--w-text);
+  line-height: 1.3;
+}
+
+.w-match-card__versus .w-team--favorite {
+  color: var(--w-accent);
+}
+
+.w-match-card__versus .w-vs {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  margin: 0 4px;
+}
+
+.w-match-card__difficulty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.w-match-card__diff-label {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--w-text-muted);
+}
+
+.w-match-card__diff-bar {
+  width: 48px;
+  height: 4px;
+  background: var(--w-bg-elevated);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.w-match-card__diff-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+/* ── Result Selector (3 pills) ── */
+.w-result-selector {
+  display: flex;
+  gap: 6px;
+  padding: 0 14px 14px;
+}
+
+.w-result-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 8px 4px;
+  border-radius: var(--w-radius-sm);
+  border: 1px solid var(--w-border);
+  background: var(--w-bg-elevated);
+  cursor: pointer;
+  font-family: var(--w-font);
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-result-btn:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+.w-result-btn:active {
+  transform: scale(0.96);
+}
+
+.w-result-btn__label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-text-dim);
+  transition: color 0.15s ease;
+}
+
+.w-result-btn__pts {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  margin-top: 2px;
+  transition: color 0.15s ease;
+}
+
+/* Selected states */
+.w-result-btn.is-selected-home {
+  background: var(--w-green-soft);
+  border-color: var(--w-green);
+}
+.w-result-btn.is-selected-home .w-result-btn__label { color: var(--w-green); }
+.w-result-btn.is-selected-home .w-result-btn__pts { color: var(--w-green); }
+
+.w-result-btn.is-selected-draw {
+  background: var(--w-orange-soft);
+  border-color: var(--w-orange);
+}
+.w-result-btn.is-selected-draw .w-result-btn__label { color: var(--w-orange); }
+.w-result-btn.is-selected-draw .w-result-btn__pts { color: var(--w-orange); }
+
+.w-result-btn.is-selected-away {
+  background: var(--w-violet-soft);
+  border-color: var(--w-violet);
+}
+.w-result-btn.is-selected-away .w-result-btn__label { color: var(--w-accent); }
+.w-result-btn.is-selected-away .w-result-btn__pts { color: var(--w-accent); }
+
+/* ── Bonus Toggles ── */
+.w-bonus-area {
+  padding: 0 14px 14px;
+  display: none;
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.w-bonus-area.is-visible {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.w-bonus-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+}
+
+.w-bonus-row + .w-bonus-row {
+  border-top: 1px solid var(--w-border-subtle);
+}
+
+.w-bonus-row__label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.w-bonus-row__name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-text-dim);
+}
+
+.w-bonus-row__team {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+}
+
+.w-bonus-row__pts {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--w-accent);
+  padding: 2px 8px;
+  background: var(--w-violet-soft);
+  border-radius: var(--w-radius-xs);
+}
+
+/* Toggle switch */
+.w-toggle-sm {
+  position: relative;
+  width: 40px;
+  height: 24px;
+  background: var(--w-bg-elevated);
+  border: 1px solid var(--w-border);
+  border-radius: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  min-width: 40px;
+  min-height: 24px;
+}
+
+.w-toggle-sm::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--w-text-muted);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.2s ease;
+}
+
+.w-toggle-sm[aria-checked="true"] {
+  background: var(--w-violet-dim);
+  border-color: var(--w-violet);
+}
+
+.w-toggle-sm[aria-checked="true"]::after {
+  transform: translateX(16px);
+  background: var(--w-accent);
+  box-shadow: 0 0 6px var(--w-violet-glow);
+}
+
+.w-toggle-sm:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+/* ── Bottom Nav ── */
+.w-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: var(--w-nav-height);
+  background: rgba(19, 13, 31, 0.95);
+  border-top: 1px solid var(--w-border-subtle);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 50;
+}
+
+.w-bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  text-decoration: none;
+  padding: 6px 12px;
+  min-width: 48px;
+  min-height: 48px;
+  justify-content: center;
+  border-radius: var(--w-radius-sm);
+  transition: color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-bottom-nav__item--active {
+  color: var(--w-accent);
+}
+
+.w-bottom-nav__item svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-bottom-nav__item:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+/* ── Animations ── */
+@keyframes w-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.w-anim {
+  animation: w-fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.w-d1 { animation-delay: 0.05s; }
+.w-d2 { animation-delay: 0.1s; }
+.w-d3 { animation-delay: 0.15s; }
+.w-d4 { animation-delay: 0.2s; }
+.w-d5 { animation-delay: 0.25s; }
+.w-d6 { animation-delay: 0.3s; }
+.w-d7 { animation-delay: 0.35s; }
+.w-d8 { animation-delay: 0.4s; }
+.w-d9 { animation-delay: 0.45s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .w-anim { animation: none; opacity: 1; transform: none; }
+  .w-bonus-area { transition: none; }
+  .w-result-btn { transition: none; }
+  .w-toggle-sm::after { transition: none; }
+  .w-match-card { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="w-container" role="main" aria-label="Simulateur de resultats">
+
+  <!-- Header -->
+  <header class="w-header">
+    <span class="w-header__logo">Whistle</span>
+    <span class="w-header__season">2025-26</span>
+  </header>
+
+  <!-- Page Title -->
+  <div class="w-page-title w-anim w-d1">
+    <div class="w-page-title__label">Scenarios what-if</div>
+    <h1 class="w-page-title__heading">Simulateur</h1>
+    <p class="w-page-title__sub">Modifiez les resultats des matchs a venir pour explorer l'impact sur le classement.</p>
+  </div>
+
+  <!-- Counter Bar -->
+  <div class="w-sim-bar w-anim w-d2" role="status" aria-live="polite" aria-label="Compteur de simulations">
+    <div class="w-sim-bar__count"><span id="sim-count">0</span> match(s) simule(s)</div>
+    <button class="w-sim-bar__reset" id="reset-btn" aria-label="Reinitialiser toutes les selections">
+      <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 1 3 6.7"/><polyline points="3 22 3 16 9 16"/></svg>
+      Reinitialiser
+    </button>
+  </div>
+
+  <!-- Journée Label -->
+  <div class="w-journee w-anim w-d3">Journee 21</div>
+
+  <!-- Match Cards (generated by JS) -->
+  <div id="matches-container"></div>
+
+  <!-- Bottom Nav -->
+  <nav class="w-bottom-nav" aria-label="Navigation principale">
+    <a href="#" class="w-bottom-nav__item" aria-label="Classement">
+      <svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M3 3l9 4 9-4"/></svg>
+      <span>Classement</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Succes">
+      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <span>Succes</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Duels">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Duels</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item w-bottom-nav__item--active" aria-label="Simulateur" aria-current="page">
+      <svg viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+      <span>Simul.</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Journal">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Journal</span>
+    </a>
+  </nav>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const matches = [
+    { home: 'Toulouse', away: 'La Rochelle', diff: 0.82, favHome: false, favAway: true },
+    { home: 'Bordeaux-Begles', away: 'Racing 92', diff: 0.55, favHome: false, favAway: false },
+    { home: 'Toulon', away: 'Clermont', diff: 0.48, favHome: false, favAway: false },
+    { home: 'Castres', away: 'Stade Francais', diff: 0.35, favHome: false, favAway: false },
+    { home: 'Lyon', away: 'Pau', diff: 0.42, favHome: false, favAway: false },
+    { home: 'Bayonne', away: 'Perpignan', diff: 0.38, favHome: false, favAway: false },
+    { home: 'Vannes', away: 'Montpellier', diff: 0.61, favHome: false, favAway: false }
+  ];
+
+  const container = document.getElementById('matches-container');
+  const countEl = document.getElementById('sim-count');
+  const resetBtn = document.getElementById('reset-btn');
+
+  // State
+  const state = matches.map(() => ({ result: null, bonusOff: false, bonusDef: false }));
+
+  function getDiffColor(d) {
+    if (d >= 0.7) return 'var(--w-red)';
+    if (d >= 0.5) return 'var(--w-orange)';
+    return 'var(--w-green)';
+  }
+
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function render() {
+    container.innerHTML = '';
+    matches.forEach((m, i) => {
+      const s = state[i];
+      const delay = i + 3;
+      const card = document.createElement('div');
+      card.className = 'w-match-card w-anim w-d' + Math.min(delay, 9) + (s.result ? ' is-selected' : '');
+      card.setAttribute('role', 'group');
+      card.setAttribute('aria-label', esc(m.home) + ' contre ' + esc(m.away));
+
+      const homeCls = m.favHome ? ' w-team--favorite' : '';
+      const awayCls = m.favAway ? ' w-team--favorite' : '';
+
+      let bonusHTML = '';
+      if (s.result) {
+        const winnerIsHome = s.result === 'home';
+        const winnerIsAway = s.result === 'away';
+        const isDraw = s.result === 'draw';
+
+        // Bonus offensif: available for winner (or both on draw)
+        let bonusOffTeam = '';
+        if (isDraw) bonusOffTeam = esc(m.home) + ' ou ' + esc(m.away);
+        else if (winnerIsHome) bonusOffTeam = esc(m.home);
+        else bonusOffTeam = esc(m.away);
+
+        // Bonus defensif: only for loser
+        let bonusDefTeam = '';
+        let showDef = false;
+        if (winnerIsHome) { bonusDefTeam = esc(m.away); showDef = true; }
+        else if (winnerIsAway) { bonusDefTeam = esc(m.home); showDef = true; }
+
+        bonusHTML = '<div class="w-bonus-area is-visible">';
+        bonusHTML += '<div class="w-bonus-row">';
+        bonusHTML += '<div class="w-bonus-row__label"><span class="w-bonus-row__name">Bonus offensif</span><span class="w-bonus-row__team">' + bonusOffTeam + '</span></div>';
+        bonusHTML += '<span class="w-bonus-row__pts">+1 pt</span>';
+        bonusHTML += '<div class="w-toggle-sm" role="switch" tabindex="0" aria-checked="' + s.bonusOff + '" aria-label="Bonus offensif" data-match="' + i + '" data-bonus="off"></div>';
+        bonusHTML += '</div>';
+
+        if (showDef) {
+          bonusHTML += '<div class="w-bonus-row">';
+          bonusHTML += '<div class="w-bonus-row__label"><span class="w-bonus-row__name">Bonus defensif</span><span class="w-bonus-row__team">' + bonusDefTeam + ' (ecart ≤7 pts)</span></div>';
+          bonusHTML += '<span class="w-bonus-row__pts">+1 pt</span>';
+          bonusHTML += '<div class="w-toggle-sm" role="switch" tabindex="0" aria-checked="' + s.bonusDef + '" aria-label="Bonus defensif" data-match="' + i + '" data-bonus="def"></div>';
+          bonusHTML += '</div>';
+        }
+
+        bonusHTML += '</div>';
+      }
+
+      card.innerHTML =
+        '<div class="w-match-card__header">' +
+          '<div class="w-match-card__teams">' +
+            '<div class="w-match-card__versus"><span class="' + homeCls.trim() + '">' + esc(m.home) + '</span><span class="w-vs"> vs </span><span class="' + awayCls.trim() + '">' + esc(m.away) + '</span></div>' +
+          '</div>' +
+          '<div class="w-match-card__difficulty">' +
+            '<span class="w-match-card__diff-label">Difficulte</span>' +
+            '<div class="w-match-card__diff-bar"><div class="w-match-card__diff-fill" style="width:' + (m.diff * 100) + '%;background:' + getDiffColor(m.diff) + '"></div></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="w-result-selector" role="radiogroup" aria-label="Resultat du match">' +
+          '<button class="w-result-btn' + (s.result === 'home' ? ' is-selected-home' : '') + '" data-match="' + i + '" data-result="home" role="radio" aria-checked="' + (s.result === 'home') + '" aria-label="Victoire domicile, 4 points">' +
+            '<span class="w-result-btn__label">Dom</span><span class="w-result-btn__pts">4 pts</span>' +
+          '</button>' +
+          '<button class="w-result-btn' + (s.result === 'draw' ? ' is-selected-draw' : '') + '" data-match="' + i + '" data-result="draw" role="radio" aria-checked="' + (s.result === 'draw') + '" aria-label="Match nul, 2 points chacun">' +
+            '<span class="w-result-btn__label">Nul</span><span class="w-result-btn__pts">2 pts</span>' +
+          '</button>' +
+          '<button class="w-result-btn' + (s.result === 'away' ? ' is-selected-away' : '') + '" data-match="' + i + '" data-result="away" role="radio" aria-checked="' + (s.result === 'away') + '" aria-label="Victoire exterieur, 4 points">' +
+            '<span class="w-result-btn__label">Ext</span><span class="w-result-btn__pts">4 pts</span>' +
+          '</button>' +
+        '</div>' +
+        bonusHTML;
+
+      container.appendChild(card);
+    });
+
+    // Update counter
+    const simulated = state.filter(s => s.result !== null).length;
+    countEl.textContent = simulated;
+
+    // Bind events
+    container.querySelectorAll('.w-result-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.dataset.match);
+        const result = btn.dataset.result;
+        if (state[idx].result === result) {
+          state[idx].result = null;
+          state[idx].bonusOff = false;
+          state[idx].bonusDef = false;
+        } else {
+          state[idx].result = result;
+          state[idx].bonusOff = false;
+          state[idx].bonusDef = false;
+        }
+        render();
+      });
+    });
+
+    container.querySelectorAll('.w-toggle-sm').forEach(tog => {
+      function toggle() {
+        const idx = parseInt(tog.dataset.match);
+        const bonus = tog.dataset.bonus;
+        if (bonus === 'off') state[idx].bonusOff = !state[idx].bonusOff;
+        else state[idx].bonusDef = !state[idx].bonusDef;
+        tog.setAttribute('aria-checked', bonus === 'off' ? state[idx].bonusOff : state[idx].bonusDef);
+        render();
+      }
+      tog.addEventListener('click', toggle);
+      tog.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    });
+  }
+
+  resetBtn.addEventListener('click', () => {
+    state.forEach(s => { s.result = null; s.bonusOff = false; s.bonusDef = false; });
+    render();
+  });
+
+  render();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,374 @@
+/* ── Tab Simulateur : Selection de resultats ── */
+
+.w-sim-container {
+  padding-bottom: 24px;
+}
+
+.w-sim-header {
+  padding: 20px 16px 8px;
+  text-align: center;
+}
+
+.w-sim-header__label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--w-text-muted);
+  margin-bottom: 4px;
+}
+
+.w-sim-header__heading {
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--w-accent), var(--w-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.w-sim-header__sub {
+  font-size: 12px;
+  color: var(--w-text-dim);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ── Counter + Reset Bar ── */
+
+.w-sim-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  margin: 8px 16px 12px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius-sm);
+}
+
+.w-sim-bar__count {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--w-text);
+}
+
+.w-sim-bar__count-num {
+  color: var(--w-accent);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.w-sim-bar__reset {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius-xs);
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-text-muted);
+  cursor: pointer;
+  min-height: 36px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-sim-bar__reset:hover,
+.w-sim-bar__reset:focus-visible {
+  color: var(--w-red);
+  border-color: var(--w-red);
+}
+
+.w-sim-bar__reset:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+.w-sim-bar__reset svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* ── Journee Label ── */
+
+.w-journee {
+  padding: 8px 16px 4px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--w-text-muted);
+}
+
+/* ── Duel Card (Gaming) ── */
+
+.w-duel {
+  margin: 0 16px 14px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius);
+  overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.w-duel.is-selected {
+  border-color: var(--w-violet);
+}
+
+.w-duel__ribbon {
+  height: 3px;
+  transition: background 0.2s ease;
+}
+
+.w-duel__arena {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 12px 8px;
+  gap: 0;
+}
+
+/* Team zone (tappable) */
+
+.w-duel__team-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 4px;
+  border-radius: var(--w-radius-sm);
+  cursor: pointer;
+  min-height: 80px;
+  transition: background 0.15s ease, transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-duel__team-zone:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+.w-duel__team-zone:active {
+  transform: scale(0.96);
+}
+
+.w-duel__initials {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  background: var(--w-bg-elevated);
+  color: var(--w-text-dim);
+  border: 2px solid var(--w-border);
+  margin-bottom: 6px;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.w-duel__team-name {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--w-text-dim);
+  text-align: center;
+  line-height: 1.2;
+  transition: color 0.15s ease;
+}
+
+.w-duel__team-name.w-team--favorite {
+  color: var(--w-accent);
+}
+
+/* Selected states */
+
+.w-duel__team-zone.is-winner .w-duel__initials {
+  background: var(--w-green-soft);
+  border-color: var(--w-green);
+  color: var(--w-green);
+}
+
+.w-duel__team-zone.is-winner .w-duel__team-name {
+  color: var(--w-green);
+}
+
+.w-duel__team-zone.is-loser .w-duel__initials {
+  background: var(--w-red-soft);
+  border-color: rgba(220, 38, 38, 0.3);
+  color: var(--w-red);
+}
+
+/* Center VS zone */
+
+.w-duel__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 4px;
+}
+
+.w-duel__vs-badge {
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--w-text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.w-duel__draw-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 32px;
+  border-radius: var(--w-radius-xs);
+  border: 1px solid var(--w-border);
+  background: var(--w-bg-elevated);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--w-text-muted);
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease, transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-duel__draw-btn:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+.w-duel__draw-btn:active {
+  transform: scale(0.93);
+}
+
+.w-duel__draw-btn.is-draw {
+  background: var(--w-orange-soft);
+  border-color: var(--w-orange);
+  color: var(--w-orange);
+}
+
+.w-duel__diff {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+}
+
+/* ── Bonus Strip ── */
+
+.w-bonus-strip {
+  display: none;
+  padding: 8px 12px 10px;
+  border-top: 1px solid var(--w-border-subtle);
+  gap: 8px;
+  justify-content: center;
+}
+
+.w-bonus-strip.is-visible {
+  display: flex;
+}
+
+.w-bonus-tag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--w-border);
+  background: var(--w-bg-elevated);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--w-text-muted);
+  transition: background 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+  min-height: 32px;
+}
+
+.w-bonus-tag:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+.w-bonus-tag svg {
+  width: 13px;
+  height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.w-bonus-tag.is-active {
+  background: var(--w-violet-soft);
+  border-color: var(--w-violet);
+  color: var(--w-accent);
+}
+
+.w-bonus-tag--def.is-active {
+  background: var(--w-orange-soft);
+  border-color: var(--w-orange);
+  color: var(--w-orange);
+}
+
+/* ── Empty State ── */
+
+.w-sim-empty {
+  margin: 0 16px 16px;
+  background: var(--w-bg-surface);
+  border: 1px solid var(--w-border);
+  border-radius: var(--w-radius);
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.w-sim-empty__icon {
+  margin-bottom: 12px;
+  opacity: 0.35;
+}
+
+.w-sim-empty__icon svg {
+  width: 40px;
+  height: 40px;
+  stroke: var(--w-text-dim);
+  fill: none;
+  stroke-width: 1.5;
+}
+
+.w-sim-empty__title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--w-text-dim);
+  margin-bottom: 4px;
+}
+
+.w-sim-empty__text {
+  font-size: 12px;
+  color: var(--w-text-muted);
+  line-height: 1.5;
+}
+
+/* ── Reduced Motion ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .w-duel,
+  .w-duel__team-zone,
+  .w-duel__initials,
+  .w-duel__draw-btn,
+  .w-bonus-tag,
+  .w-duel__ribbon,
+  .w-sim-bar__reset,
+  .w-duel__team-name {
+    transition: none;
+  }
+}

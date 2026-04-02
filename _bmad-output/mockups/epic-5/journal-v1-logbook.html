@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Journal de l'Oracle — Variante B: Grimoire</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --w-oracle-bg: #0b0a12;
+  --w-oracle-bg-elevated: #13111d;
+  --w-oracle-violet: #7c3aed;
+  --w-oracle-violet-dim: #5b21b6;
+  --w-oracle-violet-glow: rgba(124, 58, 237, 0.45);
+  --w-oracle-violet-soft: rgba(124, 58, 237, 0.12);
+  --w-oracle-green: #22c55e;
+  --w-oracle-green-glow: rgba(34, 197, 94, 0.4);
+  --w-oracle-green-soft: rgba(34, 197, 94, 0.12);
+  --w-oracle-orange: #f59e0b;
+  --w-oracle-orange-glow: rgba(245, 158, 11, 0.35);
+  --w-oracle-orange-soft: rgba(245, 158, 11, 0.12);
+  --w-oracle-gray-soft: rgba(107, 98, 121, 0.15);
+  --w-oracle-gold: #fbbf24;
+  --w-oracle-gold-glow: rgba(251, 191, 36, 0.45);
+  --w-oracle-gold-dim: rgba(251, 191, 36, 0.15);
+  --w-oracle-text: #f0edf6;
+  --w-oracle-text-dim: #9d95ab;
+  --w-oracle-text-muted: #6b6279;
+  --w-oracle-border: rgba(124, 58, 237, 0.18);
+  --w-oracle-font: 'Nunito', sans-serif;
+  --w-oracle-font-serif: 'Crimson Pro', serif;
+
+  /* Grimoire-specific */
+  --w-grimoire-parchment: #1a1726;
+  --w-grimoire-parchment-light: #201c2e;
+  --w-grimoire-ink: #c8bfda;
+  --w-grimoire-edge: rgba(251, 191, 36, 0.08);
+  --w-grimoire-fold: rgba(251, 191, 36, 0.04);
+}
+
+body {
+  font-family: var(--w-oracle-font);
+  background: var(--w-oracle-bg);
+  color: var(--w-oracle-text);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.w-oracle-container {
+  width: 100%;
+  max-width: 430px;
+  padding: 16px 16px 40px;
+}
+
+.w-oracle-journal-context {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--w-oracle-text-muted);
+  font-size: 12px;
+  border-bottom: 1px solid var(--w-oracle-border);
+  margin-bottom: 24px;
+}
+
+/* ── Toggle Button ── */
+.w-oracle-journal-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, var(--w-grimoire-parchment), var(--w-grimoire-parchment-light));
+  border: 1px solid var(--w-grimoire-edge);
+  border-bottom: 2px solid rgba(251, 191, 36, 0.12);
+  border-radius: 12px;
+  color: var(--w-oracle-gold);
+  font-family: var(--w-oracle-font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  font-style: italic;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle parchment texture via noise */
+.w-oracle-journal-toggle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='256' height='256' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.w-oracle-journal-toggle:hover {
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
+.w-oracle-journal-toggle:active {
+  transform: scale(0.97);
+}
+
+.w-oracle-journal-toggle:focus-visible {
+  outline: 2px solid var(--w-oracle-violet);
+  outline-offset: 2px;
+}
+
+.w-oracle-journal-toggle-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--w-oracle-gold);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.w-oracle-journal-toggle[aria-expanded="true"] .w-oracle-journal-toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* ── Journal Content ── */
+.w-oracle-journal-content {
+  overflow: hidden;
+}
+
+.w-oracle-journal-content[hidden] {
+  display: none;
+}
+
+/* ── Grimoire Header ── */
+.w-oracle-journal-grimoire-header {
+  text-align: center;
+  margin: 20px 0 16px;
+  position: relative;
+}
+
+.w-oracle-journal-grimoire-header::before,
+.w-oracle-journal-grimoire-header::after {
+  content: '~';
+  color: var(--w-oracle-gold);
+  opacity: 0.4;
+  font-size: 16px;
+  margin: 0 8px;
+}
+
+.w-oracle-journal-grimoire-title {
+  font-family: var(--w-oracle-font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--w-oracle-gold);
+  letter-spacing: 0.5px;
+  display: inline;
+}
+
+.w-oracle-journal-grimoire-sub {
+  font-size: 11px;
+  color: var(--w-oracle-text-muted);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* ── Page / Entry Card (Grimoire style) ── */
+.w-oracle-journal-page {
+  position: relative;
+  margin-bottom: 14px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Stacked pages effect */
+.w-oracle-journal-page::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: -3px;
+  bottom: -3px;
+  background: var(--w-grimoire-parchment);
+  border-radius: 4px;
+  border: 1px solid var(--w-grimoire-edge);
+  z-index: -1;
+  transform: rotate(0.5deg);
+}
+
+.w-oracle-journal-page::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 5px;
+  right: -5px;
+  bottom: -5px;
+  background: rgba(26, 23, 38, 0.6);
+  border-radius: 4px;
+  border: 1px solid var(--w-grimoire-fold);
+  z-index: -2;
+  transform: rotate(1deg);
+}
+
+.w-oracle-journal-page-inner {
+  background: var(--w-grimoire-parchment);
+  border: 1px solid var(--w-grimoire-edge);
+  border-left: 3px solid var(--w-oracle-gold);
+  border-radius: 4px;
+  padding: 16px 16px 14px;
+  position: relative;
+}
+
+/* Corner fold decoration */
+.w-oracle-journal-page-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  overflow: hidden;
+}
+
+.w-oracle-journal-page-corner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 24px 24px 0;
+  border-color: transparent var(--w-oracle-bg) transparent transparent;
+}
+
+.w-oracle-journal-page-corner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(225deg, transparent 50%, var(--w-grimoire-parchment-light) 50%);
+  border-bottom: 1px solid var(--w-grimoire-edge);
+  border-left: 1px solid var(--w-grimoire-edge);
+}
+
+/* Entry header */
+.w-oracle-journal-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.w-oracle-journal-page-date-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.w-oracle-journal-page-matchday {
+  font-family: var(--w-oracle-font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--w-oracle-gold);
+  line-height: 1;
+  text-shadow: 0 0 12px var(--w-oracle-gold-glow);
+}
+
+.w-oracle-journal-page-date {
+  font-size: 10px;
+  color: var(--w-oracle-text-muted);
+  margin-top: 2px;
+  font-style: italic;
+}
+
+/* Type badge (icon + label) */
+.w-oracle-journal-type-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.w-oracle-journal-type-badge svg {
+  width: 12px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-oracle-journal-type-badge--correction {
+  background: var(--w-oracle-violet-soft);
+  color: var(--w-oracle-violet);
+}
+
+.w-oracle-journal-type-badge--recalibration {
+  background: var(--w-oracle-orange-soft);
+  color: var(--w-oracle-orange);
+}
+
+/* Entry title (grimoire style) */
+.w-oracle-journal-page-title {
+  font-family: var(--w-oracle-font-serif);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--w-oracle-text);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+/* Entry description (italic oracle voice) */
+.w-oracle-journal-page-desc {
+  font-family: var(--w-oracle-font-serif);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--w-grimoire-ink);
+  line-height: 1.6;
+  margin-bottom: 12px;
+  padding-left: 12px;
+  border-left: 2px solid var(--w-grimoire-edge);
+}
+
+/* Impact + Diff row */
+.w-oracle-journal-page-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--w-grimoire-edge);
+}
+
+.w-oracle-journal-impact {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+.w-oracle-journal-impact--positive {
+  background: var(--w-oracle-green-soft);
+  color: var(--w-oracle-green);
+  box-shadow: 0 0 8px var(--w-oracle-green-glow);
+}
+
+.w-oracle-journal-impact--neutral {
+  background: var(--w-oracle-gray-soft);
+  color: var(--w-oracle-text-dim);
+}
+
+.w-oracle-journal-impact--negative {
+  background: var(--w-oracle-orange-soft);
+  color: var(--w-oracle-orange);
+  box-shadow: 0 0 8px var(--w-oracle-orange-glow);
+}
+
+.w-oracle-journal-page-diff {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.w-oracle-journal-page-old {
+  color: var(--w-oracle-text-muted);
+  text-decoration: line-through;
+}
+
+.w-oracle-journal-page-arrow {
+  color: var(--w-oracle-gold);
+  font-size: 10px;
+}
+
+.w-oracle-journal-page-new {
+  color: var(--w-oracle-text);
+  font-weight: 800;
+  text-shadow: 0 0 6px var(--w-oracle-violet-glow);
+}
+
+.w-oracle-journal-page-param {
+  font-family: 'Courier New', monospace;
+  font-size: 9px;
+  color: var(--w-oracle-text-muted);
+  margin-left: 4px;
+  opacity: 0.7;
+}
+
+/* ── Seal / Wax stamp decoration ── */
+.w-oracle-journal-seal {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 16px;
+}
+
+.w-oracle-journal-seal-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--w-oracle-violet), var(--w-oracle-violet-dim));
+  box-shadow: 0 0 20px var(--w-oracle-violet-glow), inset 0 -2px 4px rgba(0,0,0,0.3);
+  margin-bottom: 6px;
+}
+
+.w-oracle-journal-seal-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: var(--w-oracle-gold);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-oracle-journal-seal-text {
+  font-family: var(--w-oracle-font-serif);
+  font-size: 11px;
+  font-style: italic;
+  color: var(--w-oracle-text-muted);
+}
+
+/* ── Empty State ── */
+.w-oracle-journal-empty {
+  text-align: center;
+  padding: 40px 20px;
+  border-radius: 4px;
+  margin-top: 16px;
+  background: var(--w-grimoire-parchment);
+  border: 1px solid var(--w-grimoire-edge);
+  border-left: 3px solid var(--w-oracle-gold);
+  position: relative;
+}
+
+.w-oracle-journal-empty-quill {
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.w-oracle-journal-empty-text {
+  font-family: var(--w-oracle-font-serif);
+  font-size: 14px;
+  font-style: italic;
+  color: var(--w-grimoire-ink);
+  line-height: 1.6;
+}
+
+/* ── Animations ── */
+@keyframes w-oracle-journal-page-in {
+  from { opacity: 0; transform: translateY(12px) rotate(0.5deg); }
+  to { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes w-oracle-journal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.w-oracle-journal-animate-page {
+  animation: w-oracle-journal-page-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.w-oracle-journal-animate-fade {
+  animation: w-oracle-journal-fade 0.4s ease both;
+}
+
+.w-oracle-journal-delay-1 { animation-delay: 0.05s; }
+.w-oracle-journal-delay-2 { animation-delay: 0.15s; }
+.w-oracle-journal-delay-3 { animation-delay: 0.25s; }
+.w-oracle-journal-delay-4 { animation-delay: 0.35s; }
+.w-oracle-journal-delay-5 { animation-delay: 0.45s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .w-oracle-journal-animate-page,
+  .w-oracle-journal-animate-fade { animation: none; opacity: 1; transform: none; }
+  .w-oracle-journal-toggle-icon { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="w-oracle-container" role="main" aria-label="Journal de l'Oracle - Grimoire">
+
+  <div class="w-oracle-journal-context">
+    [ Contenu existant Oracle : Brier Score, Predictions, Factor Cards ]<br>
+    <small>Les elements ci-dessous representent la nouvelle section journal</small>
+  </div>
+
+  <!-- Toggle Button -->
+  <button
+    class="w-oracle-journal-toggle"
+    aria-expanded="false"
+    aria-controls="journal-content"
+    id="journal-toggle"
+  >
+    <svg class="w-oracle-journal-toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 19.5A2.5 2.5 0 016.5 17H20"/>
+      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/>
+      <path d="M12 13V7m-3 3l3-3 3 3"/>
+    </svg>
+    <span>Ouvrir le grimoire</span>
+  </button>
+
+  <!-- Journal Content -->
+  <div id="journal-content" class="w-oracle-journal-content" hidden>
+
+    <div class="w-oracle-journal-grimoire-header w-oracle-journal-animate-fade w-oracle-journal-delay-1">
+      <span class="w-oracle-journal-grimoire-title">Journal de l'Oracle</span>
+      <p class="w-oracle-journal-grimoire-sub">Les corrections et recalibrages du modele</p>
+    </div>
+
+    <!-- Page 1: Correction positive -->
+    <article class="w-oracle-journal-page w-oracle-journal-animate-page w-oracle-journal-delay-2" aria-label="Correction du 10 novembre 2025, journee 8">
+      <div class="w-oracle-journal-page-inner">
+        <div class="w-oracle-journal-page-corner" aria-hidden="true"></div>
+        <div class="w-oracle-journal-page-header">
+          <div class="w-oracle-journal-page-date-block">
+            <span class="w-oracle-journal-page-matchday">J8</span>
+            <span class="w-oracle-journal-page-date">10 novembre 2025</span>
+          </div>
+          <span class="w-oracle-journal-type-badge w-oracle-journal-type-badge--correction">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6-7.1 7.1-1.6-1.6a1 1 0 00-1.4 0"/><path d="M2 22l4-2-2-2z"/></svg>
+            Correction
+          </span>
+        </div>
+        <h3 class="w-oracle-journal-page-title">Facteur domicile recalibre</h3>
+        <p class="w-oracle-journal-page-desc">L'avantage domicile de La Rochelle passe de 1.20 a 1.35 — Marcel Deflandre est une forteresse</p>
+        <div class="w-oracle-journal-page-footer">
+          <span class="w-oracle-journal-impact w-oracle-journal-impact--positive" aria-label="Impact positif">Positif</span>
+          <div class="w-oracle-journal-page-diff">
+            <span class="w-oracle-journal-page-old">1.20</span>
+            <span class="w-oracle-journal-page-arrow" aria-hidden="true">&#10140;</span>
+            <span class="w-oracle-journal-page-new">1.35</span>
+            <span class="w-oracle-journal-page-param">homeFactor</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Page 2: Recalibration neutral -->
+    <article class="w-oracle-journal-page w-oracle-journal-animate-page w-oracle-journal-delay-3" aria-label="Recalibrage du 12 janvier 2026, journee 13">
+      <div class="w-oracle-journal-page-inner">
+        <div class="w-oracle-journal-page-corner" aria-hidden="true"></div>
+        <div class="w-oracle-journal-page-header">
+          <div class="w-oracle-journal-page-date-block">
+            <span class="w-oracle-journal-page-matchday">J13</span>
+            <span class="w-oracle-journal-page-date">12 janvier 2026</span>
+          </div>
+          <span class="w-oracle-journal-type-badge w-oracle-journal-type-badge--recalibration">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+            Recalibrage
+          </span>
+        </div>
+        <h3 class="w-oracle-journal-page-title">Recalibrage mi-saison</h3>
+        <p class="w-oracle-journal-page-desc">L'Oracle ajuste ses coefficients a mi-parcours — la decroissance temporelle s'affine pour mieux suivre la forme recente</p>
+        <div class="w-oracle-journal-page-footer">
+          <span class="w-oracle-journal-impact w-oracle-journal-impact--neutral" aria-label="Impact neutre">Neutre</span>
+          <div class="w-oracle-journal-page-diff">
+            <span class="w-oracle-journal-page-old">0.92</span>
+            <span class="w-oracle-journal-page-arrow" aria-hidden="true">&#10140;</span>
+            <span class="w-oracle-journal-page-new">0.88</span>
+            <span class="w-oracle-journal-page-param">temporalDecay</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Page 3: Correction negative -->
+    <article class="w-oracle-journal-page w-oracle-journal-animate-page w-oracle-journal-delay-4" aria-label="Correction du 8 fevrier 2026, journee 16">
+      <div class="w-oracle-journal-page-inner">
+        <div class="w-oracle-journal-page-corner" aria-hidden="true"></div>
+        <div class="w-oracle-journal-page-header">
+          <div class="w-oracle-journal-page-date-block">
+            <span class="w-oracle-journal-page-matchday">J16</span>
+            <span class="w-oracle-journal-page-date">8 fevrier 2026</span>
+          </div>
+          <span class="w-oracle-journal-type-badge w-oracle-journal-type-badge--correction">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6-7.1 7.1-1.6-1.6a1 1 0 00-1.4 0"/><path d="M2 22l4-2-2-2z"/></svg>
+            Correction
+          </span>
+        </div>
+        <h3 class="w-oracle-journal-page-title">Bonus offensif sous-estime</h3>
+        <p class="w-oracle-journal-page-desc">Le poids du bonus offensif etait trop faible — les equipes joueuses n'etaient pas assez recompensees</p>
+        <div class="w-oracle-journal-page-footer">
+          <span class="w-oracle-journal-impact w-oracle-journal-impact--negative" aria-label="Impact negatif">Negatif</span>
+          <div class="w-oracle-journal-page-diff">
+            <span class="w-oracle-journal-page-old">0.15</span>
+            <span class="w-oracle-journal-page-arrow" aria-hidden="true">&#10140;</span>
+            <span class="w-oracle-journal-page-new">0.22</span>
+            <span class="w-oracle-journal-page-param">bonusWeight</span>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <!-- Wax seal footer -->
+    <div class="w-oracle-journal-seal w-oracle-journal-animate-fade w-oracle-journal-delay-5">
+      <div class="w-oracle-journal-seal-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <p class="w-oracle-journal-seal-text">Scelle par l'Oracle — saison 2025-2026</p>
+    </div>
+
+  </div>
+
+  <!-- EMPTY STATE (uncomment below, comment entries above) -->
+  <!--
+  <div id="journal-content-empty" class="w-oracle-journal-content">
+    <div class="w-oracle-journal-grimoire-header w-oracle-journal-animate-fade w-oracle-journal-delay-1">
+      <span class="w-oracle-journal-grimoire-title">Journal de l'Oracle</span>
+      <p class="w-oracle-journal-grimoire-sub">Les corrections et recalibrages du modele</p>
+    </div>
+    <div class="w-oracle-journal-empty w-oracle-journal-animate-page w-oracle-journal-delay-2">
+      <div class="w-oracle-journal-empty-quill" aria-hidden="true">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+        </svg>
+      </div>
+      <p class="w-oracle-journal-empty-text">L'Oracle n'a pas encore eu besoin de se corriger — patience, ca viendra</p>
+    </div>
+  </div>
+  -->
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.getElementById('journal-toggle');
+  const content = document.getElementById('journal-content');
+  const label = toggle.querySelector('span');
+
+  toggle.addEventListener('click', () => {
+    const expanded = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!expanded));
+
+    if (expanded) {
+      content.hidden = true;
+      label.textContent = 'Ouvrir le grimoire';
+    } else {
+      content.hidden = false;
+      label.textContent = 'Refermer le grimoire';
+
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (!reducedMotion) {
+        content.querySelectorAll('[class*="w-oracle-journal-animate"]').forEach(el => {
+          el.style.animation = 'none';
+          el.offsetHeight;
+          el.style.animation = '';
+        });
+      }
+    }
+  });
+});
+</script>
+
+</body>
+</html>
