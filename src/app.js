@@ -23,6 +23,7 @@ import { render as renderOracle } from './components/tab-oracle.js'
 import { render as renderDuels } from './components/tab-duels.js'
 import { render as renderSimulateur } from './components/tab-simulateur.js'
 import { computeAchievements } from './components/achievement-card.js'
+import { revealProjection, resetProjection } from './animation/engine.js'
 
 const appEl = document.querySelector('#app')
 const TAB_ORDER = tabIds()
@@ -55,6 +56,135 @@ on('viewMode', () => {
   if (activeTab) showTab(activeTab, true)
 })
 
+// Invalidate classement cache when simulation mode changes
+on('simulationMode', () => {
+  if (!viewport) return
+  // Remove cached classements view to force re-render
+  const classementsView = tabViews.get('classements')
+  if (classementsView) {
+    classementsView.remove()
+    tabViews.delete('classements')
+  }
+  const activeTab = get('activeTab')
+  if (activeTab === 'classements') showTab('classements', true)
+})
+
+function esc(str) {
+  return String(str)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
+
+/**
+ * Format a delta value for display.
+ * @param {number} value — zone probability delta (decimal)
+ * @returns {string} e.g. "+12%" or "-3%"
+ */
+function formatZoneDelta(value) {
+  const pct = Math.round(value * 100)
+  if (pct === 0) return ''
+  return pct > 0 ? `+${pct}%` : `${pct}%`
+}
+
+/**
+ * Get the most significant zone delta for a team.
+ * @param {object} delta
+ * @returns {{ zone: string, value: string } | null}
+ */
+function getMostSignificantDelta(delta) {
+  const zones = [
+    { zone: 'demi-finales', value: delta.europe },
+    { zone: 'top 6', value: delta.top6 },
+    { zone: 'maintien', value: delta.relegation },
+    { zone: 'ventre mou', value: delta.mid },
+  ]
+  let best = null
+  let bestAbs = 0
+  for (const z of zones) {
+    const abs = Math.abs(z.value)
+    if (abs > bestAbs) {
+      bestAbs = abs
+      best = z
+    }
+  }
+  if (!best || bestAbs < 0.005) return null
+  return { zone: best.zone, value: formatZoneDelta(best.value) }
+}
+
+/**
+ * Render simulation mode overlay on classement: banner + return button.
+ * @param {HTMLElement} standingsSection
+ */
+function renderSimulationOverlay(standingsSection) {
+  // Add simulated class
+  standingsSection.classList.add('w-standings-section--simulated')
+
+  // Banner
+  const banner = document.createElement('div')
+  banner.className = 'w-sim-banner'
+  banner.setAttribute('role', 'status')
+  banner.setAttribute('aria-live', 'polite')
+  banner.innerHTML = '<span class="w-sim-banner__icon" aria-hidden="true">&#9889;</span> Projection simul\u00e9e'
+  standingsSection.insertBefore(banner, standingsSection.querySelector('.w-zone-group'))
+
+  // Return button
+  const returnBtn = document.createElement('button')
+  returnBtn.className = 'w-sim-return-btn'
+  returnBtn.setAttribute('aria-label', 'Quitter le mode simul\u00e9 et revenir aux projections r\u00e9elles')
+  returnBtn.textContent = 'Revenir au r\u00e9el'
+  returnBtn.addEventListener('click', () => {
+    set('simulationMode', false)
+    set('simulatedStandings', null)
+  })
+  standingsSection.appendChild(returnBtn)
+}
+
+/**
+ * Render delta badges on rank-rows in simulation mode.
+ * @param {HTMLElement} standingsSection
+ * @param {object[]} simulatedTeams
+ */
+function renderDeltaBadges(standingsSection, simulatedTeams) {
+  const teamMap = new Map(simulatedTeams.map((t) => [t.id, t]))
+  const rows = standingsSection.querySelectorAll('.w-rank-row')
+
+  for (const row of rows) {
+    const teamId = row.dataset.teamId
+    const team = teamMap.get(teamId)
+    if (!team || !team.delta) continue
+
+    const rankDelta = team.delta.rank
+    if (rankDelta !== 0) {
+      const badge = document.createElement('span')
+      badge.className = `w-delta-badge w-delta-badge--${rankDelta < 0 ? 'up' : 'down'}`
+      const sign = rankDelta > 0 ? '+' : ''
+      badge.textContent = `${sign}${rankDelta}`
+      badge.setAttribute('aria-hidden', 'true')
+      const posEl = row.querySelector('.w-rank-row__position')
+      if (posEl) posEl.parentNode.insertBefore(badge, posEl.nextSibling)
+    }
+
+    const sigDelta = getMostSignificantDelta(team.delta)
+    if (sigDelta) {
+      const sub = document.createElement('span')
+      sub.className = `w-delta-zone w-delta-zone--${sigDelta.value.startsWith('+') ? 'up' : 'down'}`
+      sub.textContent = `${sigDelta.zone} ${sigDelta.value}`
+      sub.setAttribute('aria-hidden', 'true')
+      const info = row.querySelector('.w-rank-row__info')
+      if (info) info.appendChild(sub)
+    }
+
+    // Descriptive aria-label update
+    const rankSign = rankDelta > 0 ? 'plus' : rankDelta < 0 ? 'moins' : ''
+    const rankDesc = rankDelta !== 0 ? `${Math.abs(rankDelta)} place${Math.abs(rankDelta) > 1 ? 's' : ''}` : ''
+    const sigDesc = sigDelta ? `, ${sigDelta.zone} ${sigDelta.value.replace('+', 'plus ').replace('-', 'moins ')}` : ''
+    if (rankDelta !== 0 || sigDelta) {
+      const currentLabel = row.getAttribute('aria-label') || ''
+      row.setAttribute('aria-label', `${currentLabel}, simulation: ${rankSign} ${rankDesc}${sigDesc}`)
+    }
+  }
+}
+
 function getTabIndex(tabId) {
   return TAB_ORDER.indexOf(tabId)
 }
@@ -63,6 +193,7 @@ function renderTabContent(tabId, container) {
   const season = get('season')
   switch (tabId) {
     case 'classements': {
+      const isSimulated = get('simulationMode')
       const hero = document.createElement('section')
       hero.className = 'w-hero-section'
       hero.setAttribute('aria-label', 'Equipe favorite')
@@ -74,8 +205,25 @@ function renderTabContent(tabId, container) {
       standings.innerHTML = '<h2 class="w-standings-title">Classement</h2>'
       container.append(hero, reveal, standings)
       renderScoreCard(hero)
-      renderRevealButton(reveal)
-      if (season && Array.isArray(season.teams)) {
+      if (!isSimulated) renderRevealButton(reveal)
+
+      if (isSimulated) {
+        const simTeams = get('simulatedStandings')
+        if (simTeams && Array.isArray(simTeams)) {
+          const sorted = [...simTeams].sort((a, b) => a.currentRank - b.currentRank)
+          renderZoneGroups(standings, sorted)
+          renderSimulationOverlay(standings)
+          renderDeltaBadges(standings, simTeams)
+          // Trigger animation after render
+          requestAnimationFrame(() => {
+            const rows = standings.querySelectorAll('.w-rank-row')
+            if (rows.length > 0) {
+              resetProjection(rows, sorted)
+              revealProjection(rows, simTeams)
+            }
+          })
+        }
+      } else if (season && Array.isArray(season.teams)) {
         const sorted = [...season.teams].sort((a, b) => a.currentRank - b.currentRank)
         renderZoneGroups(standings, sorted)
       }

@@ -321,6 +321,59 @@
   color: var(--w-orange);
 }
 
+/* ── Impact Button (sticky bottom) ── */
+
+.w-sim-impact-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 32px);
+  margin: 16px 16px 0;
+  padding: 14px 20px;
+  border: none;
+  border-radius: var(--w-radius);
+  background: linear-gradient(135deg, var(--w-accent), var(--w-violet));
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  min-height: 48px;
+  position: sticky;
+  bottom: 16px;
+  z-index: 10;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.w-sim-impact-btn:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+.w-sim-impact-btn:active {
+  transform: scale(0.97);
+}
+
+.w-sim-impact-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.w-sim-impact-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
 /* ── Empty State ── */
 
 .w-sim-empty {
@@ -368,7 +421,8 @@
   .w-bonus-tag,
   .w-duel__ribbon,
   .w-sim-bar__reset,
-  .w-duel__team-name {
+  .w-duel__team-name,
+  .w-sim-impact-btn {
     transition: none;
   }
 }

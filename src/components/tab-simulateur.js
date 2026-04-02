@@ -1,5 +1,6 @@
 import '../styles/components/tab-simulateur.css'
 import { get, set, on } from '../store.js'
+import { recalculateProjections, matchKey } from '../simulator-engine.js'
 
 function esc(str) {
   return String(str)
@@ -22,14 +23,8 @@ export function getInitials(teamId) {
   return parts.map((p) => /^\d+$/.test(p) ? p : p[0]).join('').toUpperCase().slice(0, 4)
 }
 
-/**
- * Build a matchKey from a calendar entry.
- * @param {{ matchday: number, home: string, away: string }} match
- * @returns {string}
- */
-export function matchKey(match) {
-  return `${match.matchday}-${match.home}-${match.away}`
-}
+// matchKey imported from simulator-engine.js (single source of truth)
+export { matchKey } from '../simulator-engine.js'
 
 /**
  * Filter upcoming matches from calendar.
@@ -87,6 +82,45 @@ function teamName(season, teamId) {
 export function countSimulated(simulated) {
   if (!simulated || typeof simulated !== 'object') return 0
   return Object.values(simulated).filter((v) => v && v.outcome != null).length
+}
+
+/** Track whether results changed after a first simulation */
+let hasSimulated = false
+
+function getImpactButtonLabel() {
+  if (hasSimulated) return 'Recalculer'
+  return 'Voir l\u2019impact'
+}
+
+function renderImpactButton(count) {
+  const label = getImpactButtonLabel()
+  return `
+    <button class="w-sim-impact-btn" aria-label="${esc(label)} — ${count} match(s) simule(s)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      ${esc(label)}
+    </button>`
+}
+
+async function handleImpact(container, season) {
+  const btn = container.querySelector('.w-sim-impact-btn')
+  if (!btn) return
+  btn.disabled = true
+  btn.setAttribute('aria-busy', 'true')
+  btn.innerHTML = `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg> ${esc('Calcul en cours...')}`
+
+  // Yield to UI before heavy computation
+  await new Promise((r) => setTimeout(r, 0))
+
+  const simulatedResults = get('simulatedResults') || {}
+  const result = recalculateProjections(season, simulatedResults)
+
+  set('simulatedStandings', result)
+  set('simulationMode', true)
+  set('activeTab', 'classements')
+  hasSimulated = true
+
+  btn.disabled = false
+  btn.removeAttribute('aria-busy')
 }
 
 function renderEmpty() {
@@ -197,6 +231,7 @@ function handleBonusClick(key, bonusType) {
 
 function handleReset() {
   set('simulatedResults', {})
+  hasSimulated = false
 }
 
 /**
@@ -251,7 +286,8 @@ export function render(container, season) {
         Reinitialiser
       </button>
     </div>
-    ${matchCardsHtml}`
+    ${matchCardsHtml}
+    ${count >= 1 ? renderImpactButton(count) : ''}`
 
   container.appendChild(wrapper)
 
@@ -272,6 +308,13 @@ export function render(container, season) {
       e.preventDefault()
       handleBonusClick(bonusEl.dataset.key, bonusEl.dataset.bonus)
       rerender(container, season)
+      return
+    }
+
+    // Impact button
+    if (e.target.closest('.w-sim-impact-btn')) {
+      e.preventDefault()
+      handleImpact(container, season)
       return
     }
 

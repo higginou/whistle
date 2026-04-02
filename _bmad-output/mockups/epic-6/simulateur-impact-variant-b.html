@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impact Simulateur — Variant B : Gaming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --w-bg-page: #130d1f;
+  --w-bg-surface: #1a1128;
+  --w-bg-elevated: #231838;
+  --w-accent: #c084fc;
+  --w-violet: #7c3aed;
+  --w-violet-dim: #5b21b6;
+  --w-violet-glow: rgba(124, 58, 237, 0.35);
+  --w-violet-soft: rgba(124, 58, 237, 0.1);
+  --w-green: #22c55e;
+  --w-green-soft: rgba(34, 197, 94, 0.12);
+  --w-green-glow: rgba(34, 197, 94, 0.25);
+  --w-orange: #f59e0b;
+  --w-orange-soft: rgba(245, 158, 11, 0.12);
+  --w-red: #dc2626;
+  --w-red-soft: rgba(220, 38, 38, 0.12);
+  --w-red-glow: rgba(220, 38, 38, 0.25);
+  --w-gray: #6b6279;
+  --w-text: #f0edf6;
+  --w-text-dim: #9d95ab;
+  --w-text-muted: #5e5670;
+  --w-border: rgba(124, 58, 237, 0.15);
+  --w-border-subtle: rgba(255, 255, 255, 0.06);
+  --w-nav-height: 60px;
+  --w-font: 'Nunito', sans-serif;
+  --w-radius: 12px;
+  --w-radius-sm: 8px;
+  --w-radius-xs: 6px;
+
+  --w-zone-qualif: #7c3aed;
+  --w-zone-qualif-bg: rgba(124, 58, 237, 0.08);
+  --w-zone-top6: #22c55e;
+  --w-zone-top6-bg: rgba(34, 197, 94, 0.06);
+  --w-zone-mid: #6b6279;
+  --w-zone-mid-bg: rgba(107, 98, 121, 0.06);
+  --w-zone-relegation: #dc2626;
+  --w-zone-relegation-bg: rgba(220, 38, 38, 0.06);
+}
+
+body {
+  font-family: var(--w-font);
+  background: var(--w-bg-page);
+  color: var(--w-text);
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+.w-container {
+  width: 100%;
+  max-width: 430px;
+  padding-bottom: calc(var(--w-nav-height) + 24px);
+}
+
+/* ── Header ── */
+.w-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(19, 13, 31, 0.92);
+  border-bottom: 1px solid var(--w-border-subtle);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.w-header__logo {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--w-accent);
+}
+
+.w-header__season {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+}
+
+/* ── Simulated Mode Banner (Variant B: Gaming — bold, glowing) ── */
+.w-sim-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(192, 132, 252, 0.08));
+  border-bottom: 2px solid var(--w-violet);
+  box-shadow: 0 2px 16px var(--w-violet-glow);
+  position: relative;
+  overflow: hidden;
+}
+
+.w-sim-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(192, 132, 252, 0.06) 50%, transparent 100%);
+  animation: w-shimmer 3s ease-in-out infinite;
+}
+
+@keyframes w-shimmer {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.w-sim-banner__badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background: var(--w-violet);
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+.w-sim-banner__badge svg {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.5;
+}
+
+.w-sim-banner__text {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--w-accent);
+  position: relative;
+  z-index: 1;
+}
+
+/* ── "Voir l'impact" Button (Gaming glow) ── */
+.w-impact-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: calc(100% - 32px);
+  margin: 16px auto;
+  min-height: 52px;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--w-violet), var(--w-violet-dim));
+  color: #fff;
+  font-family: var(--w-font);
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 50ms ease, box-shadow 150ms ease;
+  box-shadow: 0 0 20px var(--w-violet-glow), 0 0 40px rgba(124, 58, 237, 0.15), 0 2px 8px rgba(0, 0, 0, 0.2);
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.w-impact-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.1), transparent);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.w-impact-btn:hover::after,
+.w-impact-btn:focus-visible::after { opacity: 1; }
+
+.w-impact-btn:hover,
+.w-impact-btn:focus-visible {
+  box-shadow: 0 0 30px var(--w-violet-glow), 0 0 60px rgba(124, 58, 237, 0.2), 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.w-impact-btn:focus-visible {
+  outline: 3px solid var(--w-accent);
+  outline-offset: 3px;
+}
+
+.w-impact-btn:active { transform: scale(0.97); }
+
+.w-impact-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.5;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── "Revenir au reel" Button ── */
+.w-back-real-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 32px);
+  margin: 0 auto 16px;
+  min-height: 48px;
+  padding: 12px 24px;
+  border: 2px solid var(--w-border);
+  border-radius: 14px;
+  background: transparent;
+  color: var(--w-text-dim);
+  font-family: var(--w-font);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-back-real-btn:hover,
+.w-back-real-btn:focus-visible {
+  border-color: var(--w-accent);
+  color: var(--w-accent);
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.15);
+}
+
+.w-back-real-btn:focus-visible {
+  outline: 3px solid var(--w-violet);
+  outline-offset: 3px;
+}
+
+.w-back-real-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+/* ── Zone Groups ── */
+.w-zone-group {
+  margin: 0 16px 12px;
+  border-radius: var(--w-radius);
+  overflow: hidden;
+  border: 1px solid var(--w-border-subtle);
+}
+
+.w-zone-group__header {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.w-zone-group__header::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.w-zone-group--qualif { background: var(--w-zone-qualif-bg); }
+.w-zone-group--qualif .w-zone-group__header { color: var(--w-accent); }
+.w-zone-group--qualif .w-zone-group__header::before { background: var(--w-zone-qualif); }
+
+.w-zone-group--top6 { background: var(--w-zone-top6-bg); }
+.w-zone-group--top6 .w-zone-group__header { color: var(--w-zone-top6); }
+.w-zone-group--top6 .w-zone-group__header::before { background: var(--w-zone-top6); }
+
+.w-zone-group--mid { background: var(--w-zone-mid-bg); }
+.w-zone-group--mid .w-zone-group__header { color: var(--w-zone-mid); }
+.w-zone-group--mid .w-zone-group__header::before { background: var(--w-zone-mid); }
+
+.w-zone-group--relegation { background: var(--w-zone-relegation-bg); }
+.w-zone-group--relegation .w-zone-group__header { color: var(--w-red); }
+.w-zone-group--relegation .w-zone-group__header::before { background: var(--w-zone-relegation); }
+
+/* ── Rank Row ── */
+.w-rank-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 8px 12px;
+  background: var(--w-bg-surface);
+  border-bottom: 1px solid var(--w-border-subtle);
+  transition: box-shadow 0.3s ease;
+}
+
+.w-rank-row:last-child { border-bottom: none; }
+
+.w-rank-row--favorite {
+  background: rgba(124, 58, 237, 0.08);
+  border-left: 3px solid var(--w-accent);
+  padding-left: 9px;
+}
+
+/* Glow for big movers */
+.w-rank-row--glow-up {
+  box-shadow: inset 3px 0 0 var(--w-green), 0 0 12px var(--w-green-glow);
+}
+
+.w-rank-row--glow-down {
+  box-shadow: inset 3px 0 0 var(--w-red), 0 0 12px var(--w-red-glow);
+}
+
+.w-rank-row--favorite.w-rank-row--glow-up {
+  box-shadow: inset 3px 0 0 var(--w-accent), 0 0 16px rgba(192, 132, 252, 0.35);
+}
+
+.w-rank-row__position {
+  font-size: 14px;
+  font-weight: 700;
+  font-feature-settings: "tnum";
+  min-width: 22px;
+  text-align: center;
+  color: var(--w-text-dim);
+}
+
+.w-rank-row__logo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.w-rank-row__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.w-rank-row__name {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--w-text);
+}
+
+.w-rank-row--favorite .w-rank-row__name {
+  color: var(--w-accent);
+  font-weight: 700;
+}
+
+.w-rank-row__elo {
+  font-size: 11px;
+  color: var(--w-text-muted);
+  font-feature-settings: "tnum";
+}
+
+/* ── Deltas (Variant B: Bold badges) ── */
+.w-rank-row__deltas {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.w-delta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 800;
+  font-feature-settings: "tnum";
+  line-height: 1;
+}
+
+.w-delta-badge svg {
+  width: 10px;
+  height: 10px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 3;
+}
+
+.w-delta-badge--up {
+  background: var(--w-green-soft);
+  color: var(--w-green);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.w-delta-badge--down {
+  background: var(--w-red-soft);
+  color: var(--w-red);
+  border: 1px solid rgba(220, 38, 38, 0.25);
+}
+
+.w-delta-badge--stable {
+  background: rgba(107, 98, 121, 0.1);
+  color: var(--w-text-muted);
+  border: 1px solid rgba(107, 98, 121, 0.15);
+}
+
+.w-zone-delta-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  background: var(--w-violet-soft);
+  color: var(--w-accent);
+  border: 1px solid var(--w-border);
+}
+
+.w-zone-delta-badge--danger {
+  background: var(--w-red-soft);
+  color: var(--w-red);
+  border-color: rgba(220, 38, 38, 0.2);
+}
+
+.w-zone-delta-badge--success {
+  background: var(--w-green-soft);
+  color: var(--w-green);
+  border-color: rgba(34, 197, 94, 0.2);
+}
+
+/* ── Section Title ── */
+.w-section-label {
+  padding: 16px 16px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--w-text-muted);
+}
+
+/* ── Page Title ── */
+.w-page-title {
+  padding: 16px 16px 4px;
+  text-align: center;
+}
+
+.w-page-title__heading {
+  font-size: 22px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--w-accent), var(--w-violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Bottom Nav ── */
+.w-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: var(--w-nav-height);
+  background: rgba(19, 13, 31, 0.95);
+  border-top: 1px solid var(--w-border-subtle);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 50;
+}
+
+.w-bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--w-text-muted);
+  text-decoration: none;
+  padding: 6px 12px;
+  min-width: 48px;
+  min-height: 48px;
+  justify-content: center;
+  border-radius: var(--w-radius-sm);
+  transition: color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.w-bottom-nav__item--active { color: var(--w-accent); }
+
+.w-bottom-nav__item svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.w-bottom-nav__item:focus-visible {
+  outline: 2px solid var(--w-violet);
+  outline-offset: 2px;
+}
+
+/* ── Animations ── */
+@keyframes w-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.w-anim {
+  animation: w-fade-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.w-d1 { animation-delay: 0.05s; }
+.w-d2 { animation-delay: 0.1s; }
+.w-d3 { animation-delay: 0.15s; }
+.w-d4 { animation-delay: 0.2s; }
+.w-d5 { animation-delay: 0.25s; }
+.w-d6 { animation-delay: 0.3s; }
+.w-d7 { animation-delay: 0.35s; }
+.w-d8 { animation-delay: 0.4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .w-anim { animation: none; opacity: 1; transform: none; }
+  .w-sim-banner::before { animation: none; }
+  .w-impact-btn,
+  .w-back-real-btn,
+  .w-rank-row { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="w-container" role="main" aria-label="Classement simule">
+
+  <!-- Header -->
+  <header class="w-header">
+    <span class="w-header__logo">Whistle</span>
+    <span class="w-header__season">2025-26</span>
+  </header>
+
+  <!-- Simulated Mode Banner (Gaming) -->
+  <div class="w-sim-banner w-anim w-d1" role="status" aria-live="polite">
+    <div class="w-sim-banner__badge">
+      <svg viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+      Simule
+    </div>
+    <div class="w-sim-banner__text">3 matchs projetes</div>
+  </div>
+
+  <!-- Page Title -->
+  <div class="w-page-title w-anim w-d2">
+    <h1 class="w-page-title__heading">Impact sur le classement</h1>
+  </div>
+
+  <!-- Zone: Demi-finales -->
+  <div class="w-zone-group w-zone-group--qualif w-anim w-d3">
+    <h2 class="w-zone-group__header">Demi-finales</h2>
+    <div id="zone-qualif"></div>
+  </div>
+
+  <!-- Zone: Phases finales -->
+  <div class="w-zone-group w-zone-group--top6 w-anim w-d4">
+    <h2 class="w-zone-group__header">Phases finales</h2>
+    <div id="zone-top6"></div>
+  </div>
+
+  <!-- Zone: Ventre mou -->
+  <div class="w-zone-group w-zone-group--mid w-anim w-d5">
+    <h2 class="w-zone-group__header">Ventre mou</h2>
+    <div id="zone-mid"></div>
+  </div>
+
+  <!-- Zone: Maintien -->
+  <div class="w-zone-group w-zone-group--relegation w-anim w-d6">
+    <h2 class="w-zone-group__header">Maintien</h2>
+    <div id="zone-relegation"></div>
+  </div>
+
+  <!-- Back to real button -->
+  <div style="padding: 12px 0 0;" class="w-anim w-d7">
+    <button class="w-back-real-btn" aria-label="Revenir au classement reel">
+      <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      Revenir au classement reel
+    </button>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="w-bottom-nav" aria-label="Navigation principale">
+    <a href="#" class="w-bottom-nav__item w-bottom-nav__item--active" aria-label="Classement" aria-current="page">
+      <svg viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M3 3l9 4 9-4"/></svg>
+      <span>Classement</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Succes">
+      <svg viewBox="0 0 24 24"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>
+      <span>Succes</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Duels">
+      <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <span>Duels</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Simulateur">
+      <svg viewBox="0 0 24 24"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+      <span>Simul.</span>
+    </a>
+    <a href="#" class="w-bottom-nav__item" aria-label="Journal">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span>Journal</span>
+    </a>
+  </nav>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const teams = [
+    { name: 'Toulouse',         init: 'TLS', elo: 1685, pos: 1, delta: 0,  zoneDelta: '',             zoneDeltaType: '',     zone: 'qualif', color: '#dc2626', fav: false },
+    { name: 'Bordeaux-Begles',  init: 'UBB', elo: 1652, pos: 2, delta: +1, zoneDelta: '',             zoneDeltaType: '',     zone: 'qualif', color: '#7c3aed', fav: false },
+    { name: 'La Rochelle',      init: 'LR',  elo: 1640, pos: 3, delta: +2, zoneDelta: 'top 4 +8%',   zoneDeltaType: 'success', zone: 'qualif', color: '#f59e0b', fav: true },
+    { name: 'Toulon',           init: 'RCT', elo: 1628, pos: 4, delta: -1, zoneDelta: 'top 4 -3%',   zoneDeltaType: 'danger',  zone: 'qualif', color: '#dc2626', fav: false },
+    { name: 'Racing 92',        init: 'R92', elo: 1595, pos: 5, delta: -2, zoneDelta: 'top 4 -11%',  zoneDeltaType: 'danger',  zone: 'top6',   color: '#2563eb', fav: false },
+    { name: 'Clermont',         init: 'ASM', elo: 1572, pos: 6, delta: +1, zoneDelta: 'top 6 +5%',   zoneDeltaType: 'success', zone: 'top6',   color: '#f59e0b', fav: false },
+    { name: 'Lyon',             init: 'LOU', elo: 1548, pos: 7, delta: -1, zoneDelta: 'top 6 -6%',   zoneDeltaType: 'danger',  zone: 'mid',    color: '#dc2626', fav: false },
+    { name: 'Stade Francais',   init: 'SF',  elo: 1535, pos: 8, delta: 0,  zoneDelta: '',             zoneDeltaType: '',     zone: 'mid',    color: '#ec4899', fav: false },
+    { name: 'Castres',          init: 'CO',  elo: 1520, pos: 9, delta: +2, zoneDelta: '',             zoneDeltaType: '',     zone: 'mid',    color: '#2563eb', fav: false },
+    { name: 'Pau',              init: 'PAU', elo: 1505, pos: 10, delta: -1, zoneDelta: '',            zoneDeltaType: '',     zone: 'mid',    color: '#16a34a', fav: false },
+    { name: 'Bayonne',          init: 'AB',  elo: 1488, pos: 11, delta: 0,  zoneDelta: '',            zoneDeltaType: '',     zone: 'mid',    color: '#2563eb', fav: false },
+    { name: 'Montpellier',      init: 'MHR', elo: 1470, pos: 12, delta: -1, zoneDelta: '',            zoneDeltaType: '',     zone: 'mid',    color: '#1d4ed8', fav: false },
+    { name: 'Perpignan',        init: 'USAP',elo: 1445, pos: 13, delta: +1, zoneDelta: 'maintien -4%', zoneDeltaType: 'success', zone: 'relegation', color: '#dc2626', fav: false },
+    { name: 'Vannes',           init: 'RCV', elo: 1420, pos: 14, delta: -1, zoneDelta: 'maintien +7%', zoneDeltaType: 'danger',  zone: 'relegation', color: '#0ea5e9', fav: false },
+  ];
+
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
+  function deltaArrow(d) {
+    if (d > 0) return '<svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>';
+    if (d < 0) return '<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>';
+    return '';
+  }
+
+  function deltaBadgeCls(d) {
+    if (d > 0) return 'w-delta-badge--up';
+    if (d < 0) return 'w-delta-badge--down';
+    return 'w-delta-badge--stable';
+  }
+
+  function deltaText(d) {
+    if (d > 0) return '+' + d;
+    if (d < 0) return '' + d;
+    return '=';
+  }
+
+  function glowCls(d) {
+    if (d >= 2) return ' w-rank-row--glow-up';
+    if (d <= -2) return ' w-rank-row--glow-down';
+    return '';
+  }
+
+  const zones = { qualif: 'zone-qualif', top6: 'zone-top6', mid: 'zone-mid', relegation: 'zone-relegation' };
+
+  teams.forEach(t => {
+    const container = document.getElementById(zones[t.zone]);
+    const row = document.createElement('div');
+    const glow = (t.fav && t.delta > 0) ? ' w-rank-row--glow-up' : glowCls(t.delta);
+    row.className = 'w-rank-row' + (t.fav ? ' w-rank-row--favorite' : '') + glow;
+    row.setAttribute('role', 'listitem');
+    row.setAttribute('aria-label', esc(t.name) + ', position ' + t.pos + (t.delta !== 0 ? ', ' + (t.delta > 0 ? 'monte' : 'descend') + ' de ' + Math.abs(t.delta) : ''));
+
+    let zoneDeltaHTML = '';
+    if (t.zoneDelta) {
+      const cls = t.zoneDeltaType === 'danger' ? 'w-zone-delta-badge--danger' : 'w-zone-delta-badge--success';
+      zoneDeltaHTML = '<div class="w-zone-delta-badge ' + cls + '">' + esc(t.zoneDelta) + '</div>';
+    }
+
+    row.innerHTML =
+      '<div class="w-rank-row__position">' + t.pos + '</div>' +
+      '<div class="w-rank-row__logo" style="background:' + t.color + '">' + esc(t.init) + '</div>' +
+      '<div class="w-rank-row__info">' +
+        '<div class="w-rank-row__name">' + esc(t.name) + '</div>' +
+        '<div class="w-rank-row__elo">Elo ' + t.elo + '</div>' +
+      '</div>' +
+      '<div class="w-rank-row__deltas">' +
+        '<div class="w-delta-badge ' + deltaBadgeCls(t.delta) + '">' + deltaArrow(t.delta) + deltaText(t.delta) + '</div>' +
+        zoneDeltaHTML +
+      '</div>';
+
+    container.appendChild(row);
+  });
+});
+</script>
+
+</body>
+</html>

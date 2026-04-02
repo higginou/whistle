@@ -10,6 +10,8 @@ const EVENT_NAMES = {
   activeTab: 'tab-changed',
   viewMode: 'mode-changed',
   simulatedResults: 'simulated-results-changed',
+  simulationMode: 'simulation-mode-changed',
+  simulatedStandings: 'simulated-standings-changed',
 }
 
 const INITIAL_STATE = {
@@ -22,6 +24,8 @@ const INITIAL_STATE = {
   activeTab: 'classements',
   viewMode: 'simple',
   simulatedResults: {},
+  simulationMode: false,
+  simulatedStandings: null,
 }
 
 const state = { ...INITIAL_STATE }
