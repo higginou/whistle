@@ -76,7 +76,7 @@ function teamName(season, teamId) {
 
 /**
  * Count how many matches have a simulated result.
- * @param {object} simulated — { matchKey: { outcome, bonus } }
+ * @param {object} simulated — { matchKey: { outcome, bonusOff, bonusDef } }
  * @returns {number}
  */
 export function countSimulated(simulated) {
@@ -135,7 +135,7 @@ function renderEmpty() {
 }
 
 function renderMatchCard(match, season, simulated, key) {
-  const sim = simulated[key] || { outcome: null, bonus: null }
+  const sim = simulated[key] || { outcome: null, bonusOff: false, bonusDef: false }
   const homeName = teamName(season, match.home)
   const awayName = teamName(season, match.away)
   const homeInit = getInitials(match.home)
@@ -158,17 +158,17 @@ function renderMatchCard(match, season, simulated, key) {
 
   let bonusHtml = ''
   if (showBonus) {
-    const offActive = sim.bonus === 'offensive' ? ' is-active' : ''
-    const defActive = sim.bonus === 'defensive' ? ' is-active' : ''
+    const offActive = sim.bonusOff ? ' is-active' : ''
+    const defActive = sim.bonusDef ? ' is-active' : ''
 
     bonusHtml = `<div class="w-bonus-strip is-visible">`
-    bonusHtml += `<button class="w-bonus-tag${offActive}" data-key="${esc(key)}" data-bonus="offensive" role="switch" aria-checked="${sim.bonus === 'offensive'}" aria-label="Bonus offensif">
+    bonusHtml += `<button class="w-bonus-tag${offActive}" data-key="${esc(key)}" data-bonus="offensive" role="switch" aria-checked="${sim.bonusOff}" aria-label="Bonus offensif : 3 essais de plus">
       <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
       Offensif +1
     </button>`
 
     if (showDefensive) {
-      bonusHtml += `<button class="w-bonus-tag w-bonus-tag--def${defActive}" data-key="${esc(key)}" data-bonus="defensive" role="switch" aria-checked="${sim.bonus === 'defensive'}" aria-label="Bonus defensif">
+      bonusHtml += `<button class="w-bonus-tag w-bonus-tag--def${defActive}" data-key="${esc(key)}" data-bonus="defensive" role="switch" aria-checked="${sim.bonusDef}" aria-label="Bonus defensif : defaite de 5 pts max">
         <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         Defensif +1
       </button>`
@@ -201,14 +201,14 @@ function renderMatchCard(match, season, simulated, key) {
 
 function handleResultClick(key, result) {
   const simulated = { ...get('simulatedResults') }
-  const current = simulated[key] || { outcome: null, bonus: null }
+  const current = simulated[key] || { outcome: null, bonusOff: false, bonusDef: false }
 
   if (current.outcome === result) {
     // Deselect
     delete simulated[key]
   } else {
-    // Select (reset bonus on outcome change)
-    simulated[key] = { outcome: result, bonus: null }
+    // Select (reset bonuses on outcome change)
+    simulated[key] = { outcome: result, bonusOff: false, bonusDef: false }
   }
 
   set('simulatedResults', simulated)
@@ -219,13 +219,9 @@ function handleBonusClick(key, bonusType) {
   const current = simulated[key]
   if (!current || current.outcome == null) return
 
-  // Toggle bonus: if same bonus, clear it; if different, switch
-  const newBonus = current.bonus === bonusType ? null : bonusType
-
-  // Enforce rule: defensive bonus only valid on a loss (not draw, not win for the team)
-  // Since we can't know which team the user identifies with, defensive is just a toggle
-  // that's only shown when outcome is not draw
-  simulated[key] = { outcome: current.outcome, bonus: newBonus }
+  // Toggle the specific bonus independently
+  const field = bonusType === 'offensive' ? 'bonusOff' : 'bonusDef'
+  simulated[key] = { ...current, [field]: !current[field] }
   set('simulatedResults', simulated)
 }
 

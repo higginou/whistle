@@ -246,7 +246,7 @@ describe('applySimulatedResults', () => {
   it('returns updated Elos and rugby points for simulated matches', () => {
     const season = makeSeason()
     const simulatedResults = {
-      '21-toulouse-la-rochelle': { outcome: 'homeWin', bonus: null },
+      '21-toulouse-la-rochelle': { outcome: 'homeWin', bonusOff: false, bonusDef: false },
     }
     const result = applySimulatedResults(simulatedResults, season)
     expect(result.elos.get('toulouse')).toBeGreaterThan(1600)
@@ -258,7 +258,7 @@ describe('applySimulatedResults', () => {
   it('handles draw outcome', () => {
     const season = makeSeason()
     const simulatedResults = {
-      '21-toulouse-la-rochelle': { outcome: 'draw', bonus: null },
+      '21-toulouse-la-rochelle': { outcome: 'draw', bonusOff: false, bonusDef: false },
     }
     const result = applySimulatedResults(simulatedResults, season)
     expect(result.rugbyPoints.get('toulouse')).toBe(2)
@@ -268,7 +268,7 @@ describe('applySimulatedResults', () => {
   it('handles awayWin outcome', () => {
     const season = makeSeason()
     const simulatedResults = {
-      '21-toulouse-la-rochelle': { outcome: 'awayWin', bonus: null },
+      '21-toulouse-la-rochelle': { outcome: 'awayWin', bonusOff: false, bonusDef: false },
     }
     const result = applySimulatedResults(simulatedResults, season)
     expect(result.rugbyPoints.get('toulouse')).toBe(0)
@@ -278,7 +278,7 @@ describe('applySimulatedResults', () => {
   it('applies offensive bonus (+1 point to winner)', () => {
     const season = makeSeason()
     const simulatedResults = {
-      '21-toulouse-la-rochelle': { outcome: 'homeWin', bonus: 'offensive' },
+      '21-toulouse-la-rochelle': { outcome: 'homeWin', bonusOff: true, bonusDef: false },
     }
     const result = applySimulatedResults(simulatedResults, season)
     // offensive bonus: +1 to winning team
@@ -288,16 +288,27 @@ describe('applySimulatedResults', () => {
   it('applies defensive bonus (+1 point to loser)', () => {
     const season = makeSeason()
     const simulatedResults = {
-      '21-toulouse-la-rochelle': { outcome: 'homeWin', bonus: 'defensive' },
+      '21-toulouse-la-rochelle': { outcome: 'homeWin', bonusOff: false, bonusDef: true },
     }
     const result = applySimulatedResults(simulatedResults, season)
+    expect(result.rugbyPoints.get('la-rochelle')).toBe(1)
+  })
+
+  it('applies both bonuses simultaneously', () => {
+    const season = makeSeason()
+    const simulatedResults = {
+      '21-toulouse-la-rochelle': { outcome: 'homeWin', bonusOff: true, bonusDef: true },
+    }
+    const result = applySimulatedResults(simulatedResults, season)
+    // offensive: +1 to winner (toulouse), defensive: +1 to loser (la-rochelle)
+    expect(result.rugbyPoints.get('toulouse')).toBe(5)
     expect(result.rugbyPoints.get('la-rochelle')).toBe(1)
   })
 
   it('returns remaining calendar (non-simulated matches)', () => {
     const season = makeSeason()
     const simulatedResults = {
-      '21-toulouse-la-rochelle': { outcome: 'homeWin', bonus: null },
+      '21-toulouse-la-rochelle': { outcome: 'homeWin', bonusOff: false, bonusDef: false },
     }
     const result = applySimulatedResults(simulatedResults, season)
     expect(result.remainingCalendar).toHaveLength(1)
@@ -332,7 +343,7 @@ describe('recalculateProjections', () => {
     }
     const season = makeSeason()
     const simulatedResults = {
-      '21-team-a-team-d': { outcome: 'homeWin', bonus: null },
+      '21-team-a-team-d': { outcome: 'homeWin', bonusOff: false, bonusDef: false },
     }
 
     const result = recalculateProjections(season, simulatedResults, rng)
@@ -360,7 +371,7 @@ describe('recalculateProjections', () => {
     }
     const season = makeSeason()
     const simulatedResults = {
-      '21-team-a-team-d': { outcome: 'awayWin', bonus: null },
+      '21-team-a-team-d': { outcome: 'awayWin', bonusOff: false, bonusDef: false },
     }
     const result = recalculateProjections(season, simulatedResults, rng)
 
@@ -377,7 +388,7 @@ describe('recalculateProjections', () => {
     }
     const season = makeSeason()
     const simulatedResults = {
-      '21-team-a-team-d': { outcome: 'homeWin', bonus: null },
+      '21-team-a-team-d': { outcome: 'homeWin', bonusOff: false, bonusDef: false },
     }
     const result = recalculateProjections(season, simulatedResults, rng)
 

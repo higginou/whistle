@@ -209,7 +209,7 @@ export function matchKey(match) {
  * Apply user-simulated results: compute Elo changes + rugby points for each
  * simulated match, and return the remaining (non-simulated) calendar.
  *
- * @param {object} simulatedResults — { [matchKey]: { outcome, bonus } }
+ * @param {object} simulatedResults — { [matchKey]: { outcome, bonusOff, bonusDef } }
  * @param {object} season — season data with teams, calendar
  * @returns {{ elos: Map<string, number>, rugbyPoints: Map<string, number>, remainingCalendar: object[] }}
  */
@@ -250,12 +250,13 @@ export function applySimulatedResults(simulatedResults, season) {
     let homePts = homePoints
     let awayPts = awayPoints
 
-    if (sim.bonus === 'offensive') {
+    if (sim.bonusOff) {
       // +1 to winner (or both if draw)
       if (sim.outcome === 'homeWin') homePts += 1
       else if (sim.outcome === 'awayWin') awayPts += 1
       else { homePts += 1; awayPts += 1 }
-    } else if (sim.bonus === 'defensive') {
+    }
+    if (sim.bonusDef) {
       // +1 to loser
       if (sim.outcome === 'homeWin') awayPts += 1
       else if (sim.outcome === 'awayWin') homePts += 1
@@ -273,7 +274,7 @@ export function applySimulatedResults(simulatedResults, season) {
  * on remaining matches, compute new projections, and return teams with deltas.
  *
  * @param {object} season — current season data
- * @param {object} simulatedResults — { [matchKey]: { outcome, bonus } }
+ * @param {object} simulatedResults — { [matchKey]: { outcome, bonusOff, bonusDef } }
  * @param {function} [rng=Math.random]
  * @returns {object[]} — teams array with projectedRank, zones, elo, delta
  */

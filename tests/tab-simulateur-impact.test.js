@@ -42,13 +42,13 @@ describe('Impact button visibility', () => {
   })
 
   it('shows impact button when >= 1 match is simulated', () => {
-    set('simulatedResults', { '21-toulouse-la-rochelle': { outcome: 'homeWin', bonus: null } })
+    set('simulatedResults', { '21-toulouse-la-rochelle': { outcome: 'homeWin', bonusOff: false, bonusDef: false } })
     render(container, makeSeason())
     expect(container.querySelector('.w-sim-impact-btn')).not.toBeNull()
   })
 
   it('button has descriptive aria-label', () => {
-    set('simulatedResults', { '21-toulouse-la-rochelle': { outcome: 'draw', bonus: null } })
+    set('simulatedResults', { '21-toulouse-la-rochelle': { outcome: 'draw', bonusOff: false, bonusDef: false } })
     render(container, makeSeason())
     const btn = container.querySelector('.w-sim-impact-btn')
     expect(btn.getAttribute('aria-label')).toContain('1 match(s)')
@@ -65,7 +65,7 @@ describe('Impact button click', () => {
   })
 
   it('calls recalculateProjections and sets store on click', async () => {
-    set('simulatedResults', { '21-toulouse-la-rochelle': { outcome: 'homeWin', bonus: null } })
+    set('simulatedResults', { '21-toulouse-la-rochelle': { outcome: 'homeWin', bonusOff: false, bonusDef: false } })
     render(container, makeSeason())
     const btn = container.querySelector('.w-sim-impact-btn')
 

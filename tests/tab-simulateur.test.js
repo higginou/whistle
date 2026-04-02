@@ -91,9 +91,9 @@ describe('countSimulated', () => {
 
   it('counts entries with non-null outcome', () => {
     expect(countSimulated({
-      'a': { outcome: 'homeWin', bonus: null },
-      'b': { outcome: null, bonus: null },
-      'c': { outcome: 'draw', bonus: 'offensive' },
+      'a': { outcome: 'homeWin', bonusOff: false, bonusDef: false },
+      'b': { outcome: null, bonusOff: false, bonusDef: false },
+      'c': { outcome: 'draw', bonusOff: true, bonusDef: false },
     })).toBe(2)
   })
 
@@ -111,7 +111,7 @@ describe('store simulatedResults', () => {
   })
 
   it('can set and get simulatedResults', () => {
-    const data = { '21-toulouse-la-rochelle': { outcome: 'homeWin', bonus: null } }
+    const data = { '21-toulouse-la-rochelle': { outcome: 'homeWin', bonusOff: false, bonusDef: false } }
     set('simulatedResults', data)
     expect(get('simulatedResults')).toEqual(data)
   })
@@ -119,12 +119,12 @@ describe('store simulatedResults', () => {
   it('fires simulated-results-changed event', () => {
     let fired = false
     on('simulatedResults', () => { fired = true })
-    set('simulatedResults', { x: { outcome: 'draw', bonus: null } })
+    set('simulatedResults', { x: { outcome: 'draw', bonusOff: false, bonusDef: false } })
     expect(fired).toBe(true)
   })
 
   it('resets to empty object', () => {
-    set('simulatedResults', { a: { outcome: 'homeWin', bonus: null } })
+    set('simulatedResults', { a: { outcome: 'homeWin', bonusOff: false, bonusDef: false } })
     reset()
     expect(get('simulatedResults')).toEqual({})
   })
@@ -229,7 +229,7 @@ describe('interactions', () => {
     homeZone.click()
 
     const sim = get('simulatedResults')
-    expect(sim['21-toulouse-la-rochelle']).toEqual({ outcome: 'homeWin', bonus: null })
+    expect(sim['21-toulouse-la-rochelle']).toEqual({ outcome: 'homeWin', bonusOff: false, bonusDef: false })
   })
 
   it('deselects on re-click', () => {
@@ -302,7 +302,7 @@ describe('interactions', () => {
     offBtn.click()
 
     const sim = get('simulatedResults')
-    expect(sim['21-toulouse-la-rochelle'].bonus).toBe('offensive')
+    expect(sim['21-toulouse-la-rochelle'].bonusOff).toBe(true)
   })
 
   it('hides defensive bonus on draw', () => {
@@ -326,12 +326,13 @@ describe('interactions', () => {
     container.querySelector('[data-result="homeWin"]').click()
     container.querySelector('[data-bonus="offensive"]').click()
 
-    expect(get('simulatedResults')['21-toulouse-la-rochelle'].bonus).toBe('offensive')
+    expect(get('simulatedResults')['21-toulouse-la-rochelle'].bonusOff).toBe(true)
 
     // Switch to awayWin
     container.querySelector('[data-result="awayWin"]').click()
 
-    expect(get('simulatedResults')['21-toulouse-la-rochelle'].bonus).toBeNull()
+    expect(get('simulatedResults')['21-toulouse-la-rochelle'].bonusOff).toBe(false)
+    expect(get('simulatedResults')['21-toulouse-la-rochelle'].bonusDef).toBe(false)
   })
 })
 
@@ -404,7 +405,7 @@ describe('accessibility', () => {
     zone.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }))
 
     const sim = get('simulatedResults')
-    expect(sim['21-toulouse-la-rochelle']).toEqual({ outcome: 'homeWin', bonus: null })
+    expect(sim['21-toulouse-la-rochelle']).toEqual({ outcome: 'homeWin', bonusOff: false, bonusDef: false })
   })
 
   it('responds to keyboard Space on team zone', () => {
@@ -413,7 +414,7 @@ describe('accessibility', () => {
     zone.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }))
 
     const sim = get('simulatedResults')
-    expect(sim['21-toulouse-la-rochelle']).toEqual({ outcome: 'homeWin', bonus: null })
+    expect(sim['21-toulouse-la-rochelle']).toEqual({ outcome: 'homeWin', bonusOff: false, bonusDef: false })
   })
 
   it('empty state has aria-label', () => {
