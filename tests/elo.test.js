@@ -28,6 +28,13 @@ import {
   OFFENSIVE_BONUS_PROB,
   DEFENSIVE_MARGIN,
   computeResultBonuses,
+  K_SCHEDULE,
+  PYTHAGOREAN_EXP,
+  getDynamicK,
+  computeConsistencyModifier,
+  computeSoS,
+  computeHomeAwayModifier,
+  computeWeightedForm,
 } from '../scripts/elo.js';
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
@@ -1068,5 +1075,219 @@ describe('bonus constants', () => {
 
   it('DEFENSIVE_MARGIN is 5', () => {
     expect(DEFENSIVE_MARGIN).toBe(5);
+  });
+});
+
+// ─── getDynamicK ──────────────────────────────────────────────────────────
+
+describe('getDynamicK', () => {
+  it('returns 48 for matchdays 1-6', () => {
+    expect(getDynamicK(1)).toBe(48);
+    expect(getDynamicK(6)).toBe(48);
+  });
+
+  it('returns 36 for matchdays 7-13', () => {
+    expect(getDynamicK(7)).toBe(36);
+    expect(getDynamicK(13)).toBe(36);
+  });
+
+  it('returns 28 for matchdays 14-19', () => {
+    expect(getDynamicK(14)).toBe(28);
+    expect(getDynamicK(19)).toBe(28);
+  });
+
+  it('returns 24 for matchdays 20-26', () => {
+    expect(getDynamicK(20)).toBe(24);
+    expect(getDynamicK(26)).toBe(24);
+  });
+
+  it('falls back to K_FACTOR for out-of-range matchday', () => {
+    expect(getDynamicK(0)).toBe(K_FACTOR);
+    expect(getDynamicK(27)).toBe(K_FACTOR);
+    expect(getDynamicK(99)).toBe(K_FACTOR);
+  });
+
+  it('accepts custom schedule', () => {
+    const custom = [{ from: 1, to: 10, k: 50 }];
+    expect(getDynamicK(5, custom)).toBe(50);
+    expect(getDynamicK(11, custom)).toBe(K_FACTOR);
+  });
+});
+
+// ─── computeConsistencyModifier ───────────────────────────────────────────
+
+describe('computeConsistencyModifier', () => {
+  it('returns 1.0 when actual win rate matches expected', () => {
+    // With 0 point diff, expected win rate ≈ 0.5
+    const mod = computeConsistencyModifier(0, 0.5);
+    expect(mod).toBeCloseTo(1.0, 2);
+  });
+
+  it('penalises overperformers (actual > expected)', () => {
+    // Small positive diff but high win rate → overperforming
+    const mod = computeConsistencyModifier(5, 0.9);
+    expect(mod).toBeLessThan(1.0);
+  });
+
+  it('rewards underperformers (actual < expected)', () => {
+    // Large positive diff but low win rate → underperforming
+    const mod = computeConsistencyModifier(100, 0.4);
+    expect(mod).toBeGreaterThan(1.0);
+  });
+
+  it('returns 1.0 for extreme negative diff (guard clause)', () => {
+    expect(computeConsistencyModifier(-600, 0.5)).toBe(1.0);
+  });
+
+  it('accepts custom exponent', () => {
+    const a = computeConsistencyModifier(50, 0.7, 2.0);
+    const b = computeConsistencyModifier(50, 0.7, 3.0);
+    expect(a).not.toBeCloseTo(b, 3);
+  });
+});
+
+// ─── computeSoS ───────────────────────────────────────────────────────────
+
+describe('computeSoS', () => {
+  it('returns 1.0 when no games in calendar', () => {
+    expect(computeSoS('toulouse', [], new Map())).toBe(1.0);
+  });
+
+  it('returns 1.0 when all opponents are at INITIAL_ELO', () => {
+    const calendar = [
+      { home: 'toulouse', away: 'lyon' },
+      { home: 'castres', away: 'toulouse' },
+    ];
+    const elos = new Map([['lyon', 1500], ['castres', 1500]]);
+    expect(computeSoS('toulouse', calendar, elos)).toBeCloseTo(1.0, 5);
+  });
+
+  it('returns > 1 when opponents are above 1500', () => {
+    const calendar = [{ home: 'toulouse', away: 'lyon' }];
+    const elos = new Map([['lyon', 1700]]);
+    expect(computeSoS('toulouse', calendar, elos)).toBeGreaterThan(1.0);
+  });
+
+  it('returns < 1 when opponents are below 1500', () => {
+    const calendar = [{ home: 'toulouse', away: 'vannes' }];
+    const elos = new Map([['vannes', 1300]]);
+    expect(computeSoS('toulouse', calendar, elos)).toBeLessThan(1.0);
+  });
+
+  it('uses INITIAL_ELO for unknown opponents', () => {
+    const calendar = [{ home: 'toulouse', away: 'unknown-team' }];
+    const elos = new Map();
+    expect(computeSoS('toulouse', calendar, elos)).toBeCloseTo(1.0, 5);
+  });
+
+  it('ignores games not involving the team', () => {
+    const calendar = [
+      { home: 'lyon', away: 'castres' },
+      { home: 'toulouse', away: 'pau' },
+    ];
+    const elos = new Map([['lyon', 1800], ['castres', 1200], ['pau', 1600]]);
+    // Only pau is an opponent of toulouse
+    expect(computeSoS('toulouse', calendar, elos)).toBeCloseTo(1600 / 1500, 5);
+  });
+});
+
+// ─── computeHomeAwayModifier ──────────────────────────────────────────────
+
+describe('computeHomeAwayModifier', () => {
+  it('returns 1.0 when no games', () => {
+    expect(computeHomeAwayModifier('toulouse', [])).toBe(1.0);
+  });
+
+  it('returns 1.0 when home/away ratio is balanced', () => {
+    const calendar = [
+      { home: 'toulouse', away: 'lyon' },
+      { home: 'castres', away: 'toulouse' },
+    ];
+    expect(computeHomeAwayModifier('toulouse', calendar)).toBeCloseTo(1.0, 5);
+  });
+
+  it('returns > 1 when more home games remain', () => {
+    const calendar = [
+      { home: 'toulouse', away: 'lyon' },
+      { home: 'toulouse', away: 'castres' },
+      { home: 'toulouse', away: 'pau' },
+      { home: 'toulon', away: 'toulouse' },
+    ];
+    // homeRatio = 3/4 = 0.75 → 1.0 + (0.75-0.5)*0.16 = 1.04
+    expect(computeHomeAwayModifier('toulouse', calendar)).toBeCloseTo(1.04, 5);
+  });
+
+  it('returns < 1 when more away games remain', () => {
+    const calendar = [
+      { home: 'lyon', away: 'toulouse' },
+      { home: 'castres', away: 'toulouse' },
+      { home: 'pau', away: 'toulouse' },
+      { home: 'toulouse', away: 'toulon' },
+    ];
+    // homeRatio = 1/4 = 0.25 → 1.0 + (0.25-0.5)*0.16 = 0.96
+    expect(computeHomeAwayModifier('toulouse', calendar)).toBeCloseTo(0.96, 5);
+  });
+});
+
+// ─── computeWeightedForm ──────────────────────────────────────────────────
+
+describe('computeWeightedForm', () => {
+  it('returns defaults when no results for team', () => {
+    const result = computeWeightedForm('toulouse', []);
+    expect(result.offensiveBonusProb).toBe(OFFENSIVE_BONUS_PROB);
+    expect(result.defensiveBonusProb).toBeCloseTo(0.35, 5);
+    expect(result.formScore).toBe(1.0);
+  });
+
+  it('returns object with three expected keys', () => {
+    const results = [
+      { matchday: 1, home: 'toulouse', away: 'lyon', homeScore: 30, awayScore: 10, homeBonus: 1, awayBonus: 0 },
+    ];
+    const form = computeWeightedForm('toulouse', results);
+    expect(form).toHaveProperty('offensiveBonusProb');
+    expect(form).toHaveProperty('defensiveBonusProb');
+    expect(form).toHaveProperty('formScore');
+  });
+
+  it('increases offensive bonus prob when team has bonuses', () => {
+    const results = [
+      { matchday: 1, home: 'toulouse', away: 'lyon', homeScore: 40, awayScore: 10, homeBonus: 1, awayBonus: 0 },
+      { matchday: 2, home: 'toulouse', away: 'castres', homeScore: 35, awayScore: 12, homeBonus: 1, awayBonus: 0 },
+    ];
+    const withBonuses = computeWeightedForm('toulouse', results);
+
+    const noBonusResults = [
+      { matchday: 1, home: 'toulouse', away: 'lyon', homeScore: 15, awayScore: 10, homeBonus: 0, awayBonus: 0 },
+      { matchday: 2, home: 'toulouse', away: 'castres', homeScore: 14, awayScore: 12, homeBonus: 0, awayBonus: 0 },
+    ];
+    const withoutBonuses = computeWeightedForm('toulouse', noBonusResults);
+
+    expect(withBonuses.offensiveBonusProb).toBeGreaterThan(withoutBonuses.offensiveBonusProb);
+  });
+
+  it('detects defensive bonus from close losses', () => {
+    const results = [
+      { matchday: 1, home: 'toulouse', away: 'lyon', homeScore: 18, awayScore: 20, homeBonus: 0, awayBonus: 0 },
+      { matchday: 2, home: 'castres', away: 'toulouse', homeScore: 25, awayScore: 22, homeBonus: 0, awayBonus: 0 },
+    ];
+    const form = computeWeightedForm('toulouse', results);
+    // Both are close losses (≤15 pts) → defensiveBonusProb should be elevated
+    expect(form.defensiveBonusProb).toBeGreaterThan(0.35 * 0.5);
+  });
+
+  it('only considers the last N results (window)', () => {
+    const results = [];
+    for (let i = 1; i <= 10; i++) {
+      results.push({
+        matchday: i, home: 'toulouse', away: 'lyon',
+        homeScore: i <= 5 ? 40 : 10, awayScore: 20,
+        homeBonus: i <= 5 ? 1 : 0, awayBonus: 0,
+      });
+    }
+    // Window=3 → only last 3 matches (matchdays 8,9,10) which have no bonuses
+    const form3 = computeWeightedForm('toulouse', results, 3);
+    // Window=10 → all matches, includes first 5 with bonuses
+    const form10 = computeWeightedForm('toulouse', results, 10);
+    expect(form10.offensiveBonusProb).toBeGreaterThan(form3.offensiveBonusProb);
   });
 });

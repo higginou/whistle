@@ -27,7 +27,7 @@ import { fileURLToPath } from 'node:url';
 /** Elo starting value for teams without prior history */
 export const INITIAL_ELO = 1500;
 
-/** Base K-factor — sensitivity to individual match results */
+/** Base K-factor — sensitivity to individual match results (legacy default) */
 export const K_FACTOR = 30;
 
 /** Home advantage in Elo points (rugby-adapted, higher than football) */
@@ -35,6 +35,23 @@ export const HOME_ADVANTAGE = 65;
 
 /** Weight of victory margin in Elo delta */
 export const MARGIN_FACTOR = 0.006;
+
+/** Dynamic K-factor by season phase (finale-model.md) */
+export const K_SCHEDULE = [
+  { from: 1, to: 6, k: 48 },
+  { from: 7, to: 13, k: 36 },
+  { from: 14, to: 19, k: 28 },
+  { from: 20, to: 26, k: 24 },
+];
+
+/** Pythagorean expectation exponent for point differential */
+export const PYTHAGOREAN_EXP = 2.37;
+
+/** Dominant victory margin threshold (bonus delta *= 1.2) */
+export const DOMINANT_MARGIN = 20;
+
+/** Draw probability (fixed, per finale-model.md) */
+export const P_DRAW = 0.05;
 
 /** Temporal decay rate per matchday (exponential) */
 export const DECAY_RATE = 0.05;
@@ -56,6 +73,136 @@ const EARLY_SEASON_THRESHOLD = 5;
 
 /** Maximum confidence during early season */
 const EARLY_SEASON_MAX_CONFIDENCE = 0.3;
+
+// ─── Training-Oriented Functions ──────────────────────────────────────────
+
+/**
+ * Get dynamic K-factor based on matchday (finale-model.md §1.1).
+ * Falls back to K_FACTOR if no schedule matches.
+ *
+ * @param {number} matchday - Current matchday (1-26)
+ * @param {Array<{from:number,to:number,k:number}>} [schedule=K_SCHEDULE]
+ * @returns {number} K value for the matchday
+ */
+export function getDynamicK(matchday, schedule = K_SCHEDULE) {
+  for (const band of schedule) {
+    if (matchday >= band.from && matchday <= band.to) return band.k;
+  }
+  return K_FACTOR;
+}
+
+/**
+ * Pythagorean expectation — consistency modifier (finale-model.md §1.3).
+ * Penalises teams that win more than their point differential suggests.
+ *
+ * @param {number} avgPointDiff - Average point differential per game
+ * @param {number} actualWinRate - Actual win rate (0-1)
+ * @param {number} [exp=PYTHAGOREAN_EXP] - Pythagorean exponent
+ * @returns {number} consistencyModifier (around 1.0)
+ */
+export function computeConsistencyModifier(avgPointDiff, actualWinRate, exp = PYTHAGOREAN_EXP) {
+  const ptsFor = 500 + avgPointDiff;
+  const ptsAgainst = 500 - avgPointDiff;
+  if (ptsFor <= 0 || ptsAgainst <= 0) return 1.0;
+  const expectedWinRate = ptsFor ** exp / (ptsFor ** exp + ptsAgainst ** exp);
+  return 1.0 - (actualWinRate - expectedWinRate) * 0.3;
+}
+
+/**
+ * Strength of Schedule — average opponent Elo / 1500 (finale-model.md §2.2).
+ *
+ * @param {string} teamId
+ * @param {object[]} calendar - Remaining matches
+ * @param {Map<string,number>} elos - Current Elo ratings
+ * @returns {number} SoS ratio (>1 = hard schedule, <1 = easy)
+ */
+export function computeSoS(teamId, calendar, elos) {
+  const opponents = calendar
+    .filter((m) => m.home === teamId || m.away === teamId)
+    .map((m) => (m.home === teamId ? m.away : m.home));
+  if (opponents.length === 0) return 1.0;
+  const avgElo = opponents.reduce((s, id) => s + (elos.get(id) ?? INITIAL_ELO), 0) / opponents.length;
+  return avgElo / 1500;
+}
+
+/**
+ * Home/away ratio modifier (finale-model.md §2.3).
+ *
+ * @param {string} teamId
+ * @param {object[]} calendar - Remaining matches
+ * @returns {number} modifier (1.0 = balanced, >1 = more home games)
+ */
+export function computeHomeAwayModifier(teamId, calendar) {
+  const teamGames = calendar.filter((m) => m.home === teamId || m.away === teamId);
+  if (teamGames.length === 0) return 1.0;
+  const homeGames = teamGames.filter((m) => m.home === teamId).length;
+  const homeRatio = homeGames / teamGames.length;
+  return 1.0 + (homeRatio - 0.5) * 0.16;
+}
+
+/**
+ * Weighted form with bonus rates (finale-model.md §1.2).
+ * Returns offensive and defensive bonus probabilities for simulation.
+ *
+ * @param {string} teamId
+ * @param {object[]} results - Match results (with homeBonus/awayBonus if available)
+ * @param {number} [window=5] - Number of recent matches to consider
+ * @param {number} [decay=0.8] - Temporal decay factor
+ * @returns {{ offensiveBonusProb: number, defensiveBonusProb: number, formScore: number }}
+ */
+export function computeWeightedForm(teamId, results, window = 5, decay = 0.8) {
+  const teamResults = results
+    .filter((r) => r.home === teamId || r.away === teamId)
+    .sort((a, b) => a.matchday - b.matchday)
+    .slice(-window);
+
+  if (teamResults.length === 0) {
+    return { offensiveBonusProb: OFFENSIVE_BONUS_PROB, defensiveBonusProb: 0.35, formScore: 1.0 };
+  }
+
+  let offensiveBonusCount = 0;
+  let defensiveBonusCount = 0;
+  let weightedBonusSum = 0;
+  let weightSum = 0;
+
+  for (let i = 0; i < teamResults.length; i++) {
+    const age = teamResults.length - 1 - i;
+    const w = decay ** age;
+    const r = teamResults[i];
+    const isHome = r.home === teamId;
+
+    // Count bonus occurrences
+    const bonus = isHome ? r.homeBonus : r.awayBonus;
+    if (bonus != null) {
+      const bonusVal = typeof bonus === 'number' ? bonus : (bonus ? 1 : 0);
+      weightedBonusSum += (bonusVal / 2.0) * w;
+
+      // Offensive bonus detection (homeBonus/awayBonus from scraped data)
+      if (bonusVal > 0) offensiveBonusCount++;
+    }
+
+    // Defensive bonus: loss by ≤ 15 pts (wider window for form)
+    const teamScore = isHome ? r.homeScore : r.awayScore;
+    const oppScore = isHome ? r.awayScore : r.homeScore;
+    if (teamScore != null && oppScore != null) {
+      if (oppScore > teamScore && (oppScore - teamScore) <= 15) {
+        defensiveBonusCount++;
+      }
+    }
+
+    weightSum += w;
+  }
+
+  const n = teamResults.length;
+  const offensiveFormRate = offensiveBonusCount / n;
+  const defensiveFormRate = defensiveBonusCount / n;
+
+  const offensiveBonusProb = 0.30 * (0.5 + offensiveFormRate);
+  const defensiveBonusProb = 0.35 * (0.5 + defensiveFormRate);
+  const formScore = weightSum > 0 ? 1.0 + (weightedBonusSum / weightSum - 0.25) : 1.0;
+
+  return { offensiveBonusProb, defensiveBonusProb, formScore };
+}
 
 // ─── Elo Calculation Functions ─────────────────────────────────────────────
 
@@ -80,9 +227,18 @@ export function calculateExpectedScore(eloA, eloB) {
  * @param {number} params.awayScore - Points scored by away team
  * @param {number} params.eloHome - Current Elo of home team
  * @param {number} params.eloAway - Current Elo of away team
+ * @param {object} [config] - Optional overrides for training
+ * @param {number} [config.k] - K-factor override (default: K_FACTOR)
+ * @param {number} [config.homeAdvantage] - Home advantage override (default: HOME_ADVANTAGE)
+ * @param {number} [config.marginFactor] - Margin factor override (default: MARGIN_FACTOR)
+ * @param {number} [config.dominantMargin] - Margin threshold for dominant bonus (default: disabled)
  * @returns {{ homeChange: number, awayChange: number }} Elo deltas
  */
-export function calculateEloChange({ homeScore, awayScore, eloHome, eloAway }) {
+export function calculateEloChange({ homeScore, awayScore, eloHome, eloAway }, config = {}) {
+  const k = config.k ?? K_FACTOR;
+  const ha = config.homeAdvantage ?? HOME_ADVANTAGE;
+  const mf = config.marginFactor ?? MARGIN_FACTOR;
+
   // Determine result: 1 = home win, 0.5 = draw, 0 = away win
   let homeResult;
   if (homeScore > awayScore) {
@@ -94,17 +250,18 @@ export function calculateEloChange({ homeScore, awayScore, eloHome, eloAway }) {
   }
 
   // Apply home advantage to expected score calculation (not to stored Elo)
-  const expectedHome = calculateExpectedScore(
-    eloHome + HOME_ADVANTAGE,
-    eloAway,
-  );
+  const expectedHome = calculateExpectedScore(eloHome + ha, eloAway);
 
   // Margin factor: amplifies delta for large victory margins
   const margin = Math.abs(homeScore - awayScore);
-  const marginMultiplier = 1 + MARGIN_FACTOR * margin;
+  let marginMultiplier = 1 + mf * margin;
 
-  const homeChange =
-    K_FACTOR * marginMultiplier * (homeResult - expectedHome);
+  // Dominant victory bonus (finale-model.md §1.1)
+  if (config.dominantMargin != null && margin > config.dominantMargin) {
+    marginMultiplier *= 1.2;
+  }
+
+  const homeChange = k * marginMultiplier * (homeResult - expectedHome);
   const awayChange = -homeChange;
 
   return { homeChange, awayChange };
@@ -203,16 +360,27 @@ export function computeEloRatings(standings, results) {
  * @param {number} eloHome - Elo of home team
  * @param {number} eloAway - Elo of away team
  * @param {function} [rng=Math.random] - Random number generator (injectable for testing)
+ * @param {object} [config] - Optional overrides for training
+ * @param {number} [config.homeAdvantage] - Home advantage Elo points
+ * @param {number} [config.pDraw] - Fixed draw probability (replaces dynamic calc)
+ * @param {number} [config.offensiveBonusProb] - Offensive bonus probability
+ * @param {number} [config.defensiveMargin] - Defensive bonus margin threshold
+ * @param {number} [config.k] - K-factor for Elo change
+ * @param {number} [config.marginFactor] - Margin factor for Elo change
+ * @param {number} [config.dominantMargin] - Dominant victory threshold
  * @returns {{ homePoints: number, awayPoints: number, homeEloChange: number, awayEloChange: number }}
  */
-export function simulateMatch(eloHome, eloAway, rng = Math.random) {
-  const expectedHome = calculateExpectedScore(
-    eloHome + HOME_ADVANTAGE,
-    eloAway,
-  );
+export function simulateMatch(eloHome, eloAway, rng = Math.random, config = {}) {
+  const ha = config.homeAdvantage ?? HOME_ADVANTAGE;
+  const defMargin = config.defensiveMargin ?? DEFENSIVE_MARGIN;
+  const offBonusProb = config.offensiveBonusProb ?? OFFENSIVE_BONUS_PROB;
 
-  // Draw probability: higher when teams are close in Elo
-  const drawProb = 0.15 * (1 - Math.abs(expectedHome - 0.5) * 2);
+  const expectedHome = calculateExpectedScore(eloHome + ha, eloAway);
+
+  // Draw probability: fixed (finale-model.md) or dynamic (legacy)
+  const drawProb = config.pDraw != null
+    ? config.pDraw
+    : 0.15 * (1 - Math.abs(expectedHome - 0.5) * 2);
   const homeWinProb = expectedHome * (1 - drawProb);
 
   const roll = rng();
@@ -223,20 +391,17 @@ export function simulateMatch(eloHome, eloAway, rng = Math.random) {
   let awayScore;
 
   if (roll < homeWinProb) {
-    // Home win — variable margin between 1 and 30
     const margin = Math.floor(rng() * 30) + 1;
     homeScore = 20 + Math.floor(margin / 2);
     awayScore = 20 - Math.ceil(margin / 2);
     homePoints = 4;
     awayPoints = 0;
   } else if (roll < homeWinProb + drawProb) {
-    // Draw
     homePoints = 2;
     awayPoints = 2;
     homeScore = 20;
     awayScore = 20;
   } else {
-    // Away win — variable margin between 1 and 30
     const margin = Math.floor(rng() * 30) + 1;
     awayScore = 20 + Math.floor(margin / 2);
     homeScore = 20 - Math.ceil(margin / 2);
@@ -244,15 +409,15 @@ export function simulateMatch(eloHome, eloAway, rng = Math.random) {
     awayPoints = 4;
   }
 
-  // Defensive bonus: +1 to loser if margin ≤ DEFENSIVE_MARGIN
+  // Defensive bonus: +1 to loser if margin ≤ threshold
   const margin = Math.abs(homeScore - awayScore);
-  if (margin > 0 && margin <= DEFENSIVE_MARGIN) {
+  if (margin > 0 && margin <= defMargin) {
     if (homePoints === 0) homePoints += 1;
     else if (awayPoints === 0) awayPoints += 1;
   }
 
-  // Offensive bonus: ~30% chance, +1 to winner (or both if draw)
-  if (rng() < OFFENSIVE_BONUS_PROB) {
+  // Offensive bonus
+  if (rng() < offBonusProb) {
     if (homeScore > awayScore) homePoints += 1;
     else if (awayScore > homeScore) awayPoints += 1;
     else { homePoints += 1; awayPoints += 1; }
@@ -264,6 +429,11 @@ export function simulateMatch(eloHome, eloAway, rng = Math.random) {
     awayScore,
     eloHome,
     eloAway,
+  }, {
+    k: config.k,
+    homeAdvantage: ha,
+    marginFactor: config.marginFactor,
+    dominantMargin: config.dominantMargin,
   });
 
   return {

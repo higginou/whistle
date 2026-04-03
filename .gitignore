@@ -17,6 +17,9 @@ Thumbs.db
 .env
 .env.*
 
+# API keys
+api-sport.md
+
 # Logs
 *.log
 
