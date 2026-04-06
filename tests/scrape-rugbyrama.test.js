@@ -235,6 +235,33 @@ describe('parseRugbyramaCalendar : extraction des resultats', () => {
       expect(result).toHaveProperty('awayBonus', null);
     }
   });
+
+  it('extrait matchUrl pour les matchs joues', () => {
+    const { results } = parseRugbyramaCalendar(CALENDAR_HTML);
+
+    const sfMontauban = results.find(
+      (r) => r.home === 'stade-francais' && r.away === 'montauban',
+    );
+    expect(sfMontauban.matchUrl).toBe(
+      '/resultats/rugby/top-14/phase-reguliere/rencontre/55924/stade-francais-montauban',
+    );
+  });
+
+  it('extrait matchUrl pour tous les matchs joues', () => {
+    const { results } = parseRugbyramaCalendar(CALENDAR_HTML);
+    for (const r of results) {
+      expect(typeof r.matchUrl).toBe('string');
+      expect(r.matchUrl).toMatch(/\/rencontre\/\d+\//);
+    }
+  });
+
+  it('inclut homeTries et awayTries null par defaut', () => {
+    const { results } = parseRugbyramaCalendar(CALENDAR_HTML);
+    for (const r of results) {
+      expect(r).toHaveProperty('homeTries', null);
+      expect(r).toHaveProperty('awayTries', null);
+    }
+  });
 });
 
 describe('parseRugbyramaCalendar : extraction du calendrier', () => {
@@ -261,6 +288,13 @@ describe('parseRugbyramaCalendar : extraction du calendrier', () => {
     for (const match of calendar) {
       expect(match).not.toHaveProperty('homeScore');
       expect(match).not.toHaveProperty('awayScore');
+    }
+  });
+
+  it('les matchs calendrier n\'ont pas de matchUrl', () => {
+    const { calendar } = parseRugbyramaCalendar(CALENDAR_HTML);
+    for (const m of calendar) {
+      expect(m).not.toHaveProperty('matchUrl');
     }
   });
 });

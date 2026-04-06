@@ -145,6 +145,16 @@ export function parseRugbyramaCalendar(html) {
         return;
       }
 
+      // Extract match URL from the score link
+      const scoreLink = $el
+        .find('a.a_idalgo_content_result_match_score_end')
+        .first();
+      const matchUrl = scoreLink.attr('href') || null;
+
+      if (!matchUrl) {
+        console.warn(`No match URL found for ${homeId} vs ${awayId} on ${date}`);
+      }
+
       results.push({
         matchday: 0, // filled below
         round,
@@ -153,8 +163,11 @@ export function parseRugbyramaCalendar(html) {
         away: awayId,
         homeScore,
         awayScore,
+        matchUrl,
         homeBonus: null,
         awayBonus: null,
+        homeTries: null,
+        awayTries: null,
       });
     } else {
       // Upcoming match
