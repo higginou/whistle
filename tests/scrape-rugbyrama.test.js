@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   parseRugbyramaCalendar,
   parseIdalgoDate,
@@ -505,6 +505,10 @@ describe('parseMatchPage', () => {
 // ─── enrichMatchBonuses ──────────────────────────────────────────────────────
 
 describe('enrichMatchBonuses', () => {
+  let originalFetch;
+  beforeEach(() => { originalFetch = global.fetch; });
+  afterEach(() => { global.fetch = originalFetch; });
+
   it('enrichit les matchs avec matchUrl et bonus null', async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
