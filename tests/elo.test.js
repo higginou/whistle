@@ -1378,4 +1378,43 @@ describe('computeWeightedForm', () => {
     const form10 = computeWeightedForm('toulouse', results, 10);
     expect(form10.offensiveBonusProb).toBeGreaterThan(form3.offensiveBonusProb);
   });
+
+  it('gere le format objet { offensive, defensive } — bonus offensif actif', () => {
+    const withObj = [
+      {
+        matchday: 1, home: 'toulouse', away: 'lyon',
+        homeScore: 40, awayScore: 10,
+        homeBonus: { offensive: true, defensive: false },
+        awayBonus: { offensive: false, defensive: false },
+      },
+    ];
+    const withNum = [
+      {
+        matchday: 1, home: 'toulouse', away: 'lyon',
+        homeScore: 40, awayScore: 10,
+        homeBonus: 1, awayBonus: 0,
+      },
+    ];
+    const formObj = computeWeightedForm('toulouse', withObj);
+    const formNum = computeWeightedForm('toulouse', withNum);
+    // Both formats should produce the same offensiveBonusProb
+    expect(formObj.offensiveBonusProb).toBeCloseTo(formNum.offensiveBonusProb, 5);
+  });
+
+  it('gere le format objet { offensive, defensive } — bonus offensif inactif', () => {
+    const results = [
+      {
+        matchday: 1, home: 'toulouse', away: 'lyon',
+        homeScore: 20, awayScore: 15,
+        homeBonus: { offensive: false, defensive: true },
+        awayBonus: { offensive: false, defensive: false },
+      },
+    ];
+    const form = computeWeightedForm('toulouse', results);
+    // No offensive bonus → same as numeric 0
+    const formNoBonus = computeWeightedForm('toulouse', [
+      { matchday: 1, home: 'toulouse', away: 'lyon', homeScore: 20, awayScore: 15, homeBonus: 0, awayBonus: 0 },
+    ]);
+    expect(form.offensiveBonusProb).toBeCloseTo(formNoBonus.offensiveBonusProb, 5);
+  });
 });

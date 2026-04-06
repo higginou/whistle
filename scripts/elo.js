@@ -171,14 +171,21 @@ export function computeWeightedForm(teamId, results, window = 5, decay = 0.8) {
     const r = teamResults[i];
     const isHome = r.home === teamId;
 
-    // Count bonus occurrences
+    // Count offensive bonus occurrences
+    // homeBonus/awayBonus can be:
+    //   { offensive: boolean, defensive: boolean } — from enrichMatchBonuses()
+    //   number (0 or 1) — legacy format from pre-enrichment data
     const bonus = isHome ? r.homeBonus : r.awayBonus;
     if (bonus != null) {
-      const bonusVal = typeof bonus === 'number' ? bonus : (bonus ? 1 : 0);
+      let bonusVal;
+      if (typeof bonus === 'object') {
+        bonusVal = bonus.offensive ? 1 : 0;
+        if (bonus.offensive) offensiveBonusCount++;
+      } else {
+        bonusVal = typeof bonus === 'number' ? bonus : (bonus ? 1 : 0);
+        if (bonusVal > 0) offensiveBonusCount++;
+      }
       weightedBonusSum += (bonusVal / 2.0) * w;
-
-      // Offensive bonus detection (homeBonus/awayBonus from scraped data)
-      if (bonusVal > 0) offensiveBonusCount++;
     }
 
     // Defensive bonus: loss by ≤ 15 pts (wider window for form)
