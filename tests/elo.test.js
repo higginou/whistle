@@ -1077,6 +1077,21 @@ describe('computeResultBonuses', () => {
     expect(points.get('toulouse')).toBe(6);
     expect(points.get('la-rochelle')).toBe(0);
   });
+
+  it('fallback utilise quand awayBonus est undefined (scraper defaillant)', () => {
+    const results = [
+      makeResult({
+        home: 'toulouse', away: 'la-rochelle',
+        homeScore: 30, awayScore: 20,
+        homeBonus: { offensive: true, defensive: false },
+        awayBonus: undefined,
+      }),
+    ];
+    const points = computeResultBonuses(results);
+    // Falls through to fallback — margin=10, no BD
+    expect(points.get('toulouse')).toBe(4);
+    expect(points.get('la-rochelle')).toBe(0);
+  });
 });
 
 // ─── simulateSeason with initialPoints ───────────────────────────────────

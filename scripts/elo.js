@@ -445,10 +445,12 @@ export function simulateMatch(eloHome, eloAway, rng = Math.random, config = {}) 
 }
 
 /**
- * Compute rugby points from real match results including defensive bonus.
- * Offensive bonus is NOT computed (no try data available from scraper).
+ * Compute rugby points from real match results.
+ * Uses real BO/BD data when homeBonus/awayBonus are available (scraped),
+ * falls back to margin heuristic (BD only, margin ≤ DEFENSIVE_MARGIN) otherwise.
  *
- * @param {object[]} results - Match results with home, away, homeScore, awayScore
+ * @param {object[]} results - Match results with home, away, homeScore, awayScore,
+ *   and optionally homeBonus/awayBonus ({ offensive: boolean, defensive: boolean })
  * @returns {Map<string, number>} Team ID → accumulated rugby points
  */
 export function computeResultBonuses(results) {
@@ -479,7 +481,8 @@ export function computeResultBonuses(results) {
       if (r.awayBonus.offensive) points.set(r.away, points.get(r.away) + 1);
       if (r.awayBonus.defensive) points.set(r.away, points.get(r.away) + 1);
     } else {
-      // Fallback: infer defensive bonus from margin only (no offensive bonus)
+      // Fallback: infer defensive bonus from margin only (no offensive bonus).
+      // Draws have margin = 0 and no loser — no BD applicable.
       if (r.homeScore > r.awayScore && margin <= DEFENSIVE_MARGIN) {
         points.set(r.away, points.get(r.away) + 1);
       } else if (r.homeScore < r.awayScore && margin <= DEFENSIVE_MARGIN) {
