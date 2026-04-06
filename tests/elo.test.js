@@ -35,6 +35,7 @@ import {
   computeSoS,
   computeHomeAwayModifier,
   computeWeightedForm,
+  median,
 } from '../scripts/elo.js';
 
 // ─── Fixtures ──────────────────────────────────────────────────────────────
@@ -1416,5 +1417,29 @@ describe('computeWeightedForm', () => {
       { matchday: 1, home: 'toulouse', away: 'lyon', homeScore: 20, awayScore: 15, homeBonus: 0, awayBonus: 0 },
     ]);
     expect(form.offensiveBonusProb).toBeCloseTo(formNoBonus.offensiveBonusProb, 5);
+  });
+});
+
+describe('median', () => {
+  it('returns middle value for odd-length array', () => {
+    expect(median([3, 1, 2])).toBe(2);
+  });
+
+  it('returns rounded average of two middle values for even-length array', () => {
+    expect(median([1, 2, 3, 4])).toBe(3); // (2+3)/2 = 2.5 → 3
+  });
+
+  it('returns the single value for length-1 array', () => {
+    expect(median([42])).toBe(42);
+  });
+
+  it('rounds to nearest integer', () => {
+    expect(median([1, 4])).toBe(3); // (1+4)/2 = 2.5 → 3
+  });
+
+  it('does not mutate the input array', () => {
+    const arr = [3, 1, 2];
+    median(arr);
+    expect(arr).toEqual([3, 1, 2]);
   });
 });

@@ -74,6 +74,19 @@ const EARLY_SEASON_THRESHOLD = 5;
 /** Maximum confidence during early season */
 const EARLY_SEASON_MAX_CONFIDENCE = 0.3;
 
+/**
+ * Compute median of a numeric array, rounded to nearest integer.
+ * @param {number[]} arr
+ * @returns {number}
+ */
+export function median(arr) {
+  const sorted = [...arr].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0
+    ? Math.round((sorted[mid - 1] + sorted[mid]) / 2)
+    : sorted[mid];
+}
+
 // ─── Training-Oriented Functions ──────────────────────────────────────────
 
 /**
