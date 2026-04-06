@@ -36,31 +36,71 @@ donjon-finale.js       → epic end screen + rank
 donjon-audio.js        → Web Audio API (SFX + BGM + mute)
 ```
 
-Each component exports `render()` + `destroy()`. The orchestrator mounts/unmounts based on state.
+Each component exports `render(container, options)` + `destroy()`. The orchestrator mounts/unmounts based on state.
+
+### Component signatures
+
+```js
+// donjon-splash.js
+render(container, { matchesPlayed, totalMatchdays, onStart })
+destroy()
+
+// donjon-combat.js
+render(container, { match, audio, onSequenceComplete })
+destroy()
+
+// donjon-verdict.js
+render(container, { match, audio, onNext })
+destroy()
+
+// donjon-locked-door.js
+render(container, { nextOpponent, audio, onTimeout })
+destroy()
+
+// donjon-finale.js
+render(container, { matches, audio, onReplay })
+destroy()
+
+// donjon-audio.js — singleton, not a visual component
+init()
+play(soundId)
+startBGM() / stopBGM()
+setMuted(bool) / isMuted()
+destroy()
+```
 
 ## Data Layer
 
-### Source
+### Sources
 
-Match results: `scraped.json` → `results` field, filtered on `home === 'la-rochelle' || away === 'la-rochelle'`, sorted by `matchday`.
+- **Match results:** `scraped.json` → `results` field, filtered on `home === 'la-rochelle' || away === 'la-rochelle'`, sorted by `matchday`.
+- **Future matches:** `2025-2026.json` → `calendar` field (not `scraped.json`'s `calendar`), filtered on `home === 'la-rochelle' || away === 'la-rochelle'`. Schema: `{ matchday, date, home, away, difficulty }`.
+- **Team names:** `2025-2026.json` → `teams` field. Used to resolve team `id` → display `name` (e.g., `"perpignan"` → `"USA Perpignan"`). Required by all components that display team names.
 
-Future matches: `2025-2026.json` → `calendar` field, filtered on La Rochelle.
+### Normalization logic
 
-Team names: `2025-2026.json` → `teams` field (mapping id → name).
-
-### Normalized match structure
+For each match in `scraped.json` results where La Rochelle is `home` or `away`:
 
 ```js
+const isHome = match.home === 'la-rochelle'
+const opponentId = isHome ? match.away : match.home
+
 {
-  matchday: 4,
-  date: "2025-09-27",
-  isHome: true,
-  opponent: { id: "perpignan", name: "USA Perpignan" },
-  score: { lr: 31, opponent: 8 },
-  tries: { lr: 4, opponent: 1 },
+  matchday: match.matchday,
+  date: match.date,
+  isHome,
+  opponent: { id: opponentId, name: teamsMap.get(opponentId) },
+  score: {
+    lr: isHome ? match.homeScore : match.awayScore,
+    opponent: isHome ? match.awayScore : match.homeScore
+  },
+  tries: {
+    lr: isHome ? match.homeTries : match.awayTries,
+    opponent: isHome ? match.awayTries : match.homeTries
+  },
   bonus: {
-    lr: { offensive: true, defensive: false },
-    opponent: { offensive: false, defensive: false }
+    lr: isHome ? match.homeBonus : match.awayBonus,
+    opponent: isHome ? match.awayBonus : match.homeBonus
   },
   // Future fields (null until pipeline provides them)
   conversions: null,
@@ -68,8 +108,8 @@ Team names: `2025-2026.json` → `teams` field (mapping id → name).
   cards: null,
   scorers: null,
   // Derived
-  result: "win",       // "win" | "loss" | "draw"
-  magnitude: "large"   // "large" (>15pts) | "medium" (8-15) | "close" (<8)
+  result,     // "win" if lr > opponent, "loss" if lr < opponent, "draw" if equal
+  magnitude   // "large" if gap >= 16, "medium" if gap 8-15, "close" if gap <= 7
 }
 ```
 
@@ -105,8 +145,8 @@ SPLASH → COMBAT → VERDICT → (loop matchday++)
   - index+1 < matches.length → **COMBAT** (index++)
   - index+1 >= matches.length && matchday < 26 → **LOCKED_DOOR**
   - all 26 matchdays played → **FINALE**
-- **LOCKED_DOOR** → auto-transition after 3s → **FINALE**
-- **FINALE** → REJOUER button → **SPLASH**
+- **LOCKED_DOOR** → auto-transition after 3s → **FINALE** (FINALE works at any point in the season — stats reflect matches played so far, rank is based on current win rate)
+- **FINALE** → REJOUER button → **SPLASH** (resets `currentIndex` to 0, full replay from J1)
 
 Each transition calls `destroy()` on current component and `render()` on next.
 
@@ -154,11 +194,12 @@ Each transition calls `destroy()` on current component and `render()` on next.
 
 | Scenario | Visual | Audio |
 |----------|--------|-------|
-| Win large (>15pts) or bonus offensif | "VICTOIRE" gold, particle explosion, screen flashes gold, light shake | Epic fanfare, crowd roar |
-| Win medium/close | "VICTOIRE" green, subtle glow, no particles | Short positive sting |
+| Win + magnitude `large` (gap >= 16) | "VICTOIRE" gold, particle explosion, screen flashes gold, light shake | Epic fanfare, crowd roar |
+| Win + bonus offensif (regardless of magnitude) | Same as win large — bonus off always triggers top tier | Epic fanfare, crowd roar |
+| Win + magnitude `medium` or `close` (no bonus off) | "VICTOIRE" green, subtle glow, no particles | Short positive sting |
 | Draw | "MATCH NUL" white, neutral flash | Neutral sound |
-| Loss close (bonus def or <8pts) | "DEFAITE" orange, slight screen tremble | Muted thud |
-| Loss large (>15pts) | "DEFAITE" red, violent screen shake, dark vignette closing in | Heavy impact, low rumble |
+| Loss + magnitude `close` (gap <= 7) or bonus defensif | "DEFAITE" orange, slight screen tremble | Muted thud |
+| Loss + magnitude `medium` or `large` (no bonus def) | "DEFAITE" red, violent screen shake, dark vignette closing in | Heavy impact, low rumble |
 
 **Sequence:**
 1. Verdict text arrives with scale (0 → 1.2 → 1) plus corresponding flash/shake
@@ -256,9 +297,11 @@ destroy()        // Cleanup
 
 **Sound files:** Royalty-free, sourced separately. Infrastructure is built with placeholder slots.
 
+**Error handling:** Silent failure. If an audio file is missing (404) or fails to decode, `play()` does nothing. If `AudioContext` creation fails or `resume()` is blocked (iOS Safari), audio is silently disabled for the session. No UI error, no fallback — the game continues without sound.
+
 ## CSS & Art Direction
 
-### Donjon palette (custom properties in `tokens.css`)
+### Donjon palette (custom properties in `tab-donjon.css`)
 
 ```css
 --w-donjon-bg: #0a0a0f;            /* Very dark background */
@@ -296,7 +339,7 @@ One CSS file per component, following project convention.
 
 ## Accessibility
 
-- **prefers-reduced-motion:** NOT respected. Full animations for all users. This is a deliberate design choice for this personal app.
+- **prefers-reduced-motion:** NOT respected. Full animations for all users. This is a deliberate design choice for this personal app. The DoD checklist item 8 (a11y prefers-reduced-motion) is explicitly waived for all Donjon stories by user decision.
 - **Keyboard:** FIGHT and SUIVANT buttons focusable and activatable with Enter/Space.
 - **aria-labels:** On all interactive elements and status indicators.
 - **Screen readers:** Verdict text and stats are real DOM text, not just visual effects.
