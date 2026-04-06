@@ -11,12 +11,15 @@
  */
 
 import * as cheerio from 'cheerio';
-import { resolveIdalgoSlug, VALID_TEAM_IDS } from './team-mapping.js';
+import { resolveIdalgoSlug, resolveTeamId, VALID_TEAM_IDS } from './team-mapping.js';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
 const CALENDAR_URL =
   'https://www.rugbyrama.fr/resultats/rugby/top-14/calendrier';
+
+const STANDINGS_URL =
+  'https://www.rugbyrama.fr/resultats/rugby/top-14/classements';
 
 const MATCHES_PER_MATCHDAY = 7;
 
@@ -187,38 +190,49 @@ export function parseRugbyramaCalendar(html) {
     );
   }
 
-  // Assign matchday numbers from round order
-  const roundIds = [...roundMatches.keys()].sort(
-    (a, b) => parseInt(a, 10) - parseInt(b, 10),
-  );
-  const roundToMatchday = new Map();
-  for (let i = 0; i < roundIds.length; i++) {
-    roundToMatchday.set(roundIds[i], i + 1);
-  }
+  // Check if data-round is reliable (distinct rounds ≈ number of matchdays)
+  const distinctRounds = roundMatches.size;
+  const allMatches = [...results, ...calendar];
+  const expectedMatchdays = Math.ceil(allMatches.length / MATCHES_PER_MATCHDAY);
+  const roundsReliable = distinctRounds >= expectedMatchdays * 0.5;
 
-  for (const entry of results) {
-    entry.matchday = roundToMatchday.get(entry.round);
-    delete entry.round;
-  }
-  for (const entry of calendar) {
-    entry.matchday = roundToMatchday.get(entry.round);
-    delete entry.round;
-  }
-
-  // Current matchday = last round with at least 1 played match
-  let currentMatchday = 1;
-  for (const [round, stats] of roundMatches) {
-    if (stats.played > 0) {
-      const md = roundToMatchday.get(round);
-      if (md > currentMatchday) currentMatchday = md;
+  if (roundsReliable) {
+    // Original logic: assign matchday from round order
+    const roundIds = [...roundMatches.keys()].sort(
+      (a, b) => parseInt(a, 10) - parseInt(b, 10),
+    );
+    const roundToMatchday = new Map();
+    for (let i = 0; i < roundIds.length; i++) {
+      roundToMatchday.set(roundIds[i], i + 1);
+    }
+    for (const entry of allMatches) {
+      entry.matchday = roundToMatchday.get(entry.round);
+    }
+  } else {
+    // Fallback: derive matchdays from dates.
+    // Sort all matches by date, then assign matchdays in groups of MATCHES_PER_MATCHDAY.
+    // This handles deferred matches correctly by treating every 7 matches as one matchday.
+    const sorted = [...allMatches].sort((a, b) => a.date.localeCompare(b.date));
+    for (let i = 0; i < sorted.length; i++) {
+      sorted[i].matchday = Math.floor(i / MATCHES_PER_MATCHDAY) + 1;
     }
   }
 
+  // Clean up round from entries
+  for (const entry of allMatches) {
+    delete entry.round;
+  }
+
+  // Current matchday = last matchday with at least 1 played match
+  let currentMatchday = 1;
+  for (const r of results) {
+    if (r.matchday > currentMatchday) currentMatchday = r.matchday;
+  }
+
   // Complete = all matches in current matchday are played
-  const currentRound = roundIds[currentMatchday - 1];
-  const currentStats = roundMatches.get(currentRound);
-  const complete =
-    currentStats && currentStats.played >= MATCHES_PER_MATCHDAY;
+  const currentMdMatches = allMatches.filter((m) => m.matchday === currentMatchday);
+  const currentMdPlayed = results.filter((r) => r.matchday === currentMatchday).length;
+  const complete = currentMdPlayed >= MATCHES_PER_MATCHDAY;
 
   return { matchday: currentMatchday, results, calendar, complete };
 }
@@ -367,6 +381,64 @@ export async function enrichMatchBonuses(results) {
   }
 }
 
+// ─── Standings Parsing ──────────────────────────────────────────────────────
+
+/**
+ * Parse the Rugbyrama standings page (idalgo widget).
+ * Extracts the first (general) standings table — the page also contains
+ * home-only, away-only, and recent-form tables that we skip.
+ *
+ * Each team is a `<li class="li_idalgo_content_standing_team_{id}">` with
+ * child spans for points, played, wins, draws, losses, BO, BD, etc.
+ *
+ * @param {string} html - Raw HTML of the standings page
+ * @returns {Array<object>} Parsed standings (14 teams, general classification only)
+ */
+export function parseRugbyramaStandings(html) {
+  const $ = cheerio.load(html);
+  const standings = [];
+  const seen = new Set();
+
+  $('li[class*="li_idalgo_content_standing_team_"]').each((_i, el) => {
+    const $el = $(el);
+
+    // Extract team slug from the link href (/resultats/rugby/equipe/{id}/{slug})
+    const href = $el.find('.a_idalgo_content_standing_name').attr('href') || '';
+    const slugMatch = href.match(/\/resultats\/rugby\/equipe\/\d+\/([^/"]+)/);
+    const slug = slugMatch ? slugMatch[1] : null;
+
+    // Try idalgo slug first, fall back to display name
+    let teamId = resolveIdalgoSlug(slug);
+    if (!teamId) {
+      const name = $el.find('.a_idalgo_content_standing_name').text().trim();
+      teamId = resolveTeamId(name);
+    }
+    if (!teamId) return;
+
+    // Only take the first occurrence of each team (general classification)
+    if (seen.has(teamId)) return;
+    seen.add(teamId);
+
+    const int = (sel) => parseInt($el.find(sel).text().trim(), 10) || 0;
+
+    standings.push({
+      id: teamId,
+      rank: standings.length + 1,
+      points: int('.span_idalgo_content_standing_points'),
+      played: int('.span_idalgo_content_standing_played'),
+      won: int('.span_idalgo_content_standing_win'),
+      drawn: int('.span_idalgo_content_standing_draw'),
+      lost: int('.span_idalgo_content_standing_lost'),
+      bonusOffensive: int('.span_idalgo_content_standing_bo'),
+      bonusDefensive: int('.span_idalgo_content_standing_bd'),
+      pointsFor: int('.span_idalgo_content_standing_for'),
+      pointsAgainst: int('.span_idalgo_content_standing_against'),
+    });
+  });
+
+  return standings;
+}
+
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 /**
@@ -376,8 +448,19 @@ export async function enrichMatchBonuses(results) {
 export async function scrapeRugbyrama() {
   console.log('Whistle — Scraping Rugbyrama TOP 14 data...');
 
-  const html = await fetchPage(CALENDAR_URL);
-  const matchData = parseRugbyramaCalendar(html);
+  const [calendarHtml, standingsHtml] = await Promise.all([
+    fetchPage(CALENDAR_URL),
+    fetchPage(STANDINGS_URL),
+  ]);
+
+  const matchData = parseRugbyramaCalendar(calendarHtml);
+  const standings = parseRugbyramaStandings(standingsHtml);
+
+  if (standings.length > 0) {
+    console.log(`Standings: ${standings.length} teams parsed (leader: ${standings[0].id} with ${standings[0].points} pts)`);
+  } else {
+    console.warn('Could not parse standings from Rugbyrama — page structure may have changed');
+  }
 
   // Validate team IDs
   const unknownTeams = new Set();
@@ -397,7 +480,7 @@ export async function scrapeRugbyrama() {
     source: 'rugbyrama',
     matchday: matchData.matchday,
     complete: matchData.complete,
-    standings: [], // computed by elo.js from results
+    standings,
     results: matchData.results,
     calendar: matchData.calendar,
   };

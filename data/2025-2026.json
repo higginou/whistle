@@ -1,138 +1,123 @@
 {
   "season": "2025-2026",
-  "lastUpdated": "2026-04-06T10:16:56Z",
+  "lastUpdated": "2026-04-06T10:38:49Z",
   "matchday": 20,
   "brierScore": null,
   "teams": [
     {
-      "id": "bordeaux-begles",
-      "name": "Union Bordeaux-Begles",
-      "currentRank": 1,
-      "projectedRank": 1,
-      "elo": 1518,
-      "points": 4,
-      "confidence": 0.47,
-      "zones": {
-        "europe": 1,
-        "top6": 0,
-        "mid": 0,
-        "relegation": 0
-      },
-      "form": [
-        "W"
-      ],
-      "trend": "stable"
-    },
-    {
-      "id": "castres",
-      "name": "Castres Olympique",
-      "currentRank": 2,
-      "projectedRank": 3,
-      "elo": 1515,
-      "points": 4,
-      "confidence": 0.46,
-      "zones": {
-        "europe": 0.4845,
-        "top6": 0.5155,
-        "mid": 0,
-        "relegation": 0
-      },
-      "form": [
-        "W"
-      ],
-      "trend": "stable"
-    },
-    {
       "id": "toulouse",
       "name": "Stade Toulousain",
-      "currentRank": 3,
-      "projectedRank": 4,
-      "elo": 1514,
-      "points": 4,
-      "confidence": 0.46,
+      "currentRank": 1,
+      "projectedRank": 1,
+      "elo": 1585,
+      "points": 72,
+      "confidence": 0.54,
       "zones": {
-        "europe": 0,
-        "top6": 1,
+        "europe": 0.9743,
+        "top6": 0.0257,
         "mid": 0,
         "relegation": 0
       },
       "form": [
+        "W",
+        "W",
+        "W",
+        "L",
         "W"
       ],
       "trend": "stable"
+    },
+    {
+      "id": "bordeaux-begles",
+      "name": "Union Bordeaux-Begles",
+      "currentRank": 4,
+      "projectedRank": 3,
+      "elo": 1549,
+      "points": 59,
+      "confidence": 0.47,
+      "zones": {
+        "europe": 0.2985,
+        "top6": 0.6397,
+        "mid": 0.0618,
+        "relegation": 0
+      },
+      "form": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "W"
+      ],
+      "trend": "up",
+      "tiebreaker": "h2h-1"
+    },
+    {
+      "id": "stade-francais",
+      "name": "Stade Francais Paris",
+      "currentRank": 3,
+      "projectedRank": 3,
+      "elo": 1542,
+      "points": 59,
+      "confidence": 0.47,
+      "zones": {
+        "europe": 0.301,
+        "top6": 0.645,
+        "mid": 0.054,
+        "relegation": 0
+      },
+      "form": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "W"
+      ],
+      "trend": "up",
+      "tiebreaker": "h2h-1"
     },
     {
       "id": "pau",
       "name": "Section Paloise",
-      "currentRank": 4,
-      "projectedRank": 5,
-      "elo": 1513,
-      "points": 4,
-      "confidence": 0.46,
-      "zones": {
-        "europe": 0,
-        "top6": 1,
-        "mid": 0,
-        "relegation": 0
-      },
-      "form": [
-        "W"
-      ],
-      "trend": "stable"
-    },
-    {
-      "id": "bayonne",
-      "name": "Aviron Bayonnais",
-      "currentRank": 5,
-      "projectedRank": 6,
-      "elo": 1513,
-      "points": 4,
-      "confidence": 0.46,
-      "zones": {
-        "europe": 0,
-        "top6": 1,
-        "mid": 0,
-        "relegation": 0
-      },
-      "form": [
-        "W"
-      ],
-      "trend": "stable"
-    },
-    {
-      "id": "perpignan",
-      "name": "perpignan",
-      "currentRank": 6,
-      "projectedRank": 7,
-      "elo": 1513,
-      "points": 4,
-      "confidence": 0.46,
-      "zones": {
-        "europe": 0,
-        "top6": 0.2412,
-        "mid": 0.7588,
-        "relegation": 0
-      },
-      "form": [
-        "W"
-      ],
-      "trend": "stable"
-    },
-    {
-      "id": "lyon",
-      "name": "LOU Rugby",
-      "currentRank": 7,
-      "projectedRank": 8,
-      "elo": 1482,
-      "points": 1,
+      "currentRank": 2,
+      "projectedRank": 4,
+      "elo": 1538,
+      "points": 58,
       "confidence": 0.47,
       "zones": {
-        "europe": 0,
-        "top6": 0,
-        "mid": 1,
+        "europe": 0.2228,
+        "top6": 0.6803,
+        "mid": 0.0969,
         "relegation": 0
       },
       "form": [
+        "W",
+        "L",
+        "W",
+        "L",
+        "W"
+      ],
+      "trend": "stable",
+      "tiebreaker": "h2h-1"
+    },
+    {
+      "id": "montpellier",
+      "name": "Montpellier Herault Rugby",
+      "currentRank": 5,
+      "projectedRank": 4,
+      "elo": 1552,
+      "points": 56,
+      "confidence": 0.47,
+      "zones": {
+        "europe": 0.1686,
+        "top6": 0.7141,
+        "mid": 0.1173,
+        "relegation": 0
+      },
+      "form": [
+        "W",
+        "W",
+        "W",
+        "W",
         "L"
       ],
       "trend": "stable"
@@ -140,52 +125,139 @@
     {
       "id": "clermont",
       "name": "ASM Clermont Auvergne",
-      "currentRank": 8,
-      "projectedRank": 8,
-      "elo": 1500,
-      "points": 0,
-      "confidence": 0.46,
-      "zones": {
-        "europe": 0.3567,
-        "top6": 0,
-        "mid": 0.5404,
-        "relegation": 0.1029
-      },
-      "form": [],
-      "trend": "stable"
-    },
-    {
-      "id": "stade-francais",
-      "name": "Stade Francais Paris",
-      "currentRank": 9,
+      "currentRank": 6,
       "projectedRank": 7,
-      "elo": 1500,
-      "points": 0,
-      "confidence": 0.46,
+      "elo": 1514,
+      "points": 52,
+      "confidence": 0.48,
       "zones": {
-        "europe": 0.1588,
-        "top6": 0.2433,
-        "mid": 0.3024,
-        "relegation": 0.2955
+        "europe": 0.0199,
+        "top6": 0.4519,
+        "mid": 0.5282,
+        "relegation": 0
       },
-      "form": [],
-      "trend": "stable"
+      "form": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "trend": "down"
     },
     {
       "id": "racing-92",
       "name": "Racing 92",
-      "currentRank": 10,
-      "projectedRank": 9,
-      "elo": 1487,
-      "points": 0,
-      "confidence": 0.46,
+      "currentRank": 7,
+      "projectedRank": 7,
+      "elo": 1522,
+      "points": 50,
+      "confidence": 0.48,
       "zones": {
-        "europe": 0,
-        "top6": 0,
-        "mid": 1,
+        "europe": 0.0144,
+        "top6": 0.4683,
+        "mid": 0.5173,
         "relegation": 0
       },
       "form": [
+        "W",
+        "W",
+        "L",
+        "W",
+        "L"
+      ],
+      "trend": "stable"
+    },
+    {
+      "id": "castres",
+      "name": "Castres Olympique",
+      "currentRank": 8,
+      "projectedRank": 9,
+      "elo": 1491,
+      "points": 47,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0.0003,
+        "top6": 0.1442,
+        "mid": 0.8555,
+        "relegation": 0
+      },
+      "form": [
+        "W",
+        "L",
+        "L",
+        "L",
+        "W"
+      ],
+      "trend": "stable"
+    },
+    {
+      "id": "bayonne",
+      "name": "Aviron Bayonnais",
+      "currentRank": 9,
+      "projectedRank": 10,
+      "elo": 1484,
+      "points": 45,
+      "confidence": 0.47,
+      "zones": {
+        "europe": 0.0002,
+        "top6": 0.0751,
+        "mid": 0.9237,
+        "relegation": 0.001
+      },
+      "form": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "W"
+      ],
+      "trend": "up",
+      "tiebreaker": "h2h-2"
+    },
+    {
+      "id": "toulon",
+      "name": "RC Toulon",
+      "currentRank": 11,
+      "projectedRank": 10,
+      "elo": 1456,
+      "points": 45,
+      "confidence": 0.49,
+      "zones": {
+        "europe": 0,
+        "top6": 0.0589,
+        "mid": 0.9409,
+        "relegation": 0.0002
+      },
+      "form": [
+        "L",
+        "L",
+        "D",
+        "L",
+        "L"
+      ],
+      "trend": "down",
+      "tiebreaker": "h2h-2"
+    },
+    {
+      "id": "lyon",
+      "name": "LOU Rugby",
+      "currentRank": 11,
+      "projectedRank": 10,
+      "elo": 1490,
+      "points": 44,
+      "confidence": 0.46,
+      "zones": {
+        "europe": 0,
+        "top6": 0.0527,
+        "mid": 0.9465,
+        "relegation": 0.0008
+      },
+      "form": [
+        "W",
+        "W",
+        "D",
+        "W",
         "L"
       ],
       "trend": "stable"
@@ -193,57 +265,47 @@
     {
       "id": "la-rochelle",
       "name": "Stade Rochelais",
-      "currentRank": 11,
+      "currentRank": 10,
       "projectedRank": 10,
-      "elo": 1487,
-      "points": 0,
-      "confidence": 0.46,
+      "elo": 1486,
+      "points": 43,
+      "confidence": 0.47,
       "zones": {
         "europe": 0,
-        "top6": 0,
-        "mid": 1,
-        "relegation": 0
+        "top6": 0.0441,
+        "mid": 0.9531,
+        "relegation": 0.0028
       },
       "form": [
+        "L",
+        "L",
+        "W",
+        "W",
         "L"
       ],
-      "trend": "stable"
+      "trend": "stable",
+      "tiebreaker": "h2h-2"
     },
     {
-      "id": "toulon",
-      "name": "RC Toulon",
-      "currentRank": 12,
-      "projectedRank": 11,
-      "elo": 1487,
-      "points": 0,
-      "confidence": 0.46,
-      "zones": {
-        "europe": 0,
-        "top6": 0,
-        "mid": 1,
-        "relegation": 0
-      },
-      "form": [
-        "L"
-      ],
-      "trend": "stable"
-    },
-    {
-      "id": "montpellier",
-      "name": "Montpellier Herault Rugby",
+      "id": "perpignan",
+      "name": "perpignan",
       "currentRank": 13,
       "projectedRank": 13,
-      "elo": 1486,
-      "points": 0,
-      "confidence": 0.46,
+      "elo": 1445,
+      "points": 23,
+      "confidence": 0.49,
       "zones": {
         "europe": 0,
         "top6": 0,
-        "mid": 0.3984,
-        "relegation": 0.6016
+        "mid": 0.0048,
+        "relegation": 0.9952
       },
       "form": [
-        "L"
+        "L",
+        "W",
+        "L",
+        "L",
+        "W"
       ],
       "trend": "stable"
     },
@@ -252,9 +314,9 @@
       "name": "US Montauban",
       "currentRank": 14,
       "projectedRank": 14,
-      "elo": 1485,
-      "points": 0,
-      "confidence": 0.46,
+      "elo": 1346,
+      "points": 7,
+      "confidence": 0.65,
       "zones": {
         "europe": 0,
         "top6": 0,
@@ -262,18 +324,309 @@
         "relegation": 1
       },
       "form": [
+        "L",
+        "L",
+        "L",
+        "L",
         "L"
       ],
-      "trend": "stable"
+      "trend": "down"
     }
   ],
   "calendar": [
     {
-      "matchday": 20,
-      "date": "2026-03-29T14:00:00Z",
+      "matchday": 21,
+      "date": "2026-04-18",
+      "home": "la-rochelle",
+      "away": "bordeaux-begles",
+      "difficulty": 0.5
+    },
+    {
+      "matchday": 21,
+      "date": "2026-04-18",
+      "home": "clermont",
+      "away": "lyon",
+      "difficulty": 0.37
+    },
+    {
+      "matchday": 21,
+      "date": "2026-04-18",
+      "home": "bayonne",
+      "away": "pau",
+      "difficulty": 0.48
+    },
+    {
+      "matchday": 21,
+      "date": "2026-04-18",
+      "home": "montpellier",
+      "away": "perpignan",
+      "difficulty": 0.27
+    },
+    {
+      "matchday": 21,
+      "date": "2026-04-18",
+      "home": "montauban",
+      "away": "toulon",
+      "difficulty": 0.56
+    },
+    {
+      "matchday": 21,
+      "date": "2026-04-18",
+      "home": "castres",
+      "away": "toulouse",
+      "difficulty": 0.54
+    },
+    {
+      "matchday": 21,
+      "date": "2026-04-19",
+      "home": "racing-92",
+      "away": "stade-francais",
+      "difficulty": 0.44
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-25",
       "home": "stade-francais",
-      "away": "clermont",
+      "away": "pau",
+      "difficulty": 0.4
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-25",
+      "home": "lyon",
+      "away": "castres",
       "difficulty": 0.41
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-25",
+      "home": "toulon",
+      "away": "bayonne",
+      "difficulty": 0.45
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-25",
+      "home": "montauban",
+      "away": "racing-92",
+      "difficulty": 0.65
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-25",
+      "home": "perpignan",
+      "away": "la-rochelle",
+      "difficulty": 0.47
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-25",
+      "home": "bordeaux-begles",
+      "away": "montpellier",
+      "difficulty": 0.41
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-26",
+      "home": "toulouse",
+      "away": "clermont",
+      "difficulty": 0.31
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "clermont",
+      "away": "perpignan",
+      "difficulty": 0.32
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "bayonne",
+      "away": "bordeaux-begles",
+      "difficulty": 0.5
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "montpellier",
+      "away": "montauban",
+      "difficulty": 0.17
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "racing-92",
+      "away": "la-rochelle",
+      "difficulty": 0.36
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "toulon",
+      "away": "toulouse",
+      "difficulty": 0.59
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "pau",
+      "away": "castres",
+      "difficulty": 0.34
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "stade-francais",
+      "away": "lyon",
+      "difficulty": 0.34
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "castres",
+      "away": "montpellier",
+      "difficulty": 0.49
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "lyon",
+      "away": "bayonne",
+      "difficulty": 0.4
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "racing-92",
+      "away": "toulon",
+      "difficulty": 0.32
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "pau",
+      "away": "clermont",
+      "difficulty": 0.37
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "la-rochelle",
+      "away": "toulouse",
+      "difficulty": 0.55
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "bordeaux-begles",
+      "away": "perpignan",
+      "difficulty": 0.27
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "montauban",
+      "away": "stade-francais",
+      "difficulty": 0.68
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "clermont",
+      "away": "racing-92",
+      "difficulty": 0.42
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "montpellier",
+      "away": "pau",
+      "difficulty": 0.39
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "toulon",
+      "away": "bordeaux-begles",
+      "difficulty": 0.54
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "stade-francais",
+      "away": "bayonne",
+      "difficulty": 0.33
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "toulouse",
+      "away": "lyon",
+      "difficulty": 0.28
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "montauban",
+      "away": "la-rochelle",
+      "difficulty": 0.61
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "perpignan",
+      "away": "castres",
+      "difficulty": 0.47
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "bayonne",
+      "away": "perpignan",
+      "difficulty": 0.35
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "castres",
+      "away": "toulon",
+      "difficulty": 0.36
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "lyon",
+      "away": "montpellier",
+      "difficulty": 0.5
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "racing-92",
+      "away": "toulouse",
+      "difficulty": 0.5
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "pau",
+      "away": "montauban",
+      "difficulty": 0.19
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "la-rochelle",
+      "away": "stade-francais",
+      "difficulty": 0.49
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "bordeaux-begles",
+      "away": "clermont",
+      "difficulty": 0.36
     }
   ],
   "predictions": [
@@ -468,20 +821,196 @@
   "headToHead": [
     {
       "teams": [
-        "montpellier",
-        "toulouse"
+        "montauban",
+        "stade-francais"
       ],
       "matches": [
         {
-          "matchday": 20,
-          "home": "toulouse",
+          "matchday": 1,
+          "home": "stade-francais",
+          "away": "montauban",
+          "scoreHome": 47,
+          "scoreAway": 24
+        }
+      ],
+      "record": {
+        "montauban": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "stade-francais": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "perpignan"
+      ],
+      "matches": [
+        {
+          "matchday": 1,
+          "home": "perpignan",
+          "away": "bayonne",
+          "scoreHome": 19,
+          "scoreAway": 26
+        }
+      ],
+      "record": {
+        "bayonne": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        },
+        "perpignan": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "castres",
+        "pau"
+      ],
+      "matches": [
+        {
+          "matchday": 1,
+          "home": "castres",
+          "away": "pau",
+          "scoreHome": 15,
+          "scoreAway": 17
+        }
+      ],
+      "record": {
+        "castres": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "pau": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "lyon",
+        "racing-92"
+      ],
+      "matches": [
+        {
+          "matchday": 1,
+          "home": "lyon",
+          "away": "racing-92",
+          "scoreHome": 32,
+          "scoreAway": 7
+        },
+        {
+          "matchday": 15,
+          "home": "racing-92",
+          "away": "lyon",
+          "scoreHome": 35,
+          "scoreAway": 34
+        }
+      ],
+      "record": {
+        "lyon": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "racing-92": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "montpellier",
+        "toulon"
+      ],
+      "matches": [
+        {
+          "matchday": 1,
+          "home": "montpellier",
+          "away": "toulon",
+          "scoreHome": 17,
+          "scoreAway": 27
+        },
+        {
+          "matchday": 15,
+          "home": "toulon",
           "away": "montpellier",
-          "scoreHome": 45,
+          "scoreHome": 30,
           "scoreAway": 27
         }
       ],
       "record": {
         "montpellier": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        },
+        "toulon": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "bordeaux-begles",
+        "la-rochelle"
+      ],
+      "matches": [
+        {
+          "matchday": 1,
+          "home": "bordeaux-begles",
+          "away": "la-rochelle",
+          "scoreHome": 23,
+          "scoreAway": 18
+        }
+      ],
+      "record": {
+        "bordeaux-begles": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        },
+        "la-rochelle": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "clermont",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 1,
+          "home": "clermont",
+          "away": "toulouse",
+          "scoreHome": 24,
+          "scoreAway": 34
+        }
+      ],
+      "record": {
+        "clermont": {
           "w": 0,
           "d": 0,
           "l": 1
@@ -495,10 +1024,994 @@
     },
     {
       "teams": [
+        "lyon",
+        "montauban"
+      ],
+      "matches": [
+        {
+          "matchday": 2,
+          "home": "montauban",
+          "away": "lyon",
+          "scoreHome": 18,
+          "scoreAway": 25
+        },
+        {
+          "matchday": 17,
+          "home": "lyon",
+          "away": "montauban",
+          "scoreHome": 73,
+          "scoreAway": 12
+        }
+      ],
+      "record": {
+        "lyon": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        },
+        "montauban": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "montpellier"
+      ],
+      "matches": [
+        {
+          "matchday": 2,
+          "home": "bayonne",
+          "away": "montpellier",
+          "scoreHome": 26,
+          "scoreAway": 23
+        },
+        {
+          "matchday": 14,
+          "home": "montpellier",
+          "away": "bayonne",
+          "scoreHome": 62,
+          "scoreAway": 22
+        }
+      ],
+      "record": {
+        "bayonne": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "montpellier": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "pau",
+        "stade-francais"
+      ],
+      "matches": [
+        {
+          "matchday": 2,
+          "home": "pau",
+          "away": "stade-francais",
+          "scoreHome": 34,
+          "scoreAway": 10
+        }
+      ],
+      "record": {
+        "pau": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        },
+        "stade-francais": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "clermont",
+        "la-rochelle"
+      ],
+      "matches": [
+        {
+          "matchday": 2,
+          "home": "la-rochelle",
+          "away": "clermont",
+          "scoreHome": 34,
+          "scoreAway": 16
+        },
+        {
+          "matchday": 15,
+          "home": "clermont",
+          "away": "la-rochelle",
+          "scoreHome": 32,
+          "scoreAway": 27
+        }
+      ],
+      "record": {
+        "clermont": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "la-rochelle": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "perpignan",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 2,
+          "home": "toulouse",
+          "away": "perpignan",
+          "scoreHome": 31,
+          "scoreAway": 13
+        },
+        {
+          "matchday": 14,
+          "home": "perpignan",
+          "away": "toulouse",
+          "scoreHome": 30,
+          "scoreAway": 27
+        }
+      ],
+      "record": {
+        "perpignan": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "toulouse": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "castres",
+        "toulon"
+      ],
+      "matches": [
+        {
+          "matchday": 2,
+          "home": "toulon",
+          "away": "castres",
+          "scoreHome": 16,
+          "scoreAway": 12
+        }
+      ],
+      "record": {
+        "castres": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "toulon": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "bordeaux-begles",
+        "racing-92"
+      ],
+      "matches": [
+        {
+          "matchday": 2,
+          "home": "racing-92",
+          "away": "bordeaux-begles",
+          "scoreHome": 44,
+          "scoreAway": 32
+        },
+        {
+          "matchday": 14,
+          "home": "bordeaux-begles",
+          "away": "racing-92",
+          "scoreHome": 62,
+          "scoreAway": 20
+        }
+      ],
+      "record": {
+        "bordeaux-begles": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "racing-92": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "clermont",
+        "pau"
+      ],
+      "matches": [
+        {
+          "matchday": 3,
+          "home": "clermont",
+          "away": "pau",
+          "scoreHome": 50,
+          "scoreAway": 27
+        }
+      ],
+      "record": {
+        "clermont": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        },
+        "pau": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "castres"
+      ],
+      "matches": [
+        {
+          "matchday": 3,
+          "home": "castres",
+          "away": "bayonne",
+          "scoreHome": 48,
+          "scoreAway": 17
+        },
+        {
+          "matchday": 15,
+          "home": "bayonne",
+          "away": "castres",
+          "scoreHome": 10,
+          "scoreAway": 13
+        }
+      ],
+      "record": {
+        "bayonne": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        },
+        "castres": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "lyon",
+        "stade-francais"
+      ],
+      "matches": [
+        {
+          "matchday": 3,
+          "home": "lyon",
+          "away": "stade-francais",
+          "scoreHome": 42,
+          "scoreAway": 37
+        }
+      ],
+      "record": {
+        "lyon": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        },
+        "stade-francais": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "bordeaux-begles",
+        "montauban"
+      ],
+      "matches": [
+        {
+          "matchday": 3,
+          "home": "bordeaux-begles",
+          "away": "montauban",
+          "scoreHome": 71,
+          "scoreAway": 24
+        },
+        {
+          "matchday": 16,
+          "home": "montauban",
+          "away": "bordeaux-begles",
+          "scoreHome": 16,
+          "scoreAway": 31
+        }
+      ],
+      "record": {
+        "bordeaux-begles": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        },
+        "montauban": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        }
+      }
+    },
+    {
+      "teams": [
+        "perpignan",
+        "racing-92"
+      ],
+      "matches": [
+        {
+          "matchday": 3,
+          "home": "perpignan",
+          "away": "racing-92",
+          "scoreHome": 15,
+          "scoreAway": 28
+        },
+        {
+          "matchday": 16,
+          "home": "racing-92",
+          "away": "perpignan",
+          "scoreHome": 37,
+          "scoreAway": 31
+        }
+      ],
+      "record": {
+        "perpignan": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        },
+        "racing-92": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "montpellier",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 3,
+          "home": "montpellier",
+          "away": "toulouse",
+          "scoreHome": 44,
+          "scoreAway": 14
+        },
+        {
+          "matchday": 20,
+          "home": "toulouse",
+          "away": "montpellier",
+          "scoreHome": 45,
+          "scoreAway": 29
+        }
+      ],
+      "record": {
+        "montpellier": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "toulouse": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "bordeaux-begles",
+        "stade-francais"
+      ],
+      "matches": [
+        {
+          "matchday": 3,
+          "home": "stade-francais",
+          "away": "bordeaux-begles",
+          "scoreHome": 28,
+          "scoreAway": 7
+        },
+        {
+          "matchday": 15,
+          "home": "bordeaux-begles",
+          "away": "stade-francais",
+          "scoreHome": 28,
+          "scoreAway": 33
+        }
+      ],
+      "record": {
+        "bordeaux-begles": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        },
+        "stade-francais": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "clermont",
+        "racing-92"
+      ],
+      "matches": [
+        {
+          "matchday": 4,
+          "home": "racing-92",
+          "away": "clermont",
+          "scoreHome": 43,
+          "scoreAway": 31
+        }
+      ],
+      "record": {
+        "clermont": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "racing-92": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "lyon",
+        "pau"
+      ],
+      "matches": [
+        {
+          "matchday": 4,
+          "home": "pau",
+          "away": "lyon",
+          "scoreHome": 40,
+          "scoreAway": 15
+        },
+        {
+          "matchday": 14,
+          "home": "lyon",
+          "away": "pau",
+          "scoreHome": 22,
+          "scoreAway": 17
+        }
+      ],
+      "record": {
+        "lyon": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "pau": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "la-rochelle",
+        "perpignan"
+      ],
+      "matches": [
+        {
+          "matchday": 4,
+          "home": "la-rochelle",
+          "away": "perpignan",
+          "scoreHome": 31,
+          "scoreAway": 8
+        }
+      ],
+      "record": {
+        "la-rochelle": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        },
+        "perpignan": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "montauban",
+        "montpellier"
+      ],
+      "matches": [
+        {
+          "matchday": 4,
+          "home": "montauban",
+          "away": "montpellier",
+          "scoreHome": 22,
+          "scoreAway": 22
+        }
+      ],
+      "record": {
+        "montauban": {
+          "w": 0,
+          "d": 1,
+          "l": 0
+        },
+        "montpellier": {
+          "w": 0,
+          "d": 1,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "castres",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 4,
+          "home": "toulouse",
+          "away": "castres",
+          "scoreHome": 59,
+          "scoreAway": 12
+        }
+      ],
+      "record": {
+        "castres": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "toulouse": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "toulon"
+      ],
+      "matches": [
+        {
+          "matchday": 4,
+          "home": "bayonne",
+          "away": "toulon",
+          "scoreHome": 35,
+          "scoreAway": 32
+        }
+      ],
+      "record": {
+        "bayonne": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        },
+        "toulon": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "la-rochelle",
+        "montpellier"
+      ],
+      "matches": [
+        {
+          "matchday": 4,
+          "home": "montpellier",
+          "away": "la-rochelle",
+          "scoreHome": 37,
+          "scoreAway": 13
+        },
+        {
+          "matchday": 17,
+          "home": "la-rochelle",
+          "away": "montpellier",
+          "scoreHome": 33,
+          "scoreAway": 43
+        }
+      ],
+      "record": {
+        "la-rochelle": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        },
+        "montpellier": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "clermont",
+        "montauban"
+      ],
+      "matches": [
+        {
+          "matchday": 5,
+          "home": "clermont",
+          "away": "montauban",
+          "scoreHome": 84,
+          "scoreAway": 31
+        },
+        {
+          "matchday": 14,
+          "home": "montauban",
+          "away": "clermont",
+          "scoreHome": 19,
+          "scoreAway": 34
+        }
+      ],
+      "record": {
+        "clermont": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        },
+        "montauban": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        }
+      }
+    },
+    {
+      "teams": [
+        "castres",
+        "racing-92"
+      ],
+      "matches": [
+        {
+          "matchday": 5,
+          "home": "castres",
+          "away": "racing-92",
+          "scoreHome": 20,
+          "scoreAway": 16
+        },
+        {
+          "matchday": 19,
+          "home": "racing-92",
+          "away": "castres",
+          "scoreHome": 52,
+          "scoreAway": 21
+        }
+      ],
+      "record": {
+        "castres": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "racing-92": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "pau",
+        "toulon"
+      ],
+      "matches": [
+        {
+          "matchday": 5,
+          "home": "toulon",
+          "away": "pau",
+          "scoreHome": 33,
+          "scoreAway": 17
+        },
+        {
+          "matchday": 16,
+          "home": "pau",
+          "away": "toulon",
+          "scoreHome": 32,
+          "scoreAway": 12
+        }
+      ],
+      "record": {
+        "pau": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "toulon": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "perpignan",
+        "stade-francais"
+      ],
+      "matches": [
+        {
+          "matchday": 5,
+          "home": "perpignan",
+          "away": "stade-francais",
+          "scoreHome": 11,
+          "scoreAway": 28
+        },
+        {
+          "matchday": 18,
+          "home": "stade-francais",
+          "away": "perpignan",
+          "scoreHome": 42,
+          "scoreAway": 21
+        }
+      ],
+      "record": {
+        "perpignan": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        },
+        "stade-francais": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "bordeaux-begles",
+        "lyon"
+      ],
+      "matches": [
+        {
+          "matchday": 5,
+          "home": "bordeaux-begles",
+          "away": "lyon",
+          "scoreHome": 32,
+          "scoreAway": 20
+        },
+        {
+          "matchday": 20,
+          "home": "lyon",
+          "away": "bordeaux-begles",
+          "scoreHome": 17,
+          "scoreAway": 21
+        }
+      ],
+      "record": {
+        "bordeaux-begles": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        },
+        "lyon": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 5,
+          "home": "bayonne",
+          "away": "toulouse",
+          "scoreHome": 40,
+          "scoreAway": 26
+        },
+        {
+          "matchday": 16,
+          "home": "toulouse",
+          "away": "bayonne",
+          "scoreHome": 31,
+          "scoreAway": 10
+        }
+      ],
+      "record": {
+        "bayonne": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "toulouse": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "pau"
+      ],
+      "matches": [
+        {
+          "matchday": 5,
+          "home": "pau",
+          "away": "bayonne",
+          "scoreHome": 47,
+          "scoreAway": 24
+        }
+      ],
+      "record": {
+        "bayonne": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "pau": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "lyon",
+        "perpignan"
+      ],
+      "matches": [
+        {
+          "matchday": 6,
+          "home": "lyon",
+          "away": "perpignan",
+          "scoreHome": 44,
+          "scoreAway": 19
+        },
+        {
+          "matchday": 19,
+          "home": "perpignan",
+          "away": "lyon",
+          "scoreHome": 28,
+          "scoreAway": 32
+        }
+      ],
+      "record": {
+        "lyon": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        },
+        "perpignan": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        }
+      }
+    },
+    {
+      "teams": [
+        "montpellier",
+        "racing-92"
+      ],
+      "matches": [
+        {
+          "matchday": 6,
+          "home": "racing-92",
+          "away": "montpellier",
+          "scoreHome": 32,
+          "scoreAway": 25
+        },
+        {
+          "matchday": 18,
+          "home": "montpellier",
+          "away": "racing-92",
+          "scoreHome": 41,
+          "scoreAway": 17
+        }
+      ],
+      "record": {
+        "montpellier": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "racing-92": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "la-rochelle",
+        "stade-francais"
+      ],
+      "matches": [
+        {
+          "matchday": 6,
+          "home": "stade-francais",
+          "away": "la-rochelle",
+          "scoreHome": 26,
+          "scoreAway": 24
+        }
+      ],
+      "record": {
+        "la-rochelle": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "stade-francais": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
         "castres",
         "montauban"
       ],
       "matches": [
+        {
+          "matchday": 6,
+          "home": "montauban",
+          "away": "castres",
+          "scoreHome": 28,
+          "scoreAway": 32
+        },
         {
           "matchday": 20,
           "home": "castres",
@@ -509,6 +2022,196 @@
       ],
       "record": {
         "castres": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        },
+        "montauban": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        }
+      }
+    },
+    {
+      "teams": [
+        "clermont",
+        "toulon"
+      ],
+      "matches": [
+        {
+          "matchday": 6,
+          "home": "clermont",
+          "away": "toulon",
+          "scoreHome": 27,
+          "scoreAway": 10
+        },
+        {
+          "matchday": 17,
+          "home": "toulon",
+          "away": "clermont",
+          "scoreHome": 14,
+          "scoreAway": 34
+        }
+      ],
+      "record": {
+        "clermont": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        },
+        "toulon": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        }
+      }
+    },
+    {
+      "teams": [
+        "bordeaux-begles",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 6,
+          "home": "toulouse",
+          "away": "bordeaux-begles",
+          "scoreHome": 56,
+          "scoreAway": 13
+        },
+        {
+          "matchday": 19,
+          "home": "bordeaux-begles",
+          "away": "toulouse",
+          "scoreHome": 44,
+          "scoreAway": 20
+        }
+      ],
+      "record": {
+        "bordeaux-begles": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "toulouse": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "clermont"
+      ],
+      "matches": [
+        {
+          "matchday": 6,
+          "home": "bayonne",
+          "away": "clermont",
+          "scoreHome": 44,
+          "scoreAway": 17
+        },
+        {
+          "matchday": 18,
+          "home": "clermont",
+          "away": "bayonne",
+          "scoreHome": 38,
+          "scoreAway": 15
+        }
+      ],
+      "record": {
+        "bayonne": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "clermont": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "castres",
+        "stade-francais"
+      ],
+      "matches": [
+        {
+          "matchday": 7,
+          "home": "castres",
+          "away": "stade-francais",
+          "scoreHome": 29,
+          "scoreAway": 24
+        },
+        {
+          "matchday": 14,
+          "home": "stade-francais",
+          "away": "castres",
+          "scoreHome": 33,
+          "scoreAway": 15
+        }
+      ],
+      "record": {
+        "castres": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "stade-francais": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "lyon",
+        "montpellier"
+      ],
+      "matches": [
+        {
+          "matchday": 7,
+          "home": "montpellier",
+          "away": "lyon",
+          "scoreHome": 35,
+          "scoreAway": 13
+        }
+      ],
+      "record": {
+        "lyon": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "montpellier": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "la-rochelle",
+        "montauban"
+      ],
+      "matches": [
+        {
+          "matchday": 7,
+          "home": "la-rochelle",
+          "away": "montauban",
+          "scoreHome": 54,
+          "scoreAway": 19
+        }
+      ],
+      "record": {
+        "la-rochelle": {
           "w": 1,
           "d": 0,
           "l": 0
@@ -523,15 +2226,15 @@
     {
       "teams": [
         "bordeaux-begles",
-        "lyon"
+        "perpignan"
       ],
       "matches": [
         {
-          "matchday": 20,
-          "home": "lyon",
+          "matchday": 7,
+          "home": "perpignan",
           "away": "bordeaux-begles",
-          "scoreHome": 17,
-          "scoreAway": 21
+          "scoreHome": 12,
+          "scoreAway": 27
         }
       ],
       "record": {
@@ -540,8 +2243,137 @@
           "d": 0,
           "l": 0
         },
-        "lyon": {
+        "perpignan": {
           "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "pau",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 7,
+          "home": "pau",
+          "away": "toulouse",
+          "scoreHome": 30,
+          "scoreAway": 26
+        },
+        {
+          "matchday": 15,
+          "home": "toulouse",
+          "away": "pau",
+          "scoreHome": 59,
+          "scoreAway": 22
+        }
+      ],
+      "record": {
+        "pau": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "toulouse": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "racing-92",
+        "toulon"
+      ],
+      "matches": [
+        {
+          "matchday": 7,
+          "home": "toulon",
+          "away": "racing-92",
+          "scoreHome": 45,
+          "scoreAway": 21
+        }
+      ],
+      "record": {
+        "racing-92": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "toulon": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "la-rochelle",
+        "lyon"
+      ],
+      "matches": [
+        {
+          "matchday": 7,
+          "home": "lyon",
+          "away": "la-rochelle",
+          "scoreHome": 19,
+          "scoreAway": 36
+        },
+        {
+          "matchday": 16,
+          "home": "la-rochelle",
+          "away": "lyon",
+          "scoreHome": 24,
+          "scoreAway": 44
+        }
+      ],
+      "record": {
+        "la-rochelle": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "lyon": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "castres",
+        "clermont"
+      ],
+      "matches": [
+        {
+          "matchday": 8,
+          "home": "clermont",
+          "away": "castres",
+          "scoreHome": 63,
+          "scoreAway": 14
+        },
+        {
+          "matchday": 16,
+          "home": "castres",
+          "away": "clermont",
+          "scoreHome": 28,
+          "scoreAway": 23
+        }
+      ],
+      "record": {
+        "castres": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "clermont": {
+          "w": 1,
           "d": 0,
           "l": 1
         }
@@ -554,6 +2386,13 @@
       ],
       "matches": [
         {
+          "matchday": 8,
+          "home": "racing-92",
+          "away": "pau",
+          "scoreHome": 15,
+          "scoreAway": 10
+        },
+        {
           "matchday": 20,
           "home": "pau",
           "away": "racing-92",
@@ -563,6 +2402,359 @@
       ],
       "record": {
         "pau": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "racing-92": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "montpellier",
+        "stade-francais"
+      ],
+      "matches": [
+        {
+          "matchday": 8,
+          "home": "stade-francais",
+          "away": "montpellier",
+          "scoreHome": 35,
+          "scoreAway": 12
+        },
+        {
+          "matchday": 16,
+          "home": "montpellier",
+          "away": "stade-francais",
+          "scoreHome": 44,
+          "scoreAway": 7
+        }
+      ],
+      "record": {
+        "montpellier": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "stade-francais": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "montauban",
+        "perpignan"
+      ],
+      "matches": [
+        {
+          "matchday": 8,
+          "home": "montauban",
+          "away": "perpignan",
+          "scoreHome": 29,
+          "scoreAway": 22
+        },
+        {
+          "matchday": 15,
+          "home": "perpignan",
+          "away": "montauban",
+          "scoreHome": 31,
+          "scoreAway": 8
+        }
+      ],
+      "record": {
+        "montauban": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "perpignan": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "bordeaux-begles"
+      ],
+      "matches": [
+        {
+          "matchday": 8,
+          "home": "bordeaux-begles",
+          "away": "bayonne",
+          "scoreHome": 41,
+          "scoreAway": 12
+        }
+      ],
+      "record": {
+        "bayonne": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "bordeaux-begles": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "toulon",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 8,
+          "home": "toulouse",
+          "away": "toulon",
+          "scoreHome": 59,
+          "scoreAway": 24
+        }
+      ],
+      "record": {
+        "toulon": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "toulouse": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "lyon",
+        "toulon"
+      ],
+      "matches": [
+        {
+          "matchday": 8,
+          "home": "toulon",
+          "away": "lyon",
+          "scoreHome": 54,
+          "scoreAway": 21
+        },
+        {
+          "matchday": 18,
+          "home": "lyon",
+          "away": "toulon",
+          "scoreHome": 13,
+          "scoreAway": 13
+        }
+      ],
+      "record": {
+        "lyon": {
+          "w": 0,
+          "d": 1,
+          "l": 1
+        },
+        "toulon": {
+          "w": 1,
+          "d": 1,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "montauban"
+      ],
+      "matches": [
+        {
+          "matchday": 9,
+          "home": "bayonne",
+          "away": "montauban",
+          "scoreHome": 49,
+          "scoreAway": 7
+        },
+        {
+          "matchday": 19,
+          "home": "montauban",
+          "away": "bayonne",
+          "scoreHome": 26,
+          "scoreAway": 60
+        }
+      ],
+      "record": {
+        "bayonne": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        },
+        "montauban": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        }
+      }
+    },
+    {
+      "teams": [
+        "bordeaux-begles",
+        "castres"
+      ],
+      "matches": [
+        {
+          "matchday": 9,
+          "home": "castres",
+          "away": "bordeaux-begles",
+          "scoreHome": 26,
+          "scoreAway": 28
+        },
+        {
+          "matchday": 17,
+          "home": "bordeaux-begles",
+          "away": "castres",
+          "scoreHome": 57,
+          "scoreAway": 32
+        }
+      ],
+      "record": {
+        "bordeaux-begles": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        },
+        "castres": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        }
+      }
+    },
+    {
+      "teams": [
+        "clermont",
+        "montpellier"
+      ],
+      "matches": [
+        {
+          "matchday": 9,
+          "home": "montpellier",
+          "away": "clermont",
+          "scoreHome": 7,
+          "scoreAway": 9
+        },
+        {
+          "matchday": 19,
+          "home": "clermont",
+          "away": "montpellier",
+          "scoreHome": 17,
+          "scoreAway": 20
+        }
+      ],
+      "record": {
+        "clermont": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "montpellier": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "pau",
+        "perpignan"
+      ],
+      "matches": [
+        {
+          "matchday": 9,
+          "home": "pau",
+          "away": "perpignan",
+          "scoreHome": 27,
+          "scoreAway": 23
+        },
+        {
+          "matchday": 17,
+          "home": "perpignan",
+          "away": "pau",
+          "scoreHome": 40,
+          "scoreAway": 24
+        }
+      ],
+      "record": {
+        "pau": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "perpignan": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "stade-francais",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 9,
+          "home": "toulouse",
+          "away": "stade-francais",
+          "scoreHome": 29,
+          "scoreAway": 17
+        },
+        {
+          "matchday": 17,
+          "home": "stade-francais",
+          "away": "toulouse",
+          "scoreHome": 9,
+          "scoreAway": 13
+        }
+      ],
+      "record": {
+        "stade-francais": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        },
+        "toulouse": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "la-rochelle",
+        "racing-92"
+      ],
+      "matches": [
+        {
+          "matchday": 9,
+          "home": "la-rochelle",
+          "away": "racing-92",
+          "scoreHome": 33,
+          "scoreAway": 6
+        }
+      ],
+      "record": {
+        "la-rochelle": {
           "w": 1,
           "d": 0,
           "l": 0
@@ -576,20 +2768,650 @@
     },
     {
       "teams": [
-        "perpignan",
+        "la-rochelle",
         "toulon"
       ],
       "matches": [
         {
-          "matchday": 20,
-          "home": "perpignan",
+          "matchday": 9,
+          "home": "toulon",
+          "away": "la-rochelle",
+          "scoreHome": 39,
+          "scoreAway": 14
+        },
+        {
+          "matchday": 14,
+          "home": "la-rochelle",
           "away": "toulon",
+          "scoreHome": 66,
+          "scoreAway": 0
+        }
+      ],
+      "record": {
+        "la-rochelle": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "toulon": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "bordeaux-begles",
+        "pau"
+      ],
+      "matches": [
+        {
+          "matchday": 10,
+          "home": "bordeaux-begles",
+          "away": "pau",
+          "scoreHome": 33,
+          "scoreAway": 34
+        },
+        {
+          "matchday": 18,
+          "home": "pau",
+          "away": "bordeaux-begles",
+          "scoreHome": 39,
+          "scoreAway": 17
+        }
+      ],
+      "record": {
+        "bordeaux-begles": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        },
+        "pau": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "clermont",
+        "lyon"
+      ],
+      "matches": [
+        {
+          "matchday": 10,
+          "home": "lyon",
+          "away": "clermont",
+          "scoreHome": 43,
+          "scoreAway": 24
+        }
+      ],
+      "record": {
+        "clermont": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "lyon": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "racing-92"
+      ],
+      "matches": [
+        {
+          "matchday": 10,
+          "home": "racing-92",
+          "away": "bayonne",
+          "scoreHome": 47,
+          "scoreAway": 27
+        },
+        {
+          "matchday": 17,
+          "home": "bayonne",
+          "away": "racing-92",
           "scoreHome": 36,
+          "scoreAway": 41
+        }
+      ],
+      "record": {
+        "bayonne": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        },
+        "racing-92": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "castres",
+        "la-rochelle"
+      ],
+      "matches": [
+        {
+          "matchday": 10,
+          "home": "la-rochelle",
+          "away": "castres",
+          "scoreHome": 17,
+          "scoreAway": 19
+        },
+        {
+          "matchday": 18,
+          "home": "castres",
+          "away": "la-rochelle",
+          "scoreHome": 26,
+          "scoreAway": 31
+        }
+      ],
+      "record": {
+        "castres": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "la-rochelle": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "montauban",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 10,
+          "home": "montauban",
+          "away": "toulouse",
+          "scoreHome": 7,
+          "scoreAway": 49
+        },
+        {
+          "matchday": 18,
+          "home": "toulouse",
+          "away": "montauban",
+          "scoreHome": 68,
+          "scoreAway": 13
+        }
+      ],
+      "record": {
+        "montauban": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        },
+        "toulouse": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "montpellier",
+        "perpignan"
+      ],
+      "matches": [
+        {
+          "matchday": 10,
+          "home": "perpignan",
+          "away": "montpellier",
+          "scoreHome": 0,
+          "scoreAway": 28
+        }
+      ],
+      "record": {
+        "montpellier": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        },
+        "perpignan": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "stade-francais",
+        "toulon"
+      ],
+      "matches": [
+        {
+          "matchday": 10,
+          "home": "stade-francais",
+          "away": "toulon",
+          "scoreHome": 51,
+          "scoreAway": 24
+        },
+        {
+          "matchday": 19,
+          "home": "toulon",
+          "away": "stade-francais",
+          "scoreHome": 27,
+          "scoreAway": 46
+        }
+      ],
+      "record": {
+        "stade-francais": {
+          "w": 2,
+          "d": 0,
+          "l": 0
+        },
+        "toulon": {
+          "w": 0,
+          "d": 0,
+          "l": 2
+        }
+      }
+    },
+    {
+      "teams": [
+        "bordeaux-begles",
+        "montpellier"
+      ],
+      "matches": [
+        {
+          "matchday": 11,
+          "home": "montpellier",
+          "away": "bordeaux-begles",
+          "scoreHome": 28,
+          "scoreAway": 24
+        }
+      ],
+      "record": {
+        "bordeaux-begles": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "montpellier": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "clermont",
+        "stade-francais"
+      ],
+      "matches": [
+        {
+          "matchday": 11,
+          "home": "clermont",
+          "away": "stade-francais",
+          "scoreHome": 36,
+          "scoreAway": 32
+        },
+        {
+          "matchday": 20,
+          "home": "stade-francais",
+          "away": "clermont",
+          "scoreHome": 64,
           "scoreAway": 20
         }
       ],
       "record": {
+        "clermont": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "stade-francais": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "lyon"
+      ],
+      "matches": [
+        {
+          "matchday": 11,
+          "home": "bayonne",
+          "away": "lyon",
+          "scoreHome": 22,
+          "scoreAway": 20
+        }
+      ],
+      "record": {
+        "bayonne": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        },
+        "lyon": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "castres",
+        "perpignan"
+      ],
+      "matches": [
+        {
+          "matchday": 11,
+          "home": "castres",
+          "away": "perpignan",
+          "scoreHome": 23,
+          "scoreAway": 7
+        }
+      ],
+      "record": {
+        "castres": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        },
         "perpignan": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "montauban",
+        "toulon"
+      ],
+      "matches": [
+        {
+          "matchday": 11,
+          "home": "toulon",
+          "away": "montauban",
+          "scoreHome": 54,
+          "scoreAway": 28
+        }
+      ],
+      "record": {
+        "montauban": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "toulon": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "racing-92",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 11,
+          "home": "toulouse",
+          "away": "racing-92",
+          "scoreHome": 48,
+          "scoreAway": 24
+        }
+      ],
+      "record": {
+        "racing-92": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "toulouse": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "la-rochelle",
+        "pau"
+      ],
+      "matches": [
+        {
+          "matchday": 11,
+          "home": "pau",
+          "away": "la-rochelle",
+          "scoreHome": 53,
+          "scoreAway": 33
+        },
+        {
+          "matchday": 19,
+          "home": "la-rochelle",
+          "away": "pau",
+          "scoreHome": 20,
+          "scoreAway": 6
+        }
+      ],
+      "record": {
+        "la-rochelle": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "pau": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "racing-92",
+        "stade-francais"
+      ],
+      "matches": [
+        {
+          "matchday": 12,
+          "home": "stade-francais",
+          "away": "racing-92",
+          "scoreHome": 20,
+          "scoreAway": 20
+        }
+      ],
+      "record": {
+        "racing-92": {
+          "w": 0,
+          "d": 1,
+          "l": 0
+        },
+        "stade-francais": {
+          "w": 0,
+          "d": 1,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "castres",
+        "montpellier"
+      ],
+      "matches": [
+        {
+          "matchday": 12,
+          "home": "montpellier",
+          "away": "castres",
+          "scoreHome": 33,
+          "scoreAway": 31
+        }
+      ],
+      "record": {
+        "castres": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "montpellier": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "la-rochelle"
+      ],
+      "matches": [
+        {
+          "matchday": 12,
+          "home": "la-rochelle",
+          "away": "bayonne",
+          "scoreHome": 49,
+          "scoreAway": 17
+        },
+        {
+          "matchday": 20,
+          "home": "bayonne",
+          "away": "la-rochelle",
+          "scoreHome": 26,
+          "scoreAway": 15
+        }
+      ],
+      "record": {
+        "bayonne": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "la-rochelle": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "montauban",
+        "pau"
+      ],
+      "matches": [
+        {
+          "matchday": 12,
+          "home": "montauban",
+          "away": "pau",
+          "scoreHome": 17,
+          "scoreAway": 53
+        }
+      ],
+      "record": {
+        "montauban": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "pau": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "clermont",
+        "perpignan"
+      ],
+      "matches": [
+        {
+          "matchday": 12,
+          "home": "perpignan",
+          "away": "clermont",
+          "scoreHome": 26,
+          "scoreAway": 20
+        }
+      ],
+      "record": {
+        "clermont": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "perpignan": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "lyon",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 12,
+          "home": "lyon",
+          "away": "toulouse",
+          "scoreHome": 19,
+          "scoreAway": 41
+        }
+      ],
+      "record": {
+        "lyon": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "toulouse": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "bordeaux-begles",
+        "toulon"
+      ],
+      "matches": [
+        {
+          "matchday": 12,
+          "home": "bordeaux-begles",
+          "away": "toulon",
+          "scoreHome": 46,
+          "scoreAway": 7
+        }
+      ],
+      "record": {
+        "bordeaux-begles": {
           "w": 1,
           "d": 0,
           "l": 0
@@ -603,16 +3425,70 @@
     },
     {
       "teams": [
-        "bayonne",
-        "la-rochelle"
+        "montauban",
+        "racing-92"
       ],
       "matches": [
         {
-          "matchday": 20,
+          "matchday": 13,
+          "home": "racing-92",
+          "away": "montauban",
+          "scoreHome": 61,
+          "scoreAway": 16
+        }
+      ],
+      "record": {
+        "montauban": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "racing-92": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "castres",
+        "lyon"
+      ],
+      "matches": [
+        {
+          "matchday": 13,
+          "home": "castres",
+          "away": "lyon",
+          "scoreHome": 36,
+          "scoreAway": 22
+        }
+      ],
+      "record": {
+        "castres": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        },
+        "lyon": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "bayonne",
+        "stade-francais"
+      ],
+      "matches": [
+        {
+          "matchday": 13,
           "home": "bayonne",
-          "away": "la-rochelle",
-          "scoreHome": 26,
-          "scoreAway": 15
+          "away": "stade-francais",
+          "scoreHome": 35,
+          "scoreAway": 34
         }
       ],
       "record": {
@@ -621,10 +3497,125 @@
           "d": 0,
           "l": 0
         },
+        "stade-francais": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "bordeaux-begles",
+        "clermont"
+      ],
+      "matches": [
+        {
+          "matchday": 13,
+          "home": "clermont",
+          "away": "bordeaux-begles",
+          "scoreHome": 34,
+          "scoreAway": 19
+        }
+      ],
+      "record": {
+        "bordeaux-begles": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "clermont": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "montpellier",
+        "pau"
+      ],
+      "matches": [
+        {
+          "matchday": 13,
+          "home": "pau",
+          "away": "montpellier",
+          "scoreHome": 35,
+          "scoreAway": 33
+        }
+      ],
+      "record": {
+        "montpellier": {
+          "w": 0,
+          "d": 0,
+          "l": 1
+        },
+        "pau": {
+          "w": 1,
+          "d": 0,
+          "l": 0
+        }
+      }
+    },
+    {
+      "teams": [
+        "perpignan",
+        "toulon"
+      ],
+      "matches": [
+        {
+          "matchday": 13,
+          "home": "toulon",
+          "away": "perpignan",
+          "scoreHome": 31,
+          "scoreAway": 16
+        },
+        {
+          "matchday": 20,
+          "home": "perpignan",
+          "away": "toulon",
+          "scoreHome": 36,
+          "scoreAway": 20
+        }
+      ],
+      "record": {
+        "perpignan": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        },
+        "toulon": {
+          "w": 1,
+          "d": 0,
+          "l": 1
+        }
+      }
+    },
+    {
+      "teams": [
+        "la-rochelle",
+        "toulouse"
+      ],
+      "matches": [
+        {
+          "matchday": 13,
+          "home": "toulouse",
+          "away": "la-rochelle",
+          "scoreHome": 60,
+          "scoreAway": 14
+        }
+      ],
+      "record": {
         "la-rochelle": {
           "w": 0,
           "d": 0,
           "l": 1
+        },
+        "toulouse": {
+          "w": 1,
+          "d": 0,
+          "l": 0
         }
       }
     }

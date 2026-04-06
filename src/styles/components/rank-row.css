@@ -7,6 +7,7 @@
   min-height: 48px;
   padding: var(--w-space-sm) var(--w-space-md);
   background: var(--w-color-surface-elevated);
+  color: var(--w-color-text-primary);
   touch-action: manipulation;
   cursor: pointer;
 }
