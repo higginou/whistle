@@ -20,9 +20,20 @@ L'onglet Projection affiche le classement actuel (J-20) avec les points réels, 
 
 ### Frontend — `src/components/tab-projection.js`
 
-5. **En-tête** — Remplacer "Journée X/26" par "Projection J-26 · Basée sur J-{matchday}". En mode détaillé, la confiance globale reste affichée.
+5. **En-tête** — Les deux branches (simple et détaillé) sont modifiées :
+   - **Mode simple** : "Projection J-26 · Basée sur J-{matchday}"
+   - **Mode détaillé** : "Projection J-26 · Basée sur J-{matchday} · Confiance {X}%"
 
-6. **Points projetés** — Lors du remap des équipes, substituer `points` par `projectedPoints ?? points`.
+6. **Points projetés** — Dans le `.map()` (ligne ~51) qui remap les équipes, ajouter le remplacement de `points` :
+   ```js
+   .map((t) => ({
+     ...t,
+     currentRank: t.projectedRank,
+     points: t.projectedPoints ?? t.points,
+     rankDelta: t.currentRank - t.projectedRank,
+   }))
+   ```
+   `rank-row.js` lit `team.points` directement — le spread+override garantit qu'il affiche les points projetés sans modification du composant.
 
 7. **Delta de mouvement** — Calculer `rankDelta = currentRank - projectedRank` pour chaque équipe. Après le rendu des zone-groups, parcourir les rank-rows et injecter un badge de mouvement (+N vert / -N rouge) à côté de la position. Zéro = pas de badge.
 
