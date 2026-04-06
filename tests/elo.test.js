@@ -65,6 +65,8 @@ function makeResult(overrides = {}) {
     away: 'la-rochelle',
     homeScore: 24,
     awayScore: 18,
+    homeBonus: null,
+    awayBonus: null,
     ...overrides,
   };
 }
@@ -1002,6 +1004,77 @@ describe('computeResultBonuses', () => {
       makeResult({ home: 'toulouse', away: 'la-rochelle', homeScore: 26, awayScore: 20 }),
     ];
     const points = computeResultBonuses(results);
+    expect(points.get('la-rochelle')).toBe(0);
+  });
+
+  it('utilise les vrais bonus quand homeBonus est non-null', () => {
+    const results = [
+      makeResult({
+        home: 'toulouse', away: 'la-rochelle',
+        homeScore: 30, awayScore: 20,
+        homeBonus: { offensive: true, defensive: false },
+        awayBonus: { offensive: false, defensive: false },
+      }),
+    ];
+    const points = computeResultBonuses(results);
+    // toulouse: 4 (win) + 1 (BO) = 5
+    expect(points.get('toulouse')).toBe(5);
+    expect(points.get('la-rochelle')).toBe(0);
+  });
+
+  it('bonus defensif reel pris en compte meme si marge > 5', () => {
+    const results = [
+      makeResult({
+        home: 'toulouse', away: 'la-rochelle',
+        homeScore: 30, awayScore: 20,
+        homeBonus: { offensive: false, defensive: false },
+        awayBonus: { offensive: false, defensive: true },
+      }),
+    ];
+    const points = computeResultBonuses(results);
+    expect(points.get('toulouse')).toBe(4);
+    expect(points.get('la-rochelle')).toBe(1); // real BD from scraping
+  });
+
+  it('bonus offensif sur match nul', () => {
+    const results = [
+      makeResult({
+        home: 'toulouse', away: 'la-rochelle',
+        homeScore: 20, awayScore: 20,
+        homeBonus: { offensive: true, defensive: false },
+        awayBonus: { offensive: true, defensive: false },
+      }),
+    ];
+    const points = computeResultBonuses(results);
+    // Both: 2 (draw) + 1 (BO) = 3
+    expect(points.get('toulouse')).toBe(3);
+    expect(points.get('la-rochelle')).toBe(3);
+  });
+
+  it('fallback marge utilise quand homeBonus est null', () => {
+    const results = [
+      makeResult({
+        home: 'toulouse', away: 'la-rochelle',
+        homeScore: 22, awayScore: 19,
+        homeBonus: null, awayBonus: null,
+      }),
+    ];
+    const points = computeResultBonuses(results);
+    expect(points.get('toulouse')).toBe(4);
+    expect(points.get('la-rochelle')).toBe(1); // margin=3 → defensive fallback
+  });
+
+  it('bonus max: victoire + BO + BD = 6 pts', () => {
+    const results = [
+      makeResult({
+        home: 'toulouse', away: 'la-rochelle',
+        homeScore: 30, awayScore: 20,
+        homeBonus: { offensive: true, defensive: true },
+        awayBonus: { offensive: false, defensive: false },
+      }),
+    ];
+    const points = computeResultBonuses(results);
+    expect(points.get('toulouse')).toBe(6);
     expect(points.get('la-rochelle')).toBe(0);
   });
 });

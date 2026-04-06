@@ -461,24 +461,30 @@ export function computeResultBonuses(results) {
 
     const margin = Math.abs(r.homeScore - r.awayScore);
 
+    // Base points
     if (r.homeScore > r.awayScore) {
-      // Home win
       points.set(r.home, points.get(r.home) + 4);
-      // Defensive bonus for away
-      if (margin <= DEFENSIVE_MARGIN) {
-        points.set(r.away, points.get(r.away) + 1);
-      }
     } else if (r.homeScore < r.awayScore) {
-      // Away win
       points.set(r.away, points.get(r.away) + 4);
-      // Defensive bonus for home
-      if (margin <= DEFENSIVE_MARGIN) {
-        points.set(r.home, points.get(r.home) + 1);
-      }
     } else {
-      // Draw
       points.set(r.home, points.get(r.home) + 2);
       points.set(r.away, points.get(r.away) + 2);
+    }
+
+    // Bonus points
+    if (r.homeBonus != null && r.awayBonus != null) {
+      // Real bonus data from scraping (loose != null catches both null and undefined)
+      if (r.homeBonus.offensive) points.set(r.home, points.get(r.home) + 1);
+      if (r.homeBonus.defensive) points.set(r.home, points.get(r.home) + 1);
+      if (r.awayBonus.offensive) points.set(r.away, points.get(r.away) + 1);
+      if (r.awayBonus.defensive) points.set(r.away, points.get(r.away) + 1);
+    } else {
+      // Fallback: infer defensive bonus from margin only (no offensive bonus)
+      if (r.homeScore > r.awayScore && margin <= DEFENSIVE_MARGIN) {
+        points.set(r.away, points.get(r.away) + 1);
+      } else if (r.homeScore < r.awayScore && margin <= DEFENSIVE_MARGIN) {
+        points.set(r.home, points.get(r.home) + 1);
+      }
     }
   }
 
