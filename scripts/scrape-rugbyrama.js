@@ -223,6 +223,87 @@ export function parseRugbyramaCalendar(html) {
   return { matchday: currentMatchday, results, calendar, complete };
 }
 
+/**
+ * Parse an individual Rugbyrama match page to extract bonus indicators and try counts.
+ *
+ * HTML structure (idalgo widget, server-rendered):
+ *
+ * Two `.div_idalgo_content_rugby_match_header_full_main_header_bonus` blocks appear in
+ * document order — first for the home team, second for the away team. Inside each:
+ *   - `span.span_idalgo_content_rugby_match_header_full_main_header_bonus_content_defense`
+ *     → BD (bonus défensif). Active when style="display:block;", inactive when "display:none;".
+ *   - `span.span_idalgo_content_rugby_match_header_full_main_header_bonus_content_try`
+ *     → BO (bonus offensif, ≥4 tries). Same display logic.
+ *
+ * Try counts are in `.div_idalgo_dom_event_match_center_team_list_count > span`
+ * with text like "7 Essais". First occurrence = home, second = away.
+ *
+ * @param {string} html - Raw HTML of the match page
+ * @returns {{ homeBonus: {offensive: boolean, defensive: boolean},
+ *             awayBonus: {offensive: boolean, defensive: boolean},
+ *             homeTries: number,
+ *             awayTries: number } | null}
+ */
+export function parseMatchPage(html) {
+  try {
+    const $ = cheerio.load(html);
+
+    const bonusBlocks = $(
+      '.div_idalgo_content_rugby_match_header_full_main_header_bonus',
+    );
+
+    if (bonusBlocks.length < 2) {
+      return null;
+    }
+
+    const parseBonus = (block) => {
+      const $block = $(block);
+      const bdStyle = $block
+        .find(
+          '.span_idalgo_content_rugby_match_header_full_main_header_bonus_content_defense',
+        )
+        .attr('style') || '';
+      const boStyle = $block
+        .find(
+          '.span_idalgo_content_rugby_match_header_full_main_header_bonus_content_try',
+        )
+        .attr('style') || '';
+
+      return {
+        defensive: bdStyle.includes('display:block'),
+        offensive: boStyle.includes('display:block'),
+      };
+    };
+
+    const homeBonus = parseBonus(bonusBlocks[0]);
+    const awayBonus = parseBonus(bonusBlocks[1]);
+
+    const tryCounts = $('.div_idalgo_dom_event_match_center_team_list_count');
+
+    if (tryCounts.length < 2) {
+      return null;
+    }
+
+    const parseTries = (el) => {
+      const text = $(el).find('span').first().text().trim();
+      const m = text.match(/^(\d+)/);
+      return m ? parseInt(m[1], 10) : NaN;
+    };
+
+    const homeTries = parseTries(tryCounts[0]);
+    const awayTries = parseTries(tryCounts[1]);
+
+    if (Number.isNaN(homeTries) || Number.isNaN(awayTries)) {
+      return null;
+    }
+
+    return { homeBonus, awayBonus, homeTries, awayTries };
+  } catch (err) {
+    console.warn(`parseMatchPage failed: ${err.message}`);
+    return null;
+  }
+}
+
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 /**

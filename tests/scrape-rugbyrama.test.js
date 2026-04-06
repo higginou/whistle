@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   parseRugbyramaCalendar,
   parseIdalgoDate,
+  parseMatchPage,
 } from '../scripts/scrape-rugbyrama.js';
 import { resolveIdalgoSlug, IDALGO_SLUG_TO_ID } from '../scripts/team-mapping.js';
 
@@ -118,6 +119,57 @@ const EMPTY_HTML = `
 <html lang="fr">
 <body>
   <div class="div_idalgo_content_calendar_cup"></div>
+</body>
+</html>
+`;
+
+/**
+ * Minimal HTML fixture simulating a Rugbyrama individual match page.
+ * Mirrors the real idalgo class structure from the Stade Français vs Montauban match (id 55924).
+ *
+ * Key structure:
+ *   - Two .div_idalgo_content_rugby_match_header_full_main_header_bonus divs (home then away)
+ *   - Inside each: span _bonus_content_defense (BD) and span _bonus_content_try (BO)
+ *     Active = style="display:block;" / Inactive = style="display:none;"
+ *   - .div_idalgo_dom_event_match_center_team_list_count > span: "N Essais"
+ *     First occurrence = home, second = away
+ *
+ * Fixture scenario: home has BO (7 tries), away has BD (lost by 3 pts), neither has the other.
+ */
+const MATCH_PAGE_HTML = `
+<!DOCTYPE html>
+<html lang="fr">
+<body>
+<div class="div_idalgo_content_match_header_full_main_header" id="idalgo_content_rugby_match_header_full" data-status="1" data-match="55924">
+  <div class="div_idalgo_content_match_header_full_main_header_local">
+    <div class="div_idalgo_content_match_header_full_main_header_local_cnt">
+      <img alt="Stade Français">
+    </div>
+  </div>
+  <div class="div_idalgo_content_rugby_match_header_full_main_header_bonus">
+    <div class="div_idalgo_content_rugby_match_header_full_main_header_bonus_content">
+      <span class="span_idalgo_content_rugby_match_header_full_main_header_bonus_content_defense" style="display:none;">BD</span>
+      <span class="span_idalgo_content_rugby_match_header_full_main_header_bonus_content_try" style="display:block;">BO</span>
+    </div>
+  </div>
+  <div class="div_idalgo_content_match_header_full_main_header_local_side">
+    <div class="div_idalgo_dom_event_match_center_team_list_count" data-try="__numTry__ Essai"><span>7 Essais</span></div>
+  </div>
+  <div class="div_idalgo_content_match_header_full_main_header_visitor">
+    <div class="div_idalgo_content_match_header_full_main_header_visitor_cnt">
+      <img alt="Montauban">
+    </div>
+  </div>
+  <div class="div_idalgo_content_rugby_match_header_full_main_header_bonus">
+    <div class="div_idalgo_content_rugby_match_header_full_main_header_bonus_content">
+      <span class="span_idalgo_content_rugby_match_header_full_main_header_bonus_content_defense" style="display:block;">BD</span>
+      <span class="span_idalgo_content_rugby_match_header_full_main_header_bonus_content_try" style="display:none;">BO</span>
+    </div>
+  </div>
+  <div class="div_idalgo_content_match_header_full_main_header_visitor_side">
+    <div class="div_idalgo_dom_event_match_center_team_list_count" data-try="__numTry__ Essai"><span>4 Essais</span></div>
+  </div>
+</div>
 </body>
 </html>
 `;
@@ -387,6 +439,46 @@ describe('parseRugbyramaCalendar : resilience', () => {
     for (const match of [...results, ...calendar]) {
       expect(match.home).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
       expect(match.away).toMatch(/^[a-z0-9]+(-[a-z0-9]+)*$/);
+    }
+  });
+});
+
+// ─── parseMatchPage ──────────────────────────────────────────────────────────
+
+describe('parseMatchPage', () => {
+  it('extrait les bonus offensifs et defensifs', () => {
+    const result = parseMatchPage(MATCH_PAGE_HTML);
+    expect(result).not.toBeNull();
+    expect(result.homeBonus).toEqual({ offensive: true, defensive: false });
+    expect(result.awayBonus).toEqual({ offensive: false, defensive: true });
+  });
+
+  it('extrait le nombre d\'essais', () => {
+    const result = parseMatchPage(MATCH_PAGE_HTML);
+    expect(typeof result.homeTries).toBe('number');
+    expect(typeof result.awayTries).toBe('number');
+    expect(result.homeTries).toBeGreaterThanOrEqual(0);
+    expect(result.awayTries).toBeGreaterThanOrEqual(0);
+  });
+
+  it('extrait les valeurs correctes du fixture', () => {
+    const result = parseMatchPage(MATCH_PAGE_HTML);
+    expect(result.homeTries).toBe(7);
+    expect(result.awayTries).toBe(4);
+  });
+
+  it('retourne null si le parsing echoue (page vide)', () => {
+    const result = parseMatchPage('<html><body></body></html>');
+    expect(result).toBeNull();
+  });
+
+  it('retourne homeBonus et awayBonus avec des booleens', () => {
+    const result = parseMatchPage(MATCH_PAGE_HTML);
+    if (result !== null) {
+      expect(typeof result.homeBonus.offensive).toBe('boolean');
+      expect(typeof result.homeBonus.defensive).toBe('boolean');
+      expect(typeof result.awayBonus.offensive).toBe('boolean');
+      expect(typeof result.awayBonus.defensive).toBe('boolean');
     }
   });
 });
