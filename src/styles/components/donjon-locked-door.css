@@ -90,13 +90,4 @@
   }
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .w-donjon-locked__padlock {
-    animation: donjon-locked-fade-in 0.2s ease-out forwards;
-  }
-
-  .w-donjon-locked__char {
-    animation: donjon-locked-fade-in 0.2s ease-out var(--char-delay, 0.8s) forwards;
-  }
-}
+/* No prefers-reduced-motion — full animations for all users (spec decision #11) */

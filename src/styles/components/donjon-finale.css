@@ -169,19 +169,4 @@
   }
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .w-donjon-finale__stat {
-    animation: donjon-finale-fade-in 0.2s ease-out var(--stat-delay, 0s) forwards;
-  }
-
-  .w-donjon-finale__rank--visible,
-  .w-donjon-finale__rank--gold.w-donjon-finale__rank--visible,
-  .w-donjon-finale__rank--purple.w-donjon-finale__rank--visible {
-    animation: donjon-finale-fade-in 0.2s ease-out forwards;
-  }
-
-  .w-donjon-finale__replay--visible {
-    animation: donjon-finale-fade-in 0.2s ease-out forwards;
-  }
-}
+/* No prefers-reduced-motion — full animations for all users (spec decision #11) */

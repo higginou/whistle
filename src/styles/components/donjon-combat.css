@@ -178,20 +178,4 @@
   }
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .w-donjon-combat__name--visible-left,
-  .w-donjon-combat__name--visible-right,
-  .w-donjon-combat__venue--visible-left,
-  .w-donjon-combat__venue--visible-right,
-  .w-donjon-combat__matchday--visible,
-  .w-donjon-combat__score--visible,
-  .w-donjon-combat__stat--visible,
-  .w-donjon-combat__badge--visible {
-    animation: donjon-fade-in-instant 0.2s ease-out forwards;
-  }
-}
-
-@keyframes donjon-fade-in-instant {
-  to { opacity: 1; transform: none; }
-}
+/* No prefers-reduced-motion — full animations for all users (spec decision #11) */

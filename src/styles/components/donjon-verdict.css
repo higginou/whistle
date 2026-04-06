@@ -161,19 +161,4 @@
   to { opacity: 0.6; }
 }
 
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .w-donjon-verdict__text--visible,
-  .w-donjon-verdict__score--visible,
-  .w-donjon-verdict__next--visible {
-    animation: donjon-verdict-fade-in 0.2s ease-out forwards;
-  }
-
-  .w-donjon-verdict__particle {
-    display: none;
-  }
-
-  .w-donjon-verdict__vignette {
-    animation: donjon-vignette-close 0.2s ease-out forwards;
-  }
-}
+/* No prefers-reduced-motion — full animations for all users (spec decision #11) */
