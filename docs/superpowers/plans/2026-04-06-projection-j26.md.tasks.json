@@ -1,0 +1,12 @@
+{
+  "planPath": "docs/superpowers/plans/2026-04-06-projection-j26.md",
+  "tasks": [
+    {"id": 1, "subject": "Task 1: Add median() to elo.js", "status": "pending"},
+    {"id": 2, "subject": "Task 2: Export projectedPoints from elo.js", "status": "pending", "blockedBy": [1]},
+    {"id": 3, "subject": "Task 3: Propagate projectedPoints in generate.js", "status": "pending", "blockedBy": [2]},
+    {"id": 4, "subject": "Task 4: Update tab-projection.js header and projected points", "status": "pending", "blockedBy": [3]},
+    {"id": 5, "subject": "Task 5: Add movement badges in tab-projection.js", "status": "pending", "blockedBy": [4]},
+    {"id": 6, "subject": "Task 6: Full regression + visual verification", "status": "pending", "blockedBy": [5]}
+  ],
+  "lastUpdated": "2026-04-06T12:00:00Z"
+}
