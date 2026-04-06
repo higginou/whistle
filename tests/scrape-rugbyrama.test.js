@@ -593,4 +593,22 @@ describe('enrichMatchBonuses', () => {
 
     expect(results[0].homeBonus).toBeNull();
   });
+
+  it('ne lance pas d\'erreur si fetch rejette', async () => {
+    global.fetch = vi.fn().mockRejectedValue(new Error('network error'));
+
+    const results = [
+      {
+        matchday: 1, date: '2025-09-06',
+        home: 'toulon', away: 'castres',
+        homeScore: 20, awayScore: 15,
+        matchUrl: '/resultats/rugby/top-14/phase-reguliere/rencontre/99998/toulon-castres',
+        homeBonus: null, awayBonus: null,
+        homeTries: null, awayTries: null,
+      },
+    ];
+
+    await expect(enrichMatchBonuses(results)).resolves.not.toThrow();
+    expect(results[0].homeBonus).toBeNull();
+  });
 });
