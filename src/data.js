@@ -94,4 +94,19 @@ function readCache(key) {
   }
 }
 
-export { loadSeason }
+/**
+ * Load scraped match results (network-first, no cache).
+ * Sets store key 'scraped' to the fetched data, or null on error.
+ */
+async function loadScraped() {
+  try {
+    const response = await fetch('./data/scraped.json')
+    if (!response.ok) throw new Error(`HTTP ${response.status}`)
+    const data = await response.json()
+    set('scraped', data)
+  } catch (_err) {
+    set('scraped', null)
+  }
+}
+
+export { loadSeason, loadScraped }

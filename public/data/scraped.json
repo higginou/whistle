@@ -1,0 +1,3046 @@
+{
+  "scrapedAt": "2026-04-06T10:38:35.204Z",
+  "source": "rugbyrama",
+  "matchday": 20,
+  "complete": true,
+  "standings": [
+    {
+      "id": "toulouse",
+      "rank": 1,
+      "points": 71,
+      "played": 20,
+      "won": 15,
+      "drawn": 0,
+      "lost": 5,
+      "bonusOffensive": 11,
+      "bonusDefensive": 2,
+      "pointsFor": 795,
+      "pointsAgainst": 438
+    },
+    {
+      "id": "pau",
+      "rank": 2,
+      "points": 59,
+      "played": 20,
+      "won": 13,
+      "drawn": 0,
+      "lost": 7,
+      "bonusOffensive": 5,
+      "bonusDefensive": 2,
+      "pointsFor": 591,
+      "pointsAgainst": 514
+    },
+    {
+      "id": "stade-francais",
+      "rank": 3,
+      "points": 59,
+      "played": 20,
+      "won": 11,
+      "drawn": 1,
+      "lost": 8,
+      "bonusOffensive": 8,
+      "bonusDefensive": 5,
+      "pointsFor": 623,
+      "pointsAgainst": 495
+    },
+    {
+      "id": "bordeaux-begles",
+      "rank": 4,
+      "points": 59,
+      "played": 20,
+      "won": 12,
+      "drawn": 0,
+      "lost": 8,
+      "bonusOffensive": 8,
+      "bonusDefensive": 3,
+      "pointsFor": 656,
+      "pointsAgainst": 520
+    },
+    {
+      "id": "montpellier",
+      "rank": 5,
+      "points": 57,
+      "played": 20,
+      "won": 11,
+      "drawn": 1,
+      "lost": 8,
+      "bonusOffensive": 7,
+      "bonusDefensive": 4,
+      "pointsFor": 610,
+      "pointsAgainst": 452
+    },
+    {
+      "id": "clermont",
+      "rank": 6,
+      "points": 52,
+      "played": 20,
+      "won": 11,
+      "drawn": 0,
+      "lost": 9,
+      "bonusOffensive": 6,
+      "bonusDefensive": 2,
+      "pointsFor": 633,
+      "pointsAgainst": 551
+    },
+    {
+      "id": "racing-92",
+      "rank": 7,
+      "points": 50,
+      "played": 20,
+      "won": 11,
+      "drawn": 1,
+      "lost": 8,
+      "bonusOffensive": 3,
+      "bonusDefensive": 1,
+      "pointsFor": 583,
+      "pointsAgainst": 606
+    },
+    {
+      "id": "castres",
+      "rank": 8,
+      "points": 47,
+      "played": 20,
+      "won": 10,
+      "drawn": 0,
+      "lost": 10,
+      "bonusOffensive": 2,
+      "bonusDefensive": 5,
+      "pointsFor": 501,
+      "pointsAgainst": 570
+    },
+    {
+      "id": "la-rochelle",
+      "rank": 9,
+      "points": 45,
+      "played": 20,
+      "won": 9,
+      "drawn": 0,
+      "lost": 11,
+      "bonusOffensive": 5,
+      "bonusDefensive": 4,
+      "pointsFor": 586,
+      "pointsAgainst": 519
+    },
+    {
+      "id": "bayonne",
+      "rank": 10,
+      "points": 45,
+      "played": 20,
+      "won": 10,
+      "drawn": 0,
+      "lost": 10,
+      "bonusOffensive": 3,
+      "bonusDefensive": 2,
+      "pointsFor": 553,
+      "pointsAgainst": 636
+    },
+    {
+      "id": "toulon",
+      "rank": 11,
+      "points": 45,
+      "played": 20,
+      "won": 9,
+      "drawn": 1,
+      "lost": 10,
+      "bonusOffensive": 6,
+      "bonusDefensive": 1,
+      "pointsFor": 512,
+      "pointsAgainst": 618
+    },
+    {
+      "id": "lyon",
+      "rank": 12,
+      "points": 44,
+      "played": 20,
+      "won": 9,
+      "drawn": 1,
+      "lost": 10,
+      "bonusOffensive": 3,
+      "bonusDefensive": 3,
+      "pointsFor": 570,
+      "pointsAgainst": 551
+    },
+    {
+      "id": "perpignan",
+      "rank": 13,
+      "points": 23,
+      "played": 20,
+      "won": 5,
+      "drawn": 0,
+      "lost": 15,
+      "bonusOffensive": 1,
+      "bonusDefensive": 2,
+      "pointsFor": 408,
+      "pointsAgainst": 563
+    },
+    {
+      "id": "montauban",
+      "rank": 14,
+      "points": 7,
+      "played": 20,
+      "won": 1,
+      "drawn": 1,
+      "lost": 18,
+      "bonusOffensive": 0,
+      "bonusDefensive": 1,
+      "pointsFor": 381,
+      "pointsAgainst": 969
+    }
+  ],
+  "results": [
+    {
+      "matchday": 1,
+      "date": "2025-09-06",
+      "home": "stade-francais",
+      "away": "montauban",
+      "homeScore": 47,
+      "awayScore": 24,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55924/stade-francais-montauban",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 7,
+      "awayTries": 4
+    },
+    {
+      "matchday": 1,
+      "date": "2025-09-06",
+      "home": "perpignan",
+      "away": "bayonne",
+      "homeScore": 19,
+      "awayScore": 26,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55926/perpignan-bayonne",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 3,
+      "awayTries": 2
+    },
+    {
+      "matchday": 1,
+      "date": "2025-09-06",
+      "home": "castres",
+      "away": "pau",
+      "homeScore": 15,
+      "awayScore": 17,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55921/castres-pau",
+      "homeBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 1
+    },
+    {
+      "matchday": 1,
+      "date": "2025-09-06",
+      "home": "lyon",
+      "away": "racing-92",
+      "homeScore": 32,
+      "awayScore": 7,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55922/lyon-racing-92",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 1
+    },
+    {
+      "matchday": 1,
+      "date": "2025-09-06",
+      "home": "montpellier",
+      "away": "toulon",
+      "homeScore": 17,
+      "awayScore": 27,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55923/montpellier-toulon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 3
+    },
+    {
+      "matchday": 1,
+      "date": "2025-09-06",
+      "home": "bordeaux-begles",
+      "away": "la-rochelle",
+      "homeScore": 23,
+      "awayScore": 18,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55925/bordeaux-begles-la-rochelle",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 2
+    },
+    {
+      "matchday": 1,
+      "date": "2025-09-07",
+      "home": "clermont",
+      "away": "toulouse",
+      "homeScore": 24,
+      "awayScore": 34,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55920/clermont-stade-toulousain",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 4
+    },
+    {
+      "matchday": 2,
+      "date": "2025-09-13",
+      "home": "montauban",
+      "away": "lyon",
+      "homeScore": 18,
+      "awayScore": 25,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55919/montauban-lyon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 3
+    },
+    {
+      "matchday": 2,
+      "date": "2025-09-13",
+      "home": "bayonne",
+      "away": "montpellier",
+      "homeScore": 26,
+      "awayScore": 23,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55913/bayonne-montpellier",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 2
+    },
+    {
+      "matchday": 2,
+      "date": "2025-09-13",
+      "home": "pau",
+      "away": "stade-francais",
+      "homeScore": 34,
+      "awayScore": 10,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55916/pau-stade-francais",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 1
+    },
+    {
+      "matchday": 2,
+      "date": "2025-09-13",
+      "home": "la-rochelle",
+      "away": "clermont",
+      "homeScore": 34,
+      "awayScore": 16,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55917/la-rochelle-clermont",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 2
+    },
+    {
+      "matchday": 2,
+      "date": "2025-09-13",
+      "home": "toulouse",
+      "away": "perpignan",
+      "homeScore": 31,
+      "awayScore": 13,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55918/stade-toulousain-perpignan",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 1
+    },
+    {
+      "matchday": 2,
+      "date": "2025-09-13",
+      "home": "toulon",
+      "away": "castres",
+      "homeScore": 16,
+      "awayScore": 12,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55915/toulon-castres",
+      "homeBonus": null,
+      "awayBonus": null,
+      "homeTries": null,
+      "awayTries": null
+    },
+    {
+      "matchday": 2,
+      "date": "2025-09-14",
+      "home": "racing-92",
+      "away": "bordeaux-begles",
+      "homeScore": 44,
+      "awayScore": 32,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55914/racing-92-bordeaux-begles",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 5
+    },
+    {
+      "matchday": 3,
+      "date": "2025-09-20",
+      "home": "clermont",
+      "away": "pau",
+      "homeScore": 50,
+      "awayScore": 27,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55906/clermont-pau",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 7,
+      "awayTries": 3
+    },
+    {
+      "matchday": 3,
+      "date": "2025-09-20",
+      "home": "castres",
+      "away": "bayonne",
+      "homeScore": 48,
+      "awayScore": 17,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55907/castres-bayonne",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 7,
+      "awayTries": 2
+    },
+    {
+      "matchday": 3,
+      "date": "2025-09-20",
+      "home": "lyon",
+      "away": "stade-francais",
+      "homeScore": 42,
+      "awayScore": 37,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55908/lyon-stade-francais",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 4
+    },
+    {
+      "matchday": 3,
+      "date": "2025-09-20",
+      "home": "bordeaux-begles",
+      "away": "montauban",
+      "homeScore": 71,
+      "awayScore": 24,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55911/bordeaux-begles-montauban",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 11,
+      "awayTries": 3
+    },
+    {
+      "matchday": 3,
+      "date": "2025-09-20",
+      "home": "perpignan",
+      "away": "racing-92",
+      "homeScore": 15,
+      "awayScore": 28,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55912/perpignan-racing-92",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 3
+    },
+    {
+      "matchday": 3,
+      "date": "2025-09-20",
+      "home": "montpellier",
+      "away": "toulouse",
+      "homeScore": 44,
+      "awayScore": 14,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55909/montpellier-stade-toulousain",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 2
+    },
+    {
+      "matchday": 3,
+      "date": "2025-09-27",
+      "home": "stade-francais",
+      "away": "bordeaux-begles",
+      "homeScore": 28,
+      "awayScore": 7,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55902/stade-francais-bordeaux-begles",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 3,
+      "awayTries": 1
+    },
+    {
+      "matchday": 4,
+      "date": "2025-09-27",
+      "home": "racing-92",
+      "away": "clermont",
+      "homeScore": 43,
+      "awayScore": 31,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55900/racing-92-clermont",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 4
+    },
+    {
+      "matchday": 4,
+      "date": "2025-09-27",
+      "home": "pau",
+      "away": "lyon",
+      "homeScore": 40,
+      "awayScore": 15,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55901/pau-lyon",
+      "homeBonus": null,
+      "awayBonus": null,
+      "homeTries": null,
+      "awayTries": null
+    },
+    {
+      "matchday": 4,
+      "date": "2025-09-27",
+      "home": "la-rochelle",
+      "away": "perpignan",
+      "homeScore": 31,
+      "awayScore": 8,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55903/la-rochelle-perpignan",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 1
+    },
+    {
+      "matchday": 4,
+      "date": "2025-09-27",
+      "home": "montauban",
+      "away": "montpellier",
+      "homeScore": 22,
+      "awayScore": 22,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55905/montauban-montpellier",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 1,
+      "awayTries": 3
+    },
+    {
+      "matchday": 4,
+      "date": "2025-09-27",
+      "home": "toulouse",
+      "away": "castres",
+      "homeScore": 59,
+      "awayScore": 12,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55904/stade-toulousain-castres",
+      "homeBonus": null,
+      "awayBonus": null,
+      "homeTries": null,
+      "awayTries": null
+    },
+    {
+      "matchday": 4,
+      "date": "2025-09-28",
+      "home": "bayonne",
+      "away": "toulon",
+      "homeScore": 35,
+      "awayScore": 32,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55899/bayonne-toulon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 4
+    },
+    {
+      "matchday": 4,
+      "date": "2025-10-04",
+      "home": "montpellier",
+      "away": "la-rochelle",
+      "homeScore": 37,
+      "awayScore": 13,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55895/montpellier-la-rochelle",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 1
+    },
+    {
+      "matchday": 5,
+      "date": "2025-10-04",
+      "home": "clermont",
+      "away": "montauban",
+      "homeScore": 84,
+      "awayScore": 31,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55892/clermont-montauban",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 12,
+      "awayTries": 4
+    },
+    {
+      "matchday": 5,
+      "date": "2025-10-04",
+      "home": "castres",
+      "away": "racing-92",
+      "homeScore": 20,
+      "awayScore": 16,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55894/castres-racing-92",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 1
+    },
+    {
+      "matchday": 5,
+      "date": "2025-10-04",
+      "home": "toulon",
+      "away": "pau",
+      "homeScore": 33,
+      "awayScore": 17,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55896/toulon-pau",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 2
+    },
+    {
+      "matchday": 5,
+      "date": "2025-10-04",
+      "home": "perpignan",
+      "away": "stade-francais",
+      "homeScore": 11,
+      "awayScore": 28,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55898/perpignan-stade-francais",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "homeTries": 1,
+      "awayTries": 4
+    },
+    {
+      "matchday": 5,
+      "date": "2025-10-04",
+      "home": "bordeaux-begles",
+      "away": "lyon",
+      "homeScore": 32,
+      "awayScore": 20,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55897/bordeaux-begles-lyon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 2
+    },
+    {
+      "matchday": 5,
+      "date": "2025-10-05",
+      "home": "bayonne",
+      "away": "toulouse",
+      "homeScore": 40,
+      "awayScore": 26,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55893/bayonne-stade-toulousain",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 3
+    },
+    {
+      "matchday": 5,
+      "date": "2025-10-11",
+      "home": "pau",
+      "away": "bayonne",
+      "homeScore": 47,
+      "awayScore": 24,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55888/pau-bayonne",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 3
+    },
+    {
+      "matchday": 6,
+      "date": "2025-10-11",
+      "home": "lyon",
+      "away": "perpignan",
+      "homeScore": 44,
+      "awayScore": 19,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55886/lyon-perpignan",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 2
+    },
+    {
+      "matchday": 6,
+      "date": "2025-10-11",
+      "home": "racing-92",
+      "away": "montpellier",
+      "homeScore": 32,
+      "awayScore": 25,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55887/racing-92-montpellier",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 3
+    },
+    {
+      "matchday": 6,
+      "date": "2025-10-11",
+      "home": "stade-francais",
+      "away": "la-rochelle",
+      "homeScore": 26,
+      "awayScore": 24,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55889/stade-francais-la-rochelle",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 2
+    },
+    {
+      "matchday": 6,
+      "date": "2025-10-11",
+      "home": "montauban",
+      "away": "castres",
+      "homeScore": 28,
+      "awayScore": 32,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55891/montauban-castres",
+      "homeBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 4
+    },
+    {
+      "matchday": 6,
+      "date": "2025-10-11",
+      "home": "clermont",
+      "away": "toulon",
+      "homeScore": 27,
+      "awayScore": 10,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55885/clermont-toulon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 3,
+      "awayTries": 1
+    },
+    {
+      "matchday": 6,
+      "date": "2025-10-12",
+      "home": "toulouse",
+      "away": "bordeaux-begles",
+      "homeScore": 56,
+      "awayScore": 13,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55890/stade-toulousain-bordeaux-begles",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 8,
+      "awayTries": 2
+    },
+    {
+      "matchday": 6,
+      "date": "2025-10-18",
+      "home": "bayonne",
+      "away": "clermont",
+      "homeScore": 44,
+      "awayScore": 17,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55878/bayonne-clermont",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 2
+    },
+    {
+      "matchday": 7,
+      "date": "2025-10-18",
+      "home": "castres",
+      "away": "stade-francais",
+      "homeScore": 29,
+      "awayScore": 24,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55879/castres-stade-francais",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 3
+    },
+    {
+      "matchday": 7,
+      "date": "2025-10-18",
+      "home": "montpellier",
+      "away": "lyon",
+      "homeScore": 35,
+      "awayScore": 13,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55880/montpellier-lyon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 2
+    },
+    {
+      "matchday": 7,
+      "date": "2025-10-18",
+      "home": "la-rochelle",
+      "away": "montauban",
+      "homeScore": 54,
+      "awayScore": 19,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55883/la-rochelle-montauban",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 8,
+      "awayTries": 3
+    },
+    {
+      "matchday": 7,
+      "date": "2025-10-18",
+      "home": "perpignan",
+      "away": "bordeaux-begles",
+      "homeScore": 12,
+      "awayScore": 27,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55884/perpignan-bordeaux-begles",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 3
+    },
+    {
+      "matchday": 7,
+      "date": "2025-10-18",
+      "home": "pau",
+      "away": "toulouse",
+      "homeScore": 30,
+      "awayScore": 26,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55882/pau-stade-toulousain",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 3,
+      "awayTries": 2
+    },
+    {
+      "matchday": 7,
+      "date": "2025-10-19",
+      "home": "toulon",
+      "away": "racing-92",
+      "homeScore": 45,
+      "awayScore": 21,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55881/toulon-racing-92",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 3
+    },
+    {
+      "matchday": 7,
+      "date": "2025-10-25",
+      "home": "lyon",
+      "away": "la-rochelle",
+      "homeScore": 19,
+      "awayScore": 36,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55872/lyon-la-rochelle",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 3,
+      "awayTries": 5
+    },
+    {
+      "matchday": 8,
+      "date": "2025-10-25",
+      "home": "clermont",
+      "away": "castres",
+      "homeScore": 63,
+      "awayScore": 14,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55871/clermont-castres",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 9,
+      "awayTries": 1
+    },
+    {
+      "matchday": 8,
+      "date": "2025-10-25",
+      "home": "racing-92",
+      "away": "pau",
+      "homeScore": 15,
+      "awayScore": 10,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55873/racing-92-pau",
+      "homeBonus": null,
+      "awayBonus": null,
+      "homeTries": null,
+      "awayTries": null
+    },
+    {
+      "matchday": 8,
+      "date": "2025-10-25",
+      "home": "stade-francais",
+      "away": "montpellier",
+      "homeScore": 35,
+      "awayScore": 12,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55874/stade-francais-montpellier",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 2
+    },
+    {
+      "matchday": 8,
+      "date": "2025-10-25",
+      "home": "montauban",
+      "away": "perpignan",
+      "homeScore": 29,
+      "awayScore": 22,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55877/montauban-perpignan",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 1
+    },
+    {
+      "matchday": 8,
+      "date": "2025-10-25",
+      "home": "bordeaux-begles",
+      "away": "bayonne",
+      "homeScore": 41,
+      "awayScore": 12,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55876/bordeaux-begles-bayonne",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 2
+    },
+    {
+      "matchday": 8,
+      "date": "2025-10-26",
+      "home": "toulouse",
+      "away": "toulon",
+      "homeScore": 59,
+      "awayScore": 24,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55875/stade-toulousain-toulon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 8,
+      "awayTries": 3
+    },
+    {
+      "matchday": 8,
+      "date": "2025-11-01",
+      "home": "toulon",
+      "away": "lyon",
+      "homeScore": 54,
+      "awayScore": 21,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55867/toulon-lyon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 8,
+      "awayTries": 2
+    },
+    {
+      "matchday": 9,
+      "date": "2025-11-01",
+      "home": "bayonne",
+      "away": "montauban",
+      "homeScore": 49,
+      "awayScore": 7,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55864/bayonne-montauban",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 7,
+      "awayTries": 1
+    },
+    {
+      "matchday": 9,
+      "date": "2025-11-01",
+      "home": "castres",
+      "away": "bordeaux-begles",
+      "homeScore": 26,
+      "awayScore": 28,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55865/castres-bordeaux-begles",
+      "homeBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 4
+    },
+    {
+      "matchday": 9,
+      "date": "2025-11-01",
+      "home": "montpellier",
+      "away": "clermont",
+      "homeScore": 7,
+      "awayScore": 9,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55866/montpellier-clermont",
+      "homeBonus": null,
+      "awayBonus": null,
+      "homeTries": null,
+      "awayTries": null
+    },
+    {
+      "matchday": 9,
+      "date": "2025-11-01",
+      "home": "pau",
+      "away": "perpignan",
+      "homeScore": 27,
+      "awayScore": 23,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55868/pau-perpignan",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 2
+    },
+    {
+      "matchday": 9,
+      "date": "2025-11-01",
+      "home": "toulouse",
+      "away": "stade-francais",
+      "homeScore": 29,
+      "awayScore": 17,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55870/stade-toulousain-stade-francais",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 2
+    },
+    {
+      "matchday": 9,
+      "date": "2025-11-02",
+      "home": "la-rochelle",
+      "away": "racing-92",
+      "homeScore": 33,
+      "awayScore": 6,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55869/la-rochelle-racing-92",
+      "homeBonus": null,
+      "awayBonus": null,
+      "homeTries": null,
+      "awayTries": null
+    },
+    {
+      "matchday": 9,
+      "date": "2025-11-08",
+      "home": "toulon",
+      "away": "la-rochelle",
+      "homeScore": 39,
+      "awayScore": 14,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55910/toulon-la-rochelle",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 2
+    },
+    {
+      "matchday": 10,
+      "date": "2025-11-21",
+      "home": "bordeaux-begles",
+      "away": "pau",
+      "homeScore": 33,
+      "awayScore": 34,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55861/bordeaux-begles-pau",
+      "homeBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 3
+    },
+    {
+      "matchday": 10,
+      "date": "2025-11-22",
+      "home": "lyon",
+      "away": "clermont",
+      "homeScore": 43,
+      "awayScore": 24,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55857/lyon-clermont",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 4
+    },
+    {
+      "matchday": 10,
+      "date": "2025-11-22",
+      "home": "racing-92",
+      "away": "bayonne",
+      "homeScore": 47,
+      "awayScore": 27,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55858/racing-92-bayonne",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 3
+    },
+    {
+      "matchday": 10,
+      "date": "2025-11-22",
+      "home": "la-rochelle",
+      "away": "castres",
+      "homeScore": 17,
+      "awayScore": 19,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55860/la-rochelle-castres",
+      "homeBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 1
+    },
+    {
+      "matchday": 10,
+      "date": "2025-11-22",
+      "home": "montauban",
+      "away": "toulouse",
+      "homeScore": 7,
+      "awayScore": 49,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55862/montauban-stade-toulousain",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "homeTries": 1,
+      "awayTries": 7
+    },
+    {
+      "matchday": 10,
+      "date": "2025-11-22",
+      "home": "perpignan",
+      "away": "montpellier",
+      "homeScore": 0,
+      "awayScore": 28,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55863/perpignan-montpellier",
+      "homeBonus": null,
+      "awayBonus": null,
+      "homeTries": null,
+      "awayTries": null
+    },
+    {
+      "matchday": 10,
+      "date": "2025-11-23",
+      "home": "stade-francais",
+      "away": "toulon",
+      "homeScore": 51,
+      "awayScore": 24,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55859/stade-francais-toulon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 3
+    },
+    {
+      "matchday": 11,
+      "date": "2025-11-29",
+      "home": "montpellier",
+      "away": "bordeaux-begles",
+      "homeScore": 28,
+      "awayScore": 24,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55853/montpellier-bordeaux-begles",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 3
+    },
+    {
+      "matchday": 11,
+      "date": "2025-11-29",
+      "home": "clermont",
+      "away": "stade-francais",
+      "homeScore": 36,
+      "awayScore": 32,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55850/clermont-stade-francais",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 4
+    },
+    {
+      "matchday": 11,
+      "date": "2025-11-29",
+      "home": "bayonne",
+      "away": "lyon",
+      "homeScore": 22,
+      "awayScore": 20,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55851/bayonne-lyon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 1,
+      "awayTries": 2
+    },
+    {
+      "matchday": 11,
+      "date": "2025-11-29",
+      "home": "castres",
+      "away": "perpignan",
+      "homeScore": 23,
+      "awayScore": 7,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55852/castres-perpignan",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 1
+    },
+    {
+      "matchday": 11,
+      "date": "2025-11-29",
+      "home": "toulon",
+      "away": "montauban",
+      "homeScore": 54,
+      "awayScore": 28,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55854/toulon-montauban",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 8,
+      "awayTries": 4
+    },
+    {
+      "matchday": 11,
+      "date": "2025-11-29",
+      "home": "toulouse",
+      "away": "racing-92",
+      "homeScore": 48,
+      "awayScore": 24,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55856/stade-toulousain-racing-92",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 7,
+      "awayTries": 3
+    },
+    {
+      "matchday": 11,
+      "date": "2025-11-30",
+      "home": "pau",
+      "away": "la-rochelle",
+      "homeScore": 53,
+      "awayScore": 33,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55855/pau-la-rochelle",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 8,
+      "awayTries": 5
+    },
+    {
+      "matchday": 12,
+      "date": "2025-12-20",
+      "home": "stade-francais",
+      "away": "racing-92",
+      "homeScore": 20,
+      "awayScore": 20,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55845/stade-francais-racing-92",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 3
+    },
+    {
+      "matchday": 12,
+      "date": "2025-12-20",
+      "home": "montpellier",
+      "away": "castres",
+      "homeScore": 33,
+      "awayScore": 31,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55844/montpellier-castres",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 3,
+      "awayTries": 4
+    },
+    {
+      "matchday": 12,
+      "date": "2025-12-20",
+      "home": "la-rochelle",
+      "away": "bayonne",
+      "homeScore": 49,
+      "awayScore": 17,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55846/la-rochelle-bayonne",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 7,
+      "awayTries": 2
+    },
+    {
+      "matchday": 12,
+      "date": "2025-12-20",
+      "home": "montauban",
+      "away": "pau",
+      "homeScore": 17,
+      "awayScore": 53,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55848/montauban-pau",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "homeTries": 2,
+      "awayTries": 8
+    },
+    {
+      "matchday": 12,
+      "date": "2025-12-20",
+      "home": "perpignan",
+      "away": "clermont",
+      "homeScore": 26,
+      "awayScore": 20,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55849/perpignan-clermont",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 2
+    },
+    {
+      "matchday": 12,
+      "date": "2025-12-20",
+      "home": "lyon",
+      "away": "toulouse",
+      "homeScore": 19,
+      "awayScore": 41,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55843/lyon-stade-toulousain",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "homeTries": 3,
+      "awayTries": 6
+    },
+    {
+      "matchday": 12,
+      "date": "2025-12-21",
+      "home": "bordeaux-begles",
+      "away": "toulon",
+      "homeScore": 46,
+      "awayScore": 7,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55847/bordeaux-begles-toulon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 1
+    },
+    {
+      "matchday": 13,
+      "date": "2025-12-27",
+      "home": "racing-92",
+      "away": "montauban",
+      "homeScore": 61,
+      "awayScore": 16,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55839/racing-92-montauban",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 9,
+      "awayTries": 1
+    },
+    {
+      "matchday": 13,
+      "date": "2025-12-27",
+      "home": "castres",
+      "away": "lyon",
+      "homeScore": 36,
+      "awayScore": 22,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55838/castres-lyon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 3
+    },
+    {
+      "matchday": 13,
+      "date": "2025-12-27",
+      "home": "bayonne",
+      "away": "stade-francais",
+      "homeScore": 35,
+      "awayScore": 34,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55837/bayonne-stade-francais",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 4
+    },
+    {
+      "matchday": 13,
+      "date": "2025-12-27",
+      "home": "clermont",
+      "away": "bordeaux-begles",
+      "homeScore": 34,
+      "awayScore": 19,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55836/clermont-bordeaux-begles",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 3
+    },
+    {
+      "matchday": 13,
+      "date": "2025-12-28",
+      "home": "pau",
+      "away": "montpellier",
+      "homeScore": 35,
+      "awayScore": 33,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55841/pau-montpellier",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 5
+    },
+    {
+      "matchday": 13,
+      "date": "2025-12-28",
+      "home": "toulon",
+      "away": "perpignan",
+      "homeScore": 31,
+      "awayScore": 16,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55840/toulon-perpignan",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 1
+    },
+    {
+      "matchday": 13,
+      "date": "2025-12-28",
+      "home": "toulouse",
+      "away": "la-rochelle",
+      "homeScore": 60,
+      "awayScore": 14,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55842/stade-toulousain-la-rochelle",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 9,
+      "awayTries": 2
+    },
+    {
+      "matchday": 14,
+      "date": "2026-01-03",
+      "home": "perpignan",
+      "away": "toulouse",
+      "homeScore": 30,
+      "awayScore": 27,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55835/perpignan-stade-toulousain",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 3
+    },
+    {
+      "matchday": 14,
+      "date": "2026-01-03",
+      "home": "lyon",
+      "away": "pau",
+      "homeScore": 22,
+      "awayScore": 17,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55829/lyon-pau",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 3,
+      "awayTries": 2
+    },
+    {
+      "matchday": 14,
+      "date": "2026-01-03",
+      "home": "montpellier",
+      "away": "bayonne",
+      "homeScore": 62,
+      "awayScore": 22,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55830/montpellier-bayonne",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 9,
+      "awayTries": 3
+    },
+    {
+      "matchday": 14,
+      "date": "2026-01-03",
+      "home": "stade-francais",
+      "away": "castres",
+      "homeScore": 33,
+      "awayScore": 15,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55831/stade-francais-castres",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 2
+    },
+    {
+      "matchday": 14,
+      "date": "2026-01-03",
+      "home": "montauban",
+      "away": "clermont",
+      "homeScore": 19,
+      "awayScore": 34,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55834/montauban-clermont",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "homeTries": 3,
+      "awayTries": 6
+    },
+    {
+      "matchday": 14,
+      "date": "2026-01-03",
+      "home": "bordeaux-begles",
+      "away": "racing-92",
+      "homeScore": 62,
+      "awayScore": 20,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55833/bordeaux-begles-racing-92",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 9,
+      "awayTries": 2
+    },
+    {
+      "matchday": 14,
+      "date": "2026-01-04",
+      "home": "la-rochelle",
+      "away": "toulon",
+      "homeScore": 66,
+      "awayScore": 0,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55832/la-rochelle-toulon",
+      "homeBonus": null,
+      "awayBonus": null,
+      "homeTries": null,
+      "awayTries": null
+    },
+    {
+      "matchday": 15,
+      "date": "2026-01-24",
+      "home": "bordeaux-begles",
+      "away": "stade-francais",
+      "homeScore": 28,
+      "awayScore": 33,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55827/bordeaux-begles-stade-francais",
+      "homeBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 5
+    },
+    {
+      "matchday": 15,
+      "date": "2026-01-24",
+      "home": "bayonne",
+      "away": "castres",
+      "homeScore": 10,
+      "awayScore": 13,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55823/bayonne-castres",
+      "homeBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 1,
+      "awayTries": 1
+    },
+    {
+      "matchday": 15,
+      "date": "2026-01-24",
+      "home": "racing-92",
+      "away": "lyon",
+      "homeScore": 35,
+      "awayScore": 34,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55824/racing-92-lyon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 4
+    },
+    {
+      "matchday": 15,
+      "date": "2026-01-24",
+      "home": "perpignan",
+      "away": "montauban",
+      "homeScore": 31,
+      "awayScore": 8,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55828/perpignan-montauban",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 1
+    },
+    {
+      "matchday": 15,
+      "date": "2026-01-24",
+      "home": "toulouse",
+      "away": "pau",
+      "homeScore": 59,
+      "awayScore": 22,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55826/stade-toulousain-pau",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 9,
+      "awayTries": 3
+    },
+    {
+      "matchday": 15,
+      "date": "2026-01-25",
+      "home": "toulon",
+      "away": "montpellier",
+      "homeScore": 30,
+      "awayScore": 27,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55825/toulon-montpellier",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 3,
+      "awayTries": 3
+    },
+    {
+      "matchday": 15,
+      "date": "2026-01-25",
+      "home": "clermont",
+      "away": "la-rochelle",
+      "homeScore": 32,
+      "awayScore": 27,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55822/clermont-la-rochelle",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 3
+    },
+    {
+      "matchday": 16,
+      "date": "2026-01-31",
+      "home": "montpellier",
+      "away": "stade-francais",
+      "homeScore": 44,
+      "awayScore": 7,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55816/montpellier-stade-francais",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 1
+    },
+    {
+      "matchday": 16,
+      "date": "2026-01-31",
+      "home": "castres",
+      "away": "clermont",
+      "homeScore": 28,
+      "awayScore": 23,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55815/castres-clermont",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "homeTries": 3,
+      "awayTries": 2
+    },
+    {
+      "matchday": 16,
+      "date": "2026-01-31",
+      "home": "racing-92",
+      "away": "perpignan",
+      "homeScore": 37,
+      "awayScore": 31,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55817/racing-92-perpignan",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 4
+    },
+    {
+      "matchday": 16,
+      "date": "2026-01-31",
+      "home": "la-rochelle",
+      "away": "lyon",
+      "homeScore": 24,
+      "awayScore": 44,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55819/la-rochelle-lyon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 5
+    },
+    {
+      "matchday": 16,
+      "date": "2026-01-31",
+      "home": "montauban",
+      "away": "bordeaux-begles",
+      "homeScore": 16,
+      "awayScore": 31,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55821/montauban-bordeaux-begles",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "homeTries": 1,
+      "awayTries": 4
+    },
+    {
+      "matchday": 16,
+      "date": "2026-01-31",
+      "home": "toulouse",
+      "away": "bayonne",
+      "homeScore": 31,
+      "awayScore": 10,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55820/stade-toulousain-bayonne",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 1
+    },
+    {
+      "matchday": 16,
+      "date": "2026-02-01",
+      "home": "pau",
+      "away": "toulon",
+      "homeScore": 32,
+      "awayScore": 12,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55818/pau-toulon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 2
+    },
+    {
+      "matchday": 17,
+      "date": "2026-02-14",
+      "home": "bordeaux-begles",
+      "away": "castres",
+      "homeScore": 57,
+      "awayScore": 32,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55813/bordeaux-begles-castres",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 8,
+      "awayTries": 5
+    },
+    {
+      "matchday": 17,
+      "date": "2026-02-14",
+      "home": "bayonne",
+      "away": "racing-92",
+      "homeScore": 36,
+      "awayScore": 41,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55808/bayonne-racing-92",
+      "homeBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 4
+    },
+    {
+      "matchday": 17,
+      "date": "2026-02-14",
+      "home": "lyon",
+      "away": "montauban",
+      "homeScore": 73,
+      "awayScore": 12,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55809/lyon-montauban",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 11,
+      "awayTries": 2
+    },
+    {
+      "matchday": 17,
+      "date": "2026-02-14",
+      "home": "la-rochelle",
+      "away": "montpellier",
+      "homeScore": 33,
+      "awayScore": 43,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55812/la-rochelle-montpellier",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 4,
+      "awayTries": 4
+    },
+    {
+      "matchday": 17,
+      "date": "2026-02-14",
+      "home": "toulon",
+      "away": "clermont",
+      "homeScore": 14,
+      "awayScore": 34,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55810/toulon-clermont",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "homeTries": 2,
+      "awayTries": 5
+    },
+    {
+      "matchday": 17,
+      "date": "2026-02-15",
+      "home": "stade-francais",
+      "away": "toulouse",
+      "homeScore": 9,
+      "awayScore": 13,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55811/stade-francais-stade-toulousain",
+      "homeBonus": null,
+      "awayBonus": null,
+      "homeTries": null,
+      "awayTries": null
+    },
+    {
+      "matchday": 17,
+      "date": "2026-02-22",
+      "home": "perpignan",
+      "away": "pau",
+      "homeScore": 40,
+      "awayScore": 24,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55814/perpignan-pau",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 3
+    },
+    {
+      "matchday": 18,
+      "date": "2026-02-28",
+      "home": "clermont",
+      "away": "bayonne",
+      "homeScore": 38,
+      "awayScore": 15,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55801/clermont-bayonne",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 2
+    },
+    {
+      "matchday": 18,
+      "date": "2026-02-28",
+      "home": "lyon",
+      "away": "toulon",
+      "homeScore": 13,
+      "awayScore": 13,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55803/lyon-toulon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 1,
+      "awayTries": 1
+    },
+    {
+      "matchday": 18,
+      "date": "2026-02-28",
+      "home": "montpellier",
+      "away": "racing-92",
+      "homeScore": 41,
+      "awayScore": 17,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55804/montpellier-racing-92",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 2
+    },
+    {
+      "matchday": 18,
+      "date": "2026-02-28",
+      "home": "stade-francais",
+      "away": "perpignan",
+      "homeScore": 42,
+      "awayScore": 21,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55806/stade-francais-perpignan",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 3
+    },
+    {
+      "matchday": 18,
+      "date": "2026-02-28",
+      "home": "toulouse",
+      "away": "montauban",
+      "homeScore": 68,
+      "awayScore": 13,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55807/stade-toulousain-montauban",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 10,
+      "awayTries": 1
+    },
+    {
+      "matchday": 18,
+      "date": "2026-02-28",
+      "home": "castres",
+      "away": "la-rochelle",
+      "homeScore": 26,
+      "awayScore": 31,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55802/castres-la-rochelle",
+      "homeBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 4
+    },
+    {
+      "matchday": 18,
+      "date": "2026-03-01",
+      "home": "pau",
+      "away": "bordeaux-begles",
+      "homeScore": 39,
+      "awayScore": 17,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55805/pau-bordeaux-begles",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 3
+    },
+    {
+      "matchday": 19,
+      "date": "2026-03-21",
+      "home": "clermont",
+      "away": "montpellier",
+      "homeScore": 17,
+      "awayScore": 20,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55794/clermont-montpellier",
+      "homeBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 1
+    },
+    {
+      "matchday": 19,
+      "date": "2026-03-21",
+      "home": "racing-92",
+      "away": "castres",
+      "homeScore": 52,
+      "awayScore": 21,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55795/racing-92-castres",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 7,
+      "awayTries": 3
+    },
+    {
+      "matchday": 19,
+      "date": "2026-03-21",
+      "home": "toulon",
+      "away": "stade-francais",
+      "homeScore": 27,
+      "awayScore": 46,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55796/toulon-stade-francais",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "homeTries": 3,
+      "awayTries": 6
+    },
+    {
+      "matchday": 19,
+      "date": "2026-03-21",
+      "home": "montauban",
+      "away": "bayonne",
+      "homeScore": 26,
+      "awayScore": 60,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55799/montauban-bayonne",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "homeTries": 4,
+      "awayTries": 9
+    },
+    {
+      "matchday": 19,
+      "date": "2026-03-21",
+      "home": "perpignan",
+      "away": "lyon",
+      "homeScore": 28,
+      "awayScore": 32,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55800/perpignan-lyon",
+      "homeBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 3,
+      "awayTries": 4
+    },
+    {
+      "matchday": 19,
+      "date": "2026-03-21",
+      "home": "la-rochelle",
+      "away": "pau",
+      "homeScore": 20,
+      "awayScore": 6,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55797/la-rochelle-pau",
+      "homeBonus": null,
+      "awayBonus": null,
+      "homeTries": null,
+      "awayTries": null
+    },
+    {
+      "matchday": 19,
+      "date": "2026-03-22",
+      "home": "bordeaux-begles",
+      "away": "toulouse",
+      "homeScore": 44,
+      "awayScore": 20,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55798/bordeaux-begles-stade-toulousain",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 2
+    },
+    {
+      "matchday": 20,
+      "date": "2026-03-28",
+      "home": "toulouse",
+      "away": "montpellier",
+      "homeScore": 45,
+      "awayScore": 29,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55792/stade-toulousain-montpellier",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 6,
+      "awayTries": 4
+    },
+    {
+      "matchday": 20,
+      "date": "2026-03-28",
+      "home": "castres",
+      "away": "montauban",
+      "homeScore": 49,
+      "awayScore": 17,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55788/castres-montauban",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 7,
+      "awayTries": 2
+    },
+    {
+      "matchday": 20,
+      "date": "2026-03-28",
+      "home": "lyon",
+      "away": "bordeaux-begles",
+      "homeScore": 17,
+      "awayScore": 21,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55789/lyon-bordeaux-begles",
+      "homeBonus": {
+        "defensive": true,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 2,
+      "awayTries": 3
+    },
+    {
+      "matchday": 20,
+      "date": "2026-03-28",
+      "home": "pau",
+      "away": "racing-92",
+      "homeScore": 27,
+      "awayScore": 17,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55790/pau-racing-92",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 3,
+      "awayTries": 2
+    },
+    {
+      "matchday": 20,
+      "date": "2026-03-28",
+      "home": "perpignan",
+      "away": "toulon",
+      "homeScore": 36,
+      "awayScore": 20,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55793/perpignan-toulon",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 5,
+      "awayTries": 3
+    },
+    {
+      "matchday": 20,
+      "date": "2026-03-28",
+      "home": "bayonne",
+      "away": "la-rochelle",
+      "homeScore": 26,
+      "awayScore": 15,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55787/bayonne-la-rochelle",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 3,
+      "awayTries": 2
+    },
+    {
+      "matchday": 20,
+      "date": "2026-03-29",
+      "home": "stade-francais",
+      "away": "clermont",
+      "homeScore": 64,
+      "awayScore": 20,
+      "matchUrl": "/resultats/rugby/top-14/phase-reguliere/rencontre/55791/stade-francais-clermont",
+      "homeBonus": {
+        "defensive": false,
+        "offensive": true
+      },
+      "awayBonus": {
+        "defensive": false,
+        "offensive": false
+      },
+      "homeTries": 9,
+      "awayTries": 3
+    }
+  ],
+  "calendar": [
+    {
+      "matchday": 21,
+      "date": "2026-04-18",
+      "home": "la-rochelle",
+      "away": "bordeaux-begles"
+    },
+    {
+      "matchday": 21,
+      "date": "2026-04-18",
+      "home": "clermont",
+      "away": "lyon"
+    },
+    {
+      "matchday": 21,
+      "date": "2026-04-18",
+      "home": "bayonne",
+      "away": "pau"
+    },
+    {
+      "matchday": 21,
+      "date": "2026-04-18",
+      "home": "montpellier",
+      "away": "perpignan"
+    },
+    {
+      "matchday": 21,
+      "date": "2026-04-18",
+      "home": "montauban",
+      "away": "toulon"
+    },
+    {
+      "matchday": 21,
+      "date": "2026-04-18",
+      "home": "castres",
+      "away": "toulouse"
+    },
+    {
+      "matchday": 21,
+      "date": "2026-04-19",
+      "home": "racing-92",
+      "away": "stade-francais"
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-25",
+      "home": "stade-francais",
+      "away": "pau"
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-25",
+      "home": "lyon",
+      "away": "castres"
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-25",
+      "home": "toulon",
+      "away": "bayonne"
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-25",
+      "home": "montauban",
+      "away": "racing-92"
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-25",
+      "home": "perpignan",
+      "away": "la-rochelle"
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-25",
+      "home": "bordeaux-begles",
+      "away": "montpellier"
+    },
+    {
+      "matchday": 22,
+      "date": "2026-04-26",
+      "home": "toulouse",
+      "away": "clermont"
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "clermont",
+      "away": "perpignan"
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "bayonne",
+      "away": "bordeaux-begles"
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "montpellier",
+      "away": "montauban"
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "racing-92",
+      "away": "la-rochelle"
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "toulon",
+      "away": "toulouse"
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "pau",
+      "away": "castres"
+    },
+    {
+      "matchday": 23,
+      "date": "2026-05-08",
+      "home": "stade-francais",
+      "away": "lyon"
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "castres",
+      "away": "montpellier"
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "lyon",
+      "away": "bayonne"
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "racing-92",
+      "away": "toulon"
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "pau",
+      "away": "clermont"
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "la-rochelle",
+      "away": "toulouse"
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "bordeaux-begles",
+      "away": "perpignan"
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-15",
+      "home": "montauban",
+      "away": "stade-francais"
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "clermont",
+      "away": "racing-92"
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "montpellier",
+      "away": "pau"
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "toulon",
+      "away": "bordeaux-begles"
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "stade-francais",
+      "away": "bayonne"
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "toulouse",
+      "away": "lyon"
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "montauban",
+      "away": "la-rochelle"
+    },
+    {
+      "matchday": 25,
+      "date": "2026-05-29",
+      "home": "perpignan",
+      "away": "castres"
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "bayonne",
+      "away": "perpignan"
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "castres",
+      "away": "toulon"
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "lyon",
+      "away": "montpellier"
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "racing-92",
+      "away": "toulouse"
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "pau",
+      "away": "montauban"
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "la-rochelle",
+      "away": "stade-francais"
+    },
+    {
+      "matchday": 26,
+      "date": "2026-06-05",
+      "home": "bordeaux-begles",
+      "away": "clermont"
+    }
+  ]
+}

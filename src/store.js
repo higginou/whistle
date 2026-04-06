@@ -12,6 +12,7 @@ const EVENT_NAMES = {
   simulatedResults: 'simulated-results-changed',
   simulationMode: 'simulation-mode-changed',
   simulatedStandings: 'simulated-standings-changed',
+  scraped: 'scraped-loaded',
 }
 
 const INITIAL_STATE = {
@@ -26,6 +27,7 @@ const INITIAL_STATE = {
   simulatedResults: {},
   simulationMode: false,
   simulatedStandings: null,
+  scraped: null,
 }
 
 const state = { ...INITIAL_STATE }
