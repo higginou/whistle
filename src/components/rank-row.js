@@ -102,7 +102,7 @@ export function render(listElement, team) {
   row.setAttribute('tabindex', '0')
   row.setAttribute(
     'aria-label',
-    `${rank}${ordinalSuffix(rank)}, ${team.name}, Elo ${team.elo}, ${trendLabel}, confiance ${confLabel}`,
+    `${rank}${ordinalSuffix(rank)}, ${team.name}, ${team.points ?? 0} points, Elo ${team.elo}, ${trendLabel}, confiance ${confLabel}`,
   )
 
   // Tap handler — open team detail bottom sheet
@@ -165,6 +165,12 @@ export function render(listElement, team) {
   }
 
   row.appendChild(info)
+
+  // Championship points (always visible)
+  const pointsSpan = document.createElement('span')
+  pointsSpan.className = 'w-rank-row__points'
+  pointsSpan.textContent = String(team.points ?? 0)
+  row.appendChild(pointsSpan)
 
   // Delta (trend arrow)
   const deltaSpan = document.createElement('span')

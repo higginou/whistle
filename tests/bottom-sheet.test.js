@@ -10,6 +10,7 @@ function makeTeam(overrides = {}) {
     currentRank: 4,
     projectedRank: 3,
     elo: 1582,
+    points: 50,
     confidence: 0.74,
     zones: { europe: 0.35, top6: 0.40, mid: 0.20, relegation: 0.05 },
     form: ['W', 'W', 'L', 'W', 'D'],

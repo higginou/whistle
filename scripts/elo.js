@@ -960,14 +960,35 @@ export async function main() {
 
   const { standings, results, calendar, matchday } = data;
 
+  // ── Step 0: Compute real rugby points from results ──
+  const realPoints = computeResultBonuses(results);
+
+  // Derive standings from results when scraper returns empty or zeroed standings
+  const standingsHavePoints = standings && standings.length > 0
+    && standings.some((s) => s.points > 0);
+  let effectiveStandings;
+  if (standingsHavePoints) {
+    effectiveStandings = standings;
+  } else {
+    // Collect all team IDs from standings + results
+    const teamIds = new Set(
+      (standings ?? []).map((s) => s.id),
+    );
+    for (const r of results) {
+      teamIds.add(r.home);
+      teamIds.add(r.away);
+    }
+    effectiveStandings = [...teamIds]
+      .map((id) => ({ id, rank: 0, points: realPoints.get(id) ?? 0 }))
+      .sort((a, b) => b.points - a.points)
+      .map((s, i) => ({ ...s, rank: i + 1 }));
+  }
+
   // ── Step 1: Compute Elo ratings ──
-  const { elos, eloHistories } = computeEloRatings(standings, results);
+  const { elos, eloHistories } = computeEloRatings(effectiveStandings, results);
 
   // ── Step 1b: Compute head-to-head records ──
   const h2hMap = computeHeadToHead(results);
-
-  // ── Step 1c: Compute real rugby points from results ──
-  const realPoints = computeResultBonuses(results);
 
   // ── Step 2: Monte Carlo projection ──
   const { rankCounts } = simulateSeason(
@@ -984,11 +1005,11 @@ export async function main() {
     .map(([id, elo]) => ({ id, elo }))
     .sort((a, b) => b.elo - a.elo);
 
-  const teams = standings.map((standing) => {
+  const teams = effectiveStandings.map((standing) => {
     const teamId = standing.id;
     const elo = elos.get(teamId) ?? INITIAL_ELO;
     const history = eloHistories.get(teamId) ?? [INITIAL_ELO];
-    const distribution = rankCounts.get(teamId) ?? new Array(standings.length).fill(0);
+    const distribution = rankCounts.get(teamId) ?? new Array(effectiveStandings.length).fill(0);
     const projectedRank = computeProjectedRank(distribution, NUM_SIMULATIONS);
     const zones = computeZoneProbabilities(distribution, NUM_SIMULATIONS);
 
@@ -1009,7 +1030,8 @@ export async function main() {
 
     const entry = {
       id: teamId,
-      currentRank: standing.rank,
+      currentRank: standing.rank, // refined below from realPoints
+      points: realPoints.get(teamId) ?? 0,
       elo,
       projectedRank,
       confidence: roundDecimal(confidence, 2),
@@ -1029,8 +1051,14 @@ export async function main() {
     return entry;
   });
 
+  // ── Step 3a: Derive currentRank from computed points ──
+  teams.sort((a, b) => b.points - a.points || b.elo - a.elo);
+  for (let i = 0; i < teams.length; i++) {
+    teams[i].currentRank = i + 1;
+  }
+
   // ── Step 3b: Apply H2H tiebreaker ──
-  const tiebreakerMap = applyTiebreaker(teams, standings, h2hMap);
+  const tiebreakerMap = applyTiebreaker(teams, effectiveStandings, h2hMap);
   for (const team of teams) {
     const groupId = tiebreakerMap.get(team.id);
     if (groupId != null) {

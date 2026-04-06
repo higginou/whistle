@@ -22,6 +22,7 @@ function makeEloTeam(overrides = {}) {
     id: 'toulouse',
     currentRank: 1,
     elo: 1514,
+    points: 50,
     projectedRank: 4,
     confidence: 0.46,
     zones: { europe: 0, top6: 1, mid: 0, relegation: 0 },
@@ -236,6 +237,13 @@ describe('T5.4 : mapping id -> name', () => {
     const entry = buildTeamEntry(eloTeam);
 
     expect(entry.name).toBe('Stade Toulousain');
+  });
+
+  it('buildTeamEntry inclut points', () => {
+    const eloTeam = makeEloTeam({ points: 42 });
+    const entry = buildTeamEntry(eloTeam);
+
+    expect(entry.points).toBe(42);
   });
 
   it('buildTeamEntry exclut eloHistory', () => {

@@ -27,6 +27,7 @@ function makeTeam(overrides = {}) {
     name: 'Stade Rochelais',
     currentRank: 4,
     elo: 1582,
+    points: 50,
     confidence: 0.74,
     trend: 'up',
     ...overrides,

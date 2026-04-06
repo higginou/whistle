@@ -89,6 +89,16 @@
   vertical-align: middle;
 }
 
+.w-rank-row__points {
+  font-size: var(--w-text-label);
+  font-weight: 700;
+  font-feature-settings: "tnum";
+  min-width: 2.5rem;
+  text-align: right;
+  color: var(--w-color-text-primary);
+  flex-shrink: 0;
+}
+
 .w-rank-row__delta {
   font-size: var(--w-text-caption);
   font-weight: 600;

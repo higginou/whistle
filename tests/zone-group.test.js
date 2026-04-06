@@ -9,6 +9,7 @@ function makeTeam(rank, overrides = {}) {
     currentRank: rank,
     projectedRank: rank,
     elo: 1500,
+    points: 50,
     confidence: 0.5,
     trend: 'stable',
     ...overrides,
