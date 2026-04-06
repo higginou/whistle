@@ -262,6 +262,43 @@ describe('parseRugbyramaCalendar : extraction des resultats', () => {
       expect(r).toHaveProperty('awayTries', null);
     }
   });
+
+  it('matchUrl est null si le lien de score est absent', () => {
+    const html = `
+<!DOCTYPE html><html lang="fr"><body>
+<div class="div_idalgo_content_calendar_cup">
+<ul class="ul_idalgo_content_calendar_cup_date">
+<li class="li_idalgo_content_calendar_cup_date">
+  <div class="div_idalgo_content_calendar_cup_date_title">
+    <span class="span_idalgo_content_calendar_cup_date_title_left">Samedi  6 septembre 2025</span>
+  </div>
+  <ul class="ul_idalgo_content_calendar_cup_date_match">
+    <li class="li_idalgo_content_calendar_cup_date_match" data-localteam="98" data-visitorteam="11" data-state="1" data-round="1539">
+      <div class="div_idalgo_content_calendar_cup_date_match_hour">
+        <span class="idalgo_date_timezone" data-value-default="Sat Sep 06 2025 15:00:00 +0200" data-format="%H:%M">15:00</span>
+      </div>
+      <div class="div_idalgo_content_calendar_cup_date_match_local">
+        <a class="a_idalgo_content_calendar_cup_date_match_local" href="/resultats/rugby/equipe/98/toulon" title="Toulon">Toulon</a>
+      </div>
+      <div class="div_idalgo_content_calendar_cup_date_match_score">
+        <a class="a_idalgo_content_calendar_cup_date_match_score a_idalgo_content_result_match_score_end">
+          <span class="span_idalgo_score_part_left">30</span>
+          <span class="span_idalgo_score_part_center">-</span>
+          <span class="span_idalgo_score_part_right">10</span>
+        </a>
+      </div>
+      <div class="div_idalgo_content_calendar_cup_date_match_visitor">
+        <a class="a_idalgo_content_calendar_cup_date_match_visitor" href="/resultats/rugby/equipe/11/castres" title="Castres">Castres</a>
+      </div>
+    </li>
+  </ul>
+</li>
+</ul>
+</div>
+</body></html>`;
+    const { results } = parseRugbyramaCalendar(html);
+    expect(results[0].matchUrl).toBeNull();
+  });
 });
 
 describe('parseRugbyramaCalendar : extraction du calendrier', () => {
