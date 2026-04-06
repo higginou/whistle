@@ -472,13 +472,31 @@ describe('parseMatchPage', () => {
     expect(result).toBeNull();
   });
 
+  it('retourne null si un seul bloc bonus est present', () => {
+    const html = `
+    <!DOCTYPE html><html><body>
+    <div class="div_idalgo_content_rugby_match_header_full_main_header_bonus">
+      <span class="span_idalgo_content_rugby_match_header_full_main_header_bonus_content_defense" style="display:none;"></span>
+      <span class="span_idalgo_content_rugby_match_header_full_main_header_bonus_content_try" style="display:block;"></span>
+    </div>
+    </body></html>
+  `;
+    expect(parseMatchPage(html)).toBeNull();
+  });
+
+  it('reconnait display: block avec espace apres le colon', () => {
+    const html = MATCH_PAGE_HTML.replace(/display:block/g, 'display: block');
+    const result = parseMatchPage(html);
+    expect(result).not.toBeNull();
+    expect(result.homeBonus.offensive).toBe(true);
+  });
+
   it('retourne homeBonus et awayBonus avec des booleens', () => {
     const result = parseMatchPage(MATCH_PAGE_HTML);
-    if (result !== null) {
-      expect(typeof result.homeBonus.offensive).toBe('boolean');
-      expect(typeof result.homeBonus.defensive).toBe('boolean');
-      expect(typeof result.awayBonus.offensive).toBe('boolean');
-      expect(typeof result.awayBonus.defensive).toBe('boolean');
-    }
+    expect(result).not.toBeNull();
+    expect(typeof result.homeBonus.offensive).toBe('boolean');
+    expect(typeof result.homeBonus.defensive).toBe('boolean');
+    expect(typeof result.awayBonus.offensive).toBe('boolean');
+    expect(typeof result.awayBonus.defensive).toBe('boolean');
   });
 });

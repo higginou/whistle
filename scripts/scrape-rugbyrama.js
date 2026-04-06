@@ -256,6 +256,9 @@ export function parseMatchPage(html) {
       return null;
     }
 
+    const isActive = (style) =>
+      style.replace(/\s/g, '').toLowerCase().includes('display:block');
+
     const parseBonus = (block) => {
       const $block = $(block);
       const bdStyle = $block
@@ -270,8 +273,8 @@ export function parseMatchPage(html) {
         .attr('style') || '';
 
       return {
-        defensive: bdStyle.includes('display:block'),
-        offensive: boStyle.includes('display:block'),
+        defensive: isActive(bdStyle),
+        offensive: isActive(boStyle),
       };
     };
 
