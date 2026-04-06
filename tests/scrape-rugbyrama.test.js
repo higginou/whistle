@@ -1,8 +1,9 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import {
   parseRugbyramaCalendar,
   parseIdalgoDate,
   parseMatchPage,
+  enrichMatchBonuses,
 } from '../scripts/scrape-rugbyrama.js';
 import { resolveIdalgoSlug, IDALGO_SLUG_TO_ID } from '../scripts/team-mapping.js';
 
@@ -498,5 +499,98 @@ describe('parseMatchPage', () => {
     expect(typeof result.homeBonus.defensive).toBe('boolean');
     expect(typeof result.awayBonus.offensive).toBe('boolean');
     expect(typeof result.awayBonus.defensive).toBe('boolean');
+  });
+});
+
+// ─── enrichMatchBonuses ──────────────────────────────────────────────────────
+
+describe('enrichMatchBonuses', () => {
+  it('enrichit les matchs avec matchUrl et bonus null', async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve(MATCH_PAGE_HTML),
+    });
+    global.fetch = fetchMock;
+
+    const results = [
+      {
+        matchday: 1, date: '2025-09-06',
+        home: 'stade-francais', away: 'montauban',
+        homeScore: 47, awayScore: 24,
+        matchUrl: '/resultats/rugby/top-14/phase-reguliere/rencontre/55924/stade-francais-montauban',
+        homeBonus: null, awayBonus: null,
+        homeTries: null, awayTries: null,
+      },
+    ];
+
+    await enrichMatchBonuses(results);
+
+    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(results[0].homeBonus).not.toBeNull();
+    expect(results[0].awayBonus).not.toBeNull();
+  });
+
+  it('ne re-fetche pas les matchs deja enrichis', async () => {
+    const fetchMock = vi.fn();
+    global.fetch = fetchMock;
+
+    const results = [
+      {
+        matchday: 1, date: '2025-09-06',
+        home: 'toulouse', away: 'la-rochelle',
+        homeScore: 30, awayScore: 20,
+        matchUrl: '/resultats/rugby/top-14/phase-reguliere/rencontre/99999/toulouse-la-rochelle',
+        homeBonus: { offensive: true, defensive: false },
+        awayBonus: { offensive: false, defensive: false },
+        homeTries: 4, awayTries: 2,
+      },
+    ];
+
+    await enrichMatchBonuses(results);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('ignore les matchs sans matchUrl', async () => {
+    const fetchMock = vi.fn();
+    global.fetch = fetchMock;
+
+    const results = [
+      {
+        matchday: 1, date: '2025-09-06',
+        home: 'toulouse', away: 'la-rochelle',
+        homeScore: 30, awayScore: 20,
+        matchUrl: null,
+        homeBonus: null, awayBonus: null,
+        homeTries: null, awayTries: null,
+      },
+    ];
+
+    await enrichMatchBonuses(results);
+
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(results[0].homeBonus).toBeNull();
+  });
+
+  it('laisse le match intact si parseMatchPage retourne null', async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      text: () => Promise.resolve('<html><body></body></html>'),
+    });
+
+    const results = [
+      {
+        matchday: 1, date: '2025-09-06',
+        home: 'toulon', away: 'castres',
+        homeScore: 20, awayScore: 15,
+        matchUrl: '/resultats/rugby/top-14/phase-reguliere/rencontre/99998/toulon-castres',
+        homeBonus: null, awayBonus: null,
+        homeTries: null, awayTries: null,
+      },
+    ];
+
+    await enrichMatchBonuses(results);
+
+    expect(results[0].homeBonus).toBeNull();
   });
 });

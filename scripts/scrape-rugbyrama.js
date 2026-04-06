@@ -307,6 +307,66 @@ export function parseMatchPage(html) {
   }
 }
 
+// ─── Bonus Enrichment ────────────────────────────────────────────────────────
+
+const RUGBYRAMA_BASE_URL = 'https://www.rugbyrama.fr';
+const ENRICH_THROTTLE_MS = 1000;
+
+/**
+ * Enrich match results with real bonus data from individual match pages.
+ * Incremental: only fetches pages for matches where homeBonus is still null.
+ * Modifies results in-place.
+ *
+ * @param {Array} results - Array of match result objects (mutated in-place)
+ * @returns {Promise<void>}
+ */
+export async function enrichMatchBonuses(results) {
+  const toEnrich = results.filter(
+    (r) => r.homeBonus === null && r.matchUrl !== null,
+  );
+
+  if (toEnrich.length === 0) {
+    console.log('Bonus enrichment: nothing to fetch (all enriched or no URLs).');
+    return;
+  }
+
+  console.log(`Bonus enrichment: fetching ${toEnrich.length} match page(s)...`);
+
+  for (let i = 0; i < toEnrich.length; i++) {
+    const match = toEnrich[i];
+
+    if (i > 0) {
+      await new Promise((resolve) => setTimeout(resolve, ENRICH_THROTTLE_MS));
+    }
+
+    const url = `${RUGBYRAMA_BASE_URL}${match.matchUrl}`;
+    let html;
+    try {
+      html = await fetchPage(url);
+    } catch (err) {
+      console.warn(`Could not fetch ${url}: ${err.message}`);
+      continue;
+    }
+
+    const parsed = parseMatchPage(html);
+    if (!parsed) {
+      console.warn(`Could not parse bonus data from ${url}`);
+      continue;
+    }
+
+    match.homeBonus = parsed.homeBonus;
+    match.awayBonus = parsed.awayBonus;
+    match.homeTries = parsed.homeTries;
+    match.awayTries = parsed.awayTries;
+
+    console.log(
+      `  [${i + 1}/${toEnrich.length}] ${match.home} vs ${match.away}: ` +
+      `home BO=${parsed.homeBonus.offensive} BD=${parsed.homeBonus.defensive} ` +
+      `away BO=${parsed.awayBonus.offensive} BD=${parsed.awayBonus.defensive}`,
+    );
+  }
+}
+
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 /**
