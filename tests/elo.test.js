@@ -1443,3 +1443,26 @@ describe('median', () => {
     expect(arr).toEqual([3, 1, 2]);
   });
 });
+
+describe('simulateSeason pointTotals', () => {
+  it('returns pointTotals with one entry per simulation per team', () => {
+    const elos = new Map([['a', 1500], ['b', 1500]]);
+    const calendar = [{ home: 'a', away: 'b' }];
+    const numSim = 100;
+    const { pointTotals } = simulateSeason(elos, calendar, numSim);
+
+    expect(pointTotals.get('a')).toHaveLength(numSim);
+    expect(pointTotals.get('b')).toHaveLength(numSim);
+  });
+
+  it('pointTotals median is a reasonable integer', () => {
+    const elos = new Map([['a', 1600], ['b', 1400]]);
+    const calendar = [{ home: 'a', away: 'b' }];
+    const initial = new Map([['a', 40], ['b', 30]]);
+    const { pointTotals } = simulateSeason(elos, calendar, 1000, Math.random, initial);
+
+    const med = median(pointTotals.get('a'));
+    expect(Number.isInteger(med)).toBe(true);
+    expect(med).toBeGreaterThanOrEqual(40);
+  });
+});

@@ -1004,7 +1004,7 @@ export async function main() {
   const h2hMap = computeHeadToHead(results);
 
   // ── Step 2: Monte Carlo projection ──
-  const { rankCounts } = simulateSeason(
+  const { rankCounts, pointTotals } = simulateSeason(
     elos,
     calendar,
     NUM_SIMULATIONS,
@@ -1056,6 +1056,10 @@ export async function main() {
       },
       form,
       trend,
+      projectedPoints: (() => {
+        const pts = pointTotals.get(teamId) ?? [];
+        return pts.length > 0 ? median(pts) : realPoints.get(teamId) ?? 0;
+      })(),
       eloHistory: history,
     };
 
