@@ -1,0 +1,102 @@
+.w-donjon-locked {
+  width: 100%;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+/* Padlock icon */
+.w-donjon-locked__padlock {
+  font-size: clamp(3rem, 10vw, 5rem);
+  line-height: 1;
+  animation:
+    donjon-bounce-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+    donjon-padlock-glow 2s ease-in-out 0.6s infinite;
+}
+
+/* Label: PROCHAIN COMBAT */
+.w-donjon-locked__label {
+  font-size: clamp(0.75rem, 2.5vw, 1rem);
+  margin: 0;
+  color: var(--w-donjon-neon-primary);
+  opacity: 0;
+  animation: donjon-locked-fade-in 0.4s ease-out 0.5s forwards;
+}
+
+/* Opponent name — letter-by-letter */
+.w-donjon-locked__opponent {
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
+  color: var(--w-donjon-neon-secondary);
+}
+
+/* Individual character span */
+.w-donjon-locked__char {
+  display: inline-block;
+  opacity: 0;
+  animation: donjon-locked-char-in 0.3s ease-out var(--char-delay, 0.8s) forwards;
+}
+
+/* Date + venue info */
+.w-donjon-locked__info {
+  font-size: clamp(0.75rem, 2.5vw, 0.9rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--w-donjon-text);
+  margin: 0;
+  opacity: 0;
+  animation: donjon-locked-fade-in 0.4s ease-out 1.5s forwards;
+}
+
+/* Keyframes */
+@keyframes donjon-bounce-in {
+  0% {
+    opacity: 0;
+    transform: scale(0) translateY(-20px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.2) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes donjon-padlock-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px var(--w-donjon-neon-primary));
+  }
+  50% {
+    filter: drop-shadow(0 0 20px var(--w-donjon-neon-primary)) drop-shadow(0 0 40px var(--w-donjon-neon-primary));
+  }
+}
+
+@keyframes donjon-locked-fade-in {
+  to { opacity: 1; }
+}
+
+@keyframes donjon-locked-char-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .w-donjon-locked__padlock {
+    animation: donjon-locked-fade-in 0.2s ease-out forwards;
+  }
+
+  .w-donjon-locked__char {
+    animation: donjon-locked-fade-in 0.2s ease-out var(--char-delay, 0.8s) forwards;
+  }
+}

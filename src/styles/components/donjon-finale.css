@@ -1,0 +1,187 @@
+.w-donjon-finale {
+  width: 100%;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+/* Stat lines */
+.w-donjon-finale__stat {
+  font-size: clamp(0.8rem, 2.5vw, 1rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--w-donjon-text);
+  margin: 0;
+  opacity: 0;
+  animation: donjon-stat-scroll 0.5s ease-out var(--stat-delay, 0s) forwards;
+}
+
+/* Rank display */
+.w-donjon-finale__rank {
+  font-size: clamp(2rem, 8vw, 4rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0;
+  opacity: 0;
+  line-height: 1.1;
+}
+
+.w-donjon-finale__rank--visible {
+  animation: donjon-rank-reveal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Rank color modifiers */
+.w-donjon-finale__rank--gold {
+  color: var(--w-donjon-gold);
+  text-shadow:
+    0 0 20px var(--w-donjon-gold),
+    0 0 60px var(--w-donjon-gold);
+}
+
+.w-donjon-finale__rank--gold.w-donjon-finale__rank--visible {
+  animation:
+    donjon-rank-reveal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+    donjon-gold-pulse 2s ease-in-out 0.7s infinite;
+}
+
+.w-donjon-finale__rank--purple {
+  color: #cc44ff;
+  text-shadow:
+    0 0 15px #cc44ff,
+    0 0 40px #cc44ff;
+}
+
+.w-donjon-finale__rank--purple.w-donjon-finale__rank--visible {
+  animation:
+    donjon-rank-reveal 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+    donjon-purple-glow 2.5s ease-in-out 0.7s infinite;
+}
+
+.w-donjon-finale__rank--blue {
+  color: var(--w-donjon-neon-primary);
+  text-shadow:
+    0 0 10px var(--w-donjon-neon-primary),
+    0 0 30px var(--w-donjon-neon-primary);
+}
+
+.w-donjon-finale__rank--green {
+  color: var(--w-donjon-green);
+  text-shadow:
+    0 0 10px var(--w-donjon-green),
+    0 0 30px var(--w-donjon-green);
+}
+
+.w-donjon-finale__rank--grey {
+  color: #888;
+  text-shadow: none;
+}
+
+/* REJOUER button */
+.w-donjon-finale__replay {
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  font-weight: 700;
+  padding: 0.75rem 2.5rem;
+  border: 2px solid var(--w-donjon-neon-primary);
+  background: transparent;
+  color: var(--w-donjon-neon-primary);
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  opacity: 0;
+}
+
+.w-donjon-finale__replay--visible {
+  animation:
+    donjon-finale-fade-in 0.3s ease-out forwards,
+    donjon-replay-pulse 2s ease-in-out 0.3s infinite;
+}
+
+.w-donjon-finale__replay:focus-visible {
+  outline: 2px solid var(--w-donjon-gold);
+  outline-offset: 4px;
+}
+
+/* Keyframes */
+@keyframes donjon-stat-scroll {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes donjon-rank-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes donjon-finale-fade-in {
+  to { opacity: 1; }
+}
+
+@keyframes donjon-gold-pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 20px var(--w-donjon-gold),
+      0 0 60px var(--w-donjon-gold);
+  }
+  50% {
+    text-shadow:
+      0 0 40px var(--w-donjon-gold),
+      0 0 100px var(--w-donjon-gold),
+      0 0 140px var(--w-donjon-gold);
+  }
+}
+
+@keyframes donjon-purple-glow {
+  0%, 100% {
+    text-shadow:
+      0 0 15px #cc44ff,
+      0 0 40px #cc44ff;
+  }
+  50% {
+    text-shadow:
+      0 0 30px #cc44ff,
+      0 0 70px #cc44ff,
+      0 0 100px #cc44ff;
+  }
+}
+
+@keyframes donjon-replay-pulse {
+  0%, 100% {
+    box-shadow: 0 0 10px var(--w-donjon-neon-primary), 0 0 30px var(--w-donjon-neon-primary);
+  }
+  50% {
+    box-shadow: 0 0 20px var(--w-donjon-neon-primary), 0 0 60px var(--w-donjon-neon-primary);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .w-donjon-finale__stat {
+    animation: donjon-finale-fade-in 0.2s ease-out var(--stat-delay, 0s) forwards;
+  }
+
+  .w-donjon-finale__rank--visible,
+  .w-donjon-finale__rank--gold.w-donjon-finale__rank--visible,
+  .w-donjon-finale__rank--purple.w-donjon-finale__rank--visible {
+    animation: donjon-finale-fade-in 0.2s ease-out forwards;
+  }
+
+  .w-donjon-finale__replay--visible {
+    animation: donjon-finale-fade-in 0.2s ease-out forwards;
+  }
+}

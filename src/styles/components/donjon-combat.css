@@ -1,0 +1,197 @@
+.w-donjon-combat {
+  width: 100%;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+/* Matchday header */
+.w-donjon-combat__matchday {
+  font-size: clamp(0.75rem, 2.5vw, 1rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--w-donjon-text);
+  opacity: 0;
+}
+
+.w-donjon-combat__matchday--visible {
+  animation: donjon-drop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Two-column arena */
+.w-donjon-combat__arena {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  gap: 1rem;
+}
+
+/* Team column */
+.w-donjon-combat__team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.w-donjon-combat__team--lr {
+  color: var(--w-donjon-neon-primary);
+}
+
+.w-donjon-combat__team--opp {
+  color: var(--w-donjon-neon-secondary);
+}
+
+/* Team name */
+.w-donjon-combat__name {
+  font-size: clamp(0.85rem, 3vw, 1.1rem);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0;
+}
+
+.w-donjon-combat__name--visible-left {
+  animation: donjon-slide-left 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.w-donjon-combat__name--visible-right {
+  animation: donjon-slide-right 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Venue label */
+.w-donjon-combat__venue {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  opacity: 0;
+  color: var(--w-donjon-text);
+}
+
+.w-donjon-combat__venue--visible-left {
+  animation: donjon-slide-left 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+}
+
+.w-donjon-combat__venue--visible-right {
+  animation: donjon-slide-right 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+}
+
+/* Score — huge monospace */
+.w-donjon-combat__score {
+  font-family: monospace;
+  font-size: clamp(3rem, 8vw, 5rem);
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0;
+  display: block;
+}
+
+.w-donjon-combat__score--visible {
+  animation: donjon-score-impact 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Stat row (tries) */
+.w-donjon-combat__stat {
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  color: var(--w-donjon-text);
+}
+
+.w-donjon-combat__stat--visible {
+  animation: donjon-drop-in 0.35s ease-out forwards;
+}
+
+/* Badge pill */
+.w-donjon-combat__badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  padding: 0.2em 0.5em;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  opacity: 0;
+}
+
+.w-donjon-combat__badge--off {
+  color: var(--w-donjon-gold);
+  border-color: var(--w-donjon-gold);
+}
+
+.w-donjon-combat__badge--def {
+  color: var(--w-donjon-green);
+  border-color: var(--w-donjon-green);
+}
+
+.w-donjon-combat__badge--visible {
+  animation: donjon-drop-in 0.3s ease-out forwards;
+}
+
+/* Keyframes */
+@keyframes donjon-slide-left {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes donjon-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes donjon-drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes donjon-score-impact {
+  0% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .w-donjon-combat__name--visible-left,
+  .w-donjon-combat__name--visible-right,
+  .w-donjon-combat__venue--visible-left,
+  .w-donjon-combat__venue--visible-right,
+  .w-donjon-combat__matchday--visible,
+  .w-donjon-combat__score--visible,
+  .w-donjon-combat__stat--visible,
+  .w-donjon-combat__badge--visible {
+    animation: donjon-fade-in-instant 0.2s ease-out forwards;
+  }
+}
+
+@keyframes donjon-fade-in-instant {
+  to { opacity: 1; transform: none; }
+}
