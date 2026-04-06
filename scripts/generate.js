@@ -105,6 +105,7 @@ export function buildTeamEntry(eloTeam) {
     projectedRank: eloTeam.projectedRank,
     elo: eloTeam.elo,
     points: eloTeam.points ?? 0,
+    projectedPoints: eloTeam.projectedPoints ?? eloTeam.points ?? 0,
     confidence: eloTeam.confidence,
     zones: eloTeam.zones,
     form: eloTeam.form,

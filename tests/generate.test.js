@@ -252,6 +252,20 @@ describe('T5.4 : mapping id -> name', () => {
 
     expect(entry).not.toHaveProperty('eloHistory');
   });
+
+  it('buildTeamEntry inclut projectedPoints', () => {
+    const eloTeam = makeEloTeam({ projectedPoints: 78 });
+    const entry = buildTeamEntry(eloTeam);
+
+    expect(entry.projectedPoints).toBe(78);
+  });
+
+  it('buildTeamEntry fallback projectedPoints sur points si absent', () => {
+    const eloTeam = makeEloTeam({ points: 50 });
+    const entry = buildTeamEntry(eloTeam);
+
+    expect(entry.projectedPoints).toBe(50);
+  });
 });
 
 // ─── T5.5 : Mise a jour de seasons.json ───────────────────────────────────
