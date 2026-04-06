@@ -30,7 +30,7 @@ globalThis.fetch = mockFetch
 
 const SEASON_DATA = {
   id: '2025-2026',
-  lastUpdated: '2026-03-29T10:00:00Z',
+  lastUpdated: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
   teams: [{ id: 'la-rochelle' }],
 }
 
