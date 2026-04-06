@@ -20,3 +20,27 @@
 .w-projection-standings {
   padding: 0 var(--w-space-md);
 }
+
+.w-rank-delta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  font-size: 10px;
+  font-weight: 800;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.w-rank-delta--up {
+  background: var(--w-green-soft);
+  color: var(--w-green);
+}
+
+.w-rank-delta--down {
+  background: var(--w-red-soft);
+  color: var(--w-red);
+}
