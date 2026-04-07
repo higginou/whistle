@@ -1,6 +1,6 @@
 {
   "season": "2025-2026",
-  "lastUpdated": "2026-04-06T18:07:59Z",
+  "lastUpdated": "2026-04-07T09:55:27Z",
   "matchday": 20,
   "brierScore": null,
   "teams": [
@@ -14,8 +14,8 @@
       "projectedPoints": 88,
       "confidence": 0.54,
       "zones": {
-        "europe": 0.9765,
-        "top6": 0.0235,
+        "europe": 0.9771,
+        "top6": 0.0229,
         "mid": 0,
         "relegation": 0
       },
@@ -38,9 +38,9 @@
       "projectedPoints": 74,
       "confidence": 0.47,
       "zones": {
-        "europe": 0.301,
-        "top6": 0.6332,
-        "mid": 0.0658,
+        "europe": 0.2994,
+        "top6": 0.6437,
+        "mid": 0.0569,
         "relegation": 0
       },
       "form": [
@@ -60,12 +60,12 @@
       "projectedRank": 3,
       "elo": 1542,
       "points": 59,
-      "projectedPoints": 74,
+      "projectedPoints": 75,
       "confidence": 0.47,
       "zones": {
-        "europe": 0.2969,
-        "top6": 0.644,
-        "mid": 0.0591,
+        "europe": 0.3024,
+        "top6": 0.6369,
+        "mid": 0.0607,
         "relegation": 0
       },
       "form": [
@@ -88,9 +88,9 @@
       "projectedPoints": 73,
       "confidence": 0.47,
       "zones": {
-        "europe": 0.223,
-        "top6": 0.68,
-        "mid": 0.097,
+        "europe": 0.2137,
+        "top6": 0.6918,
+        "mid": 0.0945,
         "relegation": 0
       },
       "form": [
@@ -113,9 +113,9 @@
       "projectedPoints": 72,
       "confidence": 0.47,
       "zones": {
-        "europe": 0.1642,
-        "top6": 0.7152,
-        "mid": 0.1206,
+        "europe": 0.1744,
+        "top6": 0.7064,
+        "mid": 0.1192,
         "relegation": 0
       },
       "form": [
@@ -137,9 +137,9 @@
       "projectedPoints": 65,
       "confidence": 0.48,
       "zones": {
-        "europe": 0.0225,
-        "top6": 0.452,
-        "mid": 0.5255,
+        "europe": 0.0201,
+        "top6": 0.45,
+        "mid": 0.5299,
         "relegation": 0
       },
       "form": [
@@ -161,9 +161,9 @@
       "projectedPoints": 65,
       "confidence": 0.48,
       "zones": {
-        "europe": 0.0142,
-        "top6": 0.4815,
-        "mid": 0.5043,
+        "europe": 0.0118,
+        "top6": 0.4725,
+        "mid": 0.5157,
         "relegation": 0
       },
       "form": [
@@ -185,10 +185,10 @@
       "projectedPoints": 60,
       "confidence": 0.46,
       "zones": {
-        "europe": 0.0011,
-        "top6": 0.1434,
-        "mid": 0.8554,
-        "relegation": 0.0001
+        "europe": 0.0009,
+        "top6": 0.1346,
+        "mid": 0.8641,
+        "relegation": 0.0004
       },
       "form": [
         "W",
@@ -209,9 +209,9 @@
       "projectedPoints": 58,
       "confidence": 0.47,
       "zones": {
-        "europe": 0.0005,
-        "top6": 0.0771,
-        "mid": 0.9218,
+        "europe": 0.0001,
+        "top6": 0.0789,
+        "mid": 0.9204,
         "relegation": 0.0006
       },
       "form": [
@@ -234,10 +234,10 @@
       "projectedPoints": 57,
       "confidence": 0.49,
       "zones": {
-        "europe": 0.0001,
-        "top6": 0.0545,
-        "mid": 0.9446,
-        "relegation": 0.0008
+        "europe": 0,
+        "top6": 0.0667,
+        "mid": 0.9331,
+        "relegation": 0.0002
       },
       "form": [
         "L",
@@ -259,10 +259,10 @@
       "projectedPoints": 56,
       "confidence": 0.46,
       "zones": {
-        "europe": 0,
-        "top6": 0.0526,
-        "mid": 0.9469,
-        "relegation": 0.0005
+        "europe": 0.0001,
+        "top6": 0.0535,
+        "mid": 0.9456,
+        "relegation": 0.0008
       },
       "form": [
         "W",
@@ -284,9 +284,9 @@
       "confidence": 0.47,
       "zones": {
         "europe": 0,
-        "top6": 0.043,
-        "mid": 0.9553,
-        "relegation": 0.0017
+        "top6": 0.0421,
+        "mid": 0.956,
+        "relegation": 0.0019
       },
       "form": [
         "L",
@@ -310,8 +310,8 @@
       "zones": {
         "europe": 0,
         "top6": 0,
-        "mid": 0.0037,
-        "relegation": 0.9963
+        "mid": 0.0039,
+        "relegation": 0.9961
       },
       "form": [
         "L",
