@@ -74,13 +74,23 @@ export function render(container, season) {
   standingsEl.className = 'w-projection-standings'
 
   const sorted = [...season.teams]
-    .sort((a, b) => a.projectedRank - b.projectedRank)
-    .map((t) => ({
-      ...t,
-      currentRank: t.projectedRank,
-      points: t.projectedPoints ?? t.points,
-      rankDelta: t.currentRank - t.projectedRank,
-    }))
+    .sort((a, b) => {
+      const pa = a.projectedPoints ?? a.points
+      const pb = b.projectedPoints ?? b.points
+      return pa !== pb ? pb - pa : a.projectedRank - b.projectedRank
+    })
+
+  // Assign competition-style display ranks (shared rank when points are equal)
+  for (let i = 0; i < sorted.length; i++) {
+    const pts = sorted[i].projectedPoints ?? sorted[i].points
+    const prevPts = i > 0 ? (sorted[i - 1].projectedPoints ?? sorted[i - 1].points) : null
+    sorted[i] = {
+      ...sorted[i],
+      points: pts,
+      currentRank: pts === prevPts ? sorted[i - 1].currentRank : i + 1,
+      rankDelta: sorted[i].currentRank - (pts === prevPts ? sorted[i - 1].currentRank : i + 1),
+    }
+  }
   renderZoneGroups(standingsEl, sorted)
   renderMovementBadges(standingsEl, sorted)
 
