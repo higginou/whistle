@@ -72,6 +72,19 @@ describe('rank-row — tap interaction', () => {
     row.dispatchEvent(new Event('pointerup'))
     expect(row.classList.contains('is-pressed')).toBe(false)
   })
+
+  it('renders trend pill with correct class and arrow', () => {
+    render(ul, makeTeam({ trend: 'up' }))
+    const pill = ul.querySelector('.w-rank-row__pill')
+    expect(pill).not.toBeNull()
+    expect(pill.classList.contains('w-rank-row__pill--up')).toBe(true)
+    expect(pill.querySelector('.w-rank-row__pill-arrow').textContent).toBe('\u2191')
+  })
+
+  it('does not render pill when trend is missing', () => {
+    render(ul, makeTeam({ trend: undefined }))
+    expect(ul.querySelector('.w-rank-row__pill')).toBeNull()
+  })
 })
 
 describe('rank-row — promoted badge', () => {

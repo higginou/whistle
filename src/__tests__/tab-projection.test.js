@@ -11,6 +11,16 @@ vi.mock('../components/zone-group.js', () => ({
       pos.className = 'w-rank-row__position'
       pos.textContent = String(team.currentRank)
       row.appendChild(pos)
+
+      // Simulate pill created by rank-row.js
+      const pill = document.createElement('span')
+      pill.className = `w-rank-row__pill w-rank-row__pill--${team.trend === 'up' ? 'up' : team.trend === 'down' ? 'down' : 'stable'}`
+      const arrow = document.createElement('span')
+      arrow.className = 'w-rank-row__pill-arrow'
+      arrow.textContent = team.trend === 'up' ? '\u2191' : team.trend === 'down' ? '\u2193' : '='
+      pill.appendChild(arrow)
+      row.appendChild(pill)
+
       container.appendChild(row)
     }
   }),
@@ -86,22 +96,24 @@ describe('tab-projection', () => {
     expect(container.querySelector('.w-reveal-btn')).toBeNull()
   })
 
-  it('renders movement badge for team moving up', () => {
-    const badge = container.querySelector('[data-team-id="la-rochelle"] .w-rank-delta')
-    expect(badge).not.toBeNull()
-    expect(badge.textContent).toBe('+1')
-    expect(badge.classList.contains('w-rank-delta--up')).toBe(true)
+  it('enriches pill with numeric delta for team moving up', () => {
+    const pill = container.querySelector('[data-team-id="la-rochelle"] .w-rank-row__pill')
+    expect(pill).not.toBeNull()
+    expect(pill.textContent).toContain('+1')
+    expect(pill.classList.contains('w-rank-row__pill--up')).toBe(true)
   })
 
-  it('renders movement badge for team moving down', () => {
-    const badge = container.querySelector('[data-team-id="bordeaux"] .w-rank-delta')
-    expect(badge).not.toBeNull()
-    expect(badge.textContent).toBe('-1')
-    expect(badge.classList.contains('w-rank-delta--down')).toBe(true)
+  it('enriches pill with numeric delta for team moving down', () => {
+    const pill = container.querySelector('[data-team-id="bordeaux"] .w-rank-row__pill')
+    expect(pill).not.toBeNull()
+    expect(pill.textContent).toContain('-1')
+    expect(pill.classList.contains('w-rank-row__pill--down')).toBe(true)
   })
 
-  it('does not render badge for team with no movement', () => {
-    const badge = container.querySelector('[data-team-id="toulouse"] .w-rank-delta')
-    expect(badge).toBeNull()
+  it('does not add numeric delta for team with no movement', () => {
+    const pill = container.querySelector('[data-team-id="toulouse"] .w-rank-row__pill')
+    expect(pill).not.toBeNull()
+    // Pill exists (arrow only) but no numeric delta appended
+    expect(pill.textContent).toBe('=')
   })
 })
