@@ -49,14 +49,14 @@ function getTrendLabel(trend) {
 }
 
 /**
- * Get delta display info from trend.
+ * Get pill display info from trend.
  * @param {string} trend
- * @returns {{ text: string, cls: string }}
+ * @returns {{ arrow: string, cls: string }}
  */
-function getDeltaDisplay(trend) {
-  if (trend === 'up') return { text: '\u2191', cls: 'up' }
-  if (trend === 'down') return { text: '\u2193', cls: 'down' }
-  return { text: '=', cls: 'stable' }
+function getPillDisplay(trend) {
+  if (trend === 'up') return { arrow: '\u2191', cls: 'up' }
+  if (trend === 'down') return { arrow: '\u2193', cls: 'down' }
+  return { arrow: '=', cls: 'stable' }
 }
 
 /**
@@ -87,7 +87,6 @@ function getConfidenceLabel(confidence) {
  */
 export function render(listElement, team) {
   const isFavorite = team.id === FAVORITE_TEAM
-  const delta = getDeltaDisplay(team.trend)
   const trendLabel = getTrendLabel(team.trend)
   const confLabel = getConfidenceLabel(team.confidence)
   const rank = team.currentRank
@@ -172,12 +171,21 @@ export function render(listElement, team) {
   pointsSpan.textContent = String(team.points ?? 0)
   row.appendChild(pointsSpan)
 
-  // Delta (trend arrow)
-  const deltaSpan = document.createElement('span')
-  deltaSpan.className = `w-rank-row__delta w-rank-row__delta--${delta.cls}`
-  deltaSpan.textContent = delta.text
-  deltaSpan.setAttribute('aria-hidden', 'true')
-  row.appendChild(deltaSpan)
+  // Trend pill (skip if no trend data)
+  if (team.trend) {
+    const pill = getPillDisplay(team.trend)
+    const pillEl = document.createElement('span')
+    pillEl.className = `w-rank-row__pill w-rank-row__pill--${pill.cls}`
+    pillEl.setAttribute('aria-label', trendLabel)
+
+    const arrowSpan = document.createElement('span')
+    arrowSpan.className = 'w-rank-row__pill-arrow'
+    arrowSpan.textContent = pill.arrow
+    arrowSpan.setAttribute('aria-hidden', 'true')
+    pillEl.appendChild(arrowSpan)
+
+    row.appendChild(pillEl)
+  }
 
   // Confidence bar (detaille mode only)
   if (isDetaille) {
