@@ -9,7 +9,7 @@ function esc(str) {
 }
 
 /**
- * Inject movement badges on rank-rows showing rank delta.
+ * Enrich existing pills on rank-rows with numeric rank delta.
  * @param {HTMLElement} container
  * @param {object[]} teams — with rankDelta computed
  */
@@ -18,16 +18,25 @@ function renderMovementBadges(container, teams) {
   for (const row of rows) {
     const teamId = row.dataset.teamId
     const team = teams.find((t) => t.id === teamId)
-    if (!team || team.rankDelta === 0) continue
+    if (!team) continue
 
-    const badge = document.createElement('span')
-    badge.className = `w-rank-delta w-rank-delta--${team.rankDelta > 0 ? 'up' : 'down'}`
-    badge.textContent = team.rankDelta > 0 ? `+${team.rankDelta}` : String(team.rankDelta)
-    badge.setAttribute('aria-label',
+    const pill = row.querySelector('.w-rank-row__pill')
+    if (!pill || team.rankDelta === 0) continue
+
+    // Append numeric delta text
+    const deltaText = team.rankDelta > 0 ? `+${team.rankDelta}` : String(team.rankDelta)
+    pill.appendChild(document.createTextNode(deltaText))
+
+    // Update pill modifier if delta direction differs from trend
+    const deltaCls = team.rankDelta > 0 ? 'up' : 'down'
+    if (!pill.classList.contains(`w-rank-row__pill--${deltaCls}`)) {
+      pill.classList.remove('w-rank-row__pill--up', 'w-rank-row__pill--down', 'w-rank-row__pill--stable')
+      pill.classList.add(`w-rank-row__pill--${deltaCls}`)
+    }
+
+    // Update aria-label with rank delta info
+    pill.setAttribute('aria-label',
       `${Math.abs(team.rankDelta)} place${Math.abs(team.rankDelta) > 1 ? 's' : ''} ${team.rankDelta > 0 ? 'en hausse' : 'en baisse'}`)
-
-    const posEl = row.querySelector('.w-rank-row__position')
-    if (posEl) posEl.parentNode.insertBefore(badge, posEl.nextSibling)
   }
 }
 
