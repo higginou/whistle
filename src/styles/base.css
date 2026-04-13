@@ -21,7 +21,10 @@ body {
   font-weight: 400;
   line-height: 1.5;
   color: var(--w-text-primary);
-  background-color: var(--w-bg-page);
+  background:
+    radial-gradient(circle at top, rgba(245, 200, 76, 0.08), transparent 28%),
+    radial-gradient(circle at 80% 0%, rgba(124, 58, 237, 0.12), transparent 24%),
+    var(--w-bg-page);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -30,7 +33,7 @@ body {
 #app {
   max-width: 430px;
   margin: 0 auto;
-  padding: 0 var(--w-space-md);
+  padding: 0 14px 84px;
   min-height: 100vh;
   min-height: 100dvh;
 }

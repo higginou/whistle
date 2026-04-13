@@ -10,6 +10,7 @@ import { render as renderScoreCard } from './components/score-card.js'
 import { render as renderZoneGroups } from './components/zone-group.js'
 import { render as renderRevealButton } from './components/reveal-button.js'
 import { render as renderEmptyState } from './components/empty-state.js'
+import { initSupporterScore } from './supporter-score.js'
 import {
   render as renderBottomSheet,
   open as openBottomSheet,
@@ -337,6 +338,8 @@ function renderFullLayout() {
   prevTabIndex = getTabIndex(initialTab)
   showTab(initialTab, true)
 }
+
+initSupporterScore()
 
 // Listen for season data
 on('season', (event) => {

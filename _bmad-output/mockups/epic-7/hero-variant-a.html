@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epic 7.2 - Hero Variant A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #090712;
+    --surface: #12101d;
+    --surface-2: #1a1626;
+    --gold: #f5c84c;
+    --violet: #7c3aed;
+    --muted: #a79db7;
+    --text: #f4f1f8;
+    --line: rgba(255,255,255,0.08);
+    --font: 'Nunito', sans-serif;
+  }
+  body {
+    font-family: var(--font);
+    background:
+      radial-gradient(circle at top, rgba(245,200,76,0.08), transparent 28%),
+      radial-gradient(circle at 90% 8%, rgba(124,58,237,0.16), transparent 22%),
+      var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+  }
+  .shell { width: min(430px, 100%); padding: 18px 16px 28px; }
+  .hero {
+    position: relative; overflow: hidden; border-radius: 30px; padding: 18px;
+    background: linear-gradient(135deg, rgba(245,200,76,0.12), rgba(124,58,237,0.12)), var(--surface);
+    border: 1px solid rgba(245,200,76,0.18);
+    box-shadow: 0 26px 60px rgba(0,0,0,0.36);
+  }
+  .hero__badge {
+    display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px;
+    background: rgba(245,200,76,0.12); color: var(--gold); font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .hero__title { margin-top: 12px; font-size: 30px; line-height: 0.96; font-weight: 800; max-width: 10ch; }
+  .hero__copy { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.5; max-width: 28ch; }
+  .focus {
+    margin-top: 16px; padding: 14px; border-radius: 20px; background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+  }
+  .focus__label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
+  .focus__value { margin-top: 6px; font-size: 42px; font-weight: 800; line-height: 1; }
+  .focus__meta { margin-top: 5px; font-size: 12px; color: var(--muted); }
+  .chips { margin-top: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .chip { min-height: 56px; padding: 10px; border-radius: 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--line); }
+  .chip__label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .chip__value { margin-top: 4px; font-size: 16px; font-weight: 800; }
+  .chips .chip:nth-child(2) .chip__value { color: var(--gold); }
+  .chips .chip:nth-child(3) .chip__value { color: #b79cff; }
+  .story { margin-top: 12px; padding: 14px; border-radius: 18px; border: 1px solid var(--line); background: rgba(255,255,255,0.03); }
+  .story__title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
+  .story__copy { margin-top: 6px; font-size: 15px; font-weight: 700; line-height: 1.45; }
+</style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="hero__badge">Hero tribune</div>
+      <h1 class="hero__title">Aujourd'hui, on joue gros.</h1>
+      <p class="hero__copy">Un premier ecran plus direct, plus rituel, avec une phrase d'entree et un focus total sur la situation du Stade Rochelais.</p>
+
+      <div class="focus">
+        <div class="focus__label">Stade Rochelais</div>
+        <div class="focus__value">7e</div>
+        <div class="focus__meta">Projection vers le top 6 - confiance forte.</div>
+      </div>
+
+      <div class="chips">
+        <article class="chip"><div class="chip__label">Etat</div><div class="chip__value">En chasse</div></article>
+        <article class="chip"><div class="chip__label">Enjeu</div><div class="chip__value">Top 6</div></article>
+        <article class="chip"><div class="chip__label">Score</div><div class="chip__value">1840</div></article>
+      </div>
+    </section>
+
+    <article class="story">
+      <div class="story__title">Message du jour</div>
+      <div class="story__copy">La Rochelle n'est pas juste une equipe a suivre. C'est une trajectoire a porter.</div>
+    </article>
+  </main>
+</body>
+</html>

@@ -1,6 +1,6 @@
 # Story 6.1 : Selection et modification de resultats de matchs
 
-Status: review
+Status: done
 
 ## Story
 

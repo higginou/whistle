@@ -1,5 +1,5 @@
 # generated: 2026-03-28
-# last_updated: 2026-03-29 (3-3 done)
+# last_updated: 2026-04-13 (epic 7 review)
 # project: Whistle
 # project_key: NOKEY
 # tracking_system: file-system
@@ -36,7 +36,7 @@
 # - Inter-epic work (retro action items, debt, prep) is tracked under inter_epic_tasks
 
 generated: 2026-03-28
-last_updated: 2026-04-02 (6-2 done)
+last_updated: 2026-04-13 (epic 7 review)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -80,18 +80,24 @@ development_status:
   epic-4-retrospective: done
 
   # Epic 5 : Transparence du Modele (Phase 2)
-  epic-5: in-progress
+  epic-5: done
   5-1-vue-transparence-donnees-sources-et-metriques-du-modele: done
   5-2-journal-de-corrections-et-recalibrage-automatique: done
   5-3-mode-simple-mode-detaille: done
   5-4-micro-classement-confrontations-directes-et-gestion-promus: done
-  epic-5-retrospective: optional
+  epic-5-retrospective: done
 
   # Epic 6 : Simulateur (Phase 2/3)
-  epic-6: in-progress
+  epic-6: done
   6-1-selection-et-modification-de-resultats-de-matchs: done
   6-2-recalcul-instantane-et-animation-de-limpact: done
-  epic-6-retrospective: optional
+  epic-6-retrospective: done
+
+  # Epic 7 : Identite Rochelaise, Hero & Score Supporter
+  epic-7: in-progress
+  7-1-refonte-visuelle-rochelaise: review
+  7-2-hero-tribune-rochelaise: review
+  7-3-score-supporter-personnel: review
 
 # Inter-epic tasks (retro action items, debt, preparation)
 # Tracked here to avoid losing visibility on work between epics
@@ -100,7 +106,7 @@ inter_epic_tasks:
   retro2-fonts-nunito-evaluation: done        # Variable font ~38KB latin, budget OK
   retro2-pattern-slot-persistant: done         # Documente dans epic-2-retro
   retro2-tracking-inter-epics: done            # Cette section ajoutee
-  retro2-template-dev-agent-record: backlog    # Homogeneiser completion notes
+  retro2-template-dev-agent-record: closed-wontfix # Supersede par gate dev record (retro56)
   retro2-spike-motion-v12: done                 # animate from motion/mini + spring, ~3.5KB gz, vanilla JS OK
   retro2-spike-bottom-sheet: done              # Native <dialog> showModal(), free focus trap, drag on handle
   retro2-strategie-test-animations: done       # Unit test logic/config, mock animate(), manual visual validation
@@ -109,7 +115,7 @@ inter_epic_tasks:
   retro3-template-dev-agent-record: done       # Ajout critere #2 dans DoD CLAUDE.md (fichier story obligatoire)
   retro3-checklist-a11y-stories-ui: done       # Ajout critere #8 dans DoD CLAUDE.md (checklist a11y)
   retro3-audit-innerhtml-xss: done             # bottom-sheet.js (4 fixes) + score-card.js (3 fixes), critere #9 DoD
-  retro3-duplication-team-colors: backlog      # Extraire team-identity.js si 3eme usage
+  retro3-duplication-team-colors: closed-wontfix # Jamais eu de 3eme usage — ferme retro 5+6
   retro3-error-handling-reveal: done           # try/catch handleReveal + handleReplay, recovery setReplay()
   retro3-fichiers-story-3-1-3-5: done         # Fichiers existaient deja (nommage inconsistant, pas manquants)
   retro3-spike-vite-plugin-pwa: done           # generateSW, autoUpdate, NetworkFirst JSON, ~0.5KB impact
@@ -120,4 +126,11 @@ inter_epic_tasks:
   retro4-fichier-story-4-2: done               # Fichier existait (story-4-2-*.md, nommage avec prefixe story-)
   retro4-fix-tests-season-schema: done         # 475/475 tests passes — Vannes ajoutee, form[5], date calendrier
   retro4-spike-schema-json-epic5: done         # Voir epic-4-retro-2026-03-30.md — champs existants suffisants, extensions au fil des stories
-  retro4-spike-composants-epic5: backlog       # Patterns UI progressive disclosure, toggle, micro-classement
+  retro4-spike-composants-epic5: closed-wontfix # Epic 5 livre sans spike — non necessaire
+
+  # Post-retro Epic 5+6 (2026-04-02)
+  retro56-gate-review: done                       # Step 11 dans bmad-dev-story workflow + checklist
+  retro56-gate-dev-record: done                   # Step 9 dans bmad-dev-story workflow + checklist
+  retro56-gate-epic-closure: done                 # Step 11 dans bmad-dev-story workflow
+  retro56-gate-tests-zero-tolerance: done         # Step 9 dans bmad-dev-story workflow + checklist
+  retro56-fix-app-test-failures: done             # Alias virtual:pwa-register dans vite.config.js test — 700/700 green

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whistle — Background options</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #111;
+    color: #EDEDEF;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    padding: 24px 16px 40px;
+  }
+  h2 { font-size: 15px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #a78bfa; margin-bottom: 4px; }
+  .subtitle { font-size: 12px; color: #8A8F98; margin-bottom: 24px; }
+
+  .options { display: flex; flex-direction: column; gap: 16px; }
+
+  .option {
+    border-radius: 16px;
+    border: 2px solid rgba(255,255,255,0.08);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .option.selected { border-color: #7c3aed; }
+  .option:hover { border-color: rgba(139,92,246,0.4); }
+
+  .option-header {
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .color-swatch {
+    width: 40px; height: 40px; border-radius: 10px;
+    flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1);
+  }
+  .option-name { font-size: 14px; font-weight: 700; }
+  .option-desc { font-size: 11px; color: #8A8F98; margin-top: 2px; }
+  .option-letter {
+    margin-left: auto;
+    width: 28px; height: 28px; border-radius: 8px;
+    background: rgba(139,92,246,0.15);
+    border: 1px solid rgba(139,92,246,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: #a78bfa;
+    flex-shrink: 0;
+  }
+
+  /* Phone preview embedded in each option */
+  .phone-preview {
+    padding: 16px;
+    display: flex; gap: 16px; align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .mini-phone {
+    width: 140px; height: 260px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    overflow: hidden;
+    display: flex; flex-direction: column;
+    flex-shrink: 0;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  .mini-header {
+    padding: 10px 10px 6px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .mini-logo { font-size: 11px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+  .mini-trophy {
+    width: 22px; height: 22px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .mini-content { flex: 1; padding: 8px 8px 4px; display: flex; flex-direction: column; gap: 5px; }
+  .mini-hero { border-radius: 10px; padding: 8px 8px; display: flex; gap: 6px; align-items: center; }
+  .mini-team-icon { width: 26px; height: 26px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
+  .mini-team-info {}
+  .mini-team-name { font-size: 9px; font-weight: 700; }
+  .mini-team-rank { font-size: 8px; margin-top: 1px; }
+  .mini-rows { display: flex; flex-direction: column; gap: 3px; }
+  .mini-row { border-radius: 6px; padding: 4px 6px; display: flex; align-items: center; gap: 5px; }
+  .mini-rank-n { font-size: 8px; font-weight: 700; width: 10px; }
+  .mini-row-name { font-size: 8px; flex: 1; }
+  .mini-bar-wrap { width: 20px; height: 2px; border-radius: 1px; background: rgba(255,255,255,0.08); }
+  .mini-bar { height: 100%; border-radius: 1px; background: #7c3aed; }
+  .mini-nav {
+    padding: 7px 4px 10px;
+    display: flex; justify-content: space-around;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .mini-nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .mini-nav-dot { width: 16px; height: 16px; border-radius: 5px; }
+  .mini-nav-dot.active { background: rgba(139,92,246,0.25); }
+  .mini-nav-label { font-size: 6px; }
+
+  .palette-info { flex: 1; min-width: 160px; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+  .palette-row { display: flex; align-items: center; gap: 8px; }
+  .palette-dot { width: 20px; height: 20px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0; }
+  .palette-name { font-size: 10px; color: #8A8F98; }
+  .palette-hex { font-size: 10px; color: #c4c9d4; font-family: monospace; }
+
+  .tag { display: inline-block; padding: 2px 7px; border-radius: 4px; font-size: 9px; font-weight: 600; letter-spacing: 0.05em; }
+  .tag-green { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+  .tag-blue { background: rgba(96,165,250,0.15); color: #60a5fa; border: 1px solid rgba(96,165,250,0.3); }
+  .tag-orange { background: rgba(251,146,60,0.15); color: #fb923c; border: 1px solid rgba(251,146,60,0.3); }
+</style>
+</head>
+<body>
+<h2>Fond de l'interface</h2>
+<p class="subtitle">3 alternatives au noir — gaming dark, mais avec de la couleur</p>
+
+<div class="options">
+
+  <!-- Option A: Deep Indigo -->
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="option-header" style="background:#0d0f1c">
+      <div class="color-swatch" style="background:linear-gradient(135deg,#0d0f1c,#1a1d36)"></div>
+      <div>
+        <div class="option-name" style="color:#818cf8">Indigo profond</div>
+        <div class="option-desc">Nuit cosmique — chaud, spatial, premium gaming</div>
+      </div>
+      <div class="option-letter">A</div>
+    </div>
+    <div class="phone-preview" style="background:#0d0f1c">
+      <div class="mini-phone" style="background:linear-gradient(180deg,#1a1d36 0%,#0d0f1c 100%)">
+        <div class="mini-header" style="background:rgba(26,29,54,0.8)">
+          <div class="mini-logo" style="color:#818cf8">Whistle</div>
+          <div class="mini-trophy" style="background:rgba(129,140,248,0.15);border:1px solid rgba(129,140,248,0.25)">🏆</div>
+        </div>
+        <div class="mini-content">
+          <div class="mini-hero" style="background:rgba(129,140,248,0.12);border:1px solid rgba(129,140,248,0.18)">
+            <div class="mini-team-icon" style="background:rgba(129,140,248,0.15)">🌊</div>
+            <div class="mini-team-info">
+              <div class="mini-team-name" style="color:#c7d2fe">La Rochelle</div>
+              <div class="mini-team-rank" style="color:#818cf8">#3 → <span style="color:#34d399">#2</span></div>
+            </div>
+          </div>
+          <div class="mini-rows">
+            <div class="mini-row" style="background:rgba(255,255,255,0.04)"><div class="mini-rank-n" style="color:#6d7280">1</div><div class="mini-row-name" style="color:#c4c9d4">Toulouse</div><div class="mini-bar-wrap"><div class="mini-bar" style="width:85%;background:#818cf8"></div></div></div>
+            <div class="mini-row" style="background:rgba(255,255,255,0.04)"><div class="mini-rank-n" style="color:#6d7280">2</div><div class="mini-row-name" style="color:#c4c9d4">Bordeaux</div><div class="mini-bar-wrap"><div class="mini-bar" style="width:70%;background:#818cf8"></div></div></div>
+            <div class="mini-row" style="background:rgba(129,140,248,0.1);border:1px solid rgba(129,140,248,0.15)"><div class="mini-rank-n" style="color:#818cf8">3</div><div class="mini-row-name" style="color:#c7d2fe;font-weight:700">La Rochelle</div><div class="mini-bar-wrap"><div class="mini-bar" style="width:65%;background:#818cf8"></div></div></div>
+          </div>
+        </div>
+        <div class="mini-nav" style="background:rgba(13,15,28,0.92)">
+          <div class="mini-nav-item"><div class="mini-nav-dot active"></div><div class="mini-nav-label" style="color:#818cf8">Class.</div></div>
+          <div class="mini-nav-item"><div class="mini-nav-dot"></div><div class="mini-nav-label" style="color:#4b5563">Proj.</div></div>
+          <div class="mini-nav-item"><div class="mini-nav-dot"></div><div class="mini-nav-label" style="color:#4b5563">Duels</div></div>
+          <div class="mini-nav-item"><div class="mini-nav-dot"></div><div class="mini-nav-label" style="color:#4b5563">Donj.</div></div>
+          <div class="mini-nav-item"><div class="mini-nav-dot"></div><div class="mini-nav-label" style="color:#4b5563">Oracle</div></div>
+        </div>
+      </div>
+      <div class="palette-info">
+        <div class="palette-row"><div class="palette-dot" style="background:#0d0f1c"></div><div><div class="palette-name">Fond page</div><div class="palette-hex">#0d0f1c</div></div></div>
+        <div class="palette-row"><div class="palette-dot" style="background:#1a1d36"></div><div><div class="palette-name">Surface</div><div class="palette-hex">#1a1d36</div></div></div>
+        <div class="palette-row"><div class="palette-dot" style="background:#2d3161"></div><div><div class="palette-name">Elevated</div><div class="palette-hex">#2d3161</div></div></div>
+        <div class="palette-row"><div class="palette-dot" style="background:#818cf8"></div><div><div class="palette-name">Accent</div><div class="palette-hex">#818cf8</div></div></div>
+        <span class="tag tag-blue">Spatial · Cosmique</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option B: Deep Slate (dark slate blue-grey) -->
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="option-header" style="background:#0f1117">
+      <div class="color-swatch" style="background:linear-gradient(135deg,#0f1117,#1e2235)"></div>
+      <div>
+        <div class="option-name" style="color:#a78bfa">Ardoise sombre</div>
+        <div class="option-desc">Gris bleuté froid — HUD militaire, esport contemporain 2026</div>
+      </div>
+      <div class="option-letter">B</div>
+    </div>
+    <div class="phone-preview" style="background:#0f1117">
+      <div class="mini-phone" style="background:linear-gradient(180deg,#1e2235 0%,#0f1117 100%)">
+        <div class="mini-header" style="background:rgba(30,34,53,0.8)">
+          <div class="mini-logo" style="color:#a78bfa">Whistle</div>
+          <div class="mini-trophy" style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.25)">🏆</div>
+        </div>
+        <div class="mini-content">
+          <div class="mini-hero" style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.18)">
+            <div class="mini-team-icon" style="background:rgba(139,92,246,0.15)">🌊</div>
+            <div class="mini-team-info">
+              <div class="mini-team-name" style="color:#c4b5fd">La Rochelle</div>
+              <div class="mini-team-rank" style="color:#a78bfa">#3 → <span style="color:#34d399">#2</span></div>
+            </div>
+          </div>
+          <div class="mini-rows">
+            <div class="mini-row" style="background:rgba(255,255,255,0.04)"><div class="mini-rank-n" style="color:#6d7280">1</div><div class="mini-row-name" style="color:#c4c9d4">Toulouse</div><div class="mini-bar-wrap"><div class="mini-bar" style="width:85%"></div></div></div>
+            <div class="mini-row" style="background:rgba(255,255,255,0.04)"><div class="mini-rank-n" style="color:#6d7280">2</div><div class="mini-row-name" style="color:#c4c9d4">Bordeaux</div><div class="mini-bar-wrap"><div class="mini-bar" style="width:70%"></div></div></div>
+            <div class="mini-row" style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2)"><div class="mini-rank-n" style="color:#a78bfa">3</div><div class="mini-row-name" style="color:#c4b5fd;font-weight:700">La Rochelle</div><div class="mini-bar-wrap"><div class="mini-bar" style="width:65%"></div></div></div>
+          </div>
+        </div>
+        <div class="mini-nav" style="background:rgba(15,17,23,0.92)">
+          <div class="mini-nav-item"><div class="mini-nav-dot active"></div><div class="mini-nav-label" style="color:#a78bfa">Class.</div></div>
+          <div class="mini-nav-item"><div class="mini-nav-dot"></div><div class="mini-nav-label" style="color:#4b5563">Proj.</div></div>
+          <div class="mini-nav-item"><div class="mini-nav-dot"></div><div class="mini-nav-label" style="color:#4b5563">Duels</div></div>
+          <div class="mini-nav-item"><div class="mini-nav-dot"></div><div class="mini-nav-label" style="color:#4b5563">Donj.</div></div>
+          <div class="mini-nav-item"><div class="mini-nav-dot"></div><div class="mini-nav-label" style="color:#4b5563">Oracle</div></div>
+        </div>
+      </div>
+      <div class="palette-info">
+        <div class="palette-row"><div class="palette-dot" style="background:#0f1117"></div><div><div class="palette-name">Fond page</div><div class="palette-hex">#0f1117</div></div></div>
+        <div class="palette-row"><div class="palette-dot" style="background:#1e2235"></div><div><div class="palette-name">Surface</div><div class="palette-hex">#1e2235</div></div></div>
+        <div class="palette-row"><div class="palette-dot" style="background:#2a2f4a"></div><div><div class="palette-name">Elevated</div><div class="palette-hex">#2a2f4a</div></div></div>
+        <div class="palette-row"><div class="palette-dot" style="background:#a78bfa"></div><div><div class="palette-name">Accent</div><div class="palette-hex">#a78bfa</div></div></div>
+        <span class="tag tag-green">Esport · HUD · 2026</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option C: Deep Plum -->
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="option-header" style="background:#130d1f">
+      <div class="color-swatch" style="background:linear-gradient(135deg,#130d1f,#1e1035)"></div>
+      <div>
+        <div class="option-name" style="color:#c084fc">Prune nuit</div>
+        <div class="option-desc">Violet sombre profond — identité Whistle renforcée, dark fantasy</div>
+      </div>
+      <div class="option-letter">C</div>
+    </div>
+    <div class="phone-preview" style="background:#130d1f">
+      <div class="mini-phone" style="background:linear-gradient(180deg,#1e1035 0%,#130d1f 100%)">
+        <div class="mini-header" style="background:rgba(30,16,53,0.8)">
+          <div class="mini-logo" style="color:#c084fc">Whistle</div>
+          <div class="mini-trophy" style="background:rgba(192,132,252,0.12);border:1px solid rgba(192,132,252,0.25)">🏆</div>
+        </div>
+        <div class="mini-content">
+          <div class="mini-hero" style="background:rgba(192,132,252,0.1);border:1px solid rgba(192,132,252,0.18)">
+            <div class="mini-team-icon" style="background:rgba(192,132,252,0.12)">🌊</div>
+            <div class="mini-team-info">
+              <div class="mini-team-name" style="color:#e9d5ff">La Rochelle</div>
+              <div class="mini-team-rank" style="color:#c084fc">#3 → <span style="color:#34d399">#2</span></div>
+            </div>
+          </div>
+          <div class="mini-rows">
+            <div class="mini-row" style="background:rgba(255,255,255,0.03)"><div class="mini-rank-n" style="color:#6d7280">1</div><div class="mini-row-name" style="color:#c4c9d4">Toulouse</div><div class="mini-bar-wrap"><div class="mini-bar" style="width:85%;background:#c084fc"></div></div></div>
+            <div class="mini-row" style="background:rgba(255,255,255,0.03)"><div class="mini-rank-n" style="color:#6d7280">2</div><div class="mini-row-name" style="color:#c4c9d4">Bordeaux</div><div class="mini-bar-wrap"><div class="mini-bar" style="width:70%;background:#c084fc"></div></div></div>
+            <div class="mini-row" style="background:rgba(192,132,252,0.1);border:1px solid rgba(192,132,252,0.2)"><div class="mini-rank-n" style="color:#c084fc">3</div><div class="mini-row-name" style="color:#e9d5ff;font-weight:700">La Rochelle</div><div class="mini-bar-wrap"><div class="mini-bar" style="width:65%;background:#c084fc"></div></div></div>
+          </div>
+        </div>
+        <div class="mini-nav" style="background:rgba(19,13,31,0.92)">
+          <div class="mini-nav-item"><div class="mini-nav-dot" style="background:rgba(192,132,252,0.2)"></div><div class="mini-nav-label" style="color:#c084fc">Class.</div></div>
+          <div class="mini-nav-item"><div class="mini-nav-dot"></div><div class="mini-nav-label" style="color:#4b5563">Proj.</div></div>
+          <div class="mini-nav-item"><div class="mini-nav-dot"></div><div class="mini-nav-label" style="color:#4b5563">Duels</div></div>
+          <div class="mini-nav-item"><div class="mini-nav-dot"></div><div class="mini-nav-label" style="color:#4b5563">Donj.</div></div>
+          <div class="mini-nav-item"><div class="mini-nav-dot"></div><div class="mini-nav-label" style="color:#4b5563">Oracle</div></div>
+        </div>
+      </div>
+      <div class="palette-info">
+        <div class="palette-row"><div class="palette-dot" style="background:#130d1f"></div><div><div class="palette-name">Fond page</div><div class="palette-hex">#130d1f</div></div></div>
+        <div class="palette-row"><div class="palette-dot" style="background:#1e1035"></div><div><div class="palette-name">Surface</div><div class="palette-hex">#1e1035</div></div></div>
+        <div class="palette-row"><div class="palette-dot" style="background:#2e1a55"></div><div><div class="palette-name">Elevated</div><div class="palette-hex">#2e1a55</div></div></div>
+        <div class="palette-row"><div class="palette-dot" style="background:#c084fc"></div><div><div class="palette-name">Accent</div><div class="palette-hex">#c084fc</div></div></div>
+        <span class="tag tag-orange">Dark Fantasy · Whistle</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

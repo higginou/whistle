@@ -5,16 +5,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
-  padding: 2rem var(--w-space-md);
+  gap: 1.5rem;
+  padding: 2rem 0;
   text-align: center;
   min-height: 80dvh;
 }
 
 /* Illustration container with dashed ring */
 .w-empty-state__illustration {
-  width: 160px;
-  height: 160px;
+  width: 168px;
+  height: 168px;
   position: relative;
 }
 
@@ -23,7 +23,7 @@
   position: absolute;
   inset: -12px;
   border-radius: 50%;
-  border: 2px dashed rgba(109, 40, 217, 0.15);
+  border: 2px dashed rgba(245, 200, 76, 0.18);
 }
 
 .w-empty-state__illustration svg {

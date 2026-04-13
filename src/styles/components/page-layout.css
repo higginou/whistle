@@ -14,9 +14,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px var(--w-space-md);
-  background: rgba(19, 13, 31, 0.92);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 12px 0;
+  background: linear-gradient(180deg, rgba(9, 7, 18, 0.96), rgba(9, 7, 18, 0.78));
+  border-bottom: 1px solid rgba(245, 200, 76, 0.12);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }
@@ -43,8 +43,8 @@
   width: 36px;
   height: 36px;
   border-radius: 10px;
-  border: 1px solid rgba(192, 132, 252, 0.25);
-  background: rgba(192, 132, 252, 0.1);
+  border: 1px solid rgba(245, 200, 76, 0.22);
+  background: rgba(245, 200, 76, 0.08);
   color: var(--w-accent);
   cursor: pointer;
   touch-action: manipulation;
@@ -64,11 +64,11 @@
   height: 16px;
   padding: 0 4px;
   border-radius: 8px;
-  background: #7c3aed;
+  background: #f5c84c;
   border: 2px solid var(--w-bg-page);
   font-size: 8px;
   font-weight: 800;
-  color: #fff;
+  color: #1b1427;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,6 +87,10 @@
 .w-tab-view {
   width: 100%;
   will-change: transform, opacity;
+}
+
+.w-app-header__right {
+  padding-right: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

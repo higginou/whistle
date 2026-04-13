@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epic 7.1 - Identity Variant C</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0b0a10;
+    --surface: #15131c;
+    --surface-2: #1c1824;
+    --purple: #7c3aed;
+    --gold: #f5c84c;
+    --mint: #22c55e;
+    --text: #f3eef8;
+    --muted: #a89cb8;
+    --line: rgba(255,255,255,0.08);
+    --glow: rgba(124,58,237,0.24);
+    --radius-xl: 30px;
+    --radius-lg: 20px;
+    --radius-md: 16px;
+    --font: 'Nunito', sans-serif;
+  }
+  body {
+    font-family: var(--font);
+    background:
+      radial-gradient(circle at 50% -10%, rgba(124,58,237,0.2), transparent 30%),
+      radial-gradient(circle at 10% 12%, rgba(245,200,76,0.12), transparent 18%),
+      linear-gradient(180deg, #09070d, var(--bg));
+    color: var(--text);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+  }
+  .shell { width: min(430px, 100%); padding: 18px 16px 28px; }
+  .hero {
+    position: relative; overflow: hidden; border-radius: var(--radius-xl); padding: 18px;
+    background:
+      linear-gradient(135deg, rgba(124,58,237,0.15), rgba(245,200,76,0.08)),
+      var(--surface);
+    border: 1px solid rgba(124,58,237,0.22);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 30px 60px rgba(0,0,0,0.38);
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: auto -40px -50px auto; width: 180px; height: 180px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%);
+  }
+  .hero__top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px;
+    background: rgba(124,58,237,0.14); border: 1px solid rgba(124,58,237,0.22);
+    font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: #d8caff;
+  }
+  .crest {
+    width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font-weight: 800;
+    background: linear-gradient(135deg, var(--gold), #fff5c6); color: #1b1427; box-shadow: 0 0 24px rgba(245,200,76,0.18);
+  }
+  .hero__title { font-size: 30px; line-height: 0.98; font-weight: 800; max-width: 11ch; }
+  .hero__copy { margin-top: 10px; font-size: 14px; line-height: 1.5; color: var(--muted); max-width: 28ch; }
+  .stack { display: grid; gap: 12px; margin-top: 14px; }
+  .tile {
+    padding: 14px; border-radius: var(--radius-lg); background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+  }
+  .tile__label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
+  .tile__value { margin-top: 6px; font-size: 24px; font-weight: 800; }
+  .supporter {
+    display: flex; gap: 14px; align-items: center;
+    background: linear-gradient(135deg, rgba(124,58,237,0.16), rgba(34,197,94,0.08));
+  }
+  .supporter__orb {
+    width: 58px; height: 58px; border-radius: 20px; display: grid; place-items: center;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.14), rgba(255,255,255,0.04));
+    border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 0 26px var(--glow);
+    font-size: 26px;
+  }
+  .supporter__name { font-size: 16px; font-weight: 800; }
+  .supporter__desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .shield {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+  }
+  .mini {
+    min-height: 78px; padding: 12px; border-radius: 18px; background: rgba(255,255,255,0.03); border: 1px solid var(--line);
+  }
+  .mini__title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .mini__value { margin-top: 5px; font-size: 22px; font-weight: 800; }
+  .mini__note { margin-top: 2px; font-size: 11px; color: var(--muted); }
+  .nav {
+    margin-top: 14px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  }
+  .nav__item {
+    min-height: 54px; border-radius: 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+    display: grid; place-items: center; color: var(--muted);
+  }
+  .nav__item--active { background: rgba(124,58,237,0.12); color: var(--text); }
+  .nav__icon { font-size: 18px; }
+  .nav__label { margin-top: 2px; font-size: 10px; font-weight: 700; }
+</style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="hero__top">
+        <div class="badge">Collector / sportif</div>
+        <div class="crest">SR</div>
+      </div>
+      <h1 class="hero__title">L'app comme un trophée perso.</h1>
+      <p class="hero__copy">Une version plus collectionnable, plus contrastee, plus assumee. Chaque bloc ressemble a une piece debloquee.</p>
+
+      <div class="stack">
+        <article class="tile supporter">
+          <div class="supporter__orb">⭐</div>
+          <div>
+            <div class="tile__label">Titre supporteur</div>
+            <div class="supporter__name">Oracle de Deflandre</div>
+            <div class="supporter__desc">Niveau 18 - 420 XP avant le prochain rang.</div>
+          </div>
+        </article>
+
+        <div class="shield">
+          <article class="mini">
+            <div class="mini__title">Score</div>
+            <div class="mini__value">1840</div>
+            <div class="mini__note">+42 aujourd'hui</div>
+          </article>
+          <article class="mini">
+            <div class="mini__title">Streak</div>
+            <div class="mini__value">7</div>
+            <div class="mini__note">jours d'affilee</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack">
+      <article class="tile">
+        <div class="tile__label">Badge rare</div>
+        <div class="tile__value" style="font-size: 18px;">Vision juste</div>
+        <div class="supporter__desc">Tu as battu le modele sur la derniere journee.</div>
+      </article>
+      <article class="tile" style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+        <div>
+          <div class="tile__label">Etat du cache</div>
+          <div class="tile__value" style="font-size: 18px;">Mode collection</div>
+        </div>
+        <div style="font-size: 30px;">🏅</div>
+      </article>
+    </section>
+
+    <nav class="nav" aria-label="Navigation principale">
+      <div class="nav__item nav__item--active"><div class="nav__icon">1</div><div class="nav__label">Hero</div></div>
+      <div class="nav__item"><div class="nav__icon">2</div><div class="nav__label">Badges</div></div>
+      <div class="nav__item"><div class="nav__icon">3</div><div class="nav__label">Journal</div></div>
+      <div class="nav__item"><div class="nav__icon">4</div><div class="nav__label">Fin</div></div>
+    </nav>
+  </main>
+</body>
+</html>

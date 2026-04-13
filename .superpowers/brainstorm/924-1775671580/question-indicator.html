@@ -1,0 +1,136 @@
+<h2>Quel indicateur veux-tu déplacer à droite ?</h2>
+<p class="subtitle">Voici les deux indicateurs actuels dans une rank-row</p>
+
+<style>
+  .demo-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+    padding: 10px 16px;
+    background: #2e1a55;
+    border-radius: 8px;
+    color: #ededef;
+    font-family: system-ui, -apple-system, sans-serif;
+    margin: 16px 0;
+    position: relative;
+  }
+  .demo-row--fav {
+    border-left: 4px solid #6d28d9;
+    background: linear-gradient(90deg, rgba(109,40,217,0.15), #2e1a55);
+  }
+  .demo-pos {
+    font-size: 16px;
+    font-weight: 700;
+    min-width: 1.5rem;
+    text-align: center;
+    color: #8a8f98;
+  }
+  .demo-badge-delta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 9px;
+    font-size: 10px;
+    font-weight: 800;
+  }
+  .demo-badge-up { background: rgba(22,163,74,0.15); color: #16a34a; }
+  .demo-badge-down { background: rgba(220,38,38,0.15); color: #dc2626; }
+  .demo-logo {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .demo-info { flex: 1; min-width: 0; }
+  .demo-name { font-size: 14px; font-weight: 600; }
+  .demo-elo { font-size: 12px; color: #8a8f98; }
+  .demo-pts {
+    font-size: 14px; font-weight: 700;
+    min-width: 2.5rem; text-align: right; flex-shrink: 0;
+  }
+  .demo-trend {
+    font-size: 12px; font-weight: 600;
+    min-width: 1.5rem; text-align: center; flex-shrink: 0;
+  }
+  .demo-trend-up { color: #16a34a; }
+  .demo-trend-down { color: #dc2626; }
+  .demo-trend-stable { color: #8a8f98; }
+
+  .anno {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 10;
+  }
+  .anno-a {
+    top: -10px; left: 52px;
+    background: #f59e0b; color: #000;
+  }
+  .anno-b {
+    top: -10px; right: 4px;
+    background: #3b82f6; color: #fff;
+  }
+
+  .legend { margin: 24px 0 8px; }
+  .legend-item {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-right: 16px; font-size: 13px; color: #8a8f98;
+  }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+</style>
+
+<!-- Annotated demo row -->
+<div style="position:relative; margin: 32px 0 24px;">
+  <div class="demo-row demo-row--fav">
+    <span class="demo-pos">3</span>
+    <span class="demo-badge-delta demo-badge-up">+2</span>
+    <span class="demo-logo" style="background:#ffd700;">LR</span>
+    <div class="demo-info">
+      <span class="demo-name" style="color:#c084fc;">La Rochelle</span>
+      <span class="demo-elo">Elo 1842</span>
+    </div>
+    <span class="demo-pts">58</span>
+    <span class="demo-trend demo-trend-up">↑</span>
+  </div>
+  <span class="anno anno-a">A — Badge numérique (+2)</span>
+  <span class="anno anno-b">B — Flèche tendance (↑)</span>
+</div>
+
+<div class="legend">
+  <span class="legend-item"><span class="legend-dot" style="background:#f59e0b;"></span> A = Badge pill numérique (Projection uniquement)</span>
+  <span class="legend-item"><span class="legend-dot" style="background:#3b82f6;"></span> B = Flèche tendance (toutes les rows)</span>
+</div>
+
+<h3 style="margin-top:32px;">Lequel veux-tu déplacer à droite ?</h3>
+
+<div class="options">
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Badge numérique (+2, -1)</h3>
+      <p>Le pill vert/rouge dans l'onglet Projection qui montre le delta entre rang actuel et rang projeté. Actuellement à gauche après la position.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Flèche de tendance (↑/↓/=)</h3>
+      <p>L'indicateur présent sur toutes les rows. Déjà à droite après les points, mais tu veux peut-être le repositionner encore plus à droite.</p>
+    </div>
+  </div>
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Les deux — fusionner à droite</h3>
+      <p>Regrouper les deux indicateurs (badge + flèche) dans une zone à droite de la row.</p>
+    </div>
+  </div>
+</div>

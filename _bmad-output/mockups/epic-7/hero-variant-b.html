@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epic 7.2 - Hero Variant B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0c1420;
+    --surface: #142235;
+    --marine: #2c6cff;
+    --teal: #2ad6c8;
+    --cream: #f5efe1;
+    --muted: #a9b8cb;
+    --text: #eef4fb;
+    --line: rgba(255,255,255,0.1);
+    --font: 'Nunito', sans-serif;
+  }
+  body {
+    font-family: var(--font);
+    background:
+      radial-gradient(circle at 12% 10%, rgba(42,214,200,0.16), transparent 18%),
+      radial-gradient(circle at 88% 4%, rgba(44,108,255,0.16), transparent 20%),
+      linear-gradient(180deg, #08111b, var(--bg));
+    color: var(--text);
+    min-height: 100dvh;
+    display: flex; justify-content: center; -webkit-font-smoothing: antialiased;
+  }
+  .shell { width: min(430px, 100%); padding: 18px 16px 28px; }
+  .hero {
+    padding: 18px; border-radius: 28px; border: 1px solid rgba(42,214,200,0.18);
+    background: linear-gradient(135deg, rgba(42,214,200,0.12), rgba(44,108,255,0.12)), var(--surface);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+  }
+  .row { display: flex; align-items: start; justify-content: space-between; gap: 12px; }
+  .crest {
+    width: 46px; height: 46px; border-radius: 16px; display: grid; place-items: center; font-weight: 800;
+    background: linear-gradient(135deg, #f4c95d, #fff4c0); color: #192236;
+  }
+  .eyebrow {
+    display: inline-flex; gap: 8px; align-items: center; padding: 6px 10px; border-radius: 999px;
+    background: rgba(245,239,225,0.1); color: var(--cream); font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .title { margin-top: 12px; font-size: 28px; line-height: 1; font-weight: 800; max-width: 11ch; }
+  .copy { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.5; max-width: 27ch; }
+  .glass {
+    margin-top: 16px; padding: 14px; border-radius: 20px; background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+  }
+  .glass__label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
+  .glass__big { margin-top: 6px; font-size: 38px; font-weight: 800; }
+  .glass__small { margin-top: 4px; font-size: 12px; color: var(--muted); }
+  .message {
+    margin-top: 12px; border-radius: 18px; padding: 14px; background: rgba(255,255,255,0.03); border: 1px solid var(--line);
+    display: flex; gap: 12px;
+  }
+  .message__icon { font-size: 24px; }
+  .message__title { font-size: 15px; font-weight: 800; }
+  .message__copy { margin-top: 3px; font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="row">
+        <div>
+          <div class="eyebrow">Entrée en tribune</div>
+          <h1 class="title">Le match avant le match.</h1>
+          <p class="copy">Plus narratif, plus complice, plus centré sur l'enjeu du jour que sur la pure statistique.</p>
+        </div>
+        <div class="crest">SR</div>
+      </div>
+
+      <div class="glass">
+        <div class="glass__label">Enjeu principal</div>
+        <div class="glass__big">Top 6</div>
+        <div class="glass__small">La Rochelle peut encore basculer la saison.</div>
+      </div>
+
+      <div class="message">
+        <div class="message__icon">🌊</div>
+        <div>
+          <div class="message__title">Message du jour</div>
+          <div class="message__copy">Tu n'ouvres pas juste une app. Tu prends position pour la suite.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

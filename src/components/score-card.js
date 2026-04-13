@@ -1,6 +1,7 @@
 import '../styles/components/score-card.css'
 import { get, on } from '../store.js'
 import { render as renderBadge } from './badge.js'
+import { getSupporterProfile } from '../supporter-score.js'
 
 const FAVORITE_TEAM = 'la-rochelle'
 const MAX_UPCOMING = 3
@@ -122,6 +123,43 @@ function difficultyDots(difficulty) {
   ).join('')
 }
 
+function getSupporterScoreMarkup(score) {
+  const profile = getSupporterProfile(score)
+  const progressRange = Math.max(1, profile.ceiling - profile.floor)
+  const progress = Math.min(
+    100,
+    Math.max(0, ((score - profile.floor) / progressRange) * 100),
+  )
+
+  return {
+    progress: Math.round(progress),
+    profile,
+  }
+}
+
+function getHeroSummary(team) {
+  const delta = team.projectedRank - team.currentRank
+
+  if (delta < 0) {
+    return {
+      message: 'La marée est favorable.',
+      stake: `La Rochelle peut grimper au ${team.projectedRank}${ordinal(team.projectedRank)} rang.`,
+    }
+  }
+
+  if (delta > 0) {
+    return {
+      message: 'La pression monte dans la tribune.',
+      stake: `La Rochelle doit défendre le ${team.currentRank}${ordinal(team.currentRank)} rang.`,
+    }
+  }
+
+  return {
+    message: 'Le classement reste sous tension.',
+    stake: `La Rochelle vise le maintien au ${team.currentRank}${ordinal(team.currentRank)} rang.`,
+  }
+}
+
 /**
  * Look up a team name by id.
  * @param {string} id
@@ -141,6 +179,9 @@ function teamName(id, teams) {
  */
 function buildHTML(team, season) {
   const isDetaille = get('viewMode') === 'detaille'
+  const supporterScore = get('supporterScore') ?? 0
+  const supporter = getSupporterScoreMarkup(supporterScore)
+  const hero = getHeroSummary(team)
   const { symbol, label } = trendDisplay(team.trend)
   const top6Pct = Math.round(team.zones.top6 * 100)
   const matches = filterUpcomingMatches(season.calendar)
@@ -160,8 +201,28 @@ function buildHTML(team, season) {
   }).join('')
 
   return `
+    <div class="w-score-card__eyebrow">Tribune rochelaise</div>
     <div class="w-score-card__header">
-      <h1 class="w-score-card__team-name">Stade Rochelais</h1>
+      <div>
+        <h1 class="w-score-card__team-name">Stade Rochelais</h1>
+        <p class="w-score-card__headline">${esc(hero.message)}</p>
+        <p class="w-score-card__stake">${esc(hero.stake)}</p>
+      </div>
+      <span class="w-score-card__crest" aria-hidden="true">SR</span>
+    </div>
+
+    <div class="w-score-card__supporter" aria-label="Score supporter ${supporterScore}, ${esc(supporter.profile.title)}">
+      <div class="w-score-card__supporter-top">
+        <span class="w-score-card__supporter-label">Score supporter</span>
+        <span class="w-score-card__supporter-tier">${esc(supporter.profile.title)}</span>
+      </div>
+      <div class="w-score-card__supporter-main">
+        <span class="w-score-card__supporter-value w-tabular">${supporterScore}</span>
+        <p class="w-score-card__supporter-note">${esc(supporter.profile.note)}</p>
+      </div>
+      <div class="w-score-card__supporter-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${supporter.progress}">
+        <span style="width:${supporter.progress}%;"></span>
+      </div>
     </div>
 
     <div class="w-score-card__grid">
@@ -262,6 +323,26 @@ export function render(container) {
   staleEl.hidden = true
   container.appendChild(staleEl)
 
+  function updateSupporterPanel() {
+    const panel = article.querySelector('.w-score-card__supporter')
+    if (!panel) return
+
+    const score = get('supporterScore') ?? 0
+    const supporter = getSupporterScoreMarkup(score)
+    const tierEl = panel.querySelector('.w-score-card__supporter-tier')
+    const valueEl = panel.querySelector('.w-score-card__supporter-value')
+    const noteEl = panel.querySelector('.w-score-card__supporter-note')
+    const barEl = panel.querySelector('.w-score-card__supporter-bar')
+    const fillEl = panel.querySelector('.w-score-card__supporter-bar span')
+
+    panel.setAttribute('aria-label', `Score supporter ${score}, ${supporter.profile.title}`)
+    if (tierEl) tierEl.textContent = supporter.profile.title
+    if (valueEl) valueEl.textContent = String(score)
+    if (noteEl) noteEl.textContent = supporter.profile.note
+    if (barEl) barEl.setAttribute('aria-valuenow', String(supporter.progress))
+    if (fillEl) fillEl.style.width = `${supporter.progress}%`
+  }
+
   function update() {
     const season = get('season')
     if (!season) return
@@ -286,6 +367,8 @@ export function render(container) {
         }
       })
     }
+
+    updateSupporterPanel()
   }
 
   // Show stale indicator when data is old
@@ -311,4 +394,5 @@ export function render(container) {
 
   // Listen for future updates
   on('season', update)
+  on('supporterScore', updateSupporterPanel)
 }

@@ -235,6 +235,16 @@ describe('score-card', () => {
       expect(badge).not.toBeNull()
     })
 
+    it('renders supporter score panel', () => {
+      set('season', MOCK_SEASON)
+      set('supporterScore', 42)
+      render(container)
+      const supporter = container.querySelector('.w-score-card__supporter')
+      expect(supporter).not.toBeNull()
+      expect(supporter.textContent).toContain('42')
+      expect(supporter.textContent).toContain('Supporter')
+    })
+
     it('renders match pills', () => {
       set('season', MOCK_SEASON)
       render(container)

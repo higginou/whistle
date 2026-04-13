@@ -6,7 +6,7 @@
   gap: var(--w-space-sm);
   min-height: 48px;
   padding: var(--w-space-sm) var(--w-space-md);
-  background: var(--w-color-surface-elevated);
+  background: color-mix(in srgb, var(--w-color-surface-elevated) 92%, #ffffff 8%);
   color: var(--w-color-text-primary);
   touch-action: manipulation;
   cursor: pointer;
@@ -16,7 +16,7 @@
 .w-rank-row--favorite {
   background: color-mix(
     in srgb,
-    var(--w-color-europe-bg) 50%,
+    var(--w-color-europe-bg) 58%,
     var(--w-color-surface-elevated)
   );
   border-left: 4px solid var(--w-color-primary);
@@ -46,7 +46,7 @@
   justify-content: center;
   font-size: 11px;
   font-weight: 700;
-  color: #fff;
+  color: #111827;
   flex-shrink: 0;
 }
 
@@ -112,12 +112,12 @@
 }
 
 .w-rank-row__pill--up {
-  background: rgba(22, 163, 74, 0.15);
+  background: rgba(42, 214, 200, 0.14);
   color: var(--w-color-success);
 }
 
 .w-rank-row__pill--down {
-  background: rgba(220, 38, 38, 0.15);
+  background: rgba(239, 118, 118, 0.16);
   color: var(--w-color-danger);
 }
 

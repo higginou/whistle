@@ -20,18 +20,18 @@
 
 /* Full gradient backgrounds per type */
 .w-achievement--prediction {
-  background: linear-gradient(135deg, #d97706 0%, #f59e0b 40%, #fbbf24 100%);
-  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.25), var(--w-shadow-card);
+  background: linear-gradient(135deg, #a16207 0%, #f59e0b 45%, #f5c84c 100%);
+  box-shadow: 0 14px 26px rgba(245, 200, 76, 0.18), var(--w-shadow-card);
 }
 
 .w-achievement--explication {
-  background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 40%, #8b5cf6 100%);
-  box-shadow: 0 4px 16px rgba(109, 40, 217, 0.25), var(--w-shadow-card);
+  background: linear-gradient(135deg, #0f172a 0%, #1d2b4b 50%, #7c3aed 100%);
+  box-shadow: 0 14px 26px rgba(124, 58, 237, 0.2), var(--w-shadow-card);
 }
 
 .w-achievement--surprise {
-  background: linear-gradient(135deg, #c2410c 0%, #ea580c 40%, #f97316 100%);
-  box-shadow: 0 4px 16px rgba(249, 115, 22, 0.25), var(--w-shadow-card);
+  background: linear-gradient(135deg, #7c2d12 0%, #ea580c 48%, #fb923c 100%);
+  box-shadow: 0 14px 26px rgba(249, 115, 22, 0.2), var(--w-shadow-card);
 }
 
 /* Decorative circles */
@@ -69,7 +69,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.16);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   border: 2px solid rgba(255, 255, 255, 0.25);
@@ -94,7 +94,7 @@
 
 .w-achievement__description {
   font-size: var(--w-text-caption);
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.8);
   line-height: 1.4;
 }
 

@@ -1,0 +1,154 @@
+<h2>Design final — Pill combinée partout</h2>
+<p class="subtitle">Projection (avec delta) vs autres onglets (sans delta). Valide si ça te convient.</p>
+
+<style>
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 14px;
+    background: #2e1a55;
+    color: #ededef;
+    font-family: system-ui, -apple-system, sans-serif;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .row:first-child { border-radius: 8px 8px 0 0; }
+  .row:last-child { border-radius: 0 0 8px 8px; border-bottom: none; }
+  .row--fav {
+    border-left: 4px solid #6d28d9;
+    background: linear-gradient(90deg, rgba(109,40,217,0.15), #2e1a55);
+  }
+  .pos { font-size: 16px; font-weight: 700; min-width: 1.5rem; text-align: center; color: #8a8f98; }
+  .logo {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .info { flex: 1; min-width: 0; }
+  .name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .name--fav { color: #c084fc; }
+  .pts { font-size: 14px; font-weight: 700; min-width: 2rem; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 3px;
+    padding: 2px 8px; border-radius: 10px;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+  }
+  .pill--up { background: rgba(22,163,74,0.15); color: #16a34a; }
+  .pill--down { background: rgba(220,38,38,0.15); color: #dc2626; }
+  .pill--stable { background: rgba(138,143,152,0.1); color: #8a8f98; }
+  .pill .arrow { font-size: 10px; }
+
+  .ctx-label {
+    margin: 28px 0 8px;
+    font-size: 11px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: #c084fc;
+  }
+  .ctx-label:first-of-type { margin-top: 12px; }
+  .ctx-desc {
+    font-size: 12px; color: #8a8f98; margin-bottom: 10px;
+  }
+</style>
+
+<div class="ctx-label">Onglet Projection</div>
+<div class="ctx-desc">Pill combinée : flèche + delta numérique</div>
+
+<div>
+  <div class="row">
+    <span class="pos">1</span>
+    <span class="logo" style="background:#c41e3a;">ST</span>
+    <div class="info"><span class="name">Toulouse</span></div>
+    <span class="pts">68</span>
+    <span class="pill pill--stable"><span class="arrow">=</span></span>
+  </div>
+  <div class="row">
+    <span class="pos">2</span>
+    <span class="logo" style="background:#5a2d82;">UB</span>
+    <div class="info"><span class="name">Bordeaux-Bègles</span></div>
+    <span class="pts">62</span>
+    <span class="pill pill--up"><span class="arrow">&#8593;</span>+1</span>
+  </div>
+  <div class="row row--fav">
+    <span class="pos">3</span>
+    <span class="logo" style="background:#ffd700;">LR</span>
+    <div class="info"><span class="name name--fav">La Rochelle</span></div>
+    <span class="pts">58</span>
+    <span class="pill pill--up"><span class="arrow">&#8593;</span>+2</span>
+  </div>
+  <div class="row">
+    <span class="pos">4</span>
+    <span class="logo" style="background:#1e3a5f;">R9</span>
+    <div class="info"><span class="name">Racing 92</span></div>
+    <span class="pts">55</span>
+    <span class="pill pill--down"><span class="arrow">&#8595;</span>-2</span>
+  </div>
+  <div class="row">
+    <span class="pos">5</span>
+    <span class="logo" style="background:#cc0000;">RC</span>
+    <div class="info"><span class="name">Toulon</span></div>
+    <span class="pts">51</span>
+    <span class="pill pill--down"><span class="arrow">&#8595;</span>-1</span>
+  </div>
+</div>
+
+<div class="ctx-label" style="margin-top:36px;">Autres onglets (Oracle, Duels, etc.)</div>
+<div class="ctx-desc">Pill simple : flèche tendance seule, sans chiffre</div>
+
+<div>
+  <div class="row">
+    <span class="pos">1</span>
+    <span class="logo" style="background:#c41e3a;">ST</span>
+    <div class="info"><span class="name">Toulouse</span></div>
+    <span class="pts">68</span>
+    <span class="pill pill--stable"><span class="arrow">=</span></span>
+  </div>
+  <div class="row">
+    <span class="pos">2</span>
+    <span class="logo" style="background:#5a2d82;">UB</span>
+    <div class="info"><span class="name">Bordeaux-Bègles</span></div>
+    <span class="pts">62</span>
+    <span class="pill pill--up"><span class="arrow">&#8593;</span></span>
+  </div>
+  <div class="row row--fav">
+    <span class="pos">3</span>
+    <span class="logo" style="background:#ffd700;">LR</span>
+    <div class="info"><span class="name name--fav">La Rochelle</span></div>
+    <span class="pts">58</span>
+    <span class="pill pill--up"><span class="arrow">&#8593;</span></span>
+  </div>
+  <div class="row">
+    <span class="pos">4</span>
+    <span class="logo" style="background:#1e3a5f;">R9</span>
+    <div class="info"><span class="name">Racing 92</span></div>
+    <span class="pts">55</span>
+    <span class="pill pill--down"><span class="arrow">&#8595;</span></span>
+  </div>
+  <div class="row">
+    <span class="pos">5</span>
+    <span class="logo" style="background:#cc0000;">RC</span>
+    <div class="info"><span class="name">Toulon</span></div>
+    <span class="pts">51</span>
+    <span class="pill pill--down"><span class="arrow">&#8595;</span></span>
+  </div>
+</div>
+
+<div style="margin-top: 32px;">
+  <div class="options">
+    <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+      <div class="letter">&#10003;</div>
+      <div class="content">
+        <h3>C'est bon, on valide</h3>
+        <p>Ce design me convient, on passe à l'implémentation</p>
+      </div>
+    </div>
+    <div class="option" data-choice="tweak" onclick="toggleSelect(this)">
+      <div class="letter">&#9998;</div>
+      <div class="content">
+        <h3>Ajustements nécessaires</h3>
+        <p>Je veux modifier quelque chose (dis-moi quoi dans le terminal)</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epic 7.2 - Hero Variant C</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0b0a10;
+    --surface: #15131c;
+    --violet: #7c3aed;
+    --gold: #f5c84c;
+    --mint: #22c55e;
+    --muted: #a89cb8;
+    --text: #f3eef8;
+    --line: rgba(255,255,255,0.08);
+    --font: 'Nunito', sans-serif;
+  }
+  body {
+    font-family: var(--font);
+    background:
+      radial-gradient(circle at 50% -10%, rgba(124,58,237,0.2), transparent 28%),
+      radial-gradient(circle at 12% 10%, rgba(245,200,76,0.12), transparent 18%),
+      linear-gradient(180deg, #09070d, var(--bg));
+    color: var(--text);
+    min-height: 100dvh;
+    display: flex; justify-content: center; -webkit-font-smoothing: antialiased;
+  }
+  .shell { width: min(430px, 100%); padding: 18px 16px 28px; }
+  .hero {
+    position: relative; overflow: hidden; padding: 18px; border-radius: 32px;
+    background: linear-gradient(135deg, rgba(124,58,237,0.18), rgba(245,200,76,0.1)), var(--surface);
+    border: 1px solid rgba(124,58,237,0.24);
+    box-shadow: 0 28px 64px rgba(0,0,0,0.42);
+  }
+  .hero::after {
+    content: ''; position: absolute; inset: auto -40px -50px auto; width: 180px; height: 180px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%);
+  }
+  .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .badge {
+    padding: 7px 12px; border-radius: 999px; border: 1px solid rgba(124,58,237,0.22);
+    background: rgba(124,58,237,0.14); color: #d8caff; font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .crest {
+    width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; font-weight: 800;
+    background: linear-gradient(135deg, var(--gold), #fff4c6); color: #1b1427;
+  }
+  .title { font-size: 30px; line-height: 0.98; font-weight: 800; max-width: 10ch; }
+  .copy { margin-top: 10px; font-size: 14px; line-height: 1.5; color: var(--muted); max-width: 28ch; }
+  .trophy {
+    margin-top: 16px; padding: 14px; border-radius: 22px; border: 1px solid var(--line); background: rgba(255,255,255,0.04);
+    display: flex; gap: 12px; align-items: center;
+  }
+  .trophy__icon {
+    width: 56px; height: 56px; border-radius: 18px; display: grid; place-items: center; font-size: 26px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.14), rgba(255,255,255,0.04));
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .trophy__title { font-size: 16px; font-weight: 800; }
+  .trophy__desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .stats { margin-top: 12px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .stat {
+    min-height: 74px; padding: 12px; border-radius: 18px; background: rgba(255,255,255,0.03); border: 1px solid var(--line);
+  }
+  .stat__label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .stat__value { margin-top: 5px; font-size: 20px; font-weight: 800; }
+  .stat__value--accent { color: var(--gold); }
+  .stat__value--green { color: var(--mint); }
+</style>
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="top">
+        <div class="badge">Tribune / collector</div>
+        <div class="crest">SR</div>
+      </div>
+      <h1 class="title">Une entree plus glorieuse.</h1>
+      <p class="copy">Le hero devient une piece a collectionner: plus de contraste, plus de presence, plus de motivation.</p>
+
+      <article class="trophy">
+        <div class="trophy__icon">🏆</div>
+        <div>
+          <div class="trophy__title">Supporter niveau 18</div>
+          <div class="trophy__desc">Oracle de Deflandre - 420 XP avant le prochain titre.</div>
+        </div>
+      </article>
+
+      <div class="stats">
+        <article class="stat"><div class="stat__label">Score</div><div class="stat__value stat__value--accent">1840</div></article>
+        <article class="stat"><div class="stat__label">Streak</div><div class="stat__value stat__value--green">7</div></article>
+        <article class="stat"><div class="stat__label">Etat</div><div class="stat__value">Go</div></article>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

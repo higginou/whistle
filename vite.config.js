@@ -103,5 +103,10 @@ export default defineConfig(async () => {
   return {
     base: '/whistle/',
     plugins,
+    test: {
+      alias: {
+        'virtual:pwa-register': new URL('./__mocks__/virtual-pwa-register.js', import.meta.url).pathname,
+      },
+    },
   }
 })

@@ -1,0 +1,331 @@
+<h2>Structure de la Bottom Nav</h2>
+<p class="subtitle">Quelle approche pour gérer les 6 onglets ?</p>
+
+<style>
+  .phone-frame {
+    background: #0a0a0f;
+    border-radius: 28px;
+    border: 2px solid rgba(255,255,255,0.12);
+    overflow: hidden;
+    width: 200px;
+    height: 360px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05);
+    flex-shrink: 0;
+  }
+  .phone-screen {
+    flex: 1;
+    background: linear-gradient(180deg, #0d0d14 0%, #080810 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.15);
+    font-size: 11px;
+    font-style: italic;
+    letter-spacing: 0.05em;
+  }
+  .bottom-nav {
+    background: rgba(10,10,15,0.95);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 8px 4px 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    backdrop-filter: blur(20px);
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    flex: 1;
+  }
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+  .nav-icon.active {
+    background: rgba(139, 92, 246, 0.25);
+  }
+  .nav-label {
+    font-size: 8px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.03em;
+    font-family: sans-serif;
+  }
+  .nav-label.active {
+    color: #a78bfa;
+    font-weight: 600;
+  }
+  .nav-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: #7c3aed;
+    margin-top: 1px;
+  }
+  .badge-corner {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(139, 92, 246, 0.2);
+    border: 1px solid rgba(139, 92, 246, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+  }
+  .phone-screen-inner {
+    width: 100%;
+    padding: 10px 8px 6px;
+    position: relative;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  .screen-header {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .screen-title {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    font-family: sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .screen-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 32px 8px 8px;
+  }
+  .screen-line {
+    height: 7px;
+    border-radius: 4px;
+    background: rgba(255,255,255,0.06);
+  }
+  .screen-line.highlight {
+    background: rgba(139, 92, 246, 0.2);
+    width: 60%;
+  }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 9px;
+    font-family: sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .tag-green { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+  .tag-yellow { background: rgba(251,191,36,0.15); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+  .tag-red { background: rgba(248,113,113,0.15); color: #f87171; border: 1px solid rgba(248,113,113,0.3); }
+  .phones-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 12px 0;
+  }
+  .option-label {
+    font-size: 11px;
+    font-family: sans-serif;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    margin-top: 8px;
+    letter-spacing: 0.04em;
+  }
+  .option-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+  }
+  .verdict-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+</style>
+
+<div class="options">
+
+  <!-- Option A: 5 tabs, Classements+Projection merged -->
+  <div class="option" data-choice="a" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>5 onglets — Classements absorbe Projection</h3>
+      <p>La projection se déclenche depuis le Classement (comme aujourd'hui). Donjon, Duels, Oracle, Succès sont les 4 autres.</p>
+      <div class="phones-row" style="pointer-events:none">
+        <div>
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="screen-lines" style="width:100%">
+                <div class="screen-line highlight"></div>
+                <div class="screen-line"></div>
+                <div class="screen-line"></div>
+                <div class="screen-line"></div>
+                <div class="screen-line"></div>
+                <div class="screen-line" style="width:80%"></div>
+              </div>
+            </div>
+            <div class="bottom-nav">
+              <div class="nav-item">
+                <div class="nav-icon active">🏆</div>
+                <div class="nav-label active">Classement</div>
+                <div class="nav-dot"></div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon">⚔️</div>
+                <div class="nav-label">Duels</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon">🏰</div>
+                <div class="nav-label">Donjon</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon">🔮</div>
+                <div class="nav-label">Oracle</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon">🎖️</div>
+                <div class="nav-label">Succès</div>
+              </div>
+            </div>
+          </div>
+          <div class="verdict-row">
+            <span class="tag tag-green">✓ Max 5 (règle UX)</span>
+            <span class="tag tag-green">✓ Logique narrative</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option B: 6 tabs -->
+  <div class="option" data-choice="b" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>6 onglets — Tous visibles, icônes compactes</h3>
+      <p>Classements, Projection, Duels, Donjon, Oracle, Succès. Labels courts, icônes plus petites. Brise la règle des 5 mais reste utilisable.</p>
+      <div class="phones-row" style="pointer-events:none">
+        <div>
+          <div class="phone-frame">
+            <div class="phone-screen">
+              <div class="screen-lines" style="width:100%">
+                <div class="screen-line highlight"></div>
+                <div class="screen-line"></div>
+                <div class="screen-line"></div>
+                <div class="screen-line"></div>
+                <div class="screen-line"></div>
+                <div class="screen-line" style="width:80%"></div>
+              </div>
+            </div>
+            <div class="bottom-nav" style="padding: 6px 2px 8px;">
+              <div class="nav-item">
+                <div class="nav-icon active" style="width:18px;height:18px;font-size:11px">🏆</div>
+                <div class="nav-label active" style="font-size:7px">Classement</div>
+                <div class="nav-dot"></div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon" style="width:18px;height:18px;font-size:11px">📡</div>
+                <div class="nav-label" style="font-size:7px">Projection</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon" style="width:18px;height:18px;font-size:11px">⚔️</div>
+                <div class="nav-label" style="font-size:7px">Duels</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon" style="width:18px;height:18px;font-size:11px">🏰</div>
+                <div class="nav-label" style="font-size:7px">Donjon</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon" style="width:18px;height:18px;font-size:11px">🔮</div>
+                <div class="nav-label" style="font-size:7px">Oracle</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon" style="width:18px;height:18px;font-size:11px">🎖️</div>
+                <div class="nav-label" style="font-size:7px">Succès</div>
+              </div>
+            </div>
+          </div>
+          <div class="verdict-row">
+            <span class="tag tag-yellow">⚠ Règle brisée</span>
+            <span class="tag tag-yellow">⚠ Serré sur 375px</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option C: 5 tabs, Succès dans coin header -->
+  <div class="option" data-choice="c" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>5 onglets + Succès en icône header</h3>
+      <p>Classements, Projection, Duels, Donjon, Oracle en bottom nav. Succès accessible via une icône trophée dans le header (style profil/récompenses).</p>
+      <div class="phones-row" style="pointer-events:none">
+        <div>
+          <div class="phone-frame" style="position:relative">
+            <div class="phone-screen" style="position:relative">
+              <div style="position:absolute;top:8px;right:10px;width:26px;height:26px;border-radius:50%;background:rgba(139,92,246,0.2);border:1px solid rgba(139,92,246,0.35);display:flex;align-items:center;justify-content:center;font-size:12px">🎖️</div>
+              <div class="screen-lines" style="width:100%;padding-top:40px">
+                <div class="screen-line highlight"></div>
+                <div class="screen-line"></div>
+                <div class="screen-line"></div>
+                <div class="screen-line"></div>
+              </div>
+            </div>
+            <div class="bottom-nav">
+              <div class="nav-item">
+                <div class="nav-icon active">🏆</div>
+                <div class="nav-label active">Classement</div>
+                <div class="nav-dot"></div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon">📡</div>
+                <div class="nav-label">Projection</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon">⚔️</div>
+                <div class="nav-label">Duels</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon">🏰</div>
+                <div class="nav-label">Donjon</div>
+              </div>
+              <div class="nav-item">
+                <div class="nav-icon">🔮</div>
+                <div class="nav-label">Oracle</div>
+              </div>
+            </div>
+          </div>
+          <div class="verdict-row">
+            <span class="tag tag-green">✓ Max 5 nav</span>
+            <span class="tag tag-red">✗ Succès moins visible</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

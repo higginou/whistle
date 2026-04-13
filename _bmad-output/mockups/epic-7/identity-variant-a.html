@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epic 7.1 - Identity Variant A</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #090712;
+    --surface: #12101d;
+    --surface-2: #181529;
+    --gold: #f5c84c;
+    --gold-soft: rgba(245, 200, 76, 0.14);
+    --violet: #7c3aed;
+    --violet-soft: rgba(124, 58, 237, 0.12);
+    --text: #f4f1f8;
+    --muted: #a59bb4;
+    --line: rgba(255, 255, 255, 0.08);
+    --line-strong: rgba(245, 200, 76, 0.2);
+    --accent: #d8b45d;
+    --green: #22c55e;
+    --red: #ef4444;
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --font: 'Nunito', sans-serif;
+  }
+  body {
+    font-family: var(--font);
+    background:
+      radial-gradient(circle at top, rgba(245, 200, 76, 0.08), transparent 34%),
+      radial-gradient(circle at 80% 10%, rgba(124, 58, 237, 0.18), transparent 26%),
+      var(--bg);
+    color: var(--text);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+  }
+  .shell {
+    width: min(430px, 100%);
+    padding: 18px 16px 28px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+  }
+  .brand__left { display: flex; align-items: center; gap: 10px; }
+  .crest {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), #fff4bf);
+    color: #1b1427; display: grid; place-items: center; font-weight: 800;
+    box-shadow: 0 0 24px rgba(245, 200, 76, 0.25);
+  }
+  .brand__title { font-size: 13px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+  .brand__meta { font-size: 11px; color: var(--muted); }
+
+  .hero {
+    position: relative;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-xl);
+    padding: 16px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.05), transparent 36%),
+      linear-gradient(135deg, rgba(245, 200, 76, 0.08), rgba(124, 58, 237, 0.08)),
+      var(--surface);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+    overflow: hidden;
+  }
+  .hero::before,
+  .hero::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero::before { width: 180px; height: 180px; right: -60px; top: -40px; background: radial-gradient(circle, rgba(245,200,76,0.14), transparent 70%); }
+  .hero::after { width: 140px; height: 140px; left: -40px; bottom: -60px; background: radial-gradient(circle, rgba(124,58,237,0.14), transparent 70%); }
+  .hero__eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 10px; border-radius: 999px; background: var(--gold-soft);
+    color: var(--gold); font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .hero__title { font-size: 28px; line-height: 0.95; font-weight: 800; max-width: 12ch; }
+  .hero__subtitle { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.5; max-width: 28ch; }
+  .hero__score {
+    margin-top: 16px; padding: 14px; border-radius: var(--radius-lg);
+    background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+    display: grid; gap: 10px;
+  }
+  .scoreline { display: flex; align-items: end; justify-content: space-between; gap: 12px; }
+  .scoreline__value { font-size: 42px; font-weight: 800; line-height: 1; color: var(--text); }
+  .scoreline__label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+  .scoreline__badge {
+    font-size: 11px; font-weight: 800; padding: 6px 10px; border-radius: 999px;
+    background: rgba(34, 197, 94, 0.12); color: var(--green);
+  }
+  .bars { display: grid; gap: 8px; }
+  .bar { height: 10px; border-radius: 999px; background: rgba(255,255,255,0.06); overflow: hidden; }
+  .bar > span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--gold), #ffffff); width: 72%; }
+  .bar:nth-child(2) > span { width: 56%; background: linear-gradient(90deg, var(--violet), #b58cff); }
+
+  .grid { display: grid; gap: 12px; margin-top: 14px; }
+  .card {
+    border-radius: var(--radius-lg); padding: 14px; border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  }
+  .card__title { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+  .achievement {
+    display: flex; gap: 12px; align-items: center;
+    background: linear-gradient(135deg, rgba(124,58,237,0.14), rgba(245,200,76,0.12));
+  }
+  .achievement__icon {
+    width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; flex: 0 0 auto;
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); font-size: 22px;
+  }
+  .achievement__name { font-size: 16px; font-weight: 800; }
+  .achievement__desc { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .empty {
+    display: flex; align-items: center; gap: 12px; background: rgba(255,255,255,0.03);
+  }
+  .empty__art {
+    width: 54px; height: 54px; border-radius: 18px; background: radial-gradient(circle at 30% 30%, rgba(245,200,76,0.18), rgba(124,58,237,0.1));
+    display: grid; place-items: center; font-size: 24px;
+  }
+  .empty__title { font-size: 15px; font-weight: 800; }
+  .empty__desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .nav {
+    margin-top: 14px; padding: 10px; border-radius: 18px; background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
+  }
+  .nav__item {
+    min-height: 54px; border-radius: 14px; border: 1px solid transparent; background: rgba(255,255,255,0.03);
+    display: grid; place-items: center; gap: 3px; text-align: center; padding: 6px 4px; color: var(--muted);
+  }
+  .nav__item--active { background: rgba(245,200,76,0.1); border-color: rgba(245,200,76,0.22); color: var(--text); }
+  .nav__icon { font-size: 18px; }
+  .nav__label { font-size: 10px; font-weight: 700; }
+  .legend { margin-top: 12px; font-size: 11px; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+  <main class="shell">
+    <header class="brand">
+      <div class="brand__left"><div class="crest">SR</div><div><div class="brand__title">Whistle</div><div class="brand__meta">State rochelaise</div></div></div>
+      <div class="brand__meta">Lundi / 20h12</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero__eyebrow">Stade Rochelais</div>
+      <h1 class="hero__title">Le match commence avant le match.</h1>
+      <p class="hero__subtitle">Une interface plus noble, plus chaude, plus personnelle. La Rochelle au centre, le reste en soutien.</p>
+
+      <div class="hero__score">
+        <div class="scoreline">
+          <div>
+            <div class="scoreline__label">Score supporter</div>
+            <div class="scoreline__value">1840</div>
+          </div>
+          <div class="scoreline__badge">+42 aujourd'hui</div>
+        </div>
+        <div class="bars">
+          <div class="bar"><span></span></div>
+          <div class="bar"><span></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card achievement">
+        <div class="achievement__icon">🏆</div>
+        <div>
+          <div class="card__title">Achievement</div>
+          <div class="achievement__name">Le modele a vu juste</div>
+          <div class="achievement__desc">3/4 predictions correctes sur la derniere journee.</div>
+        </div>
+      </article>
+
+      <article class="card empty">
+        <div class="empty__art">🌊</div>
+        <div>
+          <div class="card__title">Etat du cache</div>
+          <div class="empty__title">Les donnees arrivent lundi</div>
+          <div class="empty__desc">Meme vide, l'app doit rester noble et lisible.</div>
+        </div>
+      </article>
+    </section>
+
+    <nav class="nav" aria-label="Navigation principale">
+      <div class="nav__item nav__item--active"><div class="nav__icon">1</div><div class="nav__label">Classement</div></div>
+      <div class="nav__item"><div class="nav__icon">2</div><div class="nav__label">Projection</div></div>
+      <div class="nav__item"><div class="nav__icon">3</div><div class="nav__label">Duels</div></div>
+      <div class="nav__item"><div class="nav__icon">4</div><div class="nav__label">Donjon</div></div>
+      <div class="nav__item"><div class="nav__icon">5</div><div class="nav__label">Oracle</div></div>
+      <div class="nav__item"><div class="nav__icon">6</div><div class="nav__label">Simul.</div></div>
+    </nav>
+
+    <p class="legend">Variant A: sombre premium, accent or, cartes profondes.</p>
+  </main>
+</body>
+</html>

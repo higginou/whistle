@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Epic 7.1 - Identity Variant B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0c1420;
+    --surface: #142235;
+    --surface-2: #1b2b42;
+    --cream: #f5efe1;
+    --cream-soft: rgba(245, 239, 225, 0.1);
+    --marine: #2c6cff;
+    --teal: #2ad6c8;
+    --gold: #f4c95d;
+    --text: #eef4fb;
+    --muted: #a9b8cb;
+    --line: rgba(255, 255, 255, 0.1);
+    --line-strong: rgba(42, 214, 200, 0.18);
+    --radius-xl: 28px;
+    --radius-lg: 20px;
+    --radius-md: 16px;
+    --font: 'Nunito', sans-serif;
+  }
+  body {
+    font-family: var(--font);
+    background:
+      radial-gradient(circle at top left, rgba(42, 214, 200, 0.18), transparent 24%),
+      radial-gradient(circle at 90% 8%, rgba(244, 201, 93, 0.12), transparent 22%),
+      linear-gradient(180deg, #08111b, var(--bg));
+    color: var(--text);
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+  }
+  .shell { width: min(430px, 100%); padding: 18px 16px 28px; }
+  .topline {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;
+    color: var(--muted); font-size: 12px;
+  }
+  .hero {
+    padding: 18px; border-radius: var(--radius-xl); border: 1px solid var(--line-strong);
+    background: linear-gradient(135deg, rgba(42,214,200,0.12), rgba(44,108,255,0.12)), var(--surface);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+  }
+  .hero__crest {
+    width: 44px; height: 44px; border-radius: 14px; display: grid; place-items: center;
+    background: linear-gradient(135deg, var(--gold), #fff2bc); color: #1c273a; font-weight: 800; margin-bottom: 12px;
+  }
+  .hero__kicker {
+    display: inline-flex; gap: 8px; align-items: center; padding: 6px 10px; border-radius: 999px;
+    background: var(--cream-soft); color: var(--cream); font-size: 11px; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+  }
+  .hero__title { margin-top: 12px; font-size: 26px; line-height: 1; font-weight: 800; }
+  .hero__copy { margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+  .data {
+    margin-top: 16px; display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 12px;
+  }
+  .panel {
+    padding: 14px; border-radius: var(--radius-lg); border: 1px solid var(--line);
+    background: rgba(255,255,255,0.04);
+  }
+  .panel__label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; }
+  .panel__value { margin-top: 6px; font-size: 34px; font-weight: 800; }
+  .panel__meta { margin-top: 4px; font-size: 12px; color: var(--muted); }
+  .progress { margin-top: 10px; height: 12px; border-radius: 999px; background: rgba(255,255,255,0.06); overflow: hidden; }
+  .progress > span { display: block; height: 100%; width: 64%; background: linear-gradient(90deg, var(--teal), var(--marine)); }
+  .timeline {
+    margin-top: 12px; display: grid; gap: 10px;
+  }
+  .step {
+    display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+  }
+  .step__bullet {
+    width: 12px; height: 12px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 20px rgba(42,214,200,0.3);
+  }
+  .step__text { flex: 1; }
+  .step__title { font-size: 14px; font-weight: 800; }
+  .step__desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .card {
+    margin-top: 12px; padding: 14px; border-radius: var(--radius-lg); border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  }
+  .card__row { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+  .card__title { font-size: 15px; font-weight: 800; }
+  .card__tag { font-size: 11px; font-weight: 800; color: var(--teal); text-transform: uppercase; letter-spacing: 0.1em; }
+  .nav {
+    margin-top: 14px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  }
+  .pill {
+    min-height: 54px; display: grid; place-items: center; border-radius: 16px; padding: 8px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+    color: var(--muted); text-align: center;
+  }
+  .pill--active { background: rgba(42,214,200,0.12); border-color: rgba(42,214,200,0.2); color: var(--text); }
+  .pill__icon { font-size: 18px; }
+  .pill__label { margin-top: 3px; font-size: 10px; font-weight: 700; }
+</style>
+</head>
+<body>
+  <main class="shell">
+    <div class="topline"><span>Whistle / Identity system</span><span>Variant B</span></div>
+
+    <section class="hero">
+      <div class="hero__crest">SR</div>
+      <div class="hero__kicker">Marine / or / nuit</div>
+      <h1 class="hero__title">La Rochelle d'abord, le reste ensuite.</h1>
+      <p class="hero__copy">Une direction plus lumineuse mais toujours sportive, avec des surfaces claires et une hiérarchie visuelle plus lisible.</p>
+
+      <div class="data">
+        <article class="panel">
+          <div class="panel__label">Supporter score</div>
+          <div class="panel__value">1840</div>
+          <div class="progress"><span></span></div>
+        </article>
+        <article class="panel">
+          <div class="panel__label">Etat</div>
+          <div class="panel__value" style="font-size: 24px; line-height: 1.1;">En chasse</div>
+          <div class="panel__meta">Direction top 6</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="timeline">
+      <article class="step">
+        <div class="step__bullet"></div>
+        <div class="step__text"><div class="step__title">Journée charniere</div><div class="step__desc">La saison prend une direction nette.</div></div>
+      </article>
+      <article class="step">
+        <div class="step__bullet" style="background: var(--gold); box-shadow: 0 0 20px rgba(244,201,93,0.25);"></div>
+        <div class="step__text"><div class="step__title">Le modele se montre juste</div><div class="step__desc">Signal de confiance pour la suite.</div></div>
+      </article>
+    </section>
+
+    <article class="card">
+      <div class="card__row">
+        <div>
+          <div class="card__tag">Achievement</div>
+          <div class="card__title">Vision juste</div>
+        </div>
+        <div style="font-size: 24px;">🏅</div>
+      </div>
+    </article>
+
+    <nav class="nav" aria-label="Navigation principale">
+      <div class="pill pill--active"><div class="pill__icon">1</div><div class="pill__label">Classement</div></div>
+      <div class="pill"><div class="pill__icon">2</div><div class="pill__label">Oracle</div></div>
+      <div class="pill"><div class="pill__icon">3</div><div class="pill__label">Simul.</div></div>
+    </nav>
+  </main>
+</body>
+</html>

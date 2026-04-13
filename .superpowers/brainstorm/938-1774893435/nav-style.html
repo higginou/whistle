@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whistle — Nav Bar Style</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #010102;
+    color: #EDEDEF;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    padding: 32px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  .section-title {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: #6d7280;
+    text-align: center; margin-bottom: 20px;
+  }
+
+  /* ── Phone mockup ── */
+  .phone {
+    width: 320px;
+    height: 580px;
+    background: linear-gradient(180deg, #0d0d16 0%, #050508 100%);
+    border-radius: 36px;
+    border: 1.5px solid rgba(255,255,255,0.1);
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.04),
+      0 24px 64px rgba(0,0,0,0.7),
+      0 0 80px rgba(124,58,237,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* Status bar */
+  .status-bar {
+    padding: 12px 20px 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .status-time { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7); }
+  .status-icons { display: flex; gap: 5px; align-items: center; }
+  .status-dot { width: 14px; height: 7px; border-radius: 2px; background: rgba(255,255,255,0.3); }
+  .status-dot.signal { width: 12px; }
+  .status-dot.battery { width: 18px; }
+
+  /* App header */
+  .app-header {
+    padding: 6px 20px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .app-logo { font-size: 16px; font-weight: 800; letter-spacing: 0.12em; color: #a78bfa; text-transform: uppercase; }
+  .header-icon {
+    width: 34px; height: 34px;
+    border-radius: 10px;
+    background: rgba(139,92,246,0.12);
+    border: 1px solid rgba(139,92,246,0.25);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .header-icon svg { width: 16px; height: 16px; stroke: #a78bfa; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .header-badge {
+    position: absolute; top: -4px; right: -4px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #7c3aed;
+    border: 2px solid #050508;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 7px; font-weight: 800; color: #fff;
+  }
+
+  /* Screen content */
+  .screen-content {
+    flex: 1;
+    overflow: hidden;
+    padding: 0 16px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Hero card */
+  .hero-card {
+    background: linear-gradient(135deg, rgba(124,58,237,0.18) 0%, rgba(139,92,246,0.08) 100%);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-badge {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(139,92,246,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .hero-text {}
+  .hero-name { font-size: 13px; font-weight: 700; color: #c4b5fd; letter-spacing: 0.04em; }
+  .hero-rank { font-size: 11px; color: #8A8F98; margin-top: 2px; }
+  .hero-rank span { color: #34d399; font-weight: 600; }
+
+  /* Mini standings */
+  .standings-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #4b5563; }
+  .standing-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 6px 8px; border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .rank-num { font-size: 10px; font-weight: 700; color: #6d7280; width: 14px; text-align: center; }
+  .team-name { font-size: 11px; color: #c4c9d4; flex: 1; }
+  .team-name.fav { color: #a78bfa; font-weight: 700; }
+  .conf-bar-wrap { width: 32px; height: 3px; background: rgba(255,255,255,0.08); border-radius: 2px; }
+  .conf-bar { height: 100%; border-radius: 2px; background: #34d399; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    background: rgba(5,5,8,0.92);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 10px 8px 14px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-shrink: 0;
+    backdrop-filter: blur(20px);
+    position: relative;
+  }
+  .bottom-nav::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
+  }
+
+  .nav-item {
+    display: flex; flex-direction: column;
+    align-items: center; gap: 4px;
+    flex: 1; cursor: pointer;
+    position: relative;
+    padding: 2px 0;
+  }
+  .nav-icon-wrap {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .nav-item.active .nav-icon-wrap {
+    background: rgba(139,92,246,0.2);
+  }
+  .nav-glow {
+    position: absolute;
+    bottom: -6px; left: 50%; transform: translateX(-50%);
+    width: 20px; height: 3px;
+    border-radius: 2px;
+    background: #7c3aed;
+    box-shadow: 0 0 8px rgba(124,58,237,0.8), 0 0 16px rgba(124,58,237,0.4);
+    opacity: 0;
+  }
+  .nav-item.active .nav-glow { opacity: 1; }
+  .nav-svg { width: 18px; height: 18px; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+  .nav-item.active .nav-svg { stroke: #a78bfa; }
+  .nav-item:not(.active) .nav-svg { stroke: rgba(255,255,255,0.3); }
+  .nav-label {
+    font-size: 9px; letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.3);
+    font-weight: 500;
+  }
+  .nav-item.active .nav-label {
+    color: #a78bfa; font-weight: 700;
+  }
+
+  /* Variants strip */
+  .variants {
+    display: flex; gap: 20px;
+    justify-content: center;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+  .variant-box { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .variant-label { font-size: 11px; color: #6d7280; text-align: center; }
+
+  /* Mini nav for comparison */
+  .mini-nav {
+    width: 320px;
+    background: rgba(5,5,8,0.95);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 10px 8px 12px;
+    display: flex; justify-content: space-around;
+    position: relative;
+  }
+  .mini-nav::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(139,92,246,0.4), transparent);
+    border-radius: 16px 16px 0 0;
+  }
+</style>
+</head>
+<body>
+
+<div class="section-title">Bottom Nav — Style contemporain gaming dark</div>
+
+<div class="phone">
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="status-time">21:47</span>
+    <div class="status-icons">
+      <div class="status-dot signal"></div>
+      <div class="status-dot"></div>
+      <div class="status-dot battery"></div>
+    </div>
+  </div>
+
+  <!-- App header -->
+  <div class="app-header">
+    <div class="app-logo">Whistle</div>
+    <div class="header-icon">
+      <!-- Trophy SVG -->
+      <svg viewBox="0 0 24 24">
+        <path d="M8 21h8M12 17v4M17 3H7l1 7a4 4 0 008 0l1-7z"/>
+        <path d="M17 3c0 0 2 0 2 3s-2 4-2 4M7 3c0 0-2 0-2 3s2 4 2 4"/>
+      </svg>
+      <div class="header-badge">3</div>
+    </div>
+  </div>
+
+  <!-- Screen content -->
+  <div class="screen-content">
+    <!-- Hero card -->
+    <div class="hero-card">
+      <div class="hero-badge">🌊</div>
+      <div class="hero-text">
+        <div class="hero-name">La Rochelle</div>
+        <div class="hero-rank">#3 actuel · Projeté <span>#2</span> · ↑</div>
+      </div>
+    </div>
+    <!-- Mini standings -->
+    <div class="standings-label">Classement actuel</div>
+    <div class="standing-row">
+      <div class="rank-num">1</div>
+      <div class="team-name">Toulouse</div>
+      <div class="conf-bar-wrap"><div class="conf-bar" style="width:85%"></div></div>
+    </div>
+    <div class="standing-row">
+      <div class="rank-num">2</div>
+      <div class="team-name">Bordeaux</div>
+      <div class="conf-bar-wrap"><div class="conf-bar" style="width:72%;background:#60a5fa"></div></div>
+    </div>
+    <div class="standing-row">
+      <div class="rank-num">3</div>
+      <div class="team-name fav">La Rochelle</div>
+      <div class="conf-bar-wrap"><div class="conf-bar" style="width:68%"></div></div>
+    </div>
+    <div class="standing-row">
+      <div class="rank-num">4</div>
+      <div class="team-name">Leinster</div>
+      <div class="conf-bar-wrap"><div class="conf-bar" style="width:60%;background:#fbbf24"></div></div>
+    </div>
+    <div class="standing-row">
+      <div class="rank-num">5</div>
+      <div class="team-name">Racing 92</div>
+      <div class="conf-bar-wrap"><div class="conf-bar" style="width:45%;background:#fbbf24"></div></div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <!-- Classements (active) -->
+    <div class="nav-item active">
+      <div class="nav-icon-wrap">
+        <svg class="nav-svg" viewBox="0 0 24 24">
+          <rect x="3" y="12" width="4" height="9" rx="1"/><rect x="10" y="7" width="4" height="14" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/>
+        </svg>
+        <div class="nav-glow"></div>
+      </div>
+      <div class="nav-label">Classement</div>
+    </div>
+    <!-- Projection -->
+    <div class="nav-item">
+      <div class="nav-icon-wrap">
+        <svg class="nav-svg" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="3"/><path d="M2 12h3M19 12h3M12 2v3M12 19v3"/><path d="M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/>
+        </svg>
+      </div>
+      <div class="nav-label">Projection</div>
+    </div>
+    <!-- Duels -->
+    <div class="nav-item">
+      <div class="nav-icon-wrap">
+        <svg class="nav-svg" viewBox="0 0 24 24">
+          <path d="M14.5 17.5L3 6V3h3l11.5 11.5"/><path d="M13 19l6-6 2 2-6 6-2-2z"/><path d="M5 19l-2-2 6-6 2 2-6 6z"/><path d="M21 3h-3L6 14.5"/>
+        </svg>
+      </div>
+      <div class="nav-label">Duels</div>
+    </div>
+    <!-- Donjon -->
+    <div class="nav-item">
+      <div class="nav-icon-wrap">
+        <svg class="nav-svg" viewBox="0 0 24 24">
+          <path d="M3 21V9l4-6h10l4 6v12"/><path d="M9 21v-6h6v6"/><path d="M3 9h18"/><rect x="10" y="9" width="4" height="5" rx="1"/>
+        </svg>
+      </div>
+      <div class="nav-label">Donjon</div>
+    </div>
+    <!-- Oracle -->
+    <div class="nav-item">
+      <div class="nav-icon-wrap">
+        <svg class="nav-svg" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 3"/><path d="M9.5 3.5C9.5 3.5 8 7 8 9s1.5 3 4 3 4-1.5 4-3-1.5-5.5-1.5-5.5"/>
+        </svg>
+      </div>
+      <div class="nav-label">Oracle</div>
+    </div>
+  </div>
+</div>
+
+<div style="max-width:360px;text-align:center">
+  <p style="font-size:12px;color:#6d7280;line-height:1.6">
+    Glow violet sous l'onglet actif · Backdrop blur sur la nav · Icône trophée header avec badge · Fond OLED #020203
+  </p>
+</div>
+
+</body>
+</html>

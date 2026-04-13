@@ -4,30 +4,30 @@
 
 :root {
   /* ===== Zone Colors ===== */
-  --w-color-europe: #6d28d9;
-  --w-color-top6: #16a34a;
-  --w-color-mid: #6b7280;
-  --w-color-relegation: #dc2626;
+  --w-color-europe: #7c3aed;
+  --w-color-top6: #0f9d7a;
+  --w-color-mid: #64748b;
+  --w-color-relegation: #d64545;
 
   /* Zone backgrounds (pale) */
-  --w-color-europe-bg: #f3e8ff;
-  --w-color-top6-bg: #dcfce7;
-  --w-color-mid-bg: #f3f4f6;
-  --w-color-relegation-bg: #fef2f2;
+  --w-color-europe-bg: #f5efff;
+  --w-color-top6-bg: #e2fbef;
+  --w-color-mid-bg: #eef2f7;
+  --w-color-relegation-bg: #fff0f0;
 
   /* ===== Functional Palette ===== */
   --w-color-primary: #6d28d9;
-  --w-color-surface: #faf8f5;
-  --w-color-surface-elevated: #ffffff;
-  --w-color-text-primary: #1f2937;
-  --w-color-text-secondary: #6b7280;
-  --w-color-success: #16a34a;
-  --w-color-danger: #dc2626;
+  --w-color-surface: #121826;
+  --w-color-surface-elevated: #182235;
+  --w-color-text-primary: #f5f7fb;
+  --w-color-text-secondary: #9aacc2;
+  --w-color-success: #2ad6c8;
+  --w-color-danger: #ef7676;
 
   /* ===== Confidence Colors ===== */
-  --w-color-confidence-high: #16a34a;
-  --w-color-confidence-mid: #f59e0b;
-  --w-color-confidence-low: #fca5a5;
+  --w-color-confidence-high: #22c55e;
+  --w-color-confidence-mid: #f5c84c;
+  --w-color-confidence-low: #f4a8a8;
 
   /* ===== Spacing (8px grid) ===== */
   --w-space-xs: 0.25rem;
@@ -48,16 +48,16 @@
   /* ===== Radius & Shadow ===== */
   --w-radius-card: 12px;
   --w-radius-button: 14px;
-  --w-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --w-shadow-card: 0 16px 34px rgba(0, 0, 0, 0.24);
 
   /* ===== Dark Palette — Prune Nuit ===== */
-  --w-bg-page:         #130d1f;
-  --w-bg-surface:      #1e1035;
-  --w-bg-elevated:     #2e1a55;
-  --w-accent:          #c084fc;
-  --w-text-primary:    #ededef;
-  --w-text-secondary:  #8a8f98;
-  --w-text-accent:     #e9d5ff;
+  --w-bg-page:         #090712;
+  --w-bg-surface:      #121826;
+  --w-bg-elevated:     #1a2740;
+  --w-accent:          #f5c84c;
+  --w-text-primary:    #f5f7fb;
+  --w-text-secondary:  #9aacc2;
+  --w-text-accent:     #fff4bf;
 
   /* ===== Nav Bar ===== */
   --w-nav-height: 60px;

@@ -1,0 +1,11 @@
+{
+  "planPath": "docs/superpowers/plans/2026-04-08-pill-indicator.md",
+  "tasks": [
+    {"id": 1, "subject": "Task 1: Update CSS — remove old classes, add pill classes", "status": "pending"},
+    {"id": 2, "subject": "Task 2: Update rank-row.js — replace deltaSpan with pill", "status": "pending", "blockedBy": [1]},
+    {"id": 3, "subject": "Task 3: Update tab-projection.js — rewrite renderMovementBadges", "status": "pending", "blockedBy": [2]},
+    {"id": 4, "subject": "Task 4: Update tests", "status": "pending", "blockedBy": [3]},
+    {"id": 5, "subject": "Task 5: Final verification", "status": "pending", "blockedBy": [4]}
+  ],
+  "lastUpdated": "2026-04-08T12:00:00Z"
+}

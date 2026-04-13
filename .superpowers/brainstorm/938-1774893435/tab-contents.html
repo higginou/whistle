@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whistle — Contenu des onglets</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #020203;
+    color: #EDEDEF;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    padding: 24px 16px 40px;
+    min-height: 100vh;
+  }
+  h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #a78bfa; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #8A8F98; margin-bottom: 28px; }
+
+  .tabs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  .tab-card {
+    background: #0a0a0f;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tab-header {
+    padding: 14px 16px 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .tab-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .tab-name { font-size: 15px; font-weight: 700; letter-spacing: 0.04em; }
+  .tab-url { font-size: 11px; color: #8A8F98; font-family: monospace; margin-top: 1px; }
+
+  .tab-body { padding: 14px 16px; flex: 1; }
+  .section-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: #6d7280; margin-bottom: 8px;
+  }
+
+  .content-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 13px; color: #c4c9d4;
+    line-height: 1.4;
+  }
+  .content-item:last-child { border-bottom: none; }
+  .content-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    margin-top: 5px; flex-shrink: 0;
+  }
+  .content-item.existing .content-dot { background: #34d399; }
+  .content-item.moved .content-dot { background: #60a5fa; }
+  .content-item.new .content-dot { background: #f59e0b; }
+  .content-item.placeholder .content-dot { background: #4b5563; }
+
+  .legend {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    margin-bottom: 20px; padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #8A8F98; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  .badge {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.06em;
+    padding: 2px 7px; border-radius: 4px;
+    text-transform: uppercase;
+    margin-left: auto; flex-shrink: 0;
+  }
+  .badge-live { background: rgba(52,211,153,0.15); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+  .badge-phase2 { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.2); }
+  .badge-new { background: rgba(139,92,246,0.15); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+
+  /* Tab color themes */
+  .tab-classements .tab-icon { background: rgba(139,92,246,0.2); }
+  .tab-classements .tab-name { color: #a78bfa; }
+  .tab-projection .tab-icon { background: rgba(96,165,250,0.2); }
+  .tab-projection .tab-name { color: #60a5fa; }
+  .tab-duels .tab-icon { background: rgba(248,113,113,0.2); }
+  .tab-duels .tab-name { color: #f87171; }
+  .tab-donjon .tab-icon { background: rgba(251,146,60,0.2); }
+  .tab-donjon .tab-name { color: #fb923c; }
+  .tab-oracle .tab-icon { background: rgba(52,211,153,0.2); }
+  .tab-oracle .tab-name { color: #34d399; }
+  .tab-succes .tab-icon { background: rgba(251,191,36,0.2); }
+  .tab-succes .tab-name { color: #fbbf24; }
+
+  .placeholder-state {
+    text-align: center; padding: 20px 12px;
+    color: #4b5563; font-size: 13px; line-height: 1.5;
+  }
+  .placeholder-state .lock-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+
+  .tab-note {
+    padding: 10px 16px 14px;
+    font-size: 11px; color: #6d7280; font-style: italic;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+</style>
+</head>
+<body>
+<h1>Whistle — Contenu des onglets</h1>
+<p class="subtitle">Architecture de navigation — Approche B (History API)</p>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div> Existant (déplacé tel quel)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div> Existant (déplacé + adapté)</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div> Nouveau composant</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#4b5563"></div> Placeholder (Phase 2+)</div>
+</div>
+
+<div class="tabs-grid">
+
+  <!-- Classements -->
+  <div class="tab-card tab-classements">
+    <div class="tab-header">
+      <div class="tab-icon">🏆</div>
+      <div>
+        <div class="tab-name">Classements</div>
+        <div class="tab-url">/ (défaut)</div>
+      </div>
+      <span class="badge badge-live">Live</span>
+    </div>
+    <div class="tab-body">
+      <div class="section-label">Contenu</div>
+      <div class="content-item existing">
+        <div class="content-dot"></div>
+        <span>Score card La Rochelle (hero, ~40% écran)</span>
+      </div>
+      <div class="content-item existing">
+        <div class="content-dot"></div>
+        <span>Classement actuel — 14 équipes par zones</span>
+      </div>
+      <div class="content-item existing">
+        <div class="content-dot"></div>
+        <span>Bouton "Révéler la Projection" (moment interactif, reste ici)</span>
+      </div>
+      <div class="content-item moved">
+        <div class="content-dot"></div>
+        <span>Achievement cards → déplacées dans Succès (header)</span>
+      </div>
+    </div>
+    <div class="tab-note">Contenu existant réorganisé. Pas de nouvelles features.</div>
+  </div>
+
+  <!-- Projection -->
+  <div class="tab-card tab-projection">
+    <div class="tab-header">
+      <div class="tab-icon">📡</div>
+      <div>
+        <div class="tab-name">Projection</div>
+        <div class="tab-url">/projection</div>
+      </div>
+      <span class="badge badge-new">Nouveau</span>
+    </div>
+    <div class="tab-body">
+      <div class="section-label">Contenu</div>
+      <div class="content-item new">
+        <div class="content-dot"></div>
+        <span>Classement projeté final — toujours visible, pas de reveal</span>
+      </div>
+      <div class="content-item existing">
+        <div class="content-dot"></div>
+        <span>Barres de confiance par équipe (composant existant)</span>
+      </div>
+      <div class="content-item existing">
+        <div class="content-dot"></div>
+        <span>Probabilités par zone (composant existant)</span>
+      </div>
+      <div class="content-item new">
+        <div class="content-dot"></div>
+        <span>Indicateur "Journée X / 26 — confiance globale"</span>
+      </div>
+    </div>
+    <div class="tab-note">Réutilise les composants existants dans un nouveau layout "toujours projeté".</div>
+  </div>
+
+  <!-- Duels -->
+  <div class="tab-card tab-duels">
+    <div class="tab-header">
+      <div class="tab-icon">⚔️</div>
+      <div>
+        <div class="tab-name">Duels</div>
+        <div class="tab-url">/duels</div>
+      </div>
+      <span class="badge badge-phase2">Phase 2</span>
+    </div>
+    <div class="tab-body">
+      <div class="placeholder-state">
+        <span class="lock-icon">🔒</span>
+        Micro-classement des confrontations directes entre équipes (FR31)<br><br>
+        <em>Placeholder "En construction" pour l'instant</em>
+      </div>
+    </div>
+    <div class="tab-note">Epic 5 — story 5-4 (micro-classement confrontations directes)</div>
+  </div>
+
+  <!-- Donjon -->
+  <div class="tab-card tab-donjon">
+    <div class="tab-header">
+      <div class="tab-icon">🏰</div>
+      <div>
+        <div class="tab-name">Donjon</div>
+        <div class="tab-url">/donjon</div>
+      </div>
+      <span class="badge badge-new">Nouveau</span>
+    </div>
+    <div class="tab-body">
+      <div class="section-label">Contenu (à spécifier)</div>
+      <div class="content-item new">
+        <div class="content-dot"></div>
+        <span>26 "niveaux" — un par journée de la saison</span>
+      </div>
+      <div class="content-item new">
+        <div class="content-dot"></div>
+        <span>Journées passées : données réelles (résultats, scores)</span>
+      </div>
+      <div class="content-item new">
+        <div class="content-dot"></div>
+        <span>Journées futures : duel projeté par l'Oracle</span>
+      </div>
+      <div class="content-item new">
+        <div class="content-dot"></div>
+        <span>Navigation niveau par niveau (swipe ou flèches)</span>
+      </div>
+    </div>
+    <div class="tab-note">Feature à part entière — nécessitera son propre epic/story.</div>
+  </div>
+
+  <!-- Oracle -->
+  <div class="tab-card tab-oracle">
+    <div class="tab-header">
+      <div class="tab-icon">🔮</div>
+      <div>
+        <div class="tab-name">Oracle</div>
+        <div class="tab-url">/oracle</div>
+      </div>
+      <span class="badge badge-phase2">Phase 2</span>
+    </div>
+    <div class="tab-body">
+      <div class="placeholder-state">
+        <span class="lock-icon">🔒</span>
+        Transparence du modèle Elo — Brier Score, historique prédictions, sources de données, journal corrections (FR25–FR28)<br><br>
+        <em>Placeholder "En construction" pour l'instant</em>
+      </div>
+    </div>
+    <div class="tab-note">Epic 5 — stories 5-1, 5-2</div>
+  </div>
+
+  <!-- Succès (header) -->
+  <div class="tab-card tab-succes">
+    <div class="tab-header">
+      <div class="tab-icon">🎖️</div>
+      <div>
+        <div class="tab-name">Succès</div>
+        <div class="tab-url">Icône header (toutes les vues)</div>
+      </div>
+      <span class="badge badge-live">Live</span>
+    </div>
+    <div class="tab-body">
+      <div class="section-label">Contenu</div>
+      <div class="content-item moved">
+        <div class="content-dot"></div>
+        <span>Achievement cards déplacées depuis Classements</span>
+      </div>
+      <div class="content-item new">
+        <div class="content-dot"></div>
+        <span>Panel/bottom sheet dédié au tap sur l'icône</span>
+      </div>
+    </div>
+    <div class="tab-note">Accessible depuis n'importe quel onglet via l'icône trophée en header.</div>
+  </div>
+
+</div>
+</body>
+</html>

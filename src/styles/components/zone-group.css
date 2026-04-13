@@ -5,12 +5,13 @@
   border-radius: var(--w-radius-card);
   overflow: hidden;
   box-shadow: var(--w-shadow-card);
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .w-zone-group__header {
   font-size: var(--w-text-label);
   font-weight: 700;
-  padding: var(--w-space-sm) var(--w-space-md);
+  padding: 12px var(--w-space-md);
   display: flex;
   align-items: center;
   gap: var(--w-space-sm);
@@ -82,7 +83,7 @@
   display: flex;
   flex-direction: column;
   gap: 1px;
-  background: rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /* ── Simulation Mode ── */

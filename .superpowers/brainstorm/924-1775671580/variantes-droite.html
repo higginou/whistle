@@ -1,0 +1,198 @@
+<h2>3 variantes — indicateurs regroupés à droite</h2>
+<p class="subtitle">Chaque variante montre 3 rows : montée, descente, stable. Clique sur celle que tu préfères.</p>
+
+<style>
+  /* Shared row styles */
+  .row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 8px 14px;
+    background: #2e1a55;
+    color: #ededef;
+    font-family: system-ui, -apple-system, sans-serif;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .row:first-child { border-radius: 8px 8px 0 0; }
+  .row:last-child { border-radius: 0 0 8px 8px; border-bottom: none; }
+  .row--fav {
+    border-left: 4px solid #6d28d9;
+    background: linear-gradient(90deg, rgba(109,40,217,0.15), #2e1a55);
+  }
+  .pos { font-size: 16px; font-weight: 700; min-width: 1.5rem; text-align: center; color: #8a8f98; }
+  .logo {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .info { flex: 1; min-width: 0; }
+  .name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .name--fav { color: #c084fc; }
+  .pts { font-size: 14px; font-weight: 700; min-width: 2rem; text-align: right; flex-shrink: 0; font-variant-numeric: tabular-nums; }
+
+  /* Right-side indicator zone */
+  .indicators { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+
+  /* Badge pill */
+  .badge {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 22px; height: 18px; padding: 0 5px;
+    border-radius: 9px; font-size: 10px; font-weight: 800;
+  }
+  .badge--up { background: rgba(22,163,74,0.15); color: #16a34a; }
+  .badge--down { background: rgba(220,38,38,0.15); color: #dc2626; }
+  .badge--stable { background: rgba(138,143,152,0.1); color: #8a8f98; }
+
+  /* Trend arrow */
+  .trend { font-size: 12px; font-weight: 600; min-width: 1rem; text-align: center; }
+  .trend--up { color: #16a34a; }
+  .trend--down { color: #dc2626; }
+  .trend--stable { color: #8a8f98; }
+
+  /* Variante B: stacked */
+  .stacked {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 1px; flex-shrink: 0; min-width: 28px;
+  }
+  .stacked .trend { font-size: 11px; line-height: 1; }
+  .stacked .badge { height: 16px; font-size: 9px; min-width: 20px; }
+
+  /* Variante C: combined pill */
+  .combo-pill {
+    display: inline-flex; align-items: center; gap: 3px;
+    padding: 2px 8px; border-radius: 10px;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+  }
+  .combo-pill--up { background: rgba(22,163,74,0.15); color: #16a34a; }
+  .combo-pill--down { background: rgba(220,38,38,0.15); color: #dc2626; }
+  .combo-pill--stable { background: rgba(138,143,152,0.1); color: #8a8f98; }
+  .combo-pill .arrow { font-size: 10px; }
+
+  .variant-label {
+    margin: 28px 0 6px;
+    font-size: 13px;
+    color: #8a8f98;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .variant-desc {
+    font-size: 13px;
+    color: #8a8f98;
+    margin-bottom: 10px;
+  }
+</style>
+
+<!-- ====== VARIANTE A : Badge + Flèche côte à côte ====== -->
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-body">
+      <h3>A — Côte à côte</h3>
+      <p>Badge numérique + flèche l'un à côté de l'autre, après les points</p>
+
+      <div style="margin-top: 12px;">
+        <div class="row row--fav">
+          <span class="pos">3</span>
+          <span class="logo" style="background:#ffd700;">LR</span>
+          <div class="info"><span class="name name--fav">La Rochelle</span></div>
+          <span class="pts">58</span>
+          <div class="indicators">
+            <span class="badge badge--up">+2</span>
+            <span class="trend trend--up">&#8593;</span>
+          </div>
+        </div>
+        <div class="row">
+          <span class="pos">7</span>
+          <span class="logo" style="background:#cc0000;">TO</span>
+          <div class="info"><span class="name">Toulon</span></div>
+          <span class="pts">42</span>
+          <div class="indicators">
+            <span class="badge badge--down">-3</span>
+            <span class="trend trend--down">&#8595;</span>
+          </div>
+        </div>
+        <div class="row">
+          <span class="pos">5</span>
+          <span class="logo" style="background:#5a2d82;">UB</span>
+          <div class="info"><span class="name">Bordeaux-Bègles</span></div>
+          <span class="pts">49</span>
+          <div class="indicators">
+            <span class="trend trend--stable">=</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== VARIANTE B : Empilés verticalement ====== -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-body">
+      <h3>B — Empilés</h3>
+      <p>Flèche au-dessus du badge, alignés verticalement à droite</p>
+
+      <div style="margin-top: 12px;">
+        <div class="row row--fav">
+          <span class="pos">3</span>
+          <span class="logo" style="background:#ffd700;">LR</span>
+          <div class="info"><span class="name name--fav">La Rochelle</span></div>
+          <span class="pts">58</span>
+          <div class="stacked">
+            <span class="trend trend--up">&#8593;</span>
+            <span class="badge badge--up">+2</span>
+          </div>
+        </div>
+        <div class="row">
+          <span class="pos">7</span>
+          <span class="logo" style="background:#cc0000;">TO</span>
+          <div class="info"><span class="name">Toulon</span></div>
+          <span class="pts">42</span>
+          <div class="stacked">
+            <span class="trend trend--down">&#8595;</span>
+            <span class="badge badge--down">-3</span>
+          </div>
+        </div>
+        <div class="row">
+          <span class="pos">5</span>
+          <span class="logo" style="background:#5a2d82;">UB</span>
+          <div class="info"><span class="name">Bordeaux-Bègles</span></div>
+          <span class="pts">49</span>
+          <div class="stacked">
+            <span class="trend trend--stable">=</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====== VARIANTE C : Pill combinée ====== -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-body">
+      <h3>C — Pill combinée</h3>
+      <p>Flèche et chiffre fusionnés dans un seul pill compact</p>
+
+      <div style="margin-top: 12px;">
+        <div class="row row--fav">
+          <span class="pos">3</span>
+          <span class="logo" style="background:#ffd700;">LR</span>
+          <div class="info"><span class="name name--fav">La Rochelle</span></div>
+          <span class="pts">58</span>
+          <span class="combo-pill combo-pill--up"><span class="arrow">&#8593;</span>+2</span>
+        </div>
+        <div class="row">
+          <span class="pos">7</span>
+          <span class="logo" style="background:#cc0000;">TO</span>
+          <div class="info"><span class="name">Toulon</span></div>
+          <span class="pts">42</span>
+          <span class="combo-pill combo-pill--down"><span class="arrow">&#8595;</span>-3</span>
+        </div>
+        <div class="row">
+          <span class="pos">5</span>
+          <span class="logo" style="background:#5a2d82;">UB</span>
+          <div class="info"><span class="name">Bordeaux-Bègles</span></div>
+          <span class="pts">49</span>
+          <span class="combo-pill combo-pill--stable"><span class="arrow">=</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

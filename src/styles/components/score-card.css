@@ -1,51 +1,71 @@
 /* === Score Card Hero === */
 .w-score-card {
-  background: linear-gradient(145deg, #7c3aed 0%, #6d28d9 40%, #5b21b6 100%);
-  border-radius: 16px;
-  color: #fff;
-  min-height: 40dvh;
-  box-shadow:
-    0 4px 20px rgba(109, 40, 217, 0.3),
-    var(--w-shadow-card);
-  padding: var(--w-space-lg);
+  position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   gap: var(--w-space-md);
-  position: relative;
-  overflow: hidden;
+  min-height: 40dvh;
+  padding: var(--w-space-lg);
+  border: 1px solid rgba(245, 200, 76, 0.12);
+  border-radius: 24px;
+  color: var(--w-text-primary);
+  background:
+    radial-gradient(circle at top right, rgba(245, 200, 76, 0.16), transparent 28%),
+    radial-gradient(circle at 10% 0%, rgba(124, 58, 237, 0.24), transparent 24%),
+    linear-gradient(165deg, #121826 0%, #0e1422 52%, #09101b 100%);
+  box-shadow:
+    0 20px 44px rgba(0, 0, 0, 0.28),
+    var(--w-shadow-card);
 }
 
-/* Decorative circles */
 .w-score-card::before,
 .w-score-card::after {
   content: "";
   position: absolute;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.05);
   pointer-events: none;
 }
 
 .w-score-card::before {
   width: 180px;
   height: 180px;
-  top: -60px;
-  right: -40px;
+  top: -72px;
+  right: -54px;
 }
 
 .w-score-card::after {
   width: 120px;
   height: 120px;
-  bottom: -30px;
-  left: -30px;
+  bottom: -36px;
+  left: -36px;
 }
 
-/* Header */
-.w-score-card__header {
-  display: flex;
-  align-items: center;
-  gap: var(--w-space-sm);
+.w-score-card__eyebrow {
   position: relative;
   z-index: 1;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(245, 200, 76, 0.12);
+  color: var(--w-accent);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.w-score-card__header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--w-space-sm);
 }
 
 .w-score-card__team-name {
@@ -54,29 +74,129 @@
   letter-spacing: -0.02em;
 }
 
+.w-score-card__headline {
+  margin-top: 4px;
+  color: var(--w-text-secondary);
+  font-size: var(--w-text-label);
+}
+
+.w-score-card__stake {
+  margin-top: 2px;
+  color: #fff;
+  font-size: var(--w-text-label);
+  font-weight: 700;
+}
+
+.w-score-card__crest {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff1a8, #f5c84c);
+  color: #1b1427;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  box-shadow: 0 0 0 4px rgba(245, 200, 76, 0.08);
+}
+
+.w-score-card__supporter {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.w-score-card__supporter-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--w-space-sm);
+}
+
+.w-score-card__supporter-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--w-text-secondary);
+}
+
+.w-score-card__supporter-tier {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--w-accent);
+}
+
+.w-score-card__supporter-main {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--w-space-md);
+}
+
+.w-score-card__supporter-value {
+  font-size: 2.6rem;
+  line-height: 1;
+  font-weight: 800;
+  color: #fff;
+}
+
+.w-score-card__supporter-note {
+  flex: 1;
+  max-width: 18ch;
+  color: var(--w-text-secondary);
+  font-size: var(--w-text-label);
+  line-height: 1.4;
+  text-align: right;
+}
+
+.w-score-card__supporter-bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.w-score-card__supporter-bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f5c84c 0%, #fff1a8 100%);
+}
+
 .w-score-card__badge-slot {
   display: inline-flex;
 }
 
 /* === Mini cards grid === */
 .w-score-card__grid {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  position: relative;
-  z-index: 1;
 }
 
 .w-mini-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border-radius: 10px;
-  padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding: 12px;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .w-mini-card--full {
@@ -86,9 +206,9 @@
 .w-mini-card__label {
   font-size: 11px;
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 0.06em;
-  opacity: 0.6;
+  text-transform: uppercase;
+  opacity: 0.68;
 }
 
 .w-mini-card__value {
@@ -106,8 +226,8 @@
 .w-mini-card--position {
   flex-direction: row;
   align-items: center;
-  gap: var(--w-space-sm);
   justify-content: center;
+  gap: var(--w-space-sm);
   padding: var(--w-space-md) 12px;
 }
 
@@ -122,6 +242,7 @@
   font-weight: 800;
   line-height: 1;
   font-feature-settings: "tnum";
+  color: #fff;
 }
 
 .w-mini-card__pos-num sup {
@@ -132,14 +253,14 @@
 .w-mini-card__pos-label {
   font-size: 10px;
   font-weight: 600;
-  text-transform: uppercase;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
   opacity: 0.6;
 }
 
 .w-mini-card__arrow {
   font-size: 1.3rem;
-  opacity: 0.5;
+  opacity: 0.66;
   animation: w-arrow-slide 2s ease-in-out infinite;
 }
 
@@ -149,6 +270,7 @@
     opacity: 0.3;
     transform: translateX(0);
   }
+
   50% {
     opacity: 0.8;
     transform: translateX(3px);
@@ -170,8 +292,8 @@
 /* Confidence line */
 .w-mini-card__confidence {
   font-size: 11px;
-  opacity: 0.5;
   font-weight: 600;
+  opacity: 0.7;
 }
 
 /* XP / Top 6 card */
@@ -189,26 +311,27 @@
 }
 
 .w-mini-card__xp-bar {
+  position: relative;
   flex: 1;
   height: 8px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
   overflow: hidden;
-  position: relative;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .w-mini-card__xp-fill {
   height: 100%;
   border-radius: 4px;
-  background: linear-gradient(90deg, #a78bfa, #c4b5fd);
+  background: linear-gradient(90deg, #f5c84c, #7c3aed);
   transition: width 0.5s ease-out;
 }
 
 .w-mini-card__xp-pct {
-  font-size: var(--w-text-h2);
-  font-weight: 800;
   min-width: 42px;
   text-align: right;
+  font-size: var(--w-text-h2);
+  font-weight: 800;
+  color: var(--w-accent);
 }
 
 /* Zones detail panel */
@@ -224,11 +347,11 @@
 }
 
 .w-mini-card__zone {
-  font-size: 11px;
-  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .w-mini-card__zone-dot {
@@ -249,24 +372,25 @@
 
 .w-match-pill {
   flex: 1;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
+  min-height: 48px;
   padding: 8px;
   display: flex;
   flex-direction: column;
   gap: 3px;
-  min-height: 48px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
   touch-action: manipulation;
 }
 
 .w-match-pill__name {
   font-size: var(--w-text-label);
   font-weight: 700;
+  color: #fff;
 }
 
 .w-match-pill__detail {
   font-size: 10px;
-  opacity: 0.7;
+  color: var(--w-text-secondary);
 }
 
 .w-match-pill__difficulty {
@@ -282,19 +406,19 @@
 }
 
 .w-match-pill__difficulty span.active {
-  background: #fbbf24;
+  background: #f5c84c;
 }
 
 /* Explication card */
 .w-mini-card--explication {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(245, 200, 76, 0.12);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .w-mini-card__explication-text {
   font-size: var(--w-text-label);
   line-height: 1.5;
-  opacity: 0.85;
+  color: var(--w-text-secondary);
 }
 
 .w-mini-card__explication-icon {
@@ -310,22 +434,22 @@
   gap: 6px;
   padding: 10px 16px;
   margin-top: 8px;
+  border-radius: 8px;
+  color: var(--w-text-secondary);
+  background: rgba(255, 255, 255, 0.06);
   font-size: 0.8125rem;
   font-weight: 600;
-  color: var(--w-color-text-secondary);
-  background: #f3f4f6;
-  border-radius: 8px;
 }
 
 .w-stale-indicator__icon {
   width: 14px;
   height: 14px;
+  flex-shrink: 0;
   fill: none;
-  stroke: #9ca3af;
+  stroke: var(--w-text-secondary);
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-  flex-shrink: 0;
 }
 
 /* === Reduced Motion === */
