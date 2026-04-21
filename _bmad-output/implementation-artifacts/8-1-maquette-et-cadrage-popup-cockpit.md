@@ -101,3 +101,17 @@ gpt-5.4-mini
 - `src/components/tab-simulateur.js`
 - `src/app.js`
 - `src/__tests__/match-cockpit.test.js`
+
+## Senior Developer Review (AI)
+
+**Review Date:** 2026-04-21
+**Outcome:** Approved
+**Action Items:** 0
+
+### Action Items
+
+- None.
+
+### Change Log
+
+- 2026-04-21 : Added documented review trace for Epic 8 story 8.1.

@@ -100,11 +100,12 @@ development_status:
   7-3-score-supporter-personnel: review
 
   # Epic 8 : Saisie guidee des matchs
-  epic-8: in-progress
+  epic-8: done
   8-1-maquette-et-cadrage-popup-cockpit: done
-  8-2-detection-matchs-manquants-et-ouverture-bloquante: ready-for-dev
-  8-3-saisie-guidee-dun-match: ready-for-dev
-  8-4-sauvegarde-locale-validation-finale-et-accessibilite: ready-for-dev
+  8-2-detection-matchs-manquants-et-ouverture-bloquante: done
+  8-3-saisie-guidee-dun-match: done
+  8-4-sauvegarde-locale-validation-finale-et-accessibilite: done
+  epic-8-retrospective: done
 
   # Epic 9 : Socle Vercel et auth admin
   epic-9: in-progress
