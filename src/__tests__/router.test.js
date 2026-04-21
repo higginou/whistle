@@ -35,6 +35,21 @@ describe('pushTab', () => {
     )
   })
 
+  it('keeps the GitHub Pages base on hash fallback routes', () => {
+    history.pushState.mockRestore()
+    history.pushState({}, '', '/whistle/')
+    window.location.hash = '#/duels'
+    vi.spyOn(history, 'pushState').mockImplementation(() => {})
+
+    pushTab('oracle')
+
+    expect(history.pushState).toHaveBeenCalledWith(
+      { tab: 'oracle' },
+      '',
+      '/whistle/oracle',
+    )
+  })
+
   it('sets activeTab in store', () => {
     pushTab('donjon')
     expect(store.set).toHaveBeenCalledWith('activeTab', 'donjon')
@@ -65,6 +80,12 @@ describe('tabFromCurrentPath', () => {
   it('returns oracle for /whistle/oracle path', () => {
     history.pushState({}, '', '/whistle/oracle')
     expect(tabFromCurrentPath()).toBe('oracle')
+    history.pushState({}, '', '/')
+  })
+
+  it('returns duels for hash-based GitHub Pages fallback', () => {
+    history.pushState({}, '', '/whistle/#/duels')
+    expect(tabFromCurrentPath()).toBe('duels')
     history.pushState({}, '', '/')
   })
 })

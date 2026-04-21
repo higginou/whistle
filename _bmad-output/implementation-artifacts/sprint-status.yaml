@@ -109,7 +109,7 @@ development_status:
 
   # Epic 9 : Socle Vercel et auth admin
   epic-9: in-progress
-  9-1-deploiement-du-front-sur-vercel: ready-for-dev
+  9-1-deploiement-du-front-sur-vercel: done
   9-2-modele-de-donnees-et-stockage-vercel-postgres: ready-for-dev
   9-3-auth-admin-pour-la-saisie: ready-for-dev
   9-4-api-publique-et-api-admin: ready-for-dev

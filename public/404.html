@@ -4,12 +4,17 @@
     <meta charset="utf-8">
     <title>Whistle</title>
     <script>
-      // Redirect to the SPA root while preserving the intended path.
-      // Uses replaceState with a non-null state object so onPopState
-      // in router.js sees state !== null on initial load.
+      // Redirect to the SPA root while preserving the intended path in the hash.
+      // The SPA router reads this hash on first load so GitHub Pages deep links
+      // still open the intended tab.
       var path = window.location.pathname;
-      history.replaceState({ redirected: true }, '', path);
-      window.location.replace('/whistle/');
+      var base = '/whistle';
+      var route = path.indexOf(base) === 0 ? path.slice(base.length) : path;
+      if (!route || route === '/') {
+        window.location.replace(base + '/');
+      } else {
+        window.location.replace(base + '/#' + route);
+      }
     </script>
   </head>
 </html>

@@ -208,8 +208,8 @@ describe('T5.3 : idempotence des predictions', () => {
 // ─── T5.4 : Mapping id -> name ────────────────────────────────────────────
 
 describe('T5.4 : mapping id -> name', () => {
-  it('TEAM_NAMES contient les 14 equipes TOP 14', () => {
-    expect(Object.keys(TEAM_NAMES)).toHaveLength(14);
+  it('TEAM_NAMES contient les 15 equipes TOP 14', () => {
+    expect(Object.keys(TEAM_NAMES)).toHaveLength(15);
   });
 
   it('toutes les equipes ont un nom via getTeamName', () => {
@@ -217,7 +217,7 @@ describe('T5.4 : mapping id -> name', () => {
       'toulouse', 'bordeaux-begles', 'la-rochelle', 'toulon',
       'racing-92', 'clermont', 'castres', 'lyon',
       'montpellier', 'pau', 'montauban', 'bayonne',
-      'stade-francais', 'vannes',
+      'stade-francais', 'perpignan',
     ];
 
     for (const id of knownIds) {
@@ -229,7 +229,7 @@ describe('T5.4 : mapping id -> name', () => {
   });
 
   it('getTeamName retourne l ID si l equipe n est pas dans le mapping', () => {
-    expect(getTeamName('perpignan')).toBe('perpignan');
+    expect(getTeamName('brive')).toBe('brive');
   });
 
   it('buildTeamEntry ajoute le name depuis TEAM_NAMES', () => {
@@ -462,12 +462,12 @@ describe('gestion des equipes manquantes', () => {
 
   it('gere les equipes hors mapping (fallback sur l ID)', () => {
     const eloOutput = makeEloOutput({
-      teams: [makeEloTeam({ id: 'perpignan', currentRank: 1 })],
+      teams: [makeEloTeam({ id: 'brive', currentRank: 1 })],
     });
 
     const seasonData = buildSeasonData(eloOutput, []);
 
-    expect(seasonData.teams[0].name).toBe('perpignan');
+    expect(seasonData.teams[0].name).toBe('brive');
   });
 });
 

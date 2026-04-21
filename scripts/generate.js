@@ -41,6 +41,7 @@ export const TEAM_NAMES = {
   'montauban': 'US Montauban',
   'bayonne': 'Aviron Bayonnais',
   'stade-francais': 'Stade Francais Paris',
+  'perpignan': 'USA Perpignan',
   'vannes': 'Rugby Club Vannetais',
 };
 
@@ -167,6 +168,7 @@ export function mergePredictions(existingPredictions, newPrediction) {
 export function buildSeasonData(eloOutput, existingPredictions, existingCalendar = [], existingCorrections = []) {
   const now = new Date().toISOString().replace(/\.\d{3}Z$/, 'Z');
   const teams = eloOutput.teams.map(buildTeamEntry);
+  const teamIds = new Set(teams.map((team) => team.id));
 
   const newPrediction = buildPredictionEntry(
     eloOutput.matchday,
@@ -174,7 +176,10 @@ export function buildSeasonData(eloOutput, existingPredictions, existingCalendar
     eloOutput.teams,
   );
 
-  const predictions = mergePredictions(existingPredictions, newPrediction);
+  const predictions = sanitizePredictions(
+    mergePredictions(existingPredictions, newPrediction),
+    teamIds,
+  );
   const calendar = mergeCalendarDates(eloOutput.calendar, existingCalendar);
   const corrections = mergeCorrections(existingCorrections, eloOutput.corrections ?? []);
 
@@ -194,6 +199,21 @@ export function buildSeasonData(eloOutput, existingPredictions, existingCalendar
   }
 
   return season;
+}
+
+/**
+ * Remove stale projection team IDs from historical predictions.
+ * @param {object[]} predictions
+ * @param {Set<string>} validTeamIds
+ * @returns {object[]}
+ */
+export function sanitizePredictions(predictions, validTeamIds) {
+  return predictions
+    .map((prediction) => ({
+      ...prediction,
+      projections: prediction.projections.filter((projection) => validTeamIds.has(projection.teamId)),
+    }))
+    .filter((prediction) => prediction.projections.length > 0);
 }
 
 /**
@@ -238,14 +258,29 @@ export function mergeCalendarDates(newCalendar, existingCalendar) {
   }
 
   return newCalendar.map((entry) => {
-    if (entry.date) return entry;
+    if (entry.date) {
+      return { ...entry, date: normalizeCalendarDate(entry.date) };
+    }
     const key = `${entry.matchday}-${entry.home}-${entry.away}`;
     const existing = existingByKey.get(key);
     if (existing?.date) {
-      return { ...entry, date: existing.date };
+      return { ...entry, date: normalizeCalendarDate(existing.date) };
     }
     return entry;
   });
+}
+
+/**
+ * Normalize a calendar date to full ISO timestamp.
+ * @param {string} dateStr
+ * @returns {string}
+ */
+export function normalizeCalendarDate(dateStr) {
+  if (typeof dateStr !== 'string') return dateStr;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    return `${dateStr}T00:00:00Z`;
+  }
+  return dateStr;
 }
 
 // ─── Seasons Index ────────────────────────────────────────────────────────
@@ -317,7 +352,7 @@ export async function main() {
 
   // Write season file
   try {
-    writeFileSync(seasonPath, `${JSON.stringify(seasonData, null, 2)}\n`, 'utf-8');
+    writeFileSync(seasonPath, `${JSON.stringify(seasonData)}\n`, 'utf-8');
   } catch (err) {
     console.error(`Impossible d'ecrire ${seasonPath} : ${err.message}`);
     process.exit(1);

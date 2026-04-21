@@ -5,13 +5,23 @@ import { set } from './store.js'
 /** Ordered tab IDs matching bottom nav order. */
 const TAB_IDS = ['classements', 'projection', 'duels', 'donjon', 'oracle', 'simulateur']
 
+function routePathname() {
+  const hash = window.location.hash
+  if (hash.startsWith('#/')) return hash.slice(1)
+  return window.location.pathname
+}
+
+function basePathname() {
+  return window.location.pathname
+}
+
 /**
  * Derive active tab from current pathname.
  * Works with or without a base path (e.g., /whistle/).
  * @returns {string} tab ID
  */
 export function tabFromCurrentPath() {
-  const pathname = window.location.pathname
+  const pathname = routePathname()
   for (const id of TAB_IDS) {
     if (id === 'classements') continue
     if (pathname.endsWith(`/${id}`)) return id
@@ -25,7 +35,8 @@ export function tabFromCurrentPath() {
  * @param {string} tabId
  */
 export function pushTab(tabId) {
-  const base = window.location.pathname.replace(
+  const currentPath = basePathname()
+  const base = currentPath === '/' ? '' : currentPath.replace(/\/$/, '').replace(
     /\/(projection|duels|donjon|oracle|simulateur)$/,
     '',
   )

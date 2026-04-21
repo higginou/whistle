@@ -1,4 +1,7 @@
 import { defineConfig } from 'vite'
+import { getAppBase } from './src/deployment-base.js'
+
+const appBase = getAppBase(process.env)
 
 export default defineConfig(async () => {
   const plugins = []
@@ -17,7 +20,7 @@ export default defineConfig(async () => {
 
           // SPA navigation fallback
           navigateFallback: 'index.html',
-          navigateFallbackDenylist: [/^\/whistle\/data\//],
+          navigateFallbackDenylist: [/^(?:\/whistle)?\/data\//],
 
           // Runtime caching rules
           runtimeCaching: [
@@ -74,8 +77,8 @@ export default defineConfig(async () => {
           background_color: '#0f0a1a',
           display: 'standalone',
           orientation: 'portrait',
-          scope: '/whistle/',
-          start_url: '/whistle/',
+          scope: appBase,
+          start_url: appBase,
           icons: [
             {
               src: 'pwa-192x192.png',
@@ -101,7 +104,7 @@ export default defineConfig(async () => {
   }
 
   return {
-    base: '/whistle/',
+    base: appBase,
     plugins,
     test: {
       alias: {

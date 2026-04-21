@@ -1083,6 +1083,12 @@ export async function main() {
     }
   }
 
+  // Keep currentRank contiguous after tiebreaker adjustments.
+  teams.sort((a, b) => a.currentRank - b.currentRank);
+  for (let i = 0; i < teams.length; i++) {
+    teams[i].currentRank = i + 1;
+  }
+
   // ── Step 3c: Build headToHead output ──
   const headToHead = buildHeadToHeadOutput(h2hMap, results);
 
