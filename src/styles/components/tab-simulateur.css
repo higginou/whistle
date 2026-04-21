@@ -34,6 +34,43 @@
   line-height: 1.4;
 }
 
+.w-sim-header__meta {
+  margin-top: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--w-text-muted);
+}
+
+.w-sim-cockpit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  width: calc(100% - 32px);
+  margin: 14px 16px 0;
+  border: none;
+  border-radius: var(--w-radius);
+  background: linear-gradient(135deg, var(--w-accent), var(--w-color-primary));
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.28);
+  transition: transform 0.1s ease, opacity 0.15s ease;
+}
+
+.w-sim-cockpit-btn:active {
+  transform: scale(0.97);
+}
+
+.w-sim-cockpit-btn:focus-visible {
+  outline: 2px solid var(--w-color-primary);
+  outline-offset: 2px;
+}
+
 /* ── Counter + Reset Bar ── */
 
 .w-sim-bar {

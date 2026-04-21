@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saisie matchs - Variante Card Stack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0d1117;
+    --surface: #141b28;
+    --surface-2: #101521;
+    --line: rgba(154, 172, 194, 0.14);
+    --line-strong: rgba(245, 200, 76, 0.2);
+    --text: #f5f7fb;
+    --muted: #9aacc2;
+    --dim: #6c7b91;
+    --accent: #f5c84c;
+    --violet: #7c3aed;
+    --green: #2ad6c8;
+    --shadow: 0 18px 44px rgba(0, 0, 0, 0.32);
+    --radius: 18px;
+  }
+  body {
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    font-family: 'Nunito', sans-serif;
+    background:
+      radial-gradient(circle at top, rgba(245, 200, 76, 0.06), transparent 28%),
+      linear-gradient(180deg, #0b1017 0%, #090d13 100%);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+  .phone {
+    width: 100%;
+    max-width: 430px;
+    min-height: 100dvh;
+    padding: 16px 14px 22px;
+  }
+  .title {
+    padding: 6px 2px 10px;
+  }
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--dim);
+    margin-bottom: 6px;
+  }
+  h1 {
+    font-size: 28px;
+    line-height: 1.05;
+    font-weight: 800;
+  }
+  .lead {
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+  .topcard {
+    margin-top: 14px;
+    padding: 14px;
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(20, 27, 40, 0.98), rgba(16, 21, 33, 0.98));
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+  .topcard__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .topcard__main strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .topcard__main span {
+    display: block;
+    margin-top: 2px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .meter {
+    display: grid;
+    place-items: center;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: conic-gradient(var(--violet) 0 210deg, rgba(255,255,255,0.08) 210deg 360deg);
+  }
+  .meter__inner {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #0f1420;
+  }
+  .meter__inner strong { font-size: 17px; font-weight: 800; }
+  .meter__inner span { font-size: 9px; text-transform: uppercase; color: var(--dim); margin-top: 1px; }
+  .mini-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+  }
+  .mini {
+    padding: 7px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .mini.is-active {
+    color: #fff1bf;
+    background: rgba(245, 200, 76, 0.1);
+    border-color: rgba(245, 200, 76, 0.22);
+  }
+  .stack {
+    margin-top: 14px;
+    position: relative;
+    padding-bottom: 4px;
+  }
+  .card {
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--surface) 0%, var(--surface-2) 100%);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .card__head {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+  .card__head strong {
+    font-size: 15px;
+    font-weight: 800;
+  }
+  .card__head span {
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(42, 214, 200, 0.1);
+    border: 1px solid rgba(42, 214, 200, 0.18);
+    color: #b9fff8;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .hero-match {
+    padding: 14px;
+  }
+  .teams {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .team {
+    min-width: 0;
+  }
+  .team__name {
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+  .team__name.is-fav { color: var(--accent); }
+  .team__meta {
+    margin-top: 3px;
+    font-size: 11px;
+    color: var(--dim);
+  }
+  .vs {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: rgba(124, 58, 237, 0.1);
+    border: 1px solid rgba(124, 58, 237, 0.18);
+    color: #dccfff;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .field {
+    display: grid;
+    gap: 6px;
+  }
+  .field label {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .field input {
+    width: 100%;
+    height: 46px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    color: var(--text);
+    padding: 0 12px;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 800;
+  }
+  .field input:focus {
+    outline: none;
+    border-color: rgba(245, 200, 76, 0.4);
+    box-shadow: 0 0 0 3px rgba(245, 200, 76, 0.08);
+  }
+  .summary {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .summary__title {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--dim);
+    margin-bottom: 8px;
+  }
+  .summary__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 0;
+    font-size: 13px;
+  }
+  .summary__row + .summary__row { border-top: 1px solid rgba(255,255,255,0.05); }
+  .summary__row strong { font-size: 14px; }
+  .summary__row .ok { color: var(--green); font-weight: 800; }
+  .summary__row .warn { color: #ffe088; font-weight: 800; }
+  .footer {
+    margin-top: 14px;
+    display: grid;
+    gap: 10px;
+  }
+  .btn {
+    height: 48px;
+    border-radius: 14px;
+    border: none;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .btn--primary {
+    background: linear-gradient(135deg, var(--accent), #fff0ad);
+    color: #1b1628;
+  }
+  .btn--ghost {
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
+  .actions .btn { flex: 1; }
+  .footnote {
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--dim);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+  <main class="phone">
+    <section class="title">
+      <div class="eyebrow">Assistant de saisie</div>
+      <h1>Validation guidee des matchs</h1>
+      <p class="lead">Une carte unique, des champs clairs, et un resume avant la validation finale.</p>
+    </section>
+
+    <section class="topcard">
+      <div class="topcard__row">
+        <div class="topcard__main">
+          <strong>2 matchs a completer</strong>
+          <span>Les bonus sont deduits automatiquement des scores et des essais.</span>
+        </div>
+        <div class="meter">
+          <div class="meter__inner">
+            <div style="text-align:center;">
+              <strong>56%</strong>
+              <span>OK</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mini-row">
+        <div class="mini is-active">Etape 2 / 4</div>
+        <div class="mini">Match 2 / 5</div>
+        <div class="mini">Auto bonus</div>
+      </div>
+    </section>
+
+    <section class="stack">
+      <article class="card">
+        <div class="card__head">
+          <div>
+            <strong>La Rochelle vs Toulouse</strong>
+            <div><span>Journee 22 - match du dimanche</span></div>
+          </div>
+          <div class="badge">En cours</div>
+        </div>
+
+        <div class="hero-match">
+          <div class="teams">
+            <div class="team">
+              <div class="team__name is-fav">La Rochelle</div>
+              <div class="team__meta">Equipe domicile</div>
+            </div>
+            <div class="vs">VS</div>
+            <div class="team" style="text-align:right;">
+              <div class="team__name">Toulouse</div>
+              <div class="team__meta">Equipe exterieure</div>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="field">
+              <label for="score-dom">Score domicile</label>
+              <input id="score-dom" type="number" inputmode="numeric" placeholder="0">
+            </div>
+            <div class="field">
+              <label for="score-ext">Score exterieur</label>
+              <input id="score-ext" type="number" inputmode="numeric" placeholder="0">
+            </div>
+            <div class="field">
+              <label for="essais-dom">Essais domicile</label>
+              <input id="essais-dom" type="number" inputmode="numeric" placeholder="0">
+            </div>
+            <div class="field">
+              <label for="essais-ext">Essais exterieur</label>
+              <input id="essais-ext" type="number" inputmode="numeric" placeholder="0">
+            </div>
+          </div>
+
+          <div class="summary">
+            <div class="summary__title">Resultat calcule</div>
+            <div class="summary__row"><span>Bonus offensif domicile</span><strong class="ok">Oui</strong></div>
+            <div class="summary__row"><span>Bonus offensif exterieur</span><strong class="warn">Non</strong></div>
+            <div class="summary__row"><span>Bonus defensif domicile</span><strong class="warn">Non</strong></div>
+            <div class="summary__row"><span>Bonus defensif exterieur</span><strong class="ok">Oui</strong></div>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="footer">
+      <div class="actions">
+        <button class="btn btn--ghost" type="button">Precedent</button>
+        <button class="btn btn--primary" type="button">Suivant</button>
+      </div>
+      <button class="btn btn--primary" type="button">Valider ce match</button>
+      <div class="footnote">Le bouton de validation finale n'apparait qu'une fois tous les matchs completement renseignes.</div>
+    </section>
+  </main>
+</body>
+</html>

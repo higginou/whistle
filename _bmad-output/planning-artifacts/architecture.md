@@ -655,3 +655,50 @@ whistle/
 npm create @vite-pwa/pwa@latest whistle -- --template vanilla
 npm install motion open-props
 ```
+
+## Migration Target: Vercel-only Runtime
+
+### Decision Summary
+
+Le runtime de Whistle migre sur Vercel. GitHub reste le stockage du code source uniquement.
+
+- Le front public, l'API et l'auth admin vivent dans un seul projet Vercel.
+- La consultation de l'app ne demande aucune authentification.
+- L'auth ne s'applique qu'a l'ouverture de l'interface de saisie des matchs.
+- La base de donnees vit cote Vercel et devient la source de verite.
+
+### Vercel Vocabulary
+
+- **Project** : l'application configuree dans Vercel.
+- **Deployment** : une version publiee de l'app ou de l'API.
+- **Preview deployment** : une URL temporaire pour tester une branche.
+- **Production deployment** : la version publique officielle.
+- **Environment variables** : les secrets et parametres stockes cote serveur, jamais dans le front.
+- **Route handler / serverless function** : un petit endpoint serveur qui repond a une requete HTTP.
+
+### Runtime Layout
+
+- **Frontend public** : lecture du classement, des projections et de l'historique.
+- **Admin gate** : saisie des matchs avec session courte.
+- **API publique** : lecture des donnees de saison.
+- **API admin** : ecriture des matchs saisis et declenchement du recalcul.
+- **Database** : matchs, validations, snapshots et logs.
+
+### Security Model
+
+- Aucun secret GitHub ne doit exister dans le navigateur.
+- Aucun secret Vercel ne doit etre commite dans le repo.
+- L'auth admin doit proteger uniquement l'ecriture, jamais la lecture publique.
+- La session admin doit etre signee cote serveur et expiree rapidement.
+
+### Data Model Direction
+
+- Une base relationnelle est preferee pour les matchs saisis et les snapshots.
+- Le recalcul doit etre deterministe et repartir de la source de verite.
+- Les vues publiques consomment une API JSON, pas du JSON statique dans GitHub Pages.
+
+### Beginner Guidance
+
+- Expliquer clairement dans les stories ce qu'est un projet Vercel, une preview, une variable d'environnement et une fonction serveur.
+- Ne pas supposer que le lecteur connait Vercel.
+- Garder le flux simple : lecture publique sans auth, saisie admin avec auth, recalcul serveur, publication immediate.

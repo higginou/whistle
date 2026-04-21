@@ -168,6 +168,7 @@ An **epic** is NOT "done" until, in addition to all stories being done:
 - **Code review automatique** — quand une story passe en `review`, l'agent DOIT lancer `bmad-code-review` immediatement dans un subagent, sans demander a l'utilisateur. Ne JAMAIS proposer de lancer le review — le faire directement.
 - After review approval, SM or Dev sets `done` in BOTH the story file AND sprint-status.yaml
 - These two statuses must ALWAYS be in sync
+- When a story is complete, the agent MUST update the story file and `sprint-status.yaml`, then commit the changes immediately without asking the user for permission. Do not leave a finished story uncommitted.
 
 **When closing an epic:**
 - All stories must be `done` (both files and sprint-status)

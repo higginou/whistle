@@ -683,3 +683,115 @@ Afin de jouer avec les futurs possibles et comprendre les enjeux.
 **And** les deltas sont clairement affiches ("La Rochelle +4% top 6", "Toulouse -1 place")
 **And** une distinction visuelle claire differencie le mode simule du mode reel (pas de confusion possible)
 **And** un bouton "Revenir au reel" permet de quitter le mode simule et retrouver le classement projete reel
+
+## Migration Plan: Saisie manuelle des matchs + Vercel
+
+### Migration Requirements
+
+- MR1 : La saisie des matchs remplace le scraping hebdomadaire.
+- MR2 : La popup cockpit s'ouvre tant qu'il reste des matchs non saisis.
+- MR3 : Le site public reste accessible sans authentification.
+- MR4 : L'auth ne sert qu'a entrer dans le flux de saisie.
+- MR5 : Les donnees vivent sur Vercel, pas dans GitHub Pages.
+- MR6 : Le recalcul est complet et deterministe apres validation finale.
+- MR7 : L'ancien pipeline GitHub Actions et le scraping sortent du runtime.
+
+### Epic 8 : Saisie guidee des matchs
+
+L'utilisateur renseigne manuellement les resultats du week-end dans une popup cockpit qui reste ouverte tant que tous les matchs ne sont pas completes.
+
+### Story 8.1 : Maquette et cadrage de la popup cockpit
+
+En tant qu'utilisateur qui va saisir les matchs,
+Je veux une popup cockpit claire et rassurante,
+Afin de completer les resultats sans me perdre.
+
+### Story 8.2 : Detection des matchs manquants et ouverture bloquante
+
+En tant qu'utilisateur,
+Je veux que l'app detecte les matchs non saisis et ouvre automatiquement la popup,
+Afin de savoir immediatement ce qu'il reste a renseigner.
+
+### Story 8.3 : Saisie guidee d'un match
+
+En tant qu'utilisateur,
+Je veux saisir le score, les essais et voir les bonus calcules automatiquement,
+Afin d'entrer un match vite et sans erreur.
+
+### Story 8.4 : Sauvegarde locale, validation finale et accessibilite
+
+En tant qu'utilisateur,
+Je veux garder ma saisie en brouillon et valider uniquement quand tout est complet,
+Afin de reprendre si je ferme l'onglet et de valider sans surprise.
+
+### Epic 9 : Socle Vercel et auth admin
+
+L'application est hebergee sur Vercel avec un front public sans auth et une zone admin reservee a la saisie des matchs.
+
+### Story 9.1 : Deploiement du front sur Vercel
+
+En tant que dev qui decouvre Vercel,
+Je veux deplacer le front sur Vercel et comprendre le vocabulaire de base,
+Afin de pouvoir tester et publier l'app sans me battre avec la plateforme.
+
+### Story 9.2 : Modele de donnees et stockage Vercel Postgres
+
+En tant que dev,
+Je veux definir la base de donnees de la migration,
+Afin de stocker les matchs, les snapshots et les logs de recalcul.
+
+### Story 9.3 : Auth admin pour la saisie
+
+En tant qu'utilisateur admin,
+Je veux une authentification courte uniquement pour entrer dans la saisie,
+Afin de proteger l'ecriture sans bloquer la consultation publique.
+
+### Story 9.4 : API publique et API admin
+
+En tant que front,
+Je veux lire les donnees publiques et ecrire les saisies via des endpoints distincts,
+Afin de garder un flux clair entre consultation et modification.
+
+### Epic 10 : Recalcul et synchronisation
+
+La validation finale reconstruit classement, Elo et projections a partir des matchs saisis.
+
+### Story 10.1 : Moteur de recalcul complet
+
+En tant que dev,
+Je veux un moteur de calcul pur et deterministe,
+Afin de reconstruire les donnees a partir de la source de verite sans etat cache fragile.
+
+### Story 10.2 : Recalcul du classement, Elo et projections
+
+En tant qu'utilisateur,
+Je veux que tout soit recalcule apres validation finale,
+Afin de voir immediatement l'impact sur le classement et les projections.
+
+### Story 10.3 : Publication et rafraichissement des vues
+
+En tant qu'utilisateur,
+Je veux que l'app publique se mette a jour apres le recalcul,
+Afin de voir les nouvelles donnees sans bricolage manuel.
+
+### Epic 11 : Retrait du pipeline legacy
+
+Le scraping, GitHub Actions et les references associees sortent du chemin critique.
+
+### Story 11.1 : Retrait du scraping legacy
+
+En tant que dev,
+Je veux supprimer le scraping du runtime,
+Afin que la migration ne dependa plus de la LNR ni d'un fallback automate.
+
+### Story 11.2 : Retrait de GitHub Actions du flux metier
+
+En tant que dev,
+Je veux retirer le workflow GitHub Actions du chemin de production,
+Afin que Vercel devienne le seul runtime.
+
+### Story 11.3 : Nettoyage final et verification
+
+En tant que dev,
+Je veux nettoyer les docs, scripts et references obsoletes,
+Afin que le projet soit lisible et coherent apres migration.
