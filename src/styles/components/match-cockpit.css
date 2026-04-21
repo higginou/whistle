@@ -1,0 +1,405 @@
+dialog.w-match-cockpit {
+  position: fixed;
+  inset: auto 0 0;
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  border: none;
+  padding: 0;
+  background:
+    radial-gradient(circle at 0% 0%, rgba(245, 200, 76, 0.08), transparent 28%),
+    radial-gradient(circle at 100% 0%, rgba(124, 58, 237, 0.12), transparent 26%),
+    linear-gradient(180deg, #141d2d 0%, #0f1420 100%);
+  color: var(--w-text-primary);
+  border-radius: 22px 22px 0 0;
+  box-shadow: 0 -12px 46px rgba(0, 0, 0, 0.45);
+  overflow: hidden;
+  max-height: 92dvh;
+  transform: translateY(100%);
+  transition: transform 260ms var(--ease-out-4);
+  will-change: transform;
+}
+
+dialog.w-match-cockpit[open] {
+  transform: translateY(0);
+}
+
+dialog.w-match-cockpit::backdrop {
+  background: rgba(4, 8, 20, 0);
+  animation: w-match-cockpit-backdrop-in 260ms ease forwards;
+}
+
+@keyframes w-match-cockpit-backdrop-in {
+  from { background: rgba(4, 8, 20, 0); }
+  to { background: rgba(4, 8, 20, 0.68); }
+}
+
+.w-match-cockpit__handle {
+  width: 40px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(245, 200, 76, 0.45);
+  margin: 10px auto 0;
+}
+
+.w-match-cockpit__close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 48px;
+  height: 48px;
+  border: none;
+  background: transparent;
+  color: #c7d0df;
+  font-size: 1.5rem;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.w-match-cockpit__close:focus-visible,
+.w-match-cockpit__action:focus-visible,
+.w-match-cockpit__field input:focus-visible {
+  outline: 2px solid var(--w-accent);
+  outline-offset: 2px;
+}
+
+.w-match-cockpit__content {
+  padding: 6px 16px 20px;
+  max-height: calc(92dvh - 24px);
+  overflow-y: auto;
+}
+
+.w-match-cockpit__hero {
+  text-align: center;
+  padding: 12px 4px 14px;
+}
+
+.w-match-cockpit__kicker,
+.w-match-cockpit__status-label,
+.w-match-cockpit__panel-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--w-text-secondary);
+}
+
+.w-match-cockpit__title {
+  font-size: 1.75rem;
+  line-height: 1.05;
+  font-weight: 800;
+  margin-top: 8px;
+}
+
+.w-match-cockpit__subtitle {
+  margin-top: 6px;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: var(--w-text-secondary);
+}
+
+.w-match-cockpit__status {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(124, 58, 237, 0.18);
+  background: linear-gradient(180deg, rgba(24, 34, 53, 0.96), rgba(18, 24, 38, 0.96));
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
+}
+
+.w-match-cockpit__status-copy strong {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.w-match-cockpit__status-copy span {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  color: var(--w-text-secondary);
+}
+
+.w-match-cockpit__progress {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  position: relative;
+  display: grid;
+  place-items: center;
+  background:
+    conic-gradient(var(--w-accent) 0 var(--w-match-cockpit-progress), rgba(255, 255, 255, 0.08) 0 360deg),
+    radial-gradient(circle at center, var(--w-bg-surface) 0 58%, transparent 58% 100%);
+}
+
+.w-match-cockpit__progress strong {
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.w-match-cockpit__progress span {
+  position: absolute;
+  bottom: 14px;
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--w-text-secondary);
+}
+
+.w-match-cockpit__steps {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 14px 0;
+}
+
+.w-match-cockpit__step {
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.02);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--w-text-secondary);
+}
+
+.w-match-cockpit__step.is-active {
+  color: #fff1bf;
+  border-color: rgba(245, 200, 76, 0.28);
+  background: rgba(245, 200, 76, 0.1);
+}
+
+.w-match-cockpit__panel {
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.w-match-cockpit__panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.w-match-cockpit__panel-title {
+  font-size: 1rem;
+  font-weight: 800;
+  margin-top: 2px;
+}
+
+.w-match-cockpit__panel-meta {
+  font-size: 0.75rem;
+  color: var(--w-text-secondary);
+  white-space: nowrap;
+}
+
+.w-match-cockpit__match-tag {
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(245, 200, 76, 0.14);
+  background: rgba(245, 200, 76, 0.06);
+  margin-bottom: 12px;
+}
+
+.w-match-cockpit__match-tag strong {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 800;
+}
+
+.w-match-cockpit__match-tag span {
+  display: block;
+  margin-top: 2px;
+  font-size: 0.75rem;
+  color: var(--w-text-secondary);
+}
+
+.w-match-cockpit__duel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 12px 0 14px;
+}
+
+.w-match-cockpit__team {
+  min-width: 0;
+  text-align: center;
+}
+
+.w-match-cockpit__badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--w-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.w-match-cockpit__team-name {
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.w-match-cockpit__team-name.is-favorite {
+  color: var(--w-accent);
+}
+
+.w-match-cockpit__team-meta {
+  margin-top: 2px;
+  font-size: 0.68rem;
+  color: var(--w-text-secondary);
+}
+
+.w-match-cockpit__vs {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(245, 200, 76, 0.18);
+  background: rgba(245, 200, 76, 0.08);
+  color: #ffeaa0;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.w-match-cockpit__fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.w-match-cockpit__field {
+  display: grid;
+  gap: 6px;
+}
+
+.w-match-cockpit__field span {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--w-text-secondary);
+}
+
+.w-match-cockpit__field input {
+  width: 100%;
+  height: 52px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--w-text-primary);
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.w-match-cockpit__bonus {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.w-match-cockpit__bonus-chip {
+  min-height: 32px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.14);
+  border: 1px solid rgba(124, 58, 237, 0.22);
+  color: #efe7ff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.w-match-cockpit__hint[data-tone='danger'] {
+  border: 1px solid rgba(239, 68, 68, 0.24);
+  background: rgba(239, 68, 68, 0.08);
+  color: #ffe0e0;
+}
+
+.w-match-cockpit__hint[data-tone='success'] {
+  border: 1px solid rgba(34, 197, 94, 0.22);
+  background: rgba(34, 197, 94, 0.08);
+  color: #dcffe5;
+}
+
+.w-match-cockpit__hint {
+  margin-top: 12px;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: var(--w-text-secondary);
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.w-match-cockpit__actions {
+  display: flex;
+  gap: 10px;
+  padding: 14px 0 4px;
+}
+
+.w-match-cockpit__action {
+  flex: 1;
+  min-height: 48px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.w-match-cockpit__action--secondary {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: var(--w-text-primary);
+}
+
+.w-match-cockpit__action--primary {
+  background: linear-gradient(135deg, var(--w-accent), var(--w-color-primary));
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.24);
+}
+
+.w-match-cockpit__action:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.w-match-cockpit__empty {
+  padding: 28px 0 20px;
+  text-align: center;
+}
+
+.w-match-cockpit__empty--done {
+  padding-top: 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.w-match-cockpit,
+  dialog.w-match-cockpit::backdrop {
+    transition: none;
+    animation: none;
+  }
+}

@@ -1,6 +1,7 @@
 import '../styles/components/tab-simulateur.css'
 import { get, set, on } from '../store.js'
 import { recalculateProjections, matchKey } from '../simulator-engine.js'
+import { render as renderMatchCockpit, open as openMatchCockpit, getCockpitSession } from './match-cockpit.js'
 
 function esc(str) {
   return String(str)
@@ -237,9 +238,11 @@ function handleReset() {
  */
 export function render(container, season) {
   container.innerHTML = ''
+  renderMatchCockpit(document.body)
 
   const calendar = season?.calendar
   const upcoming = filterUpcoming(calendar)
+  const currentMatch = upcoming[0] || null
 
   const wrapper = document.createElement('div')
   wrapper.className = 'w-sim-container'
@@ -274,6 +277,12 @@ export function render(container, season) {
       <div class="w-sim-header__label">Scenarios what-if</div>
       <h1 class="w-sim-header__heading">Simulateur</h1>
       <p class="w-sim-header__sub">Choisissez vos pronostics et explorez l'impact sur le classement.</p>
+      <button class="w-sim-cockpit-btn" type="button" aria-label="Ouvrir le cockpit de saisie guidée">
+        Ouvrir le cockpit
+      </button>
+      <div class="w-sim-header__meta" aria-live="polite">
+        ${upcoming.length} match${upcoming.length > 1 ? 's' : ''} à compléter · ${currentMatch ? `Journée ${currentMatch.matchday}` : 'aucun match courant'}
+      </div>
     </header>
     <div class="w-sim-bar" role="status" aria-live="polite">
       <div class="w-sim-bar__count"><span class="w-sim-bar__count-num">${count}</span> match(s) simule(s)</div>
@@ -319,6 +328,20 @@ export function render(container, season) {
       e.preventDefault()
       handleReset()
       rerender(container, season)
+      return
+    }
+
+    // Guided cockpit launch
+    if (e.target.closest('.w-sim-cockpit-btn')) {
+      e.preventDefault()
+      const session = getCockpitSession(season)
+      openMatchCockpit({
+        season,
+        match: session.currentMatch ?? currentMatch,
+        currentIndex: session.currentIndex || 1,
+        totalCount: session.totalCount || upcoming.length,
+        remainingCount: session.remainingCount || upcoming.length,
+      })
     }
   })
 

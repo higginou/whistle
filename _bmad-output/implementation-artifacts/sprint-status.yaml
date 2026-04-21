@@ -1,5 +1,5 @@
 # generated: 2026-03-28
-# last_updated: 2026-04-13 (epic 7 review)
+# last_updated: 2026-04-21 (epic 8 cockpit shell)
 # project: Whistle
 # project_key: NOKEY
 # tracking_system: file-system
@@ -36,7 +36,7 @@
 # - Inter-epic work (retro action items, debt, prep) is tracked under inter_epic_tasks
 
 generated: 2026-03-28
-last_updated: 2026-04-13 (epic 7 review)
+last_updated: 2026-04-20 (popup + Vercel migration prep)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -98,6 +98,32 @@ development_status:
   7-1-refonte-visuelle-rochelaise: review
   7-2-hero-tribune-rochelaise: review
   7-3-score-supporter-personnel: review
+
+  # Epic 8 : Saisie guidee des matchs
+  epic-8: in-progress
+  8-1-maquette-et-cadrage-popup-cockpit: done
+  8-2-detection-matchs-manquants-et-ouverture-bloquante: ready-for-dev
+  8-3-saisie-guidee-dun-match: ready-for-dev
+  8-4-sauvegarde-locale-validation-finale-et-accessibilite: ready-for-dev
+
+  # Epic 9 : Socle Vercel et auth admin
+  epic-9: in-progress
+  9-1-deploiement-du-front-sur-vercel: ready-for-dev
+  9-2-modele-de-donnees-et-stockage-vercel-postgres: ready-for-dev
+  9-3-auth-admin-pour-la-saisie: ready-for-dev
+  9-4-api-publique-et-api-admin: ready-for-dev
+
+  # Epic 10 : Recalcul et synchronisation
+  epic-10: in-progress
+  10-1-moteur-de-recalcul-complet: ready-for-dev
+  10-2-recalcul-du-classement-elo-et-projections: ready-for-dev
+  10-3-publication-et-rafraichissement-des-vues: ready-for-dev
+
+  # Epic 11 : Retrait du pipeline legacy
+  epic-11: in-progress
+  11-1-retrait-du-scraping-legacy: ready-for-dev
+  11-2-retrait-de-github-actions-du-flux-metier: ready-for-dev
+  11-3-nettoyage-final-et-verification: ready-for-dev
 
 # Inter-epic tasks (retro action items, debt, preparation)
 # Tracked here to avoid losing visibility on work between epics

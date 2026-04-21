@@ -23,6 +23,7 @@ import { render as renderDonjon } from './components/tab-donjon.js'
 import { render as renderOracle } from './components/tab-oracle.js'
 import { render as renderDuels } from './components/tab-duels.js'
 import { render as renderSimulateur } from './components/tab-simulateur.js'
+import { render as renderMatchCockpit, maybeOpen as maybeOpenMatchCockpit, close as closeMatchCockpit } from './components/match-cockpit.js'
 import { computeAchievements } from './components/achievement-card.js'
 import { revealProjection, resetProjection } from './animation/engine.js'
 
@@ -313,6 +314,9 @@ function renderFullLayout() {
   // Succès sheet
   renderSuccesSheet(document.body)
 
+  // Guided cockpit (always mounted, auto-opens if matches remain to enter)
+  renderMatchCockpit(document.body)
+
   // Succès button handler
   const succesBtn = shell.querySelector('.w-succes-btn')
   if (succesBtn) {
@@ -346,10 +350,12 @@ on('season', (event) => {
   const { value } = event.detail
   if (value) {
     renderFullLayout()
+    maybeOpenMatchCockpit(value)
     // Update Succès badge
     const count = computeAchievements(value).length
     updateBadge(shell, count)
   } else {
+    closeMatchCockpit()
     renderEmptyState(appEl)
   }
 })
