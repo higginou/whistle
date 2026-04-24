@@ -36,7 +36,7 @@
 # - Inter-epic work (retro action items, debt, prep) is tracked under inter_epic_tasks
 
 generated: 2026-03-28
-last_updated: 2026-04-24 (story 9.3 done)
+last_updated: 2026-04-24 (epic 9 done)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -108,11 +108,12 @@ development_status:
   epic-8-retrospective: done
 
   # Epic 9 : Socle Vercel et auth admin
-  epic-9: in-progress
+  epic-9: done
   9-1-deploiement-du-front-sur-vercel: done
   9-2-modele-de-donnees-et-stockage-vercel-postgres: done
   9-3-auth-admin-pour-la-saisie: done
-  9-4-api-publique-et-api-admin: ready-for-dev
+  9-4-api-publique-et-api-admin: done
+  epic-9-retrospective: done
 
   # Epic 10 : Recalcul et synchronisation
   epic-10: in-progress
