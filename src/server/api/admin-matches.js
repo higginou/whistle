@@ -19,6 +19,13 @@ function assertScore(value, field) {
   return value
 }
 
+function normalizeBonus(value = {}) {
+  return {
+    offensive: value?.offensive === true,
+    defensive: value?.defensive === true,
+  }
+}
+
 export function normalizeAdminMatchPayload(payload = {}) {
   const seasonId = assertString(payload.seasonId, 'seasonId')
   const homeTeamId = assertString(payload.homeTeamId, 'homeTeamId')
@@ -40,6 +47,9 @@ export function normalizeAdminMatchPayload(payload = {}) {
     throw new Error('date must be an ISO-8601 UTC timestamp')
   }
 
+  const homeBonus = normalizeBonus(payload.homeBonus)
+  const awayBonus = normalizeBonus(payload.awayBonus)
+
   return {
     seasonId,
     matchday: payload.matchday,
@@ -48,11 +58,16 @@ export function normalizeAdminMatchPayload(payload = {}) {
     awayTeamId,
     homeScore: assertScore(payload.homeScore, 'homeScore'),
     awayScore: assertScore(payload.awayScore, 'awayScore'),
+    homeBonus,
+    awayBonus,
     status: 'played',
   }
 }
 
 export async function saveAdminMatch(match, sql) {
+  const homeBonus = normalizeBonus(match.homeBonus)
+  const awayBonus = normalizeBonus(match.awayBonus)
+
   return sql`
     INSERT INTO matches (
       season_id,
@@ -62,6 +77,10 @@ export async function saveAdminMatch(match, sql) {
       away_team_id,
       home_score,
       away_score,
+      home_bonus_offensive,
+      home_bonus_defensive,
+      away_bonus_offensive,
+      away_bonus_defensive,
       status,
       source,
       updated_at
@@ -73,6 +92,10 @@ export async function saveAdminMatch(match, sql) {
       ${match.awayTeamId},
       ${match.homeScore},
       ${match.awayScore},
+      ${homeBonus.offensive},
+      ${homeBonus.defensive},
+      ${awayBonus.offensive},
+      ${awayBonus.defensive},
       ${match.status},
       'admin',
       NOW()
@@ -82,6 +105,10 @@ export async function saveAdminMatch(match, sql) {
       date = EXCLUDED.date,
       home_score = EXCLUDED.home_score,
       away_score = EXCLUDED.away_score,
+      home_bonus_offensive = EXCLUDED.home_bonus_offensive,
+      home_bonus_defensive = EXCLUDED.home_bonus_defensive,
+      away_bonus_offensive = EXCLUDED.away_bonus_offensive,
+      away_bonus_defensive = EXCLUDED.away_bonus_defensive,
       status = EXCLUDED.status,
       source = EXCLUDED.source,
       updated_at = NOW()

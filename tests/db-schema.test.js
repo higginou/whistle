@@ -30,6 +30,8 @@ describe('database schema for Vercel Postgres migration', () => {
     expect(schemaSql).toContain('away_team_id TEXT NOT NULL')
     expect(schemaSql).toContain('home_score SMALLINT')
     expect(schemaSql).toContain('away_score SMALLINT')
+    expect(schemaSql).toContain('home_bonus_offensive BOOLEAN NOT NULL DEFAULT FALSE')
+    expect(schemaSql).toContain('away_bonus_defensive BOOLEAN NOT NULL DEFAULT FALSE')
     expect(schemaSql).toContain("status = 'played' AND home_score IS NOT NULL AND away_score IS NOT NULL")
     expect(schemaSql).toContain("status <> 'played' AND home_score IS NULL AND away_score IS NULL")
     expect(schemaSql).toContain('prevent_team_double_booking')

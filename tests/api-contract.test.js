@@ -114,6 +114,8 @@ describe('admin matches API', () => {
       awayTeamId: 'toulouse',
       homeScore: 24,
       awayScore: 19,
+      homeBonus: { offensive: false, defensive: false },
+      awayBonus: { offensive: false, defensive: false },
       status: 'played',
     })
   })
@@ -167,9 +169,11 @@ describe('admin matches API', () => {
           date: '2026-04-18T19:00:00Z',
           homeTeamId: 'la-rochelle',
           awayTeamId: 'toulouse',
-          homeScore: 24,
-          awayScore: 19,
-        },
+            homeScore: 24,
+            awayScore: 19,
+            homeBonus: { offensive: true, defensive: false },
+            awayBonus: { offensive: false, defensive: true },
+          },
       },
       res,
       ENV,
@@ -178,6 +182,8 @@ describe('admin matches API', () => {
 
     expect(res.statusCode).toBe(201)
     expect(res.body.saved).toBe(true)
+    expect(res.body.match.homeBonus.offensive).toBe(true)
+    expect(res.body.match.awayBonus.defensive).toBe(true)
     expect(recorder.calls[0].text).toContain('INSERT INTO matches')
     expect(recorder.calls[0].values).toContain('la-rochelle')
   })

@@ -36,6 +36,16 @@ function normalizeMatch(match) {
   const awayTeamId = match.awayTeamId ?? match.away_team_id ?? match.away
   const homeScore = match.homeScore ?? match.home_score
   const awayScore = match.awayScore ?? match.away_score
+  const homeBonus = match.homeBonus ?? (
+    match.home_bonus_offensive != null || match.home_bonus_defensive != null
+      ? { offensive: match.home_bonus_offensive === true, defensive: match.home_bonus_defensive === true }
+      : null
+  )
+  const awayBonus = match.awayBonus ?? (
+    match.away_bonus_offensive != null || match.away_bonus_defensive != null
+      ? { offensive: match.away_bonus_offensive === true, defensive: match.away_bonus_defensive === true }
+      : null
+  )
 
   if (typeof homeTeamId !== 'string' || typeof awayTeamId !== 'string') throw new Error('match team ids are required')
   if (!Number.isInteger(match.matchday)) throw new Error('matchday is required')
@@ -48,8 +58,8 @@ function normalizeMatch(match) {
     away: awayTeamId,
     homeScore,
     awayScore,
-    homeBonus: match.homeBonus ?? null,
-    awayBonus: match.awayBonus ?? null,
+    homeBonus,
+    awayBonus,
   }
 }
 

@@ -8,6 +8,7 @@ const FINAL_STORAGE_KEY = 'w-match-cockpit-final'
 
 let dialog = null
 let currentSession = null
+let finalValidationPending = false
 
 function esc(str) {
   return String(str)
@@ -95,6 +96,13 @@ function normalizeMatchEntry(match, season, draft) {
     bonus,
     validatedAt: new Date().toISOString(),
   }
+}
+
+function normalizeAdminDate(date) {
+  if (typeof date !== 'string') return date
+  if (/^\d{4}-\d{2}-\d{2}$/.test(date)) return `${date}T00:00:00Z`
+
+  return date
 }
 
 function getCompletedEntries() {
@@ -374,13 +382,19 @@ function focusFirstMissingInput(form) {
   if (missing) missing.focus()
 }
 
-function moveToNextMatch() {
-  if (!currentSession?.season) return
+async function moveToNextMatch() {
+  if (!currentSession?.season) return false
   currentSession = getCockpitSession(currentSession.season)
 
   if (currentSession.remainingCount === 0) {
     const payload = buildValidationPayload(currentSession.season)
     writeJSON(FINAL_STORAGE_KEY, payload)
+    try {
+      await submitFinalValidation(payload)
+    } catch (_error) {
+      setStatus('Validation backend indisponible. La saisie locale est conservee.', 'danger')
+      return false
+    }
     dialog.innerHTML = `
       <div class="w-match-cockpit__handle" aria-hidden="true"></div>
       <button class="w-match-cockpit__close" type="button" aria-label="Fermer">×</button>
@@ -394,12 +408,13 @@ function moveToNextMatch() {
       </div>`
     bindDialogEvents()
     setStatus('Validation finale prête.', 'success')
-    return
+    return true
   }
 
   dialog.innerHTML = buildContent(currentSession)
   bindDialogEvents()
   focusFirstInput()
+  return true
 }
 
 function buildValidationPayload(season) {
@@ -419,8 +434,39 @@ function buildValidationPayload(season) {
   }
 }
 
-function handleSubmit(event) {
+async function postJSON(url, payload) {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) throw new Error('admin-validation-failed')
+
+  return response
+}
+
+async function submitFinalValidation(payload) {
+  for (const entry of payload.entries) {
+    await postJSON('/api/admin/matches', {
+      seasonId: payload.seasonId,
+      matchday: entry.matchday,
+      date: normalizeAdminDate(entry.date),
+      homeTeamId: entry.home,
+      awayTeamId: entry.away,
+      homeScore: entry.score.home,
+      awayScore: entry.score.away,
+      homeBonus: entry.bonus.home,
+      awayBonus: entry.bonus.away,
+    })
+  }
+
+  await postJSON('/api/admin/recompute', { seasonId: payload.seasonId })
+}
+
+async function handleSubmit(event) {
   event.preventDefault()
+  if (finalValidationPending) return
   if (!currentSession?.currentMatch) return
 
   const draft = updateDraftFromForm()
@@ -432,8 +478,15 @@ function handleSubmit(event) {
   }
 
   persistDraft(currentSession.currentMatch, draft, true)
+  const isFinalMatch = currentSession.remainingCount === 1
+  if (isFinalMatch) {
+    finalValidationPending = true
+    const submitBtn = dialog?.querySelector('[data-cockpit-submit]')
+    if (submitBtn) submitBtn.disabled = true
+  }
   setStatus('Match validé. Passage au suivant.', 'success')
-  moveToNextMatch()
+  const completed = await moveToNextMatch()
+  if (isFinalMatch && !completed) finalValidationPending = false
 }
 
 function focusFirstInput() {
@@ -463,6 +516,7 @@ function renderSession(session) {
 }
 
 export function render(container) {
+  finalValidationPending = false
   ensureDialog(container)
   return dialog
 }
