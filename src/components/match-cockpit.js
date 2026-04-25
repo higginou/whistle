@@ -1,6 +1,7 @@
 /** @module match-cockpit — Guided match entry cockpit dialog */
 
 import '../styles/components/match-cockpit.css'
+import { loadSeason } from '../data.js'
 
 const FAVORITE_TEAM = 'la-rochelle'
 const DRAFT_STORAGE_KEY = 'w-match-cockpit-drafts'
@@ -462,6 +463,7 @@ async function submitFinalValidation(payload) {
   }
 
   await postJSON('/api/admin/recompute', { seasonId: payload.seasonId })
+  await loadSeason(payload.seasonId)
 }
 
 async function handleSubmit(event) {

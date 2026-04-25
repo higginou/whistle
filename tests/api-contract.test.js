@@ -64,6 +64,7 @@ describe('public season API', () => {
 
     expect(res.statusCode).toBe(200)
     expect(res.headers['access-control-allow-origin']).toBeUndefined()
+    expect(res.headers['cache-control']).toBe('no-store')
     expect(res.body.season).toBe('2025-2026')
     expect(res.body.teams[0]).toHaveProperty('elo')
     expect(res.body.teams[0]).toHaveProperty('projectedRank')

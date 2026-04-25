@@ -301,6 +301,7 @@ async function showTab(tabId, instant = false) {
 }
 
 function renderFullLayout() {
+  document.body.querySelectorAll('.w-bottom-nav, dialog.w-bottom-sheet, dialog.w-succes-sheet').forEach((node) => node.remove())
   shell = renderLayout()
   appEl.replaceChildren(shell)
   viewport = shell.querySelector('.w-tab-viewport')

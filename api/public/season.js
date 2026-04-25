@@ -15,6 +15,7 @@ export default async function publicSeasonHandler(req, res, env = process.env, o
 
   try {
     const data = await getPublicSeasonPayload(season, getPublicSql(env, options.sql))
+    res.setHeader('Cache-Control', 'no-store')
 
     return res.status(200).json(data)
   } catch (error) {

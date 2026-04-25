@@ -144,6 +144,7 @@ describe('match-cockpit', () => {
     expect(document.querySelector('[data-cockpit-status]').textContent).toContain('Validation finale prête')
     expect(fetchMock).toHaveBeenCalledWith('/api/admin/matches', expect.objectContaining({ method: 'POST' }))
     expect(fetchMock).toHaveBeenCalledWith('/api/admin/recompute', expect.objectContaining({ method: 'POST' }))
+    expect(fetchMock).toHaveBeenCalledWith('/api/public/season?season=2025-2026', { cache: 'no-store' })
     const matchBody = JSON.parse(fetchMock.mock.calls[0][1].body)
     expect(() => normalizeAdminMatchPayload(matchBody)).not.toThrow()
     expect(matchBody.date).toBe('2026-04-18T00:00:00Z')
@@ -171,8 +172,9 @@ describe('match-cockpit', () => {
     form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
     await new Promise((resolve) => setTimeout(resolve, 0))
 
-    expect(fetchMock).toHaveBeenCalledTimes(2)
+    expect(fetchMock).toHaveBeenCalledTimes(3)
     expect(fetchMock.mock.calls[0][0]).toBe('/api/admin/matches')
     expect(fetchMock.mock.calls[1][0]).toBe('/api/admin/recompute')
+    expect(fetchMock.mock.calls[2][0]).toBe('/api/public/season?season=2025-2026')
   })
 })

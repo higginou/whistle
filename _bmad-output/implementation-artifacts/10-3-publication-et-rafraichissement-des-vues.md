@@ -1,6 +1,6 @@
 # Story 10.3 : Publication et rafraichissement des vues
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -28,15 +28,15 @@ Afin de voir les nouvelles donnees sans bricolage manuel.
 
 ## Tasks / Subtasks
 
-- [ ] Brancher les vues publiques sur les donnees fraiches (AC: 1, 2)
-  - [ ] Recharger ou rerendre apres validation
-  - [ ] Garder le flux simple
-- [ ] Poser une strategie de cache claire (AC: 2, 3)
-  - [ ] Eviter les donnees stale inutiles
-  - [ ] Laisser un fallback lisible
-- [ ] Documenter le nouveau flux de publication (AC: 4)
-  - [ ] Expliquer API -> DB -> front
-  - [ ] Retirer la confusion avec GitHub Pages
+- [x] Brancher les vues publiques sur les donnees fraiches (AC: 1, 2)
+  - [x] Recharger ou rerendre apres validation
+  - [x] Garder le flux simple
+- [x] Poser une strategie de cache claire (AC: 2, 3)
+  - [x] Eviter les donnees stale inutiles
+  - [x] Laisser un fallback lisible
+- [x] Documenter le nouveau flux de publication (AC: 4)
+  - [x] Expliquer API -> DB -> front
+  - [x] Retirer la confusion avec GitHub Pages
 
 ## Dev Notes
 
@@ -58,10 +58,62 @@ Afin de voir les nouvelles donnees sans bricolage manuel.
 
 ### Agent Model Used
 
-TBD
+openai/gpt-5.5
 
 ### Debug Log References
 
+- 2026-04-25 : `npx vitest run src/__tests__/data.test.js src/__tests__/match-cockpit.test.js tests/api-contract.test.js` : 35 tests passes.
+- 2026-04-25 : `npx vitest run` : 45 fichiers, 934 tests passes.
+- 2026-04-25 : `npx vitest run` : 45 fichiers, 935 tests passes apres correction de review.
+- 2026-04-25 : `npx biome check .` : passe.
+- 2026-04-25 : `cargo test` non execute : aucun `src-tauri/Cargo.toml` present dans le repo.
+
 ### Completion Notes List
 
+- `loadSeason()` lit maintenant la saison publique via `GET /api/public/season?season=...` avec `cache: no-store`, puis conserve le fallback localStorage existant.
+- La validation finale cockpit recharge la saison apres `POST /api/admin/recompute`, ce qui met a jour le store et rerend les vues abonnees.
+- L'API publique envoie `Cache-Control: no-store` pour eviter les lectures stale inutiles apres recalcul.
+- Documentation ajoutee pour clarifier le flux Vercel API -> DB -> front, sans redeploiement GitHub Pages.
+- Correction de review appliquee : le rerender `season` est idempotent et nettoie les elements body-mounted avant de remonter le layout.
+
 ### File List
+
+- api/public/season.js
+- src/app.js
+- src/data.js
+- src/components/match-cockpit.js
+- src/__tests__/app.test.js
+- src/__tests__/data.test.js
+- src/__tests__/match-cockpit.test.js
+- src/server/api/README.md
+- tests/api-contract.test.js
+- _bmad-output/implementation-artifacts/10-3-publication-et-rafraichissement-des-vues.md
+- _bmad-output/implementation-artifacts/sprint-status.yaml
+
+### Change Log
+
+- 2026-04-25 : Publication publique basculee sur API Vercel no-store avec refresh front apres recalcul et documentation du flux.
+- 2026-04-25 : Correction du rerender apres refresh pour eviter les doublons de nav/dialogs.
+
+## Senior Developer Review (AI)
+
+Review Date: 2026-04-25
+
+Outcome: Approve
+
+### Findings
+
+- Aucun finding bloquant apres re-review.
+
+### Action Items
+
+- [x] Lire les donnees publiques via l'API Vercel avec `cache: no-store`.
+- [x] Recharger la saison apres recalcul admin pour rerendre les vues publiques.
+- [x] Envoyer `Cache-Control: no-store` sur l'API publique.
+- [x] Conserver le fallback localStorage/null en cas d'erreur reseau.
+- [x] Documenter le flux API -> DB -> front.
+- [x] Rendre le refresh `season` idempotent pour eviter les doublons de nav/dialogs.
+
+### Residual Risks / Testing Gaps
+
+- Le header `Cache-Control: no-store` est teste sur le chemin public API succes; les chemins d'erreur ne l'assertent pas explicitement.

@@ -34,10 +34,6 @@ const SEASON_DATA = {
   teams: [{ id: 'la-rochelle' }],
 }
 
-const SEASONS_INDEX = {
-  seasons: [{ id: '2025-2026', label: 'Saison 2025-2026', current: true }],
-}
-
 beforeEach(() => {
   store.set.mockClear()
   mockFetch.mockReset()
@@ -47,21 +43,15 @@ beforeEach(() => {
 })
 
 describe('data.loadSeason', () => {
-  it('resolves current season from seasons.json when no id given', async () => {
-    mockFetch
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(SEASONS_INDEX),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: () => Promise.resolve(SEASON_DATA),
-      })
+  it('uses the Vercel public API for the current season when no id is given', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(SEASON_DATA),
+    })
 
     await loadSeason()
 
-    expect(mockFetch).toHaveBeenCalledWith('./data/seasons.json')
-    expect(mockFetch).toHaveBeenCalledWith('./data/2025-2026.json')
+    expect(mockFetch).toHaveBeenCalledWith('/api/public/season?season=2025-2026', { cache: 'no-store' })
   })
 
   it('stores data and dispatches season event on fetch success', async () => {
@@ -189,14 +179,6 @@ describe('data.loadSeason', () => {
     mockFetch.mockRejectedValueOnce(new Error('network error'))
 
     await loadSeason('2025-2026')
-
-    expect(store.set).toHaveBeenCalledWith('season', null)
-  })
-
-  it('sets season to null when seasons.json fetch fails and no id given', async () => {
-    mockFetch.mockRejectedValueOnce(new Error('network error'))
-
-    await loadSeason()
 
     expect(store.set).toHaveBeenCalledWith('season', null)
   })

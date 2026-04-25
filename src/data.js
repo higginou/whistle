@@ -7,23 +7,17 @@ const LAST_VISIT_KEY = 'whistle-last-visit'
 const STALE_THRESHOLD_MS = 7 * 24 * 60 * 60 * 1000
 
 /**
- * Load season data (network-first, cache fallback).
+ * Load season data from the Vercel public API (network-first, cache fallback).
  * @param {string} [seasonId] — if omitted, resolved from seasons.json
  */
-async function loadSeason(seasonId) {
-  if (!seasonId) {
-    seasonId = await resolveCurrentSeason()
-    if (!seasonId) {
-      set('season', null)
-      return
-    }
-  }
+async function loadSeason(seasonId = '2025-2026') {
+  if (!seasonId) seasonId = '2025-2026'
 
-  const url = `./data/${seasonId}.json`
+  const url = `/api/public/season?season=${encodeURIComponent(seasonId)}`
   const cacheKey = CACHE_PREFIX + seasonId
 
   try {
-    const response = await fetch(url)
+    const response = await fetch(url, { cache: 'no-store' })
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     const data = await response.json()
 
@@ -61,22 +55,6 @@ async function loadSeason(seasonId) {
     } else {
       set('season', null)
     }
-  }
-}
-
-/**
- * Resolve current season ID from seasons.json index.
- * @returns {Promise<string|null>}
- */
-async function resolveCurrentSeason() {
-  try {
-    const response = await fetch('./data/seasons.json')
-    if (!response.ok) throw new Error(`HTTP ${response.status}`)
-    const index = await response.json()
-    const current = index.seasons.find((s) => s.current === true)
-    return current ? current.id : null
-  } catch (_err) {
-    return null
   }
 }
 

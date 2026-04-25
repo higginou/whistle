@@ -35,6 +35,20 @@ describe('app integration', () => {
     expect(nav).not.toBeNull()
   })
 
+  it('keeps body-mounted chrome idempotent across season refreshes', async () => {
+    const { set } = await import('../store.js')
+    await import('../app.js')
+    const season = { id: '2025-2026', matchday: 10, teams: [], predictions: [], calendar: [] }
+
+    set('season', season)
+    set('season', { ...season, lastUpdated: '2026-04-25T10:00:00Z' })
+
+    expect(document.querySelectorAll('.w-bottom-nav')).toHaveLength(1)
+    expect(document.querySelectorAll('dialog.w-bottom-sheet')).toHaveLength(1)
+    expect(document.querySelectorAll('dialog.w-succes-sheet')).toHaveLength(1)
+    expect(document.querySelectorAll('dialog.w-match-cockpit')).toHaveLength(1)
+  })
+
   it('shows empty state when season is null', async () => {
     const { set } = await import('../store.js')
     await import('../app.js')
