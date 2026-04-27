@@ -1,7 +1,7 @@
 {
   "season": "2025-2026",
-  "lastUpdated": "2026-04-22T07:50:14Z",
-  "matchday": 21,
+  "lastUpdated": "2026-04-27T08:27:52Z",
+  "matchday": 22,
   "brierScore": null,
   "teams": [
     {
@@ -9,14 +9,38 @@
       "name": "Stade Toulousain",
       "currentRank": 1,
       "projectedRank": 1,
-      "elo": 1597,
-      "points": 77,
-      "projectedPoints": 90,
-      "confidence": 0.58,
+      "elo": 1573,
+      "points": 78,
+      "projectedPoints": 87,
+      "confidence": 0.51,
       "zones": {
-        "europe": 0.9979,
-        "top6": 0.0021,
+        "europe": 0.9965,
+        "top6": 0.0035,
         "mid": 0,
+        "relegation": 0
+      },
+      "form": [
+        "W",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
+      "trend": "stable"
+    },
+    {
+      "id": "montpellier",
+      "name": "Montpellier Herault Rugby",
+      "currentRank": 3,
+      "projectedRank": 3,
+      "elo": 1573,
+      "points": 64,
+      "projectedPoints": 75,
+      "confidence": 0.51,
+      "zones": {
+        "europe": 0.3812,
+        "top6": 0.5809,
+        "mid": 0.0379,
         "relegation": 0
       },
       "form": [
@@ -26,69 +50,22 @@
         "W",
         "W"
       ],
-      "trend": "up"
+      "trend": "up",
+      "tiebreaker": "h2h-1"
     },
     {
       "id": "pau",
       "name": "Section Paloise",
       "currentRank": 2,
       "projectedRank": 3,
-      "elo": 1556,
-      "points": 63,
-      "projectedPoints": 76,
-      "confidence": 0.49,
+      "elo": 1538,
+      "points": 64,
+      "projectedPoints": 75,
+      "confidence": 0.51,
       "zones": {
-        "europe": 0.4657,
-        "top6": 0.5048,
-        "mid": 0.0295,
-        "relegation": 0
-      },
-      "form": [
-        "L",
-        "W",
-        "L",
-        "W",
-        "W"
-      ],
-      "trend": "up"
-    },
-    {
-      "id": "montpellier",
-      "name": "Montpellier Herault Rugby",
-      "currentRank": 3,
-      "projectedRank": 4,
-      "elo": 1557,
-      "points": 60,
-      "projectedPoints": 73,
-      "confidence": 0.49,
-      "zones": {
-        "europe": 0.2228,
-        "top6": 0.6921,
-        "mid": 0.0851,
-        "relegation": 0
-      },
-      "form": [
-        "W",
-        "W",
-        "W",
-        "L",
-        "W"
-      ],
-      "trend": "stable"
-    },
-    {
-      "id": "bordeaux-begles",
-      "name": "Union Bordeaux-Begles",
-      "currentRank": 5,
-      "projectedRank": 5,
-      "elo": 1529,
-      "points": 59,
-      "projectedPoints": 72,
-      "confidence": 0.48,
-      "zones": {
-        "europe": 0.1193,
-        "top6": 0.7034,
-        "mid": 0.1773,
+        "europe": 0.2838,
+        "top6": 0.6494,
+        "mid": 0.0668,
         "relegation": 0
       },
       "form": [
@@ -106,117 +83,164 @@
       "name": "Stade Francais Paris",
       "currentRank": 4,
       "projectedRank": 4,
-      "elo": 1525,
-      "points": 59,
-      "projectedPoints": 72,
-      "confidence": 0.5,
+      "elo": 1537,
+      "points": 63,
+      "projectedPoints": 74,
+      "confidence": 0.51,
       "zones": {
-        "europe": 0.1327,
-        "top6": 0.7303,
-        "mid": 0.137,
+        "europe": 0.1727,
+        "top6": 0.7269,
+        "mid": 0.1004,
         "relegation": 0
       },
       "form": [
+        "W",
+        "W",
+        "W",
         "L",
-        "W",
-        "W",
-        "W",
-        "L"
+        "W"
       ],
-      "trend": "stable",
-      "tiebreaker": "h2h-1"
+      "trend": "stable"
     },
     {
       "id": "clermont",
       "name": "ASM Clermont Auvergne",
-      "currentRank": 6,
-      "projectedRank": 6,
-      "elo": 1529,
-      "points": 57,
-      "projectedPoints": 68,
-      "confidence": 0.48,
+      "currentRank": 5,
+      "projectedRank": 5,
+      "elo": 1546,
+      "points": 61,
+      "projectedPoints": 71,
+      "confidence": 0.51,
       "zones": {
-        "europe": 0.0391,
-        "top6": 0.5594,
-        "mid": 0.4015,
+        "europe": 0.0837,
+        "top6": 0.6361,
+        "mid": 0.2802,
         "relegation": 0
       },
       "form": [
         "W",
+        "L",
+        "L",
         "W",
-        "L",
-        "L",
         "W"
       ],
-      "trend": "stable"
+      "trend": "up"
     },
     {
       "id": "racing-92",
       "name": "Racing 92",
-      "currentRank": 7,
+      "currentRank": 6,
       "projectedRank": 6,
-      "elo": 1536,
-      "points": 55,
-      "projectedPoints": 68,
-      "confidence": 0.5,
+      "elo": 1548,
+      "points": 60,
+      "projectedPoints": 70,
+      "confidence": 0.51,
       "zones": {
-        "europe": 0.0224,
-        "top6": 0.5902,
-        "mid": 0.3874,
+        "europe": 0.0515,
+        "top6": 0.6274,
+        "mid": 0.3211,
         "relegation": 0
       },
       "form": [
-        "W",
         "L",
         "W",
         "L",
+        "W",
         "W"
       ],
-      "trend": "stable"
+      "trend": "up"
+    },
+    {
+      "id": "bordeaux-begles",
+      "name": "Union Bordeaux-Begles",
+      "currentRank": 7,
+      "projectedRank": 6,
+      "elo": 1511,
+      "points": 60,
+      "projectedPoints": 70,
+      "confidence": 0.52,
+      "zones": {
+        "europe": 0.0302,
+        "top6": 0.5758,
+        "mid": 0.394,
+        "relegation": 0
+      },
+      "form": [
+        "L",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "trend": "down"
     },
     {
       "id": "toulon",
       "name": "RC Toulon",
       "currentRank": 8,
-      "projectedRank": 9,
-      "elo": 1472,
-      "points": 50,
-      "projectedPoints": 60,
-      "confidence": 0.49,
+      "projectedRank": 8,
+      "elo": 1489,
+      "points": 55,
+      "projectedPoints": 63,
+      "confidence": 0.52,
       "zones": {
-        "europe": 0.0001,
-        "top6": 0.0993,
-        "mid": 0.9006,
+        "europe": 0.0003,
+        "top6": 0.131,
+        "mid": 0.8687,
         "relegation": 0
       },
       "form": [
-        "L",
         "D",
         "L",
         "L",
+        "W",
         "W"
       ],
-      "trend": "stable"
+      "trend": "up"
     },
     {
       "id": "la-rochelle",
       "name": "Stade Rochelais",
       "currentRank": 9,
       "projectedRank": 9,
-      "elo": 1503,
-      "points": 48,
-      "projectedPoints": 59,
-      "confidence": 0.54,
+      "elo": 1517,
+      "points": 52,
+      "projectedPoints": 61,
+      "confidence": 0.52,
       "zones": {
-        "europe": 0,
-        "top6": 0.0738,
-        "mid": 0.9262,
+        "europe": 0.0001,
+        "top6": 0.0657,
+        "mid": 0.9342,
         "relegation": 0
       },
       "form": [
+        "W",
+        "W",
         "L",
         "W",
+        "W"
+      ],
+      "trend": "up"
+    },
+    {
+      "id": "lyon",
+      "name": "LOU Rugby",
+      "currentRank": 10,
+      "projectedRank": 10,
+      "elo": 1493,
+      "points": 48,
+      "projectedPoints": 56,
+      "confidence": 0.52,
+      "zones": {
+        "europe": 0,
+        "top6": 0.0013,
+        "mid": 0.9987,
+        "relegation": 0
+      },
+      "form": [
+        "D",
         "W",
+        "L",
         "L",
         "W"
       ],
@@ -225,69 +249,45 @@
     {
       "id": "castres",
       "name": "Castres Olympique",
-      "currentRank": 10,
-      "projectedRank": 10,
-      "elo": 1475,
-      "points": 47,
-      "projectedPoints": 57,
-      "confidence": 0.49,
+      "currentRank": 11,
+      "projectedRank": 11,
+      "elo": 1466,
+      "points": 48,
+      "projectedPoints": 56,
+      "confidence": 0.53,
       "zones": {
         "europe": 0,
-        "top6": 0.0253,
-        "mid": 0.9747,
+        "top6": 0.002,
+        "mid": 0.998,
         "relegation": 0
       },
       "form": [
         "L",
         "L",
-        "L",
         "W",
+        "L",
         "L"
       ],
-      "trend": "stable"
+      "trend": "down"
     },
     {
       "id": "bayonne",
       "name": "Aviron Bayonnais",
-      "currentRank": 11,
-      "projectedRank": 11,
-      "elo": 1467,
-      "points": 45,
-      "projectedPoints": 55,
-      "confidence": 0.5,
-      "zones": {
-        "europe": 0,
-        "top6": 0.0137,
-        "mid": 0.9862,
-        "relegation": 0.0001
-      },
-      "form": [
-        "L",
-        "L",
-        "W",
-        "W",
-        "L"
-      ],
-      "trend": "stable"
-    },
-    {
-      "id": "lyon",
-      "name": "LOU Rugby",
       "currentRank": 12,
-      "projectedRank": 11,
-      "elo": 1481,
-      "points": 44,
-      "projectedPoints": 54,
-      "confidence": 0.5,
+      "projectedRank": 12,
+      "elo": 1456,
+      "points": 45,
+      "projectedPoints": 53,
+      "confidence": 0.53,
       "zones": {
         "europe": 0,
-        "top6": 0.0056,
-        "mid": 0.9944,
+        "top6": 0,
+        "mid": 1,
         "relegation": 0
       },
       "form": [
+        "L",
         "W",
-        "D",
         "W",
         "L",
         "L"
@@ -299,34 +299,34 @@
       "name": "perpignan",
       "currentRank": 13,
       "projectedRank": 13,
-      "elo": 1437,
-      "points": 23,
-      "projectedPoints": 32,
-      "confidence": 0.56,
+      "elo": 1424,
+      "points": 24,
+      "projectedPoints": 30,
+      "confidence": 0.58,
       "zones": {
         "europe": 0,
         "top6": 0,
-        "mid": 0.0001,
-        "relegation": 0.9999
+        "mid": 0,
+        "relegation": 1
       },
       "form": [
-        "W",
         "L",
         "L",
         "W",
+        "L",
         "L"
       ],
-      "trend": "stable"
+      "trend": "down"
     },
     {
       "id": "montauban",
       "name": "US Montauban",
       "currentRank": 14,
       "projectedRank": 14,
-      "elo": 1336,
+      "elo": 1329,
       "points": 7,
-      "projectedPoints": 13,
-      "confidence": 0.68,
+      "projectedPoints": 12,
+      "confidence": 0.7,
       "zones": {
         "europe": 0,
         "top6": 0,
@@ -345,81 +345,32 @@
   ],
   "calendar": [
     {
-      "matchday": 22,
-      "date": "2026-04-25",
-      "home": "stade-francais",
-      "away": "pau",
-      "difficulty": 0.45
-    },
-    {
-      "matchday": 22,
-      "date": "2026-04-25",
-      "home": "lyon",
-      "away": "castres",
-      "difficulty": 0.4
-    },
-    {
-      "matchday": 22,
-      "date": "2026-04-25",
-      "home": "toulon",
-      "away": "bayonne",
-      "difficulty": 0.4
-    },
-    {
-      "matchday": 22,
-      "date": "2026-04-25",
-      "home": "montauban",
-      "away": "racing-92",
-      "difficulty": 0.69
-    },
-    {
-      "matchday": 22,
-      "date": "2026-04-25",
-      "home": "perpignan",
-      "away": "la-rochelle",
-      "difficulty": 0.5
-    },
-    {
-      "matchday": 22,
-      "date": "2026-04-25",
-      "home": "bordeaux-begles",
-      "away": "montpellier",
-      "difficulty": 0.45
-    },
-    {
-      "matchday": 22,
-      "date": "2026-04-26",
-      "home": "toulouse",
-      "away": "clermont",
-      "difficulty": 0.32
-    },
-    {
       "matchday": 23,
       "date": "2026-05-09",
       "home": "pau",
       "away": "castres",
-      "difficulty": 0.3
+      "difficulty": 0.31
     },
     {
       "matchday": 23,
       "date": "2026-05-09",
       "home": "clermont",
       "away": "perpignan",
-      "difficulty": 0.29
+      "difficulty": 0.25
     },
     {
       "matchday": 23,
       "date": "2026-05-09",
       "home": "bayonne",
       "away": "bordeaux-begles",
-      "difficulty": 0.5
+      "difficulty": 0.49
     },
     {
       "matchday": 23,
       "date": "2026-05-09",
       "home": "montpellier",
       "away": "montauban",
-      "difficulty": 0.16
+      "difficulty": 0.14
     },
     {
       "matchday": 23,
@@ -433,49 +384,49 @@
       "date": "2026-05-09",
       "home": "toulon",
       "away": "toulouse",
-      "difficulty": 0.59
+      "difficulty": 0.53
     },
     {
       "matchday": 23,
       "date": "2026-05-10",
       "home": "racing-92",
       "away": "la-rochelle",
-      "difficulty": 0.36
+      "difficulty": 0.37
     },
     {
       "matchday": 24,
       "date": "2026-05-15",
       "home": "castres",
       "away": "montpellier",
-      "difficulty": 0.52
+      "difficulty": 0.56
     },
     {
       "matchday": 24,
       "date": "2026-05-15",
       "home": "lyon",
       "away": "bayonne",
-      "difficulty": 0.39
+      "difficulty": 0.36
     },
     {
       "matchday": 24,
       "date": "2026-05-15",
       "home": "racing-92",
       "away": "toulon",
-      "difficulty": 0.32
+      "difficulty": 0.33
     },
     {
       "matchday": 24,
       "date": "2026-05-15",
       "home": "pau",
       "away": "clermont",
-      "difficulty": 0.37
+      "difficulty": 0.42
     },
     {
       "matchday": 24,
       "date": "2026-05-15",
       "home": "la-rochelle",
       "away": "toulouse",
-      "difficulty": 0.54
+      "difficulty": 0.49
     },
     {
       "matchday": 24,
@@ -489,70 +440,70 @@
       "date": "2026-05-15",
       "home": "montauban",
       "away": "stade-francais",
-      "difficulty": 0.67
+      "difficulty": 0.69
     },
     {
       "matchday": 25,
       "date": "2026-05-29",
       "home": "clermont",
       "away": "racing-92",
-      "difficulty": 0.42
+      "difficulty": 0.41
     },
     {
       "matchday": 25,
       "date": "2026-05-29",
       "home": "montpellier",
       "away": "pau",
-      "difficulty": 0.41
+      "difficulty": 0.36
     },
     {
       "matchday": 25,
       "date": "2026-05-29",
       "home": "toulon",
       "away": "bordeaux-begles",
-      "difficulty": 0.49
+      "difficulty": 0.44
     },
     {
       "matchday": 25,
       "date": "2026-05-29",
       "home": "stade-francais",
       "away": "bayonne",
-      "difficulty": 0.33
+      "difficulty": 0.3
     },
     {
       "matchday": 25,
       "date": "2026-05-29",
       "home": "toulouse",
       "away": "lyon",
-      "difficulty": 0.26
+      "difficulty": 0.3
     },
     {
       "matchday": 25,
       "date": "2026-05-29",
       "home": "montauban",
       "away": "la-rochelle",
-      "difficulty": 0.64
+      "difficulty": 0.67
     },
     {
       "matchday": 25,
       "date": "2026-05-29",
       "home": "perpignan",
       "away": "castres",
-      "difficulty": 0.46
+      "difficulty": 0.47
     },
     {
       "matchday": 26,
       "date": "2026-06-05",
       "home": "bayonne",
       "away": "perpignan",
-      "difficulty": 0.37
+      "difficulty": 0.36
     },
     {
       "matchday": 26,
       "date": "2026-06-05",
       "home": "castres",
       "away": "toulon",
-      "difficulty": 0.4
+      "difficulty": 0.44
     },
     {
       "matchday": 26,
@@ -566,14 +517,14 @@
       "date": "2026-06-05",
       "home": "racing-92",
       "away": "toulouse",
-      "difficulty": 0.49
+      "difficulty": 0.44
     },
     {
       "matchday": 26,
       "date": "2026-06-05",
       "home": "pau",
       "away": "montauban",
-      "difficulty": 0.16
+      "difficulty": 0.17
     },
     {
       "matchday": 26,
@@ -587,7 +538,7 @@
       "date": "2026-06-05",
       "home": "bordeaux-begles",
       "away": "clermont",
-      "difficulty": 0.41
+      "difficulty": 0.46
     }
   ],
   "predictions": [
@@ -1051,18 +1002,25 @@
           "away": "toulouse",
           "scoreHome": 24,
           "scoreAway": 34
+        },
+        {
+          "matchday": 22,
+          "home": "toulouse",
+          "away": "clermont",
+          "scoreHome": 24,
+          "scoreAway": 27
         }
       ],
       "record": {
         "clermont": {
-          "w": 0,
+          "w": 1,
           "d": 0,
           "l": 1
         },
         "toulouse": {
           "w": 1,
           "d": 0,
-          "l": 0
+          "l": 1
         }
       }
     },
@@ -1146,16 +1104,23 @@
           "away": "stade-francais",
           "scoreHome": 34,
           "scoreAway": 10
+        },
+        {
+          "matchday": 22,
+          "home": "stade-francais",
+          "away": "pau",
+          "scoreHome": 34,
+          "scoreAway": 32
         }
       ],
       "record": {
         "pau": {
           "w": 1,
           "d": 0,
-          "l": 0
+          "l": 1
         },
         "stade-francais": {
-          "w": 0,
+          "w": 1,
           "d": 0,
           "l": 1
         }
@@ -1587,18 +1552,25 @@
           "away": "perpignan",
           "scoreHome": 31,
           "scoreAway": 8
+        },
+        {
+          "matchday": 22,
+          "home": "perpignan",
+          "away": "la-rochelle",
+          "scoreHome": 29,
+          "scoreAway": 31
         }
       ],
       "record": {
         "la-rochelle": {
-          "w": 1,
+          "w": 2,
           "d": 0,
           "l": 0
         },
         "perpignan": {
           "w": 0,
           "d": 0,
-          "l": 1
+          "l": 2
         }
       }
     },
@@ -1675,16 +1647,23 @@
           "away": "toulon",
           "scoreHome": 35,
           "scoreAway": 32
+        },
+        {
+          "matchday": 22,
+          "home": "toulon",
+          "away": "bayonne",
+          "scoreHome": 52,
+          "scoreAway": 26
         }
       ],
       "record": {
         "bayonne": {
           "w": 1,
           "d": 0,
-          "l": 0
+          "l": 1
         },
         "toulon": {
-          "w": 0,
+          "w": 1,
           "d": 0,
           "l": 1
         }
@@ -3108,16 +3087,23 @@
           "away": "bordeaux-begles",
           "scoreHome": 28,
           "scoreAway": 24
+        },
+        {
+          "matchday": 22,
+          "home": "bordeaux-begles",
+          "away": "montpellier",
+          "scoreHome": 21,
+          "scoreAway": 23
         }
       ],
       "record": {
         "bordeaux-begles": {
           "w": 0,
           "d": 0,
-          "l": 1
+          "l": 2
         },
         "montpellier": {
-          "w": 1,
+          "w": 2,
           "d": 0,
           "l": 0
         }
@@ -3521,16 +3507,23 @@
           "away": "montauban",
           "scoreHome": 61,
           "scoreAway": 16
+        },
+        {
+          "matchday": 22,
+          "home": "montauban",
+          "away": "racing-92",
+          "scoreHome": 10,
+          "scoreAway": 59
         }
       ],
       "record": {
         "montauban": {
           "w": 0,
           "d": 0,
-          "l": 1
+          "l": 2
         },
         "racing-92": {
-          "w": 1,
+          "w": 2,
           "d": 0,
           "l": 0
         }
@@ -3548,16 +3541,23 @@
           "away": "lyon",
           "scoreHome": 36,
           "scoreAway": 22
+        },
+        {
+          "matchday": 22,
+          "home": "lyon",
+          "away": "castres",
+          "scoreHome": 26,
+          "scoreAway": 21
         }
       ],
       "record": {
         "castres": {
           "w": 1,
           "d": 0,
-          "l": 0
+          "l": 1
         },
         "lyon": {
-          "w": 0,
+          "w": 1,
           "d": 0,
           "l": 1
         }
