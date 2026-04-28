@@ -1,6 +1,6 @@
 {
   "season": "2025-2026",
-  "lastUpdated": "2026-04-27T08:27:52Z",
+  "lastUpdated": "2026-04-28T08:27:58Z",
   "matchday": 22,
   "brierScore": null,
   "teams": [
@@ -11,11 +11,11 @@
       "projectedRank": 1,
       "elo": 1573,
       "points": 78,
-      "projectedPoints": 87,
+      "projectedPoints": 88,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.9965,
-        "top6": 0.0035,
+        "europe": 0.9963,
+        "top6": 0.0037,
         "mid": 0,
         "relegation": 0
       },
@@ -38,9 +38,9 @@
       "projectedPoints": 75,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.3812,
-        "top6": 0.5809,
-        "mid": 0.0379,
+        "europe": 0.377,
+        "top6": 0.5828,
+        "mid": 0.0402,
         "relegation": 0
       },
       "form": [
@@ -63,9 +63,9 @@
       "projectedPoints": 75,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.2838,
-        "top6": 0.6494,
-        "mid": 0.0668,
+        "europe": 0.29,
+        "top6": 0.6431,
+        "mid": 0.0669,
         "relegation": 0
       },
       "form": [
@@ -88,9 +88,9 @@
       "projectedPoints": 74,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.1727,
-        "top6": 0.7269,
-        "mid": 0.1004,
+        "europe": 0.1792,
+        "top6": 0.7313,
+        "mid": 0.0895,
         "relegation": 0
       },
       "form": [
@@ -112,9 +112,9 @@
       "projectedPoints": 71,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.0837,
-        "top6": 0.6361,
-        "mid": 0.2802,
+        "europe": 0.081,
+        "top6": 0.642,
+        "mid": 0.277,
         "relegation": 0
       },
       "form": [
@@ -136,9 +136,9 @@
       "projectedPoints": 70,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.0515,
-        "top6": 0.6274,
-        "mid": 0.3211,
+        "europe": 0.0451,
+        "top6": 0.635,
+        "mid": 0.3199,
         "relegation": 0
       },
       "form": [
@@ -160,9 +160,9 @@
       "projectedPoints": 70,
       "confidence": 0.52,
       "zones": {
-        "europe": 0.0302,
-        "top6": 0.5758,
-        "mid": 0.394,
+        "europe": 0.0312,
+        "top6": 0.5669,
+        "mid": 0.4019,
         "relegation": 0
       },
       "form": [
@@ -184,9 +184,9 @@
       "projectedPoints": 63,
       "confidence": 0.52,
       "zones": {
-        "europe": 0.0003,
-        "top6": 0.131,
-        "mid": 0.8687,
+        "europe": 0.0002,
+        "top6": 0.1292,
+        "mid": 0.8706,
         "relegation": 0
       },
       "form": [
@@ -208,9 +208,9 @@
       "projectedPoints": 61,
       "confidence": 0.52,
       "zones": {
-        "europe": 0.0001,
-        "top6": 0.0657,
-        "mid": 0.9342,
+        "europe": 0,
+        "top6": 0.0627,
+        "mid": 0.9373,
         "relegation": 0
       },
       "form": [
@@ -233,8 +233,8 @@
       "confidence": 0.52,
       "zones": {
         "europe": 0,
-        "top6": 0.0013,
-        "mid": 0.9987,
+        "top6": 0.0016,
+        "mid": 0.9984,
         "relegation": 0
       },
       "form": [
@@ -257,8 +257,8 @@
       "confidence": 0.53,
       "zones": {
         "europe": 0,
-        "top6": 0.002,
-        "mid": 0.998,
+        "top6": 0.0017,
+        "mid": 0.9983,
         "relegation": 0
       },
       "form": [
@@ -301,7 +301,7 @@
       "projectedRank": 13,
       "elo": 1424,
       "points": 24,
-      "projectedPoints": 30,
+      "projectedPoints": 31,
       "confidence": 0.58,
       "zones": {
         "europe": 0,
