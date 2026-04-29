@@ -1,6 +1,6 @@
 {
   "season": "2025-2026",
-  "lastUpdated": "2026-04-28T08:27:58Z",
+  "lastUpdated": "2026-04-29T08:20:49Z",
   "matchday": 22,
   "brierScore": null,
   "teams": [
@@ -35,12 +35,12 @@
       "projectedRank": 3,
       "elo": 1573,
       "points": 64,
-      "projectedPoints": 75,
+      "projectedPoints": 76,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.377,
-        "top6": 0.5828,
-        "mid": 0.0402,
+        "europe": 0.3788,
+        "top6": 0.5852,
+        "mid": 0.036,
         "relegation": 0
       },
       "form": [
@@ -57,15 +57,15 @@
       "id": "pau",
       "name": "Section Paloise",
       "currentRank": 2,
-      "projectedRank": 3,
+      "projectedRank": 4,
       "elo": 1538,
       "points": 64,
       "projectedPoints": 75,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.29,
-        "top6": 0.6431,
-        "mid": 0.0669,
+        "europe": 0.2852,
+        "top6": 0.6443,
+        "mid": 0.0705,
         "relegation": 0
       },
       "form": [
@@ -88,9 +88,9 @@
       "projectedPoints": 74,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.1792,
-        "top6": 0.7313,
-        "mid": 0.0895,
+        "europe": 0.1788,
+        "top6": 0.7235,
+        "mid": 0.0977,
         "relegation": 0
       },
       "form": [
@@ -112,9 +112,9 @@
       "projectedPoints": 71,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.081,
-        "top6": 0.642,
-        "mid": 0.277,
+        "europe": 0.086,
+        "top6": 0.6475,
+        "mid": 0.2665,
         "relegation": 0
       },
       "form": [
@@ -136,9 +136,9 @@
       "projectedPoints": 70,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.0451,
-        "top6": 0.635,
-        "mid": 0.3199,
+        "europe": 0.0456,
+        "top6": 0.6319,
+        "mid": 0.3225,
         "relegation": 0
       },
       "form": [
@@ -160,9 +160,9 @@
       "projectedPoints": 70,
       "confidence": 0.52,
       "zones": {
-        "europe": 0.0312,
-        "top6": 0.5669,
-        "mid": 0.4019,
+        "europe": 0.0289,
+        "top6": 0.5677,
+        "mid": 0.4034,
         "relegation": 0
       },
       "form": [
@@ -184,9 +184,9 @@
       "projectedPoints": 63,
       "confidence": 0.52,
       "zones": {
-        "europe": 0.0002,
-        "top6": 0.1292,
-        "mid": 0.8706,
+        "europe": 0.0003,
+        "top6": 0.1317,
+        "mid": 0.868,
         "relegation": 0
       },
       "form": [
@@ -208,9 +208,9 @@
       "projectedPoints": 61,
       "confidence": 0.52,
       "zones": {
-        "europe": 0,
-        "top6": 0.0627,
-        "mid": 0.9373,
+        "europe": 0.0001,
+        "top6": 0.0606,
+        "mid": 0.9393,
         "relegation": 0
       },
       "form": [
@@ -233,8 +233,8 @@
       "confidence": 0.52,
       "zones": {
         "europe": 0,
-        "top6": 0.0016,
-        "mid": 0.9984,
+        "top6": 0.0021,
+        "mid": 0.9979,
         "relegation": 0
       },
       "form": [
@@ -281,8 +281,8 @@
       "confidence": 0.53,
       "zones": {
         "europe": 0,
-        "top6": 0,
-        "mid": 1,
+        "top6": 0.0001,
+        "mid": 0.9999,
         "relegation": 0
       },
       "form": [
