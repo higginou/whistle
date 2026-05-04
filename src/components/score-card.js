@@ -343,6 +343,21 @@ export function render(container) {
     if (fillEl) fillEl.style.width = `${supporter.progress}%`
   }
 
+  function updateStaleIndicator(value) {
+    if (value) {
+      staleEl.hidden = false
+      staleEl.innerHTML = `
+        <svg class="w-stale-indicator__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        Derniere mise a jour : ${esc(formatDateFr(value))}
+      `
+    } else {
+      staleEl.hidden = true
+    }
+  }
+
   function update() {
     const season = get('season')
     if (!season) return
@@ -373,20 +388,10 @@ export function render(container) {
 
   // Show stale indicator when data is old
   on('dataStale', (event) => {
-    const { value } = event.detail
-    if (value) {
-      staleEl.hidden = false
-      staleEl.innerHTML = `
-        <svg class="w-stale-indicator__icon" viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"/>
-          <polyline points="12 6 12 12 16 14"/>
-        </svg>
-        Derniere mise a jour : ${esc(formatDateFr(value))}
-      `
-    } else {
-      staleEl.hidden = true
-    }
+    updateStaleIndicator(event.detail.value)
   })
+
+  updateStaleIndicator(get('dataStale'))
 
   // Initial render if data already present
   update()

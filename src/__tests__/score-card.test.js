@@ -245,6 +245,17 @@ describe('score-card', () => {
       expect(supporter.textContent).toContain('Supporter')
     })
 
+    it('renders stale indicator when stale date was set before render', () => {
+      set('season', MOCK_SEASON)
+      set('dataStale', '2026-04-12T08:00:00Z')
+      render(container)
+
+      const stale = container.querySelector('.w-stale-indicator')
+      expect(stale).not.toBeNull()
+      expect(stale.hidden).toBe(false)
+      expect(stale.textContent).toContain('Derniere mise a jour')
+    })
+
     it('renders match pills', () => {
       set('season', MOCK_SEASON)
       render(container)

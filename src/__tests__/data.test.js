@@ -35,6 +35,7 @@ const SEASON_DATA = {
 }
 
 beforeEach(() => {
+  store.reset()
   store.set.mockClear()
   mockFetch.mockReset()
   localStorageMock._clear()
@@ -157,6 +158,21 @@ describe('data.loadSeason', () => {
       ([key]) => key === 'dataStale',
     )
     expect(staleCalls).toHaveLength(0)
+  })
+
+  it('clears previous dataStale when fresh data loads', async () => {
+    store.set('dataStale', '2026-03-28T10:00:00Z')
+    store.set.mockClear()
+
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(SEASON_DATA),
+    })
+
+    await loadSeason('2025-2026')
+
+    expect(store.set).toHaveBeenCalledWith('dataStale', null)
+    expect(store.set).toHaveBeenCalledWith('season', SEASON_DATA)
   })
 
   it('sets dataStale on cache fallback with old data', async () => {

@@ -1,6 +1,6 @@
 # Story 7.1 : Refonte visuelle rochelaise
 
-Status: review
+Status: done
 
 ui-structural: true
 
@@ -76,21 +76,21 @@ Afin de ressentir immediatement que l'app m'est personnelle.
 
 ## Tasks / Subtasks
 
-- [ ] Revoir les tokens de couleur, surfaces et ombres (AC: 1, 5)
-  - [ ] Ajuster `tokens.css` pour la palette rochelaise
-  - [ ] Verifier les contrasts sur fond sombre et clair
-- [ ] Harmoniser la base typographique et le fond global (AC: 1, 5)
-  - [ ] Mettre a jour `base.css`
-  - [ ] Garantir la lisibilite des titres et du body
-- [ ] Refaire la perception visuelle des composants principaux (AC: 2, 6)
-  - [ ] `page-layout.css`
-  - [ ] `score-card.css`
-  - [ ] `bottom-nav.css`
-  - [ ] `achievement-card.css`
-  - [ ] `empty-state.css`
-- [ ] Valider le comportement mobile et reduced motion (AC: 3, 4)
-  - [ ] Tester en largeur smartphone
-  - [ ] Verifier les styles `prefers-reduced-motion`
+- [x] Revoir les tokens de couleur, surfaces et ombres (AC: 1, 5)
+  - [x] Ajuster `tokens.css` pour la palette rochelaise
+  - [x] Verifier les contrasts sur fond sombre et clair
+- [x] Harmoniser la base typographique et le fond global (AC: 1, 5)
+  - [x] Mettre a jour `base.css`
+  - [x] Garantir la lisibilite des titres et du body
+- [x] Refaire la perception visuelle des composants principaux (AC: 2, 6)
+  - [x] `page-layout.css`
+  - [x] `score-card.css`
+  - [x] `bottom-nav.css`
+  - [x] `achievement-card.css`
+  - [x] `empty-state.css`
+- [x] Valider le comportement mobile et reduced motion (AC: 3, 4)
+  - [x] Tester en largeur smartphone
+  - [x] Verifier les styles `prefers-reduced-motion`
 
 ## Dev Notes
 
@@ -119,10 +119,53 @@ Afin de ressentir immediatement que l'app m'est personnelle.
 
 ### Agent Model Used
 
-TBD
+openai/gpt-5.5
 
 ### Debug Log References
 
+- 2026-05-04 : Review automatique Epic 7.1, corrections contrastes achievements/empty state/bottom nav.
+- 2026-05-04 : `npx vitest run` : 45 fichiers, 911 tests, 0 echec.
+- 2026-05-04 : `npx biome check .` : 0 erreur.
+- 2026-05-04 : `npm run build` : OK.
+
 ### Completion Notes List
 
+- Palette rochelaise sombre/premium appliquee via tokens, fond global et surfaces elevees.
+- Score card, bottom nav, achievements et empty state harmonises dans la meme direction visuelle.
+- Contrastes post-review corriges sur gradients achievement, message empty state et navigation inactive.
+- `prefers-reduced-motion` conserve sur les interactions animees concernees.
+
 ### File List
+
+- `src/styles/tokens.css`
+- `src/styles/base.css`
+- `src/styles/components/page-layout.css`
+- `src/styles/components/score-card.css`
+- `src/styles/components/bottom-nav.css`
+- `src/styles/components/achievement-card.css`
+- `src/styles/components/empty-state.css`
+
+### Change Log
+
+- 2026-05-04 : Finalisation story 7.1, validation review et corrections de contraste.
+
+## Senior Developer Review (AI)
+
+Date : 2026-05-04
+
+Outcome : Approve
+
+### Findings
+
+- Aucun finding bloquant restant apres corrections.
+
+### Action Items
+
+- [x] Corriger les contrastes des gradients achievement prediction/surprise.
+- [x] Corriger le contraste du message empty state.
+- [x] Corriger le contraste des items inactifs de bottom nav.
+
+### Residual Risks / Testing Gaps
+
+- Contraste valide par inspection statique des couleurs, pas par outil navigateur a11y dedie.
+- Pas de validation visuelle mobile automatisee.

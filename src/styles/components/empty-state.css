@@ -48,7 +48,7 @@
 .w-empty-state__message {
   font-size: 1.125rem;
   font-weight: 700;
-  color: var(--w-color-primary);
+  color: var(--w-accent);
 }
 
 .w-empty-state__sub {

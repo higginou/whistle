@@ -1,6 +1,6 @@
 # Story 7.3 : Score supporter personnel
 
-Status: review
+Status: done
 
 ui-structural: false
 
@@ -56,22 +56,22 @@ Afin d'avoir une boucle de recompense personnelle et de revenir regulierement.
 
 ## Tasks / Subtasks
 
-- [ ] Definir le modele de score et ses evenements (AC: 1, 2, 3)
-  - [ ] Choisir les actions qui donnent des points
-  - [ ] Definir les paliers ou titres associes
-- [ ] Etendre le store si necessaire (AC: 3, 5, 6)
-  - [ ] Ajouter la cle d'etat requise
-  - [ ] Conserver le pattern `get/set/on`
-- [ ] Afficher le score dans la score card (AC: 1, 4)
-  - [ ] Ajouter un affichage compact et lisible
-  - [ ] Verifier l'espace sur mobile
-- [ ] Ajouter la persistence (AC: 5)
-  - [ ] Sauvegarde locale du score
-  - [ ] Rehydratation au demarrage
-- [ ] Tester les regles de calcul (AC: 2, 3, 5, 6)
-  - [ ] Verifier les increments
-  - [ ] Verifier la persistence
-  - [ ] Verifier l'absence de couplage parasite
+- [x] Definir le modele de score et ses evenements (AC: 1, 2, 3)
+  - [x] Choisir les actions qui donnent des points
+  - [x] Definir les paliers ou titres associes
+- [x] Etendre le store si necessaire (AC: 3, 5, 6)
+  - [x] Ajouter la cle d'etat requise
+  - [x] Conserver le pattern `get/set/on`
+- [x] Afficher le score dans la score card (AC: 1, 4)
+  - [x] Ajouter un affichage compact et lisible
+  - [x] Verifier l'espace sur mobile
+- [x] Ajouter la persistence (AC: 5)
+  - [x] Sauvegarde locale du score
+  - [x] Rehydratation au demarrage
+- [x] Tester les regles de calcul (AC: 2, 3, 5, 6)
+  - [x] Verifier les increments
+  - [x] Verifier la persistence
+  - [x] Verifier l'absence de couplage parasite
 
 ## Dev Notes
 
@@ -96,10 +96,52 @@ Afin d'avoir une boucle de recompense personnelle et de revenir regulierement.
 
 ### Agent Model Used
 
-TBD
+openai/gpt-5.5
 
 ### Debug Log References
 
+- 2026-05-04 : Review automatique Epic 7.3, corrections progression quotidienne et premiere consultation valorisee.
+- 2026-05-04 : `npx vitest run` : 45 fichiers, 911 tests, 0 echec.
+- 2026-05-04 : `npx biome check .` : 0 erreur.
+- 2026-05-04 : `npm run build` : OK.
+
 ### Completion Notes List
 
+- Modele de score personnel implemente avec points pour consultation, selection equipe, simulation, reveal et retour quotidien.
+- Cle `supporterScore` ajoutee au store avec evenement dedie, sans couplage direct entre composants.
+- Score affiche dans la score card avec titre, note et barre de progression persistante.
+- Persistence locale et rehydratation au demarrage couvertes par tests.
+
 ### File List
+
+- `src/supporter-score.js`
+- `src/store.js`
+- `src/app.js`
+- `src/components/score-card.js`
+- `src/styles/components/score-card.css`
+- `src/__tests__/supporter-score.test.js`
+- `src/__tests__/score-card.test.js`
+
+### Change Log
+
+- 2026-05-04 : Finalisation story 7.3, validation review et corrections des regles de progression.
+
+## Senior Developer Review (AI)
+
+Date : 2026-05-04
+
+Outcome : Approve
+
+### Findings
+
+- Aucun finding bloquant restant apres corrections.
+
+### Action Items
+
+- [x] Ajouter la progression lors d'un retour sur un jour different.
+- [x] Valoriser la premiere vraie navigation de consultation depuis `classements`.
+
+### Residual Risks / Testing Gaps
+
+- La progression quotidienne utilise la date UTC et n'est pas testee autour des frontieres de minuit local.
+- Pas de test visuel mobile automatise du panneau score supporter.

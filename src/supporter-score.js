@@ -2,6 +2,7 @@ import { get, on, set } from './store.js'
 
 const SCORE_KEY = 'w-supporter-score'
 const LAST_UPDATE_KEY = 'w-supporter-last-update'
+const LAST_CONSULTATION_DAY_KEY = 'w-supporter-last-consultation-day'
 const DEFAULT_SCORE = 18
 
 const CONSULTATION_TABS = new Set(['projection', 'duels', 'oracle', 'simulateur', 'donjon'])
@@ -50,15 +51,26 @@ function onSeasonLoaded(event) {
 
 function onTabChanged(event) {
   const { value, previous } = event.detail
-  if (!value || value === previous || value === 'classements') return
   if (!sawInitialTabEvent) {
     sawInitialTabEvent = true
-    return
+    if (previous == null) return
   }
+  if (!value || value === previous || value === 'classements') return
   if (!CONSULTATION_TABS.has(value) || seenTabs.has(value)) return
 
   seenTabs.add(value)
   bumpScore(1)
+}
+
+function recordDailyConsultation() {
+  const today = new Date().toISOString().slice(0, 10)
+  const previousDay = localStorage.getItem(LAST_CONSULTATION_DAY_KEY)
+
+  if (previousDay && previousDay !== today) {
+    bumpScore(1)
+  }
+
+  localStorage.setItem(LAST_CONSULTATION_DAY_KEY, today)
 }
 
 function onTeamSelected(event) {
@@ -92,6 +104,7 @@ export function initSupporterScore() {
   initialized = true
 
   writeScore(readStoredScore())
+  recordDailyConsultation()
   on('supporterScore', (event) => {
     localStorage.setItem(SCORE_KEY, String(event.detail.value))
   })

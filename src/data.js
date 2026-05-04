@@ -1,10 +1,24 @@
 /** @module data — Network-first Vercel API fetcher with localStorage cache */
 
-import { set } from './store.js'
+import { get, set } from './store.js'
 
 const CACHE_PREFIX = 'whistle-season-'
 const LAST_VISIT_KEY = 'whistle-last-visit'
 const STALE_THRESHOLD_MS = 7 * 24 * 60 * 60 * 1000
+
+function updateStaleness(lastUpdated) {
+  if (!lastUpdated) {
+    if (get('dataStale') !== null) set('dataStale', null)
+    return
+  }
+
+  const age = Date.now() - new Date(lastUpdated).getTime()
+  if (age > STALE_THRESHOLD_MS) {
+    set('dataStale', lastUpdated)
+  } else if (get('dataStale') !== null) {
+    set('dataStale', null)
+  }
+}
 
 /**
  * Load season data from the Vercel public API (network-first, cache fallback).
@@ -27,13 +41,7 @@ async function loadSeason(seasonId = '2025-2026') {
       set('dataFresh', true)
     }
 
-    // Staleness detection
-    if (data.lastUpdated) {
-      const age = Date.now() - new Date(data.lastUpdated).getTime()
-      if (age > STALE_THRESHOLD_MS) {
-        set('dataStale', data.lastUpdated)
-      }
-    }
+    updateStaleness(data.lastUpdated)
 
     // Store in cache
     localStorage.setItem(cacheKey, JSON.stringify(data))
@@ -44,13 +52,7 @@ async function loadSeason(seasonId = '2025-2026') {
     // Network failed — fallback to cache
     const cached = readCache(cacheKey)
     if (cached) {
-      // Staleness detection on cached data
-      if (cached.lastUpdated) {
-        const age = Date.now() - new Date(cached.lastUpdated).getTime()
-        if (age > STALE_THRESHOLD_MS) {
-          set('dataStale', cached.lastUpdated)
-        }
-      }
+      updateStaleness(cached.lastUpdated)
       set('season', cached)
     } else {
       set('season', null)

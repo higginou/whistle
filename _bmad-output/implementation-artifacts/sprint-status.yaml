@@ -36,7 +36,7 @@
 # - Inter-epic work (retro action items, debt, prep) is tracked under inter_epic_tasks
 
 generated: 2026-03-28
-last_updated: 2026-05-04 (epic 12 done)
+last_updated: 2026-05-04 (epic 7 done)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -94,10 +94,11 @@ development_status:
   epic-6-retrospective: done
 
   # Epic 7 : Identite Rochelaise, Hero & Score Supporter
-  epic-7: in-progress
-  7-1-refonte-visuelle-rochelaise: review
-  7-2-hero-tribune-rochelaise: review
-  7-3-score-supporter-personnel: review
+  epic-7: done
+  7-1-refonte-visuelle-rochelaise: done
+  7-2-hero-tribune-rochelaise: done
+  7-3-score-supporter-personnel: done
+  epic-7-retrospective: done
 
   # Epic 8 : Saisie guidee des matchs
   epic-8: done

@@ -1,6 +1,6 @@
 # Story 7.2 : Hero tribune rochelaise
 
-Status: review
+Status: done
 
 ui-structural: true
 
@@ -70,16 +70,16 @@ Afin de ressentir immediatement l'enjeu de la journee et l'attachement au club.
 
 ## Tasks / Subtasks
 
-- [ ] Repenser le contenu hero de l'accueil (AC: 1, 2, 3)
-  - [ ] Definir le message du jour
-  - [ ] Mettre en avant l'enjeu principal
-  - [ ] Garder La Rochelle comme point focal
-- [ ] Adapter le layout du hero (AC: 3, 4)
-  - [ ] Ajuster `page-layout.css` si necessaire
-  - [ ] Ajuster `score-card.css` pour le premier ecran
-- [ ] Verifier les etats de donnees et le reduced motion (AC: 5, 6)
-  - [ ] Valider l'affichage quand les donnees sont en cache
-  - [ ] Verifier l'absence de motion agressive
+- [x] Repenser le contenu hero de l'accueil (AC: 1, 2, 3)
+  - [x] Definir le message du jour
+  - [x] Mettre en avant l'enjeu principal
+  - [x] Garder La Rochelle comme point focal
+- [x] Adapter le layout du hero (AC: 3, 4)
+  - [x] Ajuster `page-layout.css` si necessaire
+  - [x] Ajuster `score-card.css` pour le premier ecran
+- [x] Verifier les etats de donnees et le reduced motion (AC: 5, 6)
+  - [x] Valider l'affichage quand les donnees sont en cache
+  - [x] Verifier l'absence de motion agressive
 
 ## Dev Notes
 
@@ -104,10 +104,51 @@ Afin de ressentir immediatement l'enjeu de la journee et l'attachement au club.
 
 ### Agent Model Used
 
-TBD
+openai/gpt-5.5
 
 ### Debug Log References
 
+- 2026-05-04 : Review automatique Epic 7.2, correction du stale state manque sur rendu initial et transition stale -> fresh.
+- 2026-05-04 : `npx vitest run` : 45 fichiers, 911 tests, 0 echec.
+- 2026-05-04 : `npx biome check .` : 0 erreur.
+- 2026-05-04 : `npm run build` : OK.
+
 ### Completion Notes List
 
+- Hero transforme en entree "Tribune rochelaise" avec accroche, enjeu du jour et carte La Rochelle comme point focal.
+- Score card conserve le centre visuel tout en ajoutant le contexte emotionnel et l'enjeu principal.
+- Indicateur stale rendu correctement meme si `dataStale` est defini avant le montage de la score card.
+- `dataStale` est maintenant nettoye quand des donnees fraiches remplacent des donnees stale.
+
 ### File List
+
+- `src/components/score-card.js`
+- `src/styles/components/score-card.css`
+- `src/styles/components/page-layout.css`
+- `src/data.js`
+- `src/__tests__/score-card.test.js`
+- `src/__tests__/data.test.js`
+
+### Change Log
+
+- 2026-05-04 : Finalisation story 7.2, validation review et correction des etats stale/cache.
+
+## Senior Developer Review (AI)
+
+Date : 2026-05-04
+
+Outcome : Approve
+
+### Findings
+
+- Aucun finding bloquant restant apres corrections.
+
+### Action Items
+
+- [x] Afficher l'indicateur stale quand `dataStale` est deja present avant `render()`.
+- [x] Nettoyer `dataStale` quand des donnees fraiches chargent apres une session stale.
+
+### Residual Risks / Testing Gaps
+
+- Pas de test automatise de viewport mobile.
+- Pas de validation visuelle navigateur automatisee du hero.
