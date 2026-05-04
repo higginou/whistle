@@ -36,7 +36,7 @@
 # - Inter-epic work (retro action items, debt, prep) is tracked under inter_epic_tasks
 
 generated: 2026-03-28
-last_updated: 2026-05-04 (epic 11 stories done)
+last_updated: 2026-05-04 (epic 12 done)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -128,6 +128,11 @@ development_status:
   11-2-retrait-de-github-actions-du-flux-metier: done
   11-3-nettoyage-final-et-verification: done
   epic-11-retrospective: done
+
+  # Epic 12 : Enrichissement Donjon post-migration
+  epic-12: done
+  12-1-reafficher-les-essais-dans-le-donjon: done
+  epic-12-retrospective: done
 
 # Inter-epic tasks (retro action items, debt, preparation)
 # Tracked here to avoid losing visibility on work between epics

@@ -38,6 +38,8 @@ export async function getPublicSeasonPayload(seasonId, sql) {
       away_team_id,
       home_score,
       away_score,
+      home_tries,
+      away_tries,
       home_bonus_offensive,
       home_bonus_defensive,
       away_bonus_offensive,
@@ -57,6 +59,8 @@ export async function getPublicSeasonPayload(seasonId, sql) {
       away: match.away_team_id,
       homeScore: match.home_score,
       awayScore: match.away_score,
+      homeTries: match.home_tries,
+      awayTries: match.away_tries,
       homeBonus: {
         offensive: match.home_bonus_offensive === true,
         defensive: match.home_bonus_defensive === true,

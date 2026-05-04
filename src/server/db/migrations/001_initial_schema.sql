@@ -24,6 +24,8 @@ CREATE TABLE IF NOT EXISTS matches (
   away_team_id TEXT NOT NULL,
   home_score SMALLINT CHECK (home_score >= 0),
   away_score SMALLINT CHECK (away_score >= 0),
+  home_tries SMALLINT,
+  away_tries SMALLINT,
   home_bonus_offensive BOOLEAN NOT NULL DEFAULT FALSE,
   home_bonus_defensive BOOLEAN NOT NULL DEFAULT FALSE,
   away_bonus_offensive BOOLEAN NOT NULL DEFAULT FALSE,
@@ -33,6 +35,8 @@ CREATE TABLE IF NOT EXISTS matches (
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   CHECK (home_team_id <> away_team_id),
+  CONSTRAINT matches_home_tries_range CHECK (home_tries IS NULL OR (home_tries >= 0 AND home_tries <= 50)),
+  CONSTRAINT matches_away_tries_range CHECK (away_tries IS NULL OR (away_tries >= 0 AND away_tries <= 50)),
   CHECK (
     (status = 'played' AND home_score IS NOT NULL AND away_score IS NOT NULL)
     OR (status <> 'played' AND home_score IS NULL AND away_score IS NULL)

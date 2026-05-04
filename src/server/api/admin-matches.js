@@ -4,6 +4,7 @@ const TEAM_ID_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/
 const SEASON_ID_RE = /^\d{4}-\d{4}$/
 const ISO_TIMESTAMP_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/
 const MAX_MATCH_SCORE = 200
+const MAX_MATCH_TRIES = 50
 
 function assertString(value, field) {
   if (typeof value !== 'string' || value.trim() === '') throw new Error(`${field} is required`)
@@ -14,6 +15,14 @@ function assertString(value, field) {
 function assertScore(value, field) {
   if (!Number.isInteger(value) || value < 0 || value > MAX_MATCH_SCORE) {
     throw new Error(`${field} must be an integer between 0 and ${MAX_MATCH_SCORE}`)
+  }
+
+  return value
+}
+
+function assertTries(value, field) {
+  if (!Number.isInteger(value) || value < 0 || value > MAX_MATCH_TRIES) {
+    throw new Error(`${field} must be an integer between 0 and ${MAX_MATCH_TRIES}`)
   }
 
   return value
@@ -58,6 +67,8 @@ export function normalizeAdminMatchPayload(payload = {}) {
     awayTeamId,
     homeScore: assertScore(payload.homeScore, 'homeScore'),
     awayScore: assertScore(payload.awayScore, 'awayScore'),
+    homeTries: assertTries(payload.homeTries, 'homeTries'),
+    awayTries: assertTries(payload.awayTries, 'awayTries'),
     homeBonus,
     awayBonus,
     status: 'played',
@@ -77,6 +88,8 @@ export async function saveAdminMatch(match, sql) {
       away_team_id,
       home_score,
       away_score,
+      home_tries,
+      away_tries,
       home_bonus_offensive,
       home_bonus_defensive,
       away_bonus_offensive,
@@ -92,6 +105,8 @@ export async function saveAdminMatch(match, sql) {
       ${match.awayTeamId},
       ${match.homeScore},
       ${match.awayScore},
+      ${match.homeTries},
+      ${match.awayTries},
       ${homeBonus.offensive},
       ${homeBonus.defensive},
       ${awayBonus.offensive},
@@ -105,6 +120,8 @@ export async function saveAdminMatch(match, sql) {
       date = EXCLUDED.date,
       home_score = EXCLUDED.home_score,
       away_score = EXCLUDED.away_score,
+      home_tries = EXCLUDED.home_tries,
+      away_tries = EXCLUDED.away_tries,
       home_bonus_offensive = EXCLUDED.home_bonus_offensive,
       home_bonus_defensive = EXCLUDED.home_bonus_defensive,
       away_bonus_offensive = EXCLUDED.away_bonus_offensive,

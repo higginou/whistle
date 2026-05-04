@@ -9,4 +9,4 @@ Variables attendues :
 
 La couche `connection.js` utilise le client `postgres` (Postgres.js). Le client est cree paresseusement : aucune connexion reseau n'est ouverte avant la premiere requete.
 
-Le schema garde les matchs dans des colonnes relationnelles (`home_team_id`, `away_team_id`, `home_score`, `away_score`) pour eviter de persister la saisie sous forme de JSON opaque. Les projections sont stockees dans `projection_snapshots` comme historique append-only : chaque recalcul ajoute une ligne horodatee au lieu de modifier la precedente.
+Le schema garde les matchs dans des colonnes relationnelles (`home_team_id`, `away_team_id`, `home_score`, `away_score`, `home_tries`, `away_tries`) pour eviter de persister la saisie sous forme de JSON opaque. Les projections sont stockees dans `projection_snapshots` comme historique append-only : chaque recalcul ajoute une ligne horodatee au lieu de modifier la precedente.

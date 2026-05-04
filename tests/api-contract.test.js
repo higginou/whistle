@@ -94,6 +94,8 @@ describe('public season API', () => {
             away_team_id: 'toulouse',
             home_score: 24,
             away_score: 19,
+            home_tries: 3,
+            away_tries: 1,
             home_bonus_offensive: true,
             home_bonus_defensive: false,
             away_bonus_offensive: false,
@@ -111,6 +113,8 @@ describe('public season API', () => {
         away: 'toulouse',
         homeScore: 24,
         awayScore: 19,
+        homeTries: 3,
+        awayTries: 1,
         homeBonus: { offensive: true, defensive: false },
         awayBonus: { offensive: false, defensive: true },
       },
@@ -152,6 +156,8 @@ describe('admin matches API', () => {
         awayTeamId: 'toulouse',
         homeScore: 24,
         awayScore: 19,
+        homeTries: 3,
+        awayTries: 1,
       }),
     ).toEqual({
       seasonId: '2025-2026',
@@ -161,6 +167,8 @@ describe('admin matches API', () => {
       awayTeamId: 'toulouse',
       homeScore: 24,
       awayScore: 19,
+      homeTries: 3,
+      awayTries: 1,
       homeBonus: { offensive: false, defensive: false },
       awayBonus: { offensive: false, defensive: false },
       status: 'played',
@@ -177,6 +185,8 @@ describe('admin matches API', () => {
         awayTeamId: 'toulouse',
         homeScore: 24,
         awayScore: 19,
+        homeTries: 3,
+        awayTries: 1,
       }),
     ).toThrow(/ISO-8601/)
 
@@ -189,8 +199,26 @@ describe('admin matches API', () => {
         awayTeamId: 'toulouse',
         homeScore: 32_768,
         awayScore: 19,
+        homeTries: 3,
+        awayTries: 1,
       }),
     ).toThrow(/between 0 and 200/)
+
+    for (const homeTries of [-1, 51]) {
+      expect(() =>
+        normalizeAdminMatchPayload({
+          seasonId: '2025-2026',
+          matchday: 18,
+          date: '2026-04-18T19:00:00Z',
+          homeTeamId: 'la-rochelle',
+          awayTeamId: 'toulouse',
+          homeScore: 24,
+          awayScore: 19,
+          homeTries,
+          awayTries: 1,
+        }),
+      ).toThrow(/between 0 and 50/)
+    }
   })
 
   it('rejects admin writes without a valid session', async () => {
@@ -218,6 +246,8 @@ describe('admin matches API', () => {
           awayTeamId: 'toulouse',
             homeScore: 24,
             awayScore: 19,
+            homeTries: 3,
+            awayTries: 1,
             homeBonus: { offensive: true, defensive: false },
             awayBonus: { offensive: false, defensive: true },
           },
@@ -231,8 +261,12 @@ describe('admin matches API', () => {
     expect(res.body.saved).toBe(true)
     expect(res.body.match.homeBonus.offensive).toBe(true)
     expect(res.body.match.awayBonus.defensive).toBe(true)
+    expect(res.body.match.homeTries).toBe(3)
+    expect(res.body.match.awayTries).toBe(1)
     expect(recorder.calls[0].text).toContain('INSERT INTO matches')
+    expect(recorder.calls[0].text).toContain('home_tries')
     expect(recorder.calls[0].values).toContain('la-rochelle')
+    expect(recorder.calls[0].values).toContain(3)
   })
 
   it('returns a controlled admin response when storage is unavailable', async () => {
@@ -251,6 +285,8 @@ describe('admin matches API', () => {
           awayTeamId: 'toulouse',
           homeScore: 24,
           awayScore: 19,
+          homeTries: 3,
+          awayTries: 1,
         },
       },
       res,
@@ -273,6 +309,8 @@ describe('admin matches API', () => {
         awayTeamId: 'toulouse',
         homeScore: 24,
         awayScore: 19,
+        homeTries: 3,
+        awayTries: 1,
         status: 'played',
       },
       recorder.sql,

@@ -148,6 +148,8 @@ describe('match-cockpit', () => {
     const matchBody = JSON.parse(fetchMock.mock.calls[0][1].body)
     expect(() => normalizeAdminMatchPayload(matchBody)).not.toThrow()
     expect(matchBody.date).toBe('2026-04-18T00:00:00Z')
+    expect(matchBody.homeTries).toBe(4)
+    expect(matchBody.awayTries).toBe(1)
     expect(matchBody.homeBonus.offensive).toBe(true)
     expect(matchBody.awayBonus.defensive).toBe(false)
   })

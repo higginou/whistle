@@ -795,3 +795,13 @@ Afin que Vercel devienne le seul runtime.
 En tant que dev,
 Je veux nettoyer les docs, scripts et references obsoletes,
 Afin que le projet soit lisible et coherent apres migration.
+
+### Epic 12 : Enrichissement Donjon post-migration
+
+Le Donjon recupere les statistiques rugby perdues pendant le retrait du `scraped.json`, sans recreer de dependance au pipeline legacy.
+
+### Story 12.1 : Reafficher les essais dans le Donjon
+
+En tant que supporter de La Rochelle,
+Je veux revoir les essais marques et encaisses dans le Donjon,
+Afin que le recit des matchs retrouve les stats rugby stockees dans le runtime Vercel.

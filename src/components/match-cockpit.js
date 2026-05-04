@@ -457,6 +457,8 @@ async function submitFinalValidation(payload) {
       awayTeamId: entry.away,
       homeScore: entry.score.home,
       awayScore: entry.score.away,
+      homeTries: entry.tries.home,
+      awayTries: entry.tries.away,
       homeBonus: entry.bonus.home,
       awayBonus: entry.bonus.away,
     })

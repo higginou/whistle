@@ -5,6 +5,7 @@ import { DATABASE_TABLES } from '../src/server/db/schema.js'
 
 const DB_DIR = resolve(import.meta.dirname, '..', 'src', 'server', 'db')
 const schemaSql = readFileSync(resolve(DB_DIR, 'migrations', '001_initial_schema.sql'), 'utf-8')
+const matchTriesMigrationSql = readFileSync(resolve(DB_DIR, 'migrations', '002_match_tries.sql'), 'utf-8')
 const seedSql = readFileSync(resolve(DB_DIR, 'seeds', '001_current_season.sql'), 'utf-8')
 const matchesTableSql = schemaSql.slice(
   schemaSql.indexOf('CREATE TABLE IF NOT EXISTS matches'),
@@ -30,6 +31,10 @@ describe('database schema for Vercel Postgres migration', () => {
     expect(schemaSql).toContain('away_team_id TEXT NOT NULL')
     expect(schemaSql).toContain('home_score SMALLINT')
     expect(schemaSql).toContain('away_score SMALLINT')
+    expect(schemaSql).toContain('home_tries SMALLINT')
+    expect(schemaSql).toContain('away_tries SMALLINT')
+    expect(schemaSql).toContain('CONSTRAINT matches_home_tries_range CHECK (home_tries IS NULL OR (home_tries >= 0 AND home_tries <= 50))')
+    expect(schemaSql).toContain('CONSTRAINT matches_away_tries_range CHECK (away_tries IS NULL OR (away_tries >= 0 AND away_tries <= 50))')
     expect(schemaSql).toContain('home_bonus_offensive BOOLEAN NOT NULL DEFAULT FALSE')
     expect(schemaSql).toContain('away_bonus_defensive BOOLEAN NOT NULL DEFAULT FALSE')
     expect(schemaSql).toContain("status = 'played' AND home_score IS NOT NULL AND away_score IS NOT NULL")
@@ -37,6 +42,15 @@ describe('database schema for Vercel Postgres migration', () => {
     expect(schemaSql).toContain('prevent_team_double_booking')
     expect(schemaSql).toContain('UNIQUE (season_id, matchday, home_team_id, away_team_id)')
     expect(matchesTableSql).not.toMatch(/JSONB/i)
+  })
+
+  it('adds match try columns with idempotent bounded constraints for existing databases', () => {
+    expect(matchTriesMigrationSql).toContain('ADD COLUMN IF NOT EXISTS home_tries SMALLINT')
+    expect(matchTriesMigrationSql).toContain('ADD COLUMN IF NOT EXISTS away_tries SMALLINT')
+    expect(matchTriesMigrationSql).toContain('DROP CONSTRAINT IF EXISTS matches_home_tries_range')
+    expect(matchTriesMigrationSql).toContain('ADD CONSTRAINT matches_home_tries_range CHECK (home_tries IS NULL OR (home_tries >= 0 AND home_tries <= 50)) NOT VALID')
+    expect(matchTriesMigrationSql).toContain('DROP CONSTRAINT IF EXISTS matches_away_tries_range')
+    expect(matchTriesMigrationSql).toContain('ADD CONSTRAINT matches_away_tries_range CHECK (away_tries IS NULL OR (away_tries >= 0 AND away_tries <= 50)) NOT VALID')
   })
 
   it('keeps generated projections append-only', () => {
