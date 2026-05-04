@@ -5,7 +5,7 @@ Status: done
 ## Informations
 
 - **Epic :** Epic 1 — Fondation & Pipeline de Donnees
-- **Statut :** review
+- **Statut :** done
 - **Priorite :** Haute (bloque les stories 1.3 a 1.7 et toutes les stories front-end)
 - **Estimation :** Petite (< 2h)
 - **ui-structural :** false

@@ -1,3 +1,7 @@
 # Deferred Work
 
-- **Synchroniser les bonus stochastiques dans le frontend Monte Carlo** — `src/simulator-engine.js:simulateMatch()` utilise encore des scores fixes (25-15) sans bonus. Le pipeline `scripts/elo.js` modélise maintenant des marges variables + bonus défensif/offensif probabiliste. Le simulateur what-if produit donc des projections différentes du pipeline pour les matchs non simulés. Porter la logique de bonus stochastique du pipeline vers le frontend.
+Aucun travail differe ouvert.
+
+## Clos le 2026-05-04
+
+- **Synchroniser les bonus stochastiques dans le frontend Monte Carlo** — resolu dans `src/simulator-engine.js:simulateMatch()`. Le simulateur what-if utilise maintenant des marges variables, le bonus defensif sur defaite courte et le bonus offensif probabiliste pour les matchs non simules.

@@ -1,8 +1,8 @@
 # Story 4.2 : Manifest PWA, icones et installation Android
 
-**Epic :** 4 — PWA, Offline & Deploiement
-**Status :** done
-**ui-structural :** false
+Epic: 4 — PWA, Offline & Deploiement
+Status: done
+ui-structural: false
 **Dependance :** story 4-1 (done) — configuration SW et strategies de cache
 
 ## Story

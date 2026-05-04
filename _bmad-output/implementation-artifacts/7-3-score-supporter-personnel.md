@@ -14,8 +14,8 @@ Afin d'avoir une boucle de recompense personnelle et de revenir regulierement.
 
 ## Dependencies
 
-- **7-1** (planned) : Refonte visuelle rochelaise — pour que le score s'integre dans le nouveau theme
-- **7-2** (planned) : Hero tribune rochelaise — le score supporteur doit s'afficher dans le hero
+- **7-1** (done) : Refonte visuelle rochelaise — pour que le score s'integre dans le nouveau theme
+- **7-2** (done) : Hero tribune rochelaise — le score supporteur doit s'afficher dans le hero
 - **2-2** (done) : Store d'etat, fetch donnees et router — base `get/set/on` a etendre si besoin
 - **2-4** (done) : Score card hero La Rochelle — emplacement principal du score
 

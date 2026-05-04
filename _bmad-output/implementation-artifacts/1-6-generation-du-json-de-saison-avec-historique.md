@@ -5,7 +5,7 @@ Status: done
 ## Informations
 
 - **Epic :** Epic 1 — Fondation & Pipeline de Donnees
-- **Statut :** in-progress
+- **Statut :** done
 - **Priorite :** Haute (bloque Story 1.7 — pipeline GitHub Actions)
 - **Estimation :** Petite (2-4h)
 - **ui-structural :** false

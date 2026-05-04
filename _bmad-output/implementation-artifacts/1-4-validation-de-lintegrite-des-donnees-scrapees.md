@@ -5,7 +5,7 @@ Status: done
 ## Informations
 
 - **Epic :** Epic 1 — Fondation & Pipeline de Donnees
-- **Statut :** ready-for-dev
+- **Statut :** done
 - **Priorite :** Haute (bloque les stories 1.5 a 1.7)
 - **Estimation :** Petite (2-4h)
 - **ui-structural :** false

@@ -12,6 +12,8 @@ export const K_FACTOR = 30
 export const HOME_ADVANTAGE = 65
 export const MARGIN_FACTOR = 0.006
 export const NUM_SIMULATIONS = 10000
+export const OFFENSIVE_BONUS_PROB = 0.3
+export const DEFENSIVE_MARGIN = 5
 
 // ─── Elo Calculation Functions ────────────────────────────────────────────
 
@@ -65,11 +67,29 @@ export function simulateMatch(eloHome, eloAway, rng = Math.random) {
   let homePoints, awayPoints, homeScore, awayScore
 
   if (roll < homeWinProb) {
-    homePoints = 4; awayPoints = 0; homeScore = 25; awayScore = 15
+    const margin = Math.floor(rng() * 30) + 1
+    homePoints = 4; awayPoints = 0
+    homeScore = 20 + Math.floor(margin / 2)
+    awayScore = 20 - Math.ceil(margin / 2)
   } else if (roll < homeWinProb + drawProb) {
     homePoints = 2; awayPoints = 2; homeScore = 20; awayScore = 20
   } else {
-    homePoints = 0; awayPoints = 4; homeScore = 15; awayScore = 25
+    const margin = Math.floor(rng() * 30) + 1
+    homePoints = 0; awayPoints = 4
+    awayScore = 20 + Math.floor(margin / 2)
+    homeScore = 20 - Math.ceil(margin / 2)
+  }
+
+  const margin = Math.abs(homeScore - awayScore)
+  if (margin > 0 && margin <= DEFENSIVE_MARGIN) {
+    if (homePoints === 0) homePoints += 1
+    else if (awayPoints === 0) awayPoints += 1
+  }
+
+  if (rng() < OFFENSIVE_BONUS_PROB) {
+    if (homeScore > awayScore) homePoints += 1
+    else if (awayScore > homeScore) awayPoints += 1
+    else { homePoints += 1; awayPoints += 1 }
   }
 
   const { homeChange, awayChange } = calculateEloChange({

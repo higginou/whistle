@@ -92,14 +92,16 @@ describe('calculateEloChange', () => {
 
 describe('simulateMatch', () => {
   it('returns home win for low roll', () => {
-    const rng = () => 0.01 // very low → should be home win
+    const rolls = [0.01, 0.5, 0.99]
+    const rng = () => rolls.shift() ?? 0.99
     const result = simulateMatch(1500, 1500, rng)
     expect(result.homePoints).toBe(4)
     expect(result.awayPoints).toBe(0)
   })
 
   it('returns away win for high roll', () => {
-    const rng = () => 0.99
+    const rolls = [0.99, 0.5, 0.99]
+    const rng = () => rolls.shift() ?? 0.99
     const result = simulateMatch(1500, 1500, rng)
     expect(result.homePoints).toBe(0)
     expect(result.awayPoints).toBe(4)
@@ -110,14 +112,32 @@ describe('simulateMatch', () => {
     // drawProb ~0.15 * (1 - |0.6 - 0.5| * 2) = 0.15 * 0.8 = 0.12
     // homeWinProb ~0.6 * 0.88 = 0.528
     // Draw range: 0.528 to 0.648
-    const rng = () => 0.59
+    const rolls = [0.59, 0.99]
+    const rng = () => rolls.shift() ?? 0.99
     const result = simulateMatch(1500, 1500, rng)
     expect(result.homePoints).toBe(2)
     expect(result.awayPoints).toBe(2)
   })
 
+  it('adds defensive bonus for narrow losses', () => {
+    const rolls = [0.01, 0, 0.99]
+    const rng = () => rolls.shift() ?? 0.99
+    const result = simulateMatch(1500, 1500, rng)
+    expect(result.homePoints).toBe(4)
+    expect(result.awayPoints).toBe(1)
+  })
+
+  it('adds offensive bonus to the winner', () => {
+    const rolls = [0.01, 0.5, 0]
+    const rng = () => rolls.shift() ?? 0.99
+    const result = simulateMatch(1500, 1500, rng)
+    expect(result.homePoints).toBe(5)
+    expect(result.awayPoints).toBe(0)
+  })
+
   it('returns Elo changes', () => {
-    const rng = () => 0.01
+    const rolls = [0.01, 0.5, 0.99]
+    const rng = () => rolls.shift() ?? 0.99
     const result = simulateMatch(1500, 1500, rng)
     expect(result.homeEloChange).toBeDefined()
     expect(result.awayEloChange).toBeDefined()

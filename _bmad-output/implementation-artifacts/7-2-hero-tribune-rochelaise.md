@@ -28,7 +28,7 @@ Afin de ressentir immediatement l'enjeu de la journee et l'attachement au club.
 
 ## Dependencies
 
-- **7-1** (planned) : Refonte visuelle rochelaise — base visuelle a appliquer au hero
+- **7-1** (done) : Refonte visuelle rochelaise — base visuelle a appliquer au hero
 - **2-3** (done) : Layout page principale et structure HTML semantique — emplacement du hero
 - **2-4** (done) : Score card hero La Rochelle — contenu central deja present et a recontextualiser
 

@@ -1,8 +1,8 @@
 # Story 2.2 : Store d'etat, fetch donnees et router
 
-**Epic:** 2 — Score Card & Situation Equipe Favorite
-**Status:** done
-**ui-structural:** false
+Epic: 2 — Score Card & Situation Equipe Favorite
+Status: done
+ui-structural: false
 
 ## User Story
 

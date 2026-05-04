@@ -1,8 +1,8 @@
 # Story 2.3 : Layout page principale et structure HTML semantique
 
-**Epic:** 2 — Score Card & Situation Equipe Favorite
-**Status:** done
-**ui-structural:** true
+Epic: 2 — Score Card & Situation Equipe Favorite
+Status: done
+ui-structural: true
 
 ## Maquettes
 
@@ -170,4 +170,3 @@ Claude Opus 4.6
 - `src/app.js` (modified)
 - `src/__tests__/page-layout.test.js` (new)
 - `src/__tests__/app.test.js` (new)
-

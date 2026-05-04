@@ -1,5 +1,7 @@
 # Story 1.1 : Initialisation du projet Vite + PWA + dependances
 
+Status: done
+
 ## Informations
 
 - **Epic :** Epic 1 — Fondation & Pipeline de Donnees
