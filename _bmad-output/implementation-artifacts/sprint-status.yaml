@@ -36,7 +36,7 @@
 # - Inter-epic work (retro action items, debt, prep) is tracked under inter_epic_tasks
 
 generated: 2026-03-28
-last_updated: 2026-04-25 (epic 10 retrospective done)
+last_updated: 2026-05-04 (epic 11 stories done)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -123,10 +123,11 @@ development_status:
   epic-10-retrospective: done
 
   # Epic 11 : Retrait du pipeline legacy
-  epic-11: in-progress
-  11-1-retrait-du-scraping-legacy: ready-for-dev
-  11-2-retrait-de-github-actions-du-flux-metier: ready-for-dev
-  11-3-nettoyage-final-et-verification: ready-for-dev
+  epic-11: done
+  11-1-retrait-du-scraping-legacy: done
+  11-2-retrait-de-github-actions-du-flux-metier: done
+  11-3-nettoyage-final-et-verification: done
+  epic-11-retrospective: done
 
 # Inter-epic tasks (retro action items, debt, preparation)
 # Tracked here to avoid losing visibility on work between epics

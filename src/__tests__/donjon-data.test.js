@@ -84,6 +84,22 @@ describe('donjon-data', () => {
       expect(result.result).toBe('draw')
       expect(result.magnitude).toBe('close')
     })
+
+    it('keeps try counts optional for Vercel public API results', () => {
+      const raw = {
+        matchday: 18, date: '2026-04-18T19:00:00Z',
+        home: 'la-rochelle', away: 'toulouse',
+        homeScore: 24, awayScore: 19,
+        homeBonus: { offensive: true, defensive: false },
+        awayBonus: { offensive: false, defensive: true },
+      }
+
+      const result = normalizeMatch(raw, TEAMS_MAP)
+
+      expect(result.tries).toEqual({ lr: null, opponent: null })
+      expect(result.score).toEqual({ lr: 24, opponent: 19 })
+      expect(result.bonus.lr).toEqual({ offensive: true, defensive: false })
+    })
   })
 
   describe('normalizeMatches', () => {

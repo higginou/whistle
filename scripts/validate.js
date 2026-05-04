@@ -4,9 +4,9 @@
  * scripts/validate.js
  *
  * Validates the integrity of scraped data (data/scraped.json) before
- * passing it to the Elo calculation pipeline.
+ * passing it to the legacy local Elo calculation.
  *
- * Pipeline position: scrape.js -> **validate.js** -> elo.js -> generate.js
+ * Legacy local maintenance archive; not used by the Vercel production runtime.
  *
  * Usage: node scripts/validate.js
  *

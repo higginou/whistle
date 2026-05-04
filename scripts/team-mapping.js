@@ -1,6 +1,6 @@
 /**
  * Mapping between LNR display names and internal kebab-case team IDs.
- * Used by scrape.js and potentially other pipeline scripts.
+ * Used by legacy local scraping scripts.
  *
  * Each entry maps a normalized (lowercase, no accents) LNR name to the
  * internal ID defined in data/2025-2026.json (Story 1.2).

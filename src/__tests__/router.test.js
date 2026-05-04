@@ -35,7 +35,7 @@ describe('pushTab', () => {
     )
   })
 
-  it('keeps the GitHub Pages base on hash fallback routes', () => {
+  it('keeps the current base on hash fallback routes', () => {
     history.pushState.mockRestore()
     history.pushState({}, '', '/whistle/')
     window.location.hash = '#/duels'
@@ -83,7 +83,7 @@ describe('tabFromCurrentPath', () => {
     history.pushState({}, '', '/')
   })
 
-  it('returns duels for hash-based GitHub Pages fallback', () => {
+  it('returns duels for hash-based fallback routes', () => {
     history.pushState({}, '', '/whistle/#/duels')
     expect(tabFromCurrentPath()).toBe('duels')
     history.pushState({}, '', '/')

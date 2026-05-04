@@ -39,7 +39,12 @@ export function computeFinaleStats(matches) {
     ? losses.reduce((a, b) => (a.score.opponent - a.score.lr) >= (b.score.opponent - b.score.lr) ? a : b)
     : null
 
-  const totalTries = matches.reduce((sum, m) => sum + m.tries.lr, 0)
+  const knownTries = matches
+    .map((m) => m.tries.lr)
+    .filter((tries) => Number.isInteger(tries))
+  const totalTries = knownTries.length === matches.length
+    ? knownTries.reduce((sum, tries) => sum + tries, 0)
+    : null
   const bonusOffensifs = matches.filter((m) => m.bonus.lr.offensive).length
 
   return {
@@ -82,7 +87,7 @@ export function render(container, { matches, audio, onReplay }) {
     stats.worstLoss
       ? `PIRE DÉFAITE : ${esc(String(stats.worstLoss.score.lr))}-${esc(String(stats.worstLoss.score.opponent))} vs ${esc(stats.worstLoss.opponent.name)} (J${esc(String(stats.worstLoss.matchday))})`
       : null,
-    `${esc(String(stats.totalTries))} ESSAIS MARQUÉS`,
+    Number.isInteger(stats.totalTries) ? `${esc(String(stats.totalTries))} ESSAIS MARQUÉS` : null,
     `${esc(String(stats.bonusOffensifs))} BONUS OFFENSIFS`,
   ].filter(Boolean)
 

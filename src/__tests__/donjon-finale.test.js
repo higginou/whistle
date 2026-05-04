@@ -30,6 +30,13 @@ describe('computeFinaleStats', () => {
     const stats = computeFinaleStats(SAMPLE_MATCHES)
     expect(stats.totalTries).toBe(12)
   })
+  it('does not compute total tries when Vercel results omit try counts', () => {
+    const stats = computeFinaleStats([
+      { ...SAMPLE_MATCHES[0], tries: { lr: null, opponent: null } },
+    ])
+
+    expect(stats.totalTries).toBeNull()
+  })
   it('counts bonus offensifs', () => {
     const stats = computeFinaleStats(SAMPLE_MATCHES)
     expect(stats.bonusOffensifs).toBe(1)

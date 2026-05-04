@@ -24,6 +24,11 @@ function formatDate(dateStr) {
   return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`
 }
 
+function renderTries(count) {
+  if (!Number.isInteger(count)) return ''
+  return `<span class="w-donjon-combat__stat w-donjon-combat__tries">${esc(String(count))} essai${count > 1 ? 's' : ''}</span>`
+}
+
 /**
  * Render the combat screen.
  * @param {HTMLElement} container
@@ -49,7 +54,7 @@ export function render(container, { match, audio, onSequenceComplete }) {
     <span class="w-donjon-combat__name w-donjon-neon">${esc('LA ROCHELLE')}</span>
     <span class="w-donjon-combat__venue">${esc(match.isHome ? 'DOM' : 'EXT')}</span>
     <span class="w-donjon-combat__score">${esc(String(match.score.lr))}</span>
-    <span class="w-donjon-combat__stat w-donjon-combat__tries">${esc(String(match.tries.lr))} essai${match.tries.lr > 1 ? 's' : ''}</span>
+    ${renderTries(match.tries.lr)}
     ${match.bonus.lr.offensive ? '<span class="w-donjon-combat__badge w-donjon-combat__badge--off">OFF</span>' : ''}
     ${match.bonus.lr.defensive ? '<span class="w-donjon-combat__badge w-donjon-combat__badge--def">DEF</span>' : ''}
   `
@@ -61,7 +66,7 @@ export function render(container, { match, audio, onSequenceComplete }) {
     <span class="w-donjon-combat__name">${esc(match.opponent.name)}</span>
     <span class="w-donjon-combat__venue">${esc(match.isHome ? 'EXT' : 'DOM')}</span>
     <span class="w-donjon-combat__score">${esc(String(match.score.opponent))}</span>
-    <span class="w-donjon-combat__stat w-donjon-combat__tries">${esc(String(match.tries.opponent))} essai${match.tries.opponent > 1 ? 's' : ''}</span>
+    ${renderTries(match.tries.opponent)}
     ${match.bonus.opponent.offensive ? '<span class="w-donjon-combat__badge w-donjon-combat__badge--off">OFF</span>' : ''}
     ${match.bonus.opponent.defensive ? '<span class="w-donjon-combat__badge w-donjon-combat__badge--def">DEF</span>' : ''}
   `
@@ -111,15 +116,17 @@ async function runSequence(el, match, audio, onComplete) {
   audio.play('score-impact')
   await wait(400)
 
-  // 5. LR tries
-  lrTries.classList.add('w-donjon-combat__stat--visible')
-  audio.play('stat-reveal')
-  await wait(300)
+  if (lrTries) {
+    lrTries.classList.add('w-donjon-combat__stat--visible')
+    audio.play('stat-reveal')
+    await wait(300)
+  }
 
-  // 6. Opponent tries
-  oppTries.classList.add('w-donjon-combat__stat--visible')
-  audio.play('stat-reveal')
-  await wait(300)
+  if (oppTries) {
+    oppTries.classList.add('w-donjon-combat__stat--visible')
+    audio.play('stat-reveal')
+    await wait(300)
+  }
 
   // 7. LR bonuses
   for (const badge of lrBadges) {

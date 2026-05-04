@@ -1,4 +1,4 @@
-/** @module donjon-data — Normalize scraped match data for Donjon consumption */
+/** @module donjon-data — Normalize Vercel match data for Donjon consumption */
 
 const LR_ID = 'la-rochelle'
 
@@ -9,13 +9,17 @@ export function deriveMagnitude(scoreA, scoreB) {
   return 'close'
 }
 
+function optionalCount(value) {
+  return Number.isInteger(value) ? value : null
+}
+
 export function normalizeMatch(raw, teamsMap) {
   const isHome = raw.home === LR_ID
   const opponentId = isHome ? raw.away : raw.home
   const lrScore = isHome ? raw.homeScore : raw.awayScore
   const oppScore = isHome ? raw.awayScore : raw.homeScore
-  const lrTries = isHome ? raw.homeTries : raw.awayTries
-  const oppTries = isHome ? raw.awayTries : raw.homeTries
+  const lrTries = optionalCount(isHome ? raw.homeTries : raw.awayTries)
+  const oppTries = optionalCount(isHome ? raw.awayTries : raw.homeTries)
   const lrBonus = isHome ? raw.homeBonus : raw.awayBonus
   const oppBonus = isHome ? raw.awayBonus : raw.homeBonus
 

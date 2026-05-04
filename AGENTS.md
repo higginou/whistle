@@ -6,9 +6,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Whistle is a personal PWA that projects the final standings of the French rugby TOP 14 league using an Elo-based predictive model with animated visualizations. Single user (supporter of La Rochelle), season 2025-2026.
 
-Two decoupled systems connected only by static JSON:
-- **Pipeline (CI/CD):** Node.js scripts running in GitHub Actions (scrape, validate, Elo calc, JSON generation)
-- **Frontend (PWA):** Vanilla JS SPA with animated leaderboard, served from GitHub Pages
+Runtime is Vercel-first:
+- **Public app (PWA):** Vanilla JS SPA with animated leaderboard, served by Vercel
+- **Server API:** Vercel functions read/write Postgres for public season data, admin match entry, and recomputation
+- **Legacy scripts:** Node.js scripts in `scripts/` remain as local maintenance archives, not production runtime
 
 ## Tech Stack
 
@@ -17,8 +18,8 @@ Two decoupled systems connected only by static JSON:
 - **Animation:** Motion v12.x (formerly Motion One, ~4Ko)
 - **State:** Custom EventTarget + CustomEvent store (~50 lines)
 - **Routing:** Manual History API (~20 lines, back button closes bottom sheet)
-- **Pipeline:** Node.js scripts in `scripts/` (scrape.js, validate.js, elo.js, generate.js)
-- **Hosting:** GitHub Pages (static), zero server cost
+- **Server:** Vercel Functions + Vercel Postgres
+- **Hosting:** Vercel
 
 ## Commands
 
@@ -34,8 +35,7 @@ npm run dev          # Vite dev server with HMR
 npm run build        # Production build (budget: <200Ko gzipped)
 npm run preview      # Preview production build
 
-# Pipeline (normally runs in GitHub Actions)
-node scripts/scrape.js
+# Legacy local maintenance scripts (not production runtime)
 node scripts/validate.js
 node scripts/elo.js
 node scripts/generate.js
@@ -59,15 +59,16 @@ src/
     components/      # 1 CSS file per component, same name as JS
   store.js           # EventTarget state store
   router.js          # popstate / back Android
-  data.js            # Fetch JSON, cache logic, freshness detection
+  data.js            # Fetch Vercel API payload, cache logic, freshness detection
   app.js             # Entry point
-scripts/             # Pipeline (GitHub Actions only)
-data/                # Generated JSON (seasons.json + per-season files)
+api/                 # Vercel function entrypoints
+scripts/             # Legacy local maintenance scripts
+data/                # Historical/generated JSON fixtures
 ```
 
 ### JSON Data Contract
 
-Season files live in `data/`. Schema: teams array with `id`, `currentRank`, `projectedRank`, `elo`, `confidence` (0-1 decimal), `zones` (probabilities), `form`, `trend`. Plus `calendar` and `predictions` history (append-only).
+The active public contract is `GET /api/public/season?season=YYYY-YYYY`. Schema: teams array with `id`, `currentRank`, `projectedRank`, `elo`, `confidence` (0-1 decimal), `zones` (probabilities), `form`, `trend`. Plus `calendar`, `predictions` history (append-only), and played `results` from Vercel storage.
 
 - Team IDs: `kebab-case` (e.g., `la-rochelle`, `racing-92`)
 - Dates: ISO 8601 everywhere
@@ -99,7 +100,7 @@ Flat store with `set()`, `get()`, `on()`. Keys: `season`, `revealed`, `activeShe
 
 ## Error Handling
 
-- **Pipeline:** `console.error()` + non-zero exit code (GitHub Actions detects failure)
+- **Server API:** return controlled status codes; write paths require admin auth
 - **Frontend:** Silent fallback to cached data. No spinners, no error popups. If no cache: show "Les donnees arrivent lundi"
 - No generic try/catch — each catch handles a specific case or re-throws
 

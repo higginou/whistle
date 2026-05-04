@@ -1,7 +1,7 @@
 /**
  * scripts/scrape-rugbyrama.js
  *
- * Rugbyrama scraper — primary source for the Whistle pipeline.
+ * Rugbyrama scraper — legacy local archive, outside the Vercel runtime.
  * Scrapes the entire TOP 14 season (results + upcoming matches) from
  * a single Rugbyrama calendar page (server-rendered idalgo widgets).
  *

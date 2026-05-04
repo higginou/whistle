@@ -39,8 +39,9 @@ function createSqlRecorder() {
   return { sql, calls }
 }
 
-function createPublicSql(rows) {
-  return () => Promise.resolve(rows)
+function createPublicSql(rows, matchRows = []) {
+  let calls = 0
+  return () => Promise.resolve(calls++ === 0 ? rows : matchRows)
 }
 
 describe('public season API', () => {
@@ -69,6 +70,51 @@ describe('public season API', () => {
     expect(res.body.teams[0]).toHaveProperty('elo')
     expect(res.body.teams[0]).toHaveProperty('projectedRank')
     expect(res.body).toHaveProperty('predictions')
+    expect(res.body).toHaveProperty('results')
+  })
+
+  it('exposes played matches from Vercel storage in the public payload', async () => {
+    const payload = await getPublicSeasonPayload(
+      '2025-2026',
+      createPublicSql(
+        [
+          {
+            season: '2025-2026',
+            matchday: 18,
+            generated_at: '2026-04-18T21:00:00Z',
+            brier_score: null,
+            standings: { teams: [], predictions: [] },
+          },
+        ],
+        [
+          {
+            matchday: 18,
+            date: '2026-04-18T19:00:00Z',
+            home_team_id: 'la-rochelle',
+            away_team_id: 'toulouse',
+            home_score: 24,
+            away_score: 19,
+            home_bonus_offensive: true,
+            home_bonus_defensive: false,
+            away_bonus_offensive: false,
+            away_bonus_defensive: true,
+          },
+        ],
+      ),
+    )
+
+    expect(payload.results).toEqual([
+      {
+        matchday: 18,
+        date: '2026-04-18T19:00:00.000Z',
+        home: 'la-rochelle',
+        away: 'toulouse',
+        homeScore: 24,
+        awayScore: 19,
+        homeBonus: { offensive: true, defensive: false },
+        awayBonus: { offensive: false, defensive: true },
+      },
+    ])
   })
 
   it('returns controlled public API errors for missing projections and missing storage', async () => {

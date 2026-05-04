@@ -6,7 +6,7 @@
  * Calculates Elo ratings for all TOP 14 teams, projects final standings
  * using Monte Carlo simulation, and computes confidence/difficulty metrics.
  *
- * Pipeline position: scrape.js -> validate.js -> **elo.js** -> generate.js
+ * Legacy local maintenance archive; not used by the Vercel production runtime.
  *
  * Usage: node scripts/elo.js
  *

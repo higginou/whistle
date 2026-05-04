@@ -6,7 +6,7 @@
  * Generates the season JSON file with append-only prediction history
  * and updates the seasons index.
  *
- * Pipeline position: scrape.js -> validate.js -> elo.js -> **generate.js**
+ * Legacy local maintenance step after validate.js and elo.js.
  *
  * Usage: node scripts/generate.js
  *
@@ -18,8 +18,8 @@
  *   - No generic try/catch — each catch handles a specific case
  */
 
-import { readFileSync, writeFileSync, existsSync, copyFileSync, mkdirSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 // ─── Constants ────────────────────────────────────────────────────────────
@@ -358,11 +358,6 @@ export async function main() {
     process.exit(1);
   }
 
-  // Mirror to public/data/ for Vite dev server
-  const publicSeasonPath = resolve('public/data/2025-2026.json');
-  mkdirSync(dirname(publicSeasonPath), { recursive: true });
-  copyFileSync(seasonPath, publicSeasonPath);
-
   // Update seasons.json index
   let seasonsIndex;
   try {
@@ -382,10 +377,6 @@ export async function main() {
       process.exit(1);
     }
   }
-
-  // Mirror seasons index to public/data/
-  const publicSeasonsPath = resolve('public/data/seasons.json');
-  copyFileSync(seasonsIndexPath, publicSeasonsPath);
 
   // Success summary
   console.log('\n✅ Generation JSON de saison terminee');

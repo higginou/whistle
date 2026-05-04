@@ -14,6 +14,8 @@ date: '2026-03-28'
 
 _This document builds collaboratively through step-by-step discovery. Sections are appended as we work through each architectural decision together._
 
+> Note post-migration Epic 11 : les sections historiques qui mentionnent GitHub Pages, GitHub Actions, le scraping LNR ou API-Sports decrivent l'architecture initiale. Le chemin actif de production est Vercel + Postgres + API publique/admin ; les scripts restent des archives de maintenance locale.
+
 ## Project Context Analysis
 
 ### Requirements Overview
@@ -21,31 +23,31 @@ _This document builds collaboratively through step-by-step discovery. Sections a
 **Functional Requirements:**
 38 FRs reparties en 7 domaines : Pipeline/Donnees (FR1-5), Modele Predictif (FR6-13), Vue Equipe Favorite (FR14-19), Classement Anime (FR20-24), Transparence Modele (FR25-32, Phase 2), Simulateur (FR33-35, Phase 2/3), PWA/Offline (FR36-38). Le MVP couvre FR1-24 + FR36-38 (27 FRs). Les FRs Phase 2/3 (FR25-35) sont des extensions qui n'impactent pas l'architecture fondamentale.
 
-Architecture a deux systemes distincts :
-- **Pipeline (CI/CD)** : scraping, validation, modele Elo, generation JSON — execute dans GitHub Actions, aucune interaction utilisateur
-- **Front-end (PWA)** : consommation JSON, affichage, animations, offline — execute dans le navigateur, toute l'interaction utilisateur
+Architecture courante apres migration :
+- **Runtime Vercel** : API publique, API admin, stockage Postgres, recalcul serveur des projections.
+- **Front-end (PWA)** : consommation du payload `GET /api/public/season`, affichage, animations, cache localStorage/offline.
+- **Scripts legacy** : conserves comme archives/outils locaux, hors chemin critique de production.
 
-Le JSON statique est le seul point de couplage entre les deux systemes.
+Le payload public Vercel est le contrat actif entre serveur et front.
 
 **Non-Functional Requirements:**
 - Performance : < 2s chargement 4G, < 1s depuis cache, 60fps animations, < 200Ko assets gzipped, < 50Ko JSON/saison
-- Fiabilite pipeline : 0 intervention manuelle sur une saison, retry automatique, alerte apres 3 echecs
+- Fiabilite runtime : saisie admin controlee, recalcul deterministe, lecture publique sans authentification
 - Offline : PWA installable, cache-first assets, network-first donnees, fonctionnement complet hors ligne
 - Accessibilite : WCAG AA, zones tap 48px, prefers-reduced-motion, HTML semantique, aria-labels
 - Maintenabilite : developpeur solo, zero dependance serveur, infrastructure cout zero
 
 **Scale & Complexity:**
 
-- Domaine principal : Front-end PWA + CI/CD Pipeline
+- Domaine principal : Front-end PWA + API Vercel/Postgres
 - Niveau de complexite : Faible (infra/data) / Moyen (UX/animations)
-- Composants architecturaux estimes : ~8-10 (pipeline scraping, modele Elo, generateur JSON, Service Worker, moteur d'animation, composants UI, gestionnaire de cache, gestionnaire d'etat)
+- Composants architecturaux estimes : ~8-10 (API publique, API admin, modele Elo/recalcul, Service Worker, moteur d'animation, composants UI, gestionnaire de cache, gestionnaire d'etat)
 
 ### Technical Constraints & Dependencies
 
-- Hebergement statique gratuit (GitHub Pages ou Vercel) — pas de serveur, pas de fonctions cloud
-- Source de donnees primaire : site LNR (scraping HTML) — instable par nature, necessite resilience
-- Source de fallback : API-Sports — endpoint structure, plus fiable
-- GitHub Actions comme seul environnement d'execution backend
+- Hebergement Vercel pour le front et les fonctions serveur
+- Source de verite active : matchs saisis dans Vercel Postgres
+- Le scraping LNR/API-Sports et GitHub Actions sont retires du runtime de production
 - Chrome Android comme navigateur primaire, Firefox/Samsung Internet secondaires
 - Budget taille strict : chaque Ko compte dans le budget de 200Ko
 - JS vanilla ou micro-framework leger — pas de React/Vue/Angular
@@ -53,12 +55,12 @@ Le JSON statique est le seul point de couplage entre les deux systemes.
 
 ### Cross-Cutting Concerns Identified
 
-1. **Schema JSON (contrat pipeline <> front)** : definit les donnees de classement, projections, confiance, historique. Toute modification impacte les deux systemes
-2. **Strategie de cache Service Worker** : cache-first (assets statiques) vs network-first (JSON donnees) avec detection silencieuse de mise a jour et badge "Nouveau"
+1. **Payload public Vercel (contrat serveur <> front)** : definit les donnees de classement, projections, confiance, historique et resultats joues. Toute modification impacte le serveur et le front.
+2. **Strategie de cache Service Worker** : cache-first (assets statiques) vs network-first (API donnees) avec detection silencieuse de mise a jour et badge "Nouveau"
 3. **Historique append-only des predictions** : chaque semaine ajoute une entree — impacte la taille du JSON, la structure de stockage, et les vues historiques futures
-4. **Gestion des etats de donnees** : donnees fraiches vs cache vs offline vs erreur pipeline — chaque composant UI doit gerer ces etats de maniere coherente
+4. **Gestion des etats de donnees** : donnees fraiches vs cache vs offline vs erreur API — chaque composant UI doit gerer ces etats de maniere coherente
 5. **Animation comme systeme** : les regles de graduation (0/+-1/+-2/+-3+), le stagger, le traitement special de l'equipe favorite — c'est un systeme transversal qui touche tous les composants visuels
-6. **Abstraction source de donnees pipeline** : le passage LNR vers API-Sports ne doit modifier que le module de scraping — necessite une interface propre dans le pipeline
+6. **Abstraction source de donnees runtime** : les composants lisent le payload public, sans dependance directe aux scripts ou fichiers legacy
 
 ## Starter Template Evaluation
 

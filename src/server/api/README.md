@@ -1,6 +1,6 @@
 # Publication des donnees publiques
 
-Le runtime Vercel publie les donnees par l'API et la base, pas par un nouveau deploy GitHub Pages.
+Le runtime Vercel publie les donnees par l'API et la base, pas par un nouveau deploy statique.
 
 Flux courant :
 
@@ -10,4 +10,4 @@ Flux courant :
 4. Le front public lit la derniere version via `GET /api/public/season?season=2025-2026` avec `cache: no-store`.
 5. Si le reseau echoue, `src/data.js` garde le dernier payload lisible depuis `localStorage`.
 
-Cette publication ne modifie pas les JSON statiques de `data/` et ne depend pas d'un redeploiement GitHub Pages.
+Cette publication ne modifie pas les JSON statiques de `data/` et ne depend pas d'un redeploiement statique.

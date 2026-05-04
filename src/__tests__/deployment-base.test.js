@@ -6,7 +6,7 @@ describe('getAppBase', () => {
     expect(getAppBase({ VERCEL: '1' })).toBe('/')
   })
 
-  it('keeps the GitHub Pages base outside Vercel', () => {
-    expect(getAppBase({})).toBe('/whistle/')
+  it('uses the root path outside Vercel too', () => {
+    expect(getAppBase({})).toBe('/')
   })
 })

@@ -2,7 +2,7 @@ import './styles/base.css'
 import { registerSW } from 'virtual:pwa-register'
 import { animate } from 'motion/mini'
 import { get, set, on } from './store.js'
-import { loadSeason, loadScraped } from './data.js'
+import { loadSeason } from './data.js'
 import { init as initRouter, tabFromCurrentPath, pushTab, pushSheet } from './router.js'
 import { render as renderLayout } from './components/page-layout.js'
 import { render as renderBottomNav, update as updateBottomNav, tabIds } from './components/bottom-nav.js'
@@ -238,7 +238,7 @@ function renderTabContent(tabId, container) {
       if (season) renderDuels(container, season)
       break
     case 'donjon':
-      renderDonjon(container, season, get('scraped'))
+      renderDonjon(container, season)
       break
     case 'oracle':
       if (season) renderOracle(container, season)
@@ -400,14 +400,5 @@ registerSW({
   onRegisterError(error) { console.error('[SW] Registration failed:', error) },
 })
 
-// Invalidate donjon tab cache when scraped data arrives
-on('scraped', () => {
-  if (!viewport) return
-  const donjonView = tabViews.get('donjon')
-  if (donjonView) { donjonView.remove(); tabViews.delete('donjon') }
-  if (get('activeTab') === 'donjon') showTab('donjon', true)
-})
-
 initRouter()
 loadSeason()
-loadScraped()

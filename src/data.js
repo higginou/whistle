@@ -1,4 +1,4 @@
-/** @module data — Network-first data fetcher with localStorage cache */
+/** @module data — Network-first Vercel API fetcher with localStorage cache */
 
 import { set } from './store.js'
 
@@ -8,7 +8,7 @@ const STALE_THRESHOLD_MS = 7 * 24 * 60 * 60 * 1000
 
 /**
  * Load season data from the Vercel public API (network-first, cache fallback).
- * @param {string} [seasonId] — if omitted, resolved from seasons.json
+ * @param {string} [seasonId] — if omitted, uses the active TOP 14 season
  */
 async function loadSeason(seasonId = '2025-2026') {
   if (!seasonId) seasonId = '2025-2026'
@@ -72,19 +72,4 @@ function readCache(key) {
   }
 }
 
-/**
- * Load scraped match results (network-first, no cache).
- * Sets store key 'scraped' to the fetched data, or null on error.
- */
-async function loadScraped() {
-  try {
-    const response = await fetch('./data/scraped.json')
-    if (!response.ok) throw new Error(`HTTP ${response.status}`)
-    const data = await response.json()
-    set('scraped', data)
-  } catch (_err) {
-    set('scraped', null)
-  }
-}
-
-export { loadSeason, loadScraped }
+export { loadSeason }

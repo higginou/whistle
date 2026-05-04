@@ -28,7 +28,8 @@ describe('donjon orchestrator', () => {
     ],
   }
 
-  const MOCK_SCRAPED = {
+  const MOCK_SEASON_WITH_RESULTS = {
+    ...MOCK_SEASON,
     results: [
       {
         matchday: 1, date: '2025-09-06',
@@ -42,25 +43,25 @@ describe('donjon orchestrator', () => {
   }
 
   it('starts in splash phase', () => {
-    render(container, MOCK_SEASON, MOCK_SCRAPED)
+    render(container, MOCK_SEASON_WITH_RESULTS)
     expect(container.querySelector('.w-donjon')).toBeTruthy()
     expect(container.querySelector('.w-donjon-splash')).toBeTruthy()
   })
 
-  it('renders with empty scraped data without crashing', () => {
-    render(container, MOCK_SEASON, { results: [] })
+  it('renders with empty Vercel match data without crashing', () => {
+    render(container, { ...MOCK_SEASON, results: [] })
     expect(container.querySelector('.w-donjon-splash')).toBeTruthy()
     const counter = container.querySelector('.w-donjon-splash__counter')
     expect(counter.textContent).toContain('0')
   })
 
-  it('renders with null scraped data without crashing', () => {
-    render(container, MOCK_SEASON, null)
+  it('renders without Vercel match data without crashing', () => {
+    render(container, MOCK_SEASON)
     expect(container.querySelector('.w-donjon-splash')).toBeTruthy()
   })
 
   it('has mute button', () => {
-    render(container, MOCK_SEASON, MOCK_SCRAPED)
+    render(container, MOCK_SEASON_WITH_RESULTS)
     const muteBtn = container.querySelector('.w-donjon__mute')
     expect(muteBtn).toBeTruthy()
     expect(muteBtn.getAttribute('aria-label')).toBeTruthy()

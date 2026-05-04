@@ -130,9 +130,8 @@ function transitionTo(phase) {
  * Render the Donjon tab.
  * @param {HTMLElement} container
  * @param {object} season — season JSON data
- * @param {object} scraped — scraped.json data (may be null)
  */
-export function render(container, season, scraped) {
+export function render(container, season) {
   root = document.createElement('div')
   root.className = 'w-donjon w-tab-donjon'
 
@@ -154,9 +153,9 @@ export function render(container, season, scraped) {
   container.appendChild(root)
 
   // Prepare data
-  if (season && scraped && scraped.results) {
+  if (season && Array.isArray(season.results)) {
     const teamsMap = buildTeamsMap(season.teams || [])
-    state.matches = normalizeMatches(scraped.results, teamsMap)
+    state.matches = normalizeMatches(season.results, teamsMap)
     const lastMatchday = state.matches.length > 0
       ? state.matches[state.matches.length - 1].matchday
       : 0

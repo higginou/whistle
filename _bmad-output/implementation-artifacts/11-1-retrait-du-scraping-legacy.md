@@ -1,6 +1,6 @@
 # Story 11.1 : Retrait du scraping legacy
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -24,12 +24,12 @@ Afin que la migration ne dependa plus de la LNR ni d'un fallback automate.
 
 ## Tasks / Subtasks
 
-- [ ] Isoler puis retirer les appels au scraping du chemin critique (AC: 1, 3)
-  - [ ] Supprimer les dependances runtime au script
-  - [ ] Verifier qu'aucune page ne les invoque
-- [ ] Nettoyer les references au fallback LNR/API-Sports (AC: 1, 2)
-  - [ ] Retirer les commentaires et docs trompeurs
-  - [ ] Garder seulement l'historique utile
+- [x] Isoler puis retirer les appels au scraping du chemin critique (AC: 1, 3)
+  - [x] Supprimer les dependances runtime au script
+  - [x] Verifier qu'aucune page ne les invoque
+- [x] Nettoyer les references au fallback LNR/API-Sports (AC: 1, 2)
+  - [x] Retirer les commentaires et docs trompeurs
+  - [x] Garder seulement l'historique utile
 
 ## Dev Notes
 
@@ -51,10 +51,58 @@ Afin que la migration ne dependa plus de la LNR ni d'un fallback automate.
 
 ### Agent Model Used
 
-TBD
+openai/gpt-5.5
 
 ### Debug Log References
 
 ### Completion Notes List
 
+- Retire le chargement runtime de `public/data/scraped.json` et la cle store associee.
+- Le Donjon lit les resultats depuis le payload public Vercel `season.results`.
+- Les scripts de scraping restent presents comme archives locales, avec commentaires explicites hors runtime Vercel.
+
+### Change Log
+
+- 2026-05-04 : Suppression du flux `loadScraped()` et branchement des resultats joues sur l'API publique Vercel.
+- 2026-05-04 : Correction review — les essais Donjon sont optionnels quand le payload Vercel ne les fournit pas.
+
 ### File List
+
+- src/data.js
+- src/app.js
+- src/store.js
+- src/components/tab-donjon.js
+- src/components/donjon-data.js
+- src/server/api/public-season.js
+- tests/api-contract.test.js
+- src/__tests__/app.test.js
+- src/__tests__/data.test.js
+- src/__tests__/donjon-state.test.js
+- scripts/scrape.js
+- scripts/scrape-rugbyrama.js
+- scripts/scrape-lnr.js
+- scripts/scrape-api.js
+- scripts/team-mapping.js
+- scripts/validate.js
+- scripts/elo.js
+- public/data/scraped.json
+- src/components/donjon-combat.js
+- src/components/donjon-finale.js
+- src/__tests__/donjon-data.test.js
+- src/__tests__/donjon-finale.test.js
+
+## Senior Developer Review (AI)
+
+- Review date: 2026-05-04
+- Outcome: Approve
+- Reviewer: bmad-code-review via general subagent
+
+### Findings
+
+- Medium: le payload public Vercel `results` ne fournit pas `homeTries` / `awayTries`, alors que Donjon rendait encore ces valeurs comme obligatoires. Corrige en normalisant les essais manquants a `null`, en masquant les lignes d'essais absentes dans le combat, et en evitant `NaN` dans la finale.
+
+### Action Items
+
+- [x] Rendre les essais Donjon optionnels pour le payload public Vercel.
+- [x] Ajouter une regression sur la forme exacte `results` sans essais.
+- [x] Reexecuter `npx vitest run`, `npx biome check .` et `npm run build`.

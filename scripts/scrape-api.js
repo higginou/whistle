@@ -5,7 +5,7 @@
  *
  * Scrapes TOP 14 data from API-Sport (rugby v1) for a given season.
  * Outputs data/{season}-{season+1}.scraped.json in the same format
- * as data/scraped.json used by the existing pipeline.
+ * as data/scraped.json used by the legacy local scripts.
  *
  * Usage: node scripts/scrape-api.js <startYear>
  *   e.g. node scripts/scrape-api.js 2024   → data/2024-2025.scraped.json

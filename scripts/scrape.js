@@ -3,10 +3,11 @@
 /**
  * scripts/scrape.js
  *
+ * Legacy local maintenance archive; not used by the Vercel production runtime.
  * Orchestrator — scrapes TOP 14 data using Rugbyrama (primary)
- * with LNR fallback. Writes data/scraped.json for the pipeline.
+ * with LNR fallback. Writes data/scraped.json for local analysis.
  *
- * Pipeline position: **scrape.js** -> validate.js -> elo.js -> generate.js
+ * Legacy sequence: **scrape.js** -> validate.js -> elo.js -> generate.js
  *
  * Usage: node scripts/scrape.js
  */

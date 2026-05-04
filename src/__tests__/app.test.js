@@ -2,7 +2,7 @@
 import { beforeEach, describe, it, expect, vi } from 'vitest'
 
 vi.mock('virtual:pwa-register', () => ({ registerSW: vi.fn(() => vi.fn()) }))
-vi.mock('../data.js', () => ({ loadSeason: vi.fn(), loadScraped: vi.fn() }))
+vi.mock('../data.js', () => ({ loadSeason: vi.fn() }))
 vi.mock('../router.js', () => ({
   init: vi.fn(),
   tabFromCurrentPath: vi.fn(() => 'classements'),

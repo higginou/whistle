@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import * as store from '../store.js'
-import { loadSeason, loadScraped } from '../data.js'
+import { loadSeason } from '../data.js'
 
 // Mock store.set to track calls without side effects
 vi.spyOn(store, 'set')
@@ -198,37 +198,3 @@ describe('data.loadSeason', () => {
   })
 })
 
-const SCRAPED_DATA = {
-  matchday: 26,
-  matches: [{ home: 'la-rochelle', away: 'bordeaux', homeScore: 34, awayScore: 10 }],
-}
-
-describe('data.loadScraped', () => {
-  it('fetches scraped.json and sets scraped in store on success', async () => {
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(SCRAPED_DATA),
-    })
-
-    await loadScraped()
-
-    expect(mockFetch).toHaveBeenCalledWith('./data/scraped.json')
-    expect(store.set).toHaveBeenCalledWith('scraped', SCRAPED_DATA)
-  })
-
-  it('sets scraped to null when fetch fails with network error', async () => {
-    mockFetch.mockRejectedValueOnce(new Error('network error'))
-
-    await loadScraped()
-
-    expect(store.set).toHaveBeenCalledWith('scraped', null)
-  })
-
-  it('sets scraped to null when server returns non-ok response', async () => {
-    mockFetch.mockResolvedValueOnce({ ok: false, status: 404 })
-
-    await loadScraped()
-
-    expect(store.set).toHaveBeenCalledWith('scraped', null)
-  })
-})

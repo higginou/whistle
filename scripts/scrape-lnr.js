@@ -1,7 +1,7 @@
 /**
  * scripts/scrape-lnr.js
  *
- * LNR scraper — fallback source for the Whistle pipeline.
+ * LNR scraper — legacy local archive, outside the Vercel runtime.
  * Scrapes TOP 14 results, standings, and calendar from top14.lnr.fr.
  *
  * Called by scrape.js orchestrator when Rugbyrama (primary) fails.
