@@ -1,6 +1,6 @@
 {
   "season": "2025-2026",
-  "lastUpdated": "2026-04-29T08:20:49Z",
+  "lastUpdated": "2026-05-04T08:31:58Z",
   "matchday": 22,
   "brierScore": null,
   "teams": [
@@ -11,11 +11,11 @@
       "projectedRank": 1,
       "elo": 1573,
       "points": 78,
-      "projectedPoints": 88,
+      "projectedPoints": 87,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.9963,
-        "top6": 0.0037,
+        "europe": 0.996,
+        "top6": 0.004,
         "mid": 0,
         "relegation": 0
       },
@@ -38,9 +38,9 @@
       "projectedPoints": 76,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.3788,
-        "top6": 0.5852,
-        "mid": 0.036,
+        "europe": 0.3853,
+        "top6": 0.5786,
+        "mid": 0.0361,
         "relegation": 0
       },
       "form": [
@@ -63,9 +63,9 @@
       "projectedPoints": 75,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.2852,
-        "top6": 0.6443,
-        "mid": 0.0705,
+        "europe": 0.2803,
+        "top6": 0.6487,
+        "mid": 0.071,
         "relegation": 0
       },
       "form": [
@@ -88,9 +88,9 @@
       "projectedPoints": 74,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.1788,
-        "top6": 0.7235,
-        "mid": 0.0977,
+        "europe": 0.1725,
+        "top6": 0.7297,
+        "mid": 0.0978,
         "relegation": 0
       },
       "form": [
@@ -112,9 +112,9 @@
       "projectedPoints": 71,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.086,
-        "top6": 0.6475,
-        "mid": 0.2665,
+        "europe": 0.0862,
+        "top6": 0.6387,
+        "mid": 0.2751,
         "relegation": 0
       },
       "form": [
@@ -136,9 +136,9 @@
       "projectedPoints": 70,
       "confidence": 0.51,
       "zones": {
-        "europe": 0.0456,
-        "top6": 0.6319,
-        "mid": 0.3225,
+        "europe": 0.0509,
+        "top6": 0.6221,
+        "mid": 0.327,
         "relegation": 0
       },
       "form": [
@@ -160,9 +160,9 @@
       "projectedPoints": 70,
       "confidence": 0.52,
       "zones": {
-        "europe": 0.0289,
-        "top6": 0.5677,
-        "mid": 0.4034,
+        "europe": 0.0283,
+        "top6": 0.5796,
+        "mid": 0.3921,
         "relegation": 0
       },
       "form": [
@@ -184,9 +184,9 @@
       "projectedPoints": 63,
       "confidence": 0.52,
       "zones": {
-        "europe": 0.0003,
-        "top6": 0.1317,
-        "mid": 0.868,
+        "europe": 0.0004,
+        "top6": 0.1279,
+        "mid": 0.8717,
         "relegation": 0
       },
       "form": [
@@ -209,8 +209,8 @@
       "confidence": 0.52,
       "zones": {
         "europe": 0.0001,
-        "top6": 0.0606,
-        "mid": 0.9393,
+        "top6": 0.0678,
+        "mid": 0.9321,
         "relegation": 0
       },
       "form": [
@@ -233,8 +233,8 @@
       "confidence": 0.52,
       "zones": {
         "europe": 0,
-        "top6": 0.0021,
-        "mid": 0.9979,
+        "top6": 0.0011,
+        "mid": 0.9989,
         "relegation": 0
       },
       "form": [
@@ -257,8 +257,8 @@
       "confidence": 0.53,
       "zones": {
         "europe": 0,
-        "top6": 0.0017,
-        "mid": 0.9983,
+        "top6": 0.0018,
+        "mid": 0.9982,
         "relegation": 0
       },
       "form": [
@@ -281,8 +281,8 @@
       "confidence": 0.53,
       "zones": {
         "europe": 0,
-        "top6": 0.0001,
-        "mid": 0.9999,
+        "top6": 0,
+        "mid": 1,
         "relegation": 0
       },
       "form": [
@@ -395,52 +395,52 @@
     },
     {
       "matchday": 24,
-      "date": "2026-05-15",
-      "home": "castres",
-      "away": "montpellier",
-      "difficulty": 0.56
-    },
-    {
-      "matchday": 24,
-      "date": "2026-05-15",
-      "home": "lyon",
-      "away": "bayonne",
-      "difficulty": 0.36
-    },
-    {
-      "matchday": 24,
-      "date": "2026-05-15",
-      "home": "racing-92",
-      "away": "toulon",
-      "difficulty": 0.33
-    },
-    {
-      "matchday": 24,
-      "date": "2026-05-15",
+      "date": "2026-05-16",
       "home": "pau",
       "away": "clermont",
       "difficulty": 0.42
     },
     {
       "matchday": 24,
-      "date": "2026-05-15",
-      "home": "la-rochelle",
-      "away": "toulouse",
-      "difficulty": 0.49
+      "date": "2026-05-16",
+      "home": "castres",
+      "away": "montpellier",
+      "difficulty": 0.56
     },
     {
       "matchday": 24,
-      "date": "2026-05-15",
+      "date": "2026-05-16",
+      "home": "lyon",
+      "away": "bayonne",
+      "difficulty": 0.36
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-16",
       "home": "bordeaux-begles",
       "away": "perpignan",
       "difficulty": 0.29
     },
     {
       "matchday": 24,
-      "date": "2026-05-15",
+      "date": "2026-05-16",
       "home": "montauban",
       "away": "stade-francais",
       "difficulty": 0.69
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-16",
+      "home": "racing-92",
+      "away": "toulon",
+      "difficulty": 0.33
+    },
+    {
+      "matchday": 24,
+      "date": "2026-05-17",
+      "home": "la-rochelle",
+      "away": "toulouse",
+      "difficulty": 0.49
     },
     {
       "matchday": 25,
