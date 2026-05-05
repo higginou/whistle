@@ -1,0 +1,164 @@
+.w-admin-access {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 28px 0;
+  color: var(--w-text-primary);
+}
+
+.w-admin-access__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.w-admin-access__shell {
+  width: min(100%, 430px);
+  display: grid;
+  gap: 16px;
+}
+
+.w-admin-access__header,
+.w-admin-access__login,
+.w-admin-access__panel,
+.w-admin-access__note {
+  border: 1px solid rgba(245, 200, 76, 0.18);
+  background: linear-gradient(180deg, rgba(26, 39, 64, 0.94), rgba(18, 24, 38, 0.96));
+  box-shadow: var(--w-shadow-card);
+}
+
+.w-admin-access__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-radius: 18px;
+}
+
+.w-admin-access__brand,
+.w-admin-access__eyebrow,
+.w-admin-access__badge {
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 900;
+}
+
+.w-admin-access__brand,
+.w-admin-access__eyebrow {
+  color: var(--w-accent);
+}
+
+.w-admin-access__badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(245, 200, 76, 0.1);
+  color: var(--w-text-accent);
+  font-size: var(--w-text-caption);
+}
+
+.w-admin-access__login,
+.w-admin-access__panel {
+  border-radius: 24px;
+  padding: 26px 22px;
+}
+
+.w-admin-access h1,
+.w-admin-access h2 {
+  margin: 8px 0;
+  font-size: clamp(2rem, 12vw, 3.7rem);
+  line-height: 0.95;
+  letter-spacing: -0.06em;
+}
+
+.w-admin-access h2 {
+  font-size: clamp(1.8rem, 9vw, 3rem);
+}
+
+.w-admin-access__copy,
+.w-admin-access__hint,
+.w-admin-access__note {
+  color: var(--w-text-secondary);
+}
+
+.w-admin-access__form {
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.w-admin-access__label {
+  color: var(--w-text-accent);
+  font-weight: 800;
+}
+
+.w-admin-access__input,
+.w-admin-access__button {
+  min-height: 48px;
+  border-radius: var(--w-radius-button);
+  font: inherit;
+}
+
+.w-admin-access__input {
+  width: 100%;
+  border: 1px solid rgba(245, 247, 251, 0.18);
+  background: rgba(9, 7, 18, 0.72);
+  color: var(--w-text-primary);
+  padding: 0 14px;
+}
+
+.w-admin-access__button {
+  border: 0;
+  background: linear-gradient(135deg, var(--w-accent), #ffe8a5);
+  color: var(--w-bg-page);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.w-admin-access__button:disabled {
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.w-admin-access__input:focus-visible,
+.w-admin-access__button:focus-visible {
+  outline: 3px solid var(--w-text-accent);
+  outline-offset: 3px;
+}
+
+.w-admin-access__message {
+  margin-top: 14px;
+  border-left: 3px solid var(--w-color-danger);
+  border-radius: 12px;
+  background: rgba(239, 118, 118, 0.12);
+  color: #ffd6d6;
+  padding: 10px 12px;
+  font-size: var(--w-text-label);
+}
+
+.w-admin-access__actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.w-admin-access__note {
+  border-radius: 16px;
+  padding: 12px 14px;
+  font-size: var(--w-text-caption);
+}
+
+@media (min-width: 720px) {
+  .w-admin-access__shell {
+    width: min(760px, 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .w-admin-access__button {
+    transition: none;
+  }
+}

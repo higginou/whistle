@@ -90,6 +90,25 @@ describe('tabFromCurrentPath', () => {
   })
 })
 
+describe('isAdminPath', () => {
+  beforeEach(() => {
+    history.pushState.mockRestore()
+  })
+
+  afterEach(() => {
+    history.pushState({}, '', '/')
+    vi.spyOn(history, 'pushState').mockImplementation(() => {})
+  })
+
+  it('accepts /admin with or without trailing slash', async () => {
+    const { isAdminPath } = await import('../router.js')
+    history.pushState({}, '', '/admin')
+    expect(isAdminPath()).toBe(true)
+    history.pushState({}, '', '/admin/')
+    expect(isAdminPath()).toBe(true)
+  })
+})
+
 describe('popstate — updated handler', () => {
   it('closes sheet when state has sheet property', () => {
     init()

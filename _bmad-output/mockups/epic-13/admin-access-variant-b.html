@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Whistle Admin Access - Variante B</title>
+    <style>
+      :root {
+        --w-bg: #06100d;
+        --w-panel: #0f1c18;
+        --w-line: rgba(219, 184, 111, 0.24);
+        --w-gold: #d9b36c;
+        --w-text: #fbf3df;
+        --w-muted: #aeb8af;
+        --w-ok: #78d7ae;
+        --w-warn: #ffd27a;
+        --w-error: #ff9c8f;
+        color-scheme: dark;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--w-text);
+        background:
+          linear-gradient(rgba(217, 179, 108, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(217, 179, 108, 0.04) 1px, transparent 1px),
+          radial-gradient(circle at 82% 12%, rgba(217, 179, 108, 0.18), transparent 25rem),
+          var(--w-bg);
+        background-size: 28px 28px, 28px 28px, auto, auto;
+        padding: 22px;
+      }
+
+      .w-console { max-width: 1160px; margin: 0 auto; border: 1px solid var(--w-line); border-radius: 18px; overflow: hidden; background: rgba(8, 18, 15, 0.88); box-shadow: 0 22px 70px rgba(0, 0, 0, 0.44); }
+      .w-topbar { min-height: 58px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 18px; border-bottom: 1px solid var(--w-line); background: #0d1815; }
+      .w-brand { display: flex; align-items: center; gap: 12px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; }
+      .w-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--w-gold); box-shadow: 0 0 18px var(--w-gold); }
+      .w-status { color: var(--w-ok); font-size: 0.86rem; }
+      .w-grid { display: grid; grid-template-columns: 360px 1fr; min-height: 620px; }
+      .w-sidebar { border-right: 1px solid var(--w-line); padding: 22px; background: rgba(15, 28, 24, 0.82); }
+      .w-main { padding: 22px; display: grid; gap: 18px; align-content: start; }
+      .w-card { border: 1px solid rgba(251, 243, 223, 0.1); border-radius: 15px; background: rgba(20, 35, 31, 0.72); padding: 18px; }
+      h1, h2 { margin: 0 0 10px; }
+      h1 { font-size: clamp(1.6rem, 4vw, 2.8rem); font-family: Inter, ui-sans-serif, system-ui, sans-serif; letter-spacing: -0.05em; }
+      h2 { color: #ffe0a0; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.12em; }
+      p { color: var(--w-muted); line-height: 1.55; }
+      .w-field { display: grid; gap: 8px; margin: 18px 0 12px; }
+      .w-label { color: #f7e3b2; font-weight: 800; }
+      .w-input, .w-button { min-height: 48px; border-radius: 10px; font: inherit; }
+      .w-input { border: 1px solid rgba(251, 243, 223, 0.2); background: #06100d; color: var(--w-text); padding: 0 13px; }
+      .w-button { width: 100%; border: 1px solid var(--w-gold); background: rgba(217, 179, 108, 0.14); color: #ffe0a0; font-weight: 900; cursor: pointer; }
+      .w-input:focus-visible, .w-button:focus-visible, .w-command:focus-visible { outline: 3px solid #ffe0a0; outline-offset: 3px; }
+      .w-errors { display: grid; gap: 8px; margin-top: 16px; }
+      .w-error { margin: 0; color: #ffd5cf; border: 1px solid rgba(255, 156, 143, 0.35); border-radius: 10px; padding: 10px; background: rgba(255, 156, 143, 0.09); }
+      .w-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+      .w-metric strong { display: block; font-size: 1.55rem; color: var(--w-text); }
+      .w-metric span { color: var(--w-muted); font-size: 0.82rem; }
+      .w-log { display: grid; gap: 9px; }
+      .w-line { display: flex; gap: 12px; color: var(--w-muted); }
+      .w-line b { color: var(--w-gold); min-width: 76px; }
+      .w-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .w-command { min-height: 56px; border: 1px solid rgba(217, 179, 108, 0.25); border-radius: 12px; background: #10231e; color: var(--w-text); text-align: left; padding: 12px 14px; cursor: pointer; }
+
+      @media (max-width: 820px) {
+        body { padding: 12px; }
+        .w-topbar { align-items: flex-start; flex-direction: column; }
+        .w-grid { grid-template-columns: 1fr; min-height: auto; }
+        .w-sidebar { border-right: 0; border-bottom: 1px solid var(--w-line); }
+        .w-metrics, .w-actions { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="w-console" aria-label="Console operations admin Whistle">
+      <header class="w-topbar">
+        <div class="w-brand"><span class="w-dot" aria-hidden="true"></span>Whistle Ops</div>
+        <div class="w-status">runtime public actif - admin verrouille par defaut</div>
+      </header>
+      <section class="w-grid">
+        <aside class="w-sidebar">
+          <h1>Acces operations</h1>
+          <p>Connexion courte, orientee exploitation. Aucune variable sensible n'est affichee.</p>
+          <form aria-label="Connexion admin">
+            <div class="w-field">
+              <label class="w-label" for="password-b">Mot de passe admin</label>
+              <input class="w-input" id="password-b" type="password" autocomplete="current-password" placeholder="Saisir le secret" />
+            </div>
+            <button class="w-button" type="button">Demarrer session</button>
+            <div class="w-errors" aria-live="polite">
+              <p class="w-error">auth: mot de passe invalide</p>
+              <p class="w-error">guard: limite de tentatives atteinte</p>
+              <p class="w-error">config: protection admin indisponible</p>
+            </div>
+          </form>
+        </aside>
+        <div class="w-main" aria-labelledby="auth-panel-b">
+          <section class="w-card">
+            <h2 id="auth-panel-b">Panneau authentifie</h2>
+            <div class="w-metrics">
+              <div class="w-card w-metric"><strong>2025-26</strong><span>Saison cible</span></div>
+              <div class="w-card w-metric"><strong>3</strong><span>Actions protegees</span></div>
+              <div class="w-card w-metric"><strong>OK</strong><span>Session locale</span></div>
+            </div>
+          </section>
+          <section class="w-card">
+            <h2>Commandes</h2>
+            <div class="w-actions">
+              <button class="w-command" type="button">Saisir resultat TOP 14</button>
+              <button class="w-command" type="button">Lancer recomputation Elo</button>
+              <button class="w-command" type="button">Verifier donnees publiques</button>
+              <button class="w-command" type="button">Fermer session admin</button>
+            </div>
+          </section>
+          <section class="w-card w-log" aria-label="Journal runtime">
+            <h2>Journal</h2>
+            <div class="w-line"><b>12:02:11</b><span>session admin ouverte</span></div>
+            <div class="w-line"><b>12:02:15</b><span>etat Postgres masque: disponible</span></div>
+            <div class="w-line"><b>12:02:31</b><span>pret pour saisie resultat</span></div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

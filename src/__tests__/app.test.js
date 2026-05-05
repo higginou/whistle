@@ -5,6 +5,7 @@ vi.mock('virtual:pwa-register', () => ({ registerSW: vi.fn(() => vi.fn()) }))
 vi.mock('../data.js', () => ({ loadSeason: vi.fn() }))
 vi.mock('../router.js', () => ({
   init: vi.fn(),
+  isAdminPath: vi.fn(() => window.location.pathname.endsWith('/admin')),
   tabFromCurrentPath: vi.fn(() => 'classements'),
   pushTab: vi.fn(),
   pushSheet: vi.fn(),
@@ -16,6 +17,7 @@ vi.mock('motion/mini', () => ({
 describe('app integration', () => {
   beforeEach(() => {
     vi.resetModules()
+    vi.clearAllMocks()
     document.body.innerHTML = '<div id="app"></div>'
   })
 
@@ -55,5 +57,17 @@ describe('app integration', () => {
     set('season', null)
     const fallback = document.querySelector('.w-empty-state')
     expect(fallback).not.toBeNull()
+  })
+
+  it('renders admin access without waiting for season data', async () => {
+    history.pushState({}, '', '/admin')
+    const { loadSeason } = await import('../data.js')
+
+    await import('../app.js')
+
+    expect(document.querySelector('.w-admin-access')).not.toBeNull()
+    expect(document.querySelector('.w-bottom-nav')).toBeNull()
+    expect(loadSeason).not.toHaveBeenCalled()
+    history.pushState({}, '', '/')
   })
 })

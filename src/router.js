@@ -29,6 +29,10 @@ export function tabFromCurrentPath() {
   return 'classements'
 }
 
+export function isAdminPath() {
+  return routePathname().replace(/\/+$/, '').endsWith('/admin')
+}
+
 /**
  * Push a tab navigation state.
  * Builds path by replacing the current tab suffix.

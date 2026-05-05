@@ -1,0 +1,154 @@
+import '../styles/components/admin-access.css'
+
+const SESSION_URL = '/api/admin/session'
+const LOGIN_URL = '/api/admin/login'
+
+let root = null
+let passwordInput = null
+let submitButton = null
+let messageEl = null
+
+function safeFetch(url, options) {
+  if (typeof fetch !== 'function') return Promise.reject(new Error('fetch-unavailable'))
+  return fetch(url, options)
+}
+
+function setMessage(message, role = 'status') {
+  if (!messageEl) return
+  messageEl.setAttribute('role', role)
+  messageEl.textContent = message
+  messageEl.hidden = message === ''
+}
+
+function messageForStatus(status) {
+  if (status === 401) return 'Mot de passe incorrect.'
+  if (status === 429) return 'Trop de tentatives. Reessaye dans une minute.'
+  if (status === 503) return 'Configuration admin indisponible cote serveur.'
+  return 'Connexion admin impossible pour le moment.'
+}
+
+function renderPanel() {
+  if (!root) return
+  root.classList.add('w-admin-access--authenticated')
+  root.querySelector('.w-admin-access__body').replaceChildren(buildPanel())
+}
+
+function buildPanel() {
+  const panel = document.createElement('section')
+  panel.className = 'w-admin-access__panel'
+  panel.setAttribute('aria-label', 'Session admin valide')
+  panel.innerHTML = `
+    <p class="w-admin-access__eyebrow">Session valide</p>
+    <h2>Actions admin</h2>
+    <p class="w-admin-access__copy">La session admin est active. Les actions de recalcul et diagnostic arrivent dans les stories suivantes.</p>
+    <div class="w-admin-access__actions" aria-label="Actions admin a venir">
+      <button class="w-admin-access__button" type="button" disabled>Recalculer la saison</button>
+      <span class="w-admin-access__hint">Disponible avec la story 13.2</span>
+    </div>
+  `
+  return panel
+}
+
+function setPending(isPending) {
+  if (submitButton) submitButton.disabled = isPending
+  if (passwordInput) passwordInput.disabled = isPending
+}
+
+async function submitLogin(event) {
+  event.preventDefault()
+  if (!passwordInput) return
+
+  const password = passwordInput.value
+  setPending(true)
+  setMessage('Connexion en cours...')
+
+  try {
+    const response = await safeFetch(LOGIN_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password }),
+    })
+
+    if (!response.ok) {
+      passwordInput.value = ''
+      setMessage(messageForStatus(response.status), 'alert')
+      return
+    }
+
+    const data = await response.json()
+    passwordInput.value = ''
+
+    if (data.authenticated === true) {
+      renderPanel()
+      return
+    }
+
+    setMessage(messageForStatus(response.status), 'alert')
+  } catch (_error) {
+    passwordInput.value = ''
+    setMessage('Connexion admin impossible pour le moment.', 'alert')
+  } finally {
+    setPending(false)
+  }
+}
+
+function buildForm() {
+  const wrapper = document.createElement('section')
+  wrapper.className = 'w-admin-access__login'
+  wrapper.innerHTML = `
+    <p class="w-admin-access__eyebrow">Acces protege</p>
+    <h1>Admin Whistle</h1>
+    <p class="w-admin-access__copy">Connecte la session admin Vercel pour piloter l'initialisation sans console navigateur.</p>
+    <form class="w-admin-access__form">
+      <label class="w-admin-access__label" for="admin-password">Mot de passe admin</label>
+      <input class="w-admin-access__input" id="admin-password" name="password" type="password" autocomplete="current-password" required />
+      <button class="w-admin-access__button" type="submit">Ouvrir la session</button>
+    </form>
+    <p class="w-admin-access__message" aria-live="polite" hidden></p>
+  `
+
+  const form = wrapper.querySelector('form')
+  passwordInput = wrapper.querySelector('[name="password"]')
+  submitButton = wrapper.querySelector('button')
+  messageEl = wrapper.querySelector('.w-admin-access__message')
+  form.addEventListener('submit', submitLogin)
+
+  return wrapper
+}
+
+async function checkSession() {
+  try {
+    const response = await safeFetch(SESSION_URL, { cache: 'no-store' })
+    const data = await response.json()
+    if (data.authenticated === true) renderPanel()
+  } catch (_error) {
+    setMessage('Verification session indisponible. Connexion manuelle possible.', 'alert')
+  }
+}
+
+export function render(container) {
+  root = document.createElement('main')
+  root.className = 'w-admin-access'
+  root.setAttribute('aria-labelledby', 'admin-access-title')
+  root.innerHTML = `
+    <div class="w-admin-access__shell">
+      <header class="w-admin-access__header">
+        <span class="w-admin-access__brand" aria-label="Whistle">Whistle</span>
+        <span class="w-admin-access__badge">Vercel admin</span>
+      </header>
+      <div class="w-admin-access__body"></div>
+      <aside class="w-admin-access__note" aria-label="Regles de securite">
+        Lecture publique sans auth. Secrets jamais affiches. Session courte cote serveur.
+      </aside>
+    </div>
+  `
+
+  const title = document.createElement('span')
+  title.id = 'admin-access-title'
+  title.className = 'w-admin-access__sr-only'
+  title.textContent = 'Acces admin protege Whistle'
+  root.prepend(title)
+  root.querySelector('.w-admin-access__body').appendChild(buildForm())
+  container.replaceChildren(root)
+  checkSession()
+}

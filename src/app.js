@@ -3,7 +3,7 @@ import { registerSW } from 'virtual:pwa-register'
 import { animate } from 'motion/mini'
 import { get, set, on } from './store.js'
 import { loadSeason } from './data.js'
-import { init as initRouter, tabFromCurrentPath, pushTab, pushSheet } from './router.js'
+import { init as initRouter, isAdminPath, tabFromCurrentPath, pushTab, pushSheet } from './router.js'
 import { render as renderLayout } from './components/page-layout.js'
 import { render as renderBottomNav, update as updateBottomNav, tabIds } from './components/bottom-nav.js'
 import { render as renderScoreCard } from './components/score-card.js'
@@ -24,11 +24,13 @@ import { render as renderOracle } from './components/tab-oracle.js'
 import { render as renderDuels } from './components/tab-duels.js'
 import { render as renderSimulateur } from './components/tab-simulateur.js'
 import { render as renderMatchCockpit, maybeOpen as maybeOpenMatchCockpit, close as closeMatchCockpit } from './components/match-cockpit.js'
+import { render as renderAdminAccess } from './components/admin-access.js'
 import { computeAchievements } from './components/achievement-card.js'
 import { revealProjection, resetProjection } from './animation/engine.js'
 
 const appEl = document.querySelector('#app')
 const TAB_ORDER = tabIds()
+const isAdminRoute = isAdminPath()
 
 let shell = null
 let nav = null
@@ -348,6 +350,7 @@ initSupporterScore()
 
 // Listen for season data
 on('season', (event) => {
+  if (isAdminRoute) return
   const { value } = event.detail
   if (value) {
     renderFullLayout()
@@ -401,4 +404,9 @@ registerSW({
 })
 
 initRouter()
-loadSeason()
+if (isAdminRoute) {
+  document.body.querySelectorAll('.w-bottom-nav, dialog.w-bottom-sheet, dialog.w-succes-sheet, dialog.w-match-cockpit').forEach((node) => node.remove())
+  renderAdminAccess(appEl)
+} else {
+  loadSeason()
+}

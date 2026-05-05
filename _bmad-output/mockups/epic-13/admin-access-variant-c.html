@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Whistle Admin Access - Variante C</title>
+    <style>
+      :root {
+        --w-bg: #050d0b;
+        --w-card: #101d19;
+        --w-card-2: #162821;
+        --w-gold: #d9b36c;
+        --w-text: #fff6e4;
+        --w-muted: #afbbb2;
+        --w-danger: #ff9b8f;
+        color-scheme: dark;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--w-text);
+        background: linear-gradient(180deg, #11221d 0%, var(--w-bg) 42%);
+        padding: 12px;
+      }
+
+      .w-phone { width: min(430px, 100%); margin: 0 auto; min-height: calc(100vh - 24px); display: grid; align-content: space-between; gap: 14px; }
+      .w-hero { padding: 22px 6px 6px; }
+      .w-eyebrow { color: var(--w-gold); font-size: 0.75rem; font-weight: 900; letter-spacing: 0.18em; text-transform: uppercase; }
+      h1 { margin: 8px 0; font-size: clamp(2.15rem, 12vw, 3.4rem); line-height: 0.94; letter-spacing: -0.07em; }
+      p { color: var(--w-muted); line-height: 1.5; }
+      .w-stack { display: grid; gap: 12px; }
+      .w-sheet { border: 1px solid rgba(217, 179, 108, 0.25); border-radius: 28px; background: linear-gradient(180deg, var(--w-card-2), var(--w-card)); padding: 18px; box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.38); }
+      .w-handle { width: 54px; height: 5px; border-radius: 999px; background: rgba(255, 246, 228, 0.25); margin: 0 auto 18px; }
+      .w-field { display: grid; gap: 8px; }
+      .w-label { font-weight: 850; color: #ffe2a2; }
+      .w-input, .w-button, .w-command { min-height: 52px; border-radius: 16px; font: inherit; }
+      .w-input { width: 100%; border: 1px solid rgba(255, 246, 228, 0.18); background: #07110f; color: var(--w-text); padding: 0 14px; }
+      .w-button { width: 100%; border: 0; background: var(--w-gold); color: #08120f; font-weight: 950; margin-top: 12px; }
+      .w-input:focus-visible, .w-button:focus-visible, .w-command:focus-visible { outline: 3px solid #ffdf98; outline-offset: 3px; }
+      .w-errors { display: grid; gap: 7px; margin-top: 14px; }
+      .w-error { margin: 0; border-radius: 14px; background: rgba(255, 155, 143, 0.12); color: #ffd6d0; padding: 10px 12px; font-size: 0.86rem; }
+      .w-auth { border-radius: 24px; background: rgba(5, 13, 11, 0.52); padding: 14px; margin-top: 14px; }
+      .w-row { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin-bottom: 12px; }
+      .w-badge { min-height: 34px; display: inline-flex; align-items: center; border-radius: 999px; padding: 0 12px; background: rgba(120, 215, 174, 0.14); color: #9ff0c8; font-weight: 850; font-size: 0.78rem; }
+      .w-commands { display: grid; gap: 9px; }
+      .w-command { width: 100%; border: 1px solid rgba(217, 179, 108, 0.2); background: #13241f; color: var(--w-text); text-align: left; padding: 0 14px; font-weight: 800; }
+      .w-footer { padding: 0 6px 10px; color: var(--w-muted); font-size: 0.82rem; }
+
+      @media (min-width: 760px) {
+        body { display: grid; place-items: center; padding: 30px; background: radial-gradient(circle at center, rgba(217, 179, 108, 0.18), transparent 36rem), var(--w-bg); }
+        .w-phone { min-height: auto; border: 1px solid rgba(217, 179, 108, 0.22); border-radius: 38px; padding: 14px; background: #08120f; box-shadow: 0 30px 90px rgba(0, 0, 0, 0.48); }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="w-phone" aria-label="Panneau admin mobile Whistle">
+      <section class="w-hero">
+        <div class="w-eyebrow">Commande admin</div>
+        <h1>Simple, ferme, rapide.</h1>
+        <p>Un panneau pense mobile pour saisir ou declencher une operation depuis le bord du terrain.</p>
+      </section>
+
+      <section class="w-sheet" aria-labelledby="login-c-title">
+        <div class="w-handle" aria-hidden="true"></div>
+        <div class="w-stack">
+          <form aria-label="Connexion admin mobile">
+            <h2 id="login-c-title">Connexion</h2>
+            <div class="w-field">
+              <label class="w-label" for="password-c">Mot de passe admin</label>
+              <input class="w-input" id="password-c" type="password" autocomplete="current-password" placeholder="Mot de passe" />
+            </div>
+            <button class="w-button" type="button">Entrer</button>
+            <div class="w-errors" aria-live="polite">
+              <p class="w-error">Mot de passe invalide.</p>
+              <p class="w-error">Trop d'essais. Attente obligatoire.</p>
+              <p class="w-error">Configuration admin non disponible.</p>
+            </div>
+          </form>
+
+          <aside class="w-auth" aria-label="Etat authentifie">
+            <div class="w-row"><strong>Session ouverte</strong><span class="w-badge">Protege</span></div>
+            <div class="w-commands">
+              <button class="w-command" type="button">+ Resultat</button>
+              <button class="w-command" type="button">Recalcul Elo</button>
+              <button class="w-command" type="button">Deconnexion</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+      <footer class="w-footer">Aucun secret affiche. Cibles tactiles 52px minimum.</footer>
+    </main>
+  </body>
+</html>

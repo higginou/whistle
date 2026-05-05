@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * scripts/generate.js
  *
@@ -389,6 +387,6 @@ export async function main() {
 }
 
 // Guard: only run main() when script is executed directly
-if (fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
   main();
 }
