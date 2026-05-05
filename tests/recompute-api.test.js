@@ -238,4 +238,23 @@ describe('admin recompute API', () => {
     expect(res.body).toEqual({ recalculated: false, error: 'recalculation-failed' })
     expect(recorder.calls.some((call) => call.text.includes('INSERT INTO projection_snapshots'))).toBe(false)
   })
+
+  it('returns storage-unavailable when recompute storage is not configured', async () => {
+    const token = createAdminSession(ENV, { now: 1_000 })
+    const res = createResponse()
+
+    await adminRecomputeHandler(
+      {
+        method: 'POST',
+        headers: { cookie: `${ADMIN_SESSION_COOKIE}=${token}` },
+        body: { seasonId: '2025-2026' },
+      },
+      res,
+      ENV,
+      { clock: { now: 1_000 } },
+    )
+
+    expect(res.statusCode).toBe(503)
+    expect(res.body).toEqual({ recalculated: false, error: 'storage-unavailable' })
+  })
 })

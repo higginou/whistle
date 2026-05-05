@@ -9,6 +9,21 @@ function parseBody(body) {
   return JSON.parse(body)
 }
 
+const RECOMPUTE_ERROR_MESSAGES = new Set([
+  'season-has-no-matches',
+  'no-played-matches',
+  'missing-calendar',
+  'match team ids are required',
+  'matchday is required',
+  'played match scores are required',
+  'calendar team ids are required',
+  'calendar matchday is required',
+  'seasonId is required',
+  'generatedAt is required',
+  'numSimulations must be positive',
+  'team id is required',
+])
+
 export default async function adminRecomputeHandler(req, res, env = process.env, options = {}) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST')
@@ -45,6 +60,10 @@ export default async function adminRecomputeHandler(req, res, env = process.env,
   } catch (error) {
     if (error.message === 'invalid-season') {
       return res.status(400).json({ recalculated: false, error: 'invalid-season' })
+    }
+
+    if (!RECOMPUTE_ERROR_MESSAGES.has(error.message)) {
+      return res.status(503).json({ recalculated: false, error: 'storage-unavailable' })
     }
 
     return res.status(422).json({ recalculated: false, error: 'recalculation-failed' })

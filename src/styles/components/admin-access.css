@@ -139,6 +139,21 @@
   font-size: var(--w-text-label);
 }
 
+.w-admin-access__result {
+  border-left: 3px solid var(--w-color-success);
+  border-radius: 12px;
+  background: rgba(42, 214, 200, 0.1);
+  color: var(--w-text-primary);
+  padding: 10px 12px;
+  font-size: var(--w-text-label);
+}
+
+.w-admin-access__result[role="alert"] {
+  border-left-color: var(--w-color-danger);
+  background: rgba(239, 118, 118, 0.12);
+  color: #ffd6d6;
+}
+
 .w-admin-access__actions {
   display: grid;
   gap: 10px;

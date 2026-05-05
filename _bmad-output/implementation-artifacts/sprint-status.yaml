@@ -36,7 +36,7 @@
 # - Inter-epic work (retro action items, debt, prep) is tracked under inter_epic_tasks
 
 generated: 2026-03-28
-last_updated: 2026-05-05 (epic 13 story 13.1 done)
+last_updated: 2026-05-05 (epic 13 story 13.2 done)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -138,7 +138,7 @@ development_status:
   # Epic 13 : Interface admin Vercel
   epic-13: in-progress
   13-1-acces-admin-protege: done
-  13-2-recalcul-manuel-et-creation-du-premier-snapshot: backlog
+  13-2-recalcul-manuel-et-creation-du-premier-snapshot: done
   13-3-diagnostic-runtime-vercel-et-donnees-publiques: backlog
   13-4-runbook-de-deploiement-admin: backlog
   epic-13-retrospective: optional

@@ -2,11 +2,15 @@ import '../styles/components/admin-access.css'
 
 const SESSION_URL = '/api/admin/session'
 const LOGIN_URL = '/api/admin/login'
+const RECOMPUTE_URL = '/api/admin/recompute'
+const SEASON_ID = '2025-2026'
 
 let root = null
 let passwordInput = null
 let submitButton = null
 let messageEl = null
+let recomputeButton = null
+let recomputeResultEl = null
 
 function safeFetch(url, options) {
   if (typeof fetch !== 'function') return Promise.reject(new Error('fetch-unavailable'))
@@ -27,6 +31,62 @@ function messageForStatus(status) {
   return 'Connexion admin impossible pour le moment.'
 }
 
+function recomputeMessageFor(status, error) {
+  if (status === 401) return 'Session admin expiree. Reconnecte-toi puis relance.'
+  if (status === 400 || error === 'invalid-json' || error === 'invalid-season') {
+    return 'Donnees de saison manquantes ou invalides. Verifie l initialisation DB.'
+  }
+  if (status === 422 || error === 'recalculation-failed') return 'Recalcul impossible. Verifie les matchs importes puis relance.'
+  if (status === 503) return 'Base de donnees indisponible. Reessaye apres retablissement Vercel.'
+  return 'Recalcul impossible pour le moment. Verifie le runtime puis relance.'
+}
+
+async function readJson(response) {
+  try {
+    return await response.json()
+  } catch (_error) {
+    return {}
+  }
+}
+
+function setRecomputeResult(message, role = 'status') {
+  if (!recomputeResultEl) return
+  recomputeResultEl.setAttribute('role', role)
+  recomputeResultEl.textContent = message
+  recomputeResultEl.hidden = message === ''
+}
+
+function setRecomputePending(isPending) {
+  if (!recomputeButton) return
+  recomputeButton.disabled = isPending
+  recomputeButton.textContent = isPending ? 'Recalcul en cours...' : 'Recalculer la saison'
+}
+
+async function recomputeSeason() {
+  setRecomputePending(true)
+  setRecomputeResult('Recalcul en cours...')
+
+  try {
+    const response = await safeFetch(RECOMPUTE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ seasonId: SEASON_ID }),
+    })
+    const data = await readJson(response)
+
+    if (response.ok && data.recalculated === true) {
+      setRecomputeResult(`Snapshot cree : ${data.snapshotId}. Matchday : journee ${data.matchday}.`)
+      return
+    }
+
+    setRecomputeResult(recomputeMessageFor(response.status, data.error), 'alert')
+  } catch (_error) {
+    setRecomputeResult('Base de donnees indisponible. Reessaye apres retablissement Vercel.', 'alert')
+  } finally {
+    setRecomputePending(false)
+  }
+}
+
 function renderPanel() {
   if (!root) return
   root.classList.add('w-admin-access--authenticated')
@@ -40,12 +100,16 @@ function buildPanel() {
   panel.innerHTML = `
     <p class="w-admin-access__eyebrow">Session valide</p>
     <h2>Actions admin</h2>
-    <p class="w-admin-access__copy">La session admin est active. Les actions de recalcul et diagnostic arrivent dans les stories suivantes.</p>
-    <div class="w-admin-access__actions" aria-label="Actions admin a venir">
-      <button class="w-admin-access__button" type="button" disabled>Recalculer la saison</button>
-      <span class="w-admin-access__hint">Disponible avec la story 13.2</span>
+    <p class="w-admin-access__copy">La session admin est active. Declenche le recalcul serveur pour creer ou rafraichir le snapshot public.</p>
+    <div class="w-admin-access__actions" aria-label="Actions admin">
+      <button class="w-admin-access__button" type="button" data-admin-action="recompute">Recalculer la saison</button>
+      <p class="w-admin-access__result" aria-live="polite" hidden></p>
+      <span class="w-admin-access__hint">Saison cible : 2025-2026</span>
     </div>
   `
+  recomputeButton = panel.querySelector('[data-admin-action="recompute"]')
+  recomputeResultEl = panel.querySelector('.w-admin-access__result')
+  recomputeButton.addEventListener('click', recomputeSeason)
   return panel
 }
 
