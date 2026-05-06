@@ -37,6 +37,18 @@ function getMatchKey(match) {
   return `${match.matchday}-${match.home}-${match.away}`
 }
 
+function isPastMatch(match, now = new Date()) {
+  if (typeof match?.date !== 'string' || match.date.trim() === '') return true
+
+  const matchDate = new Date(match.date)
+  if (Number.isNaN(matchDate.getTime())) return true
+
+  const todayUtc = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())
+  const matchDayUtc = Date.UTC(matchDate.getUTCFullYear(), matchDate.getUTCMonth(), matchDate.getUTCDate())
+
+  return matchDayUtc < todayUtc
+}
+
 function readJSON(key, fallback) {
   try {
     const raw = localStorage.getItem(key)
@@ -117,7 +129,7 @@ function getCompletedEntries() {
 }
 
 function getRemainingMatches(season) {
-  const calendar = Array.isArray(season?.calendar) ? season.calendar : []
+  const calendar = Array.isArray(season?.calendar) ? season.calendar.filter((match) => isPastMatch(match)) : []
   const drafts = readDrafts()
   const completed = new Set(Object.keys(getCompletedEntries()))
 
@@ -125,7 +137,7 @@ function getRemainingMatches(season) {
 }
 
 function getCockpitSession(season) {
-  const calendar = Array.isArray(season?.calendar) ? season.calendar : []
+  const calendar = Array.isArray(season?.calendar) ? season.calendar.filter((match) => isPastMatch(match)) : []
   const drafts = readDrafts()
   const remainingMatches = getRemainingMatches(season)
   const currentMatch = remainingMatches[0] ?? null
@@ -421,6 +433,7 @@ async function moveToNextMatch() {
 function buildValidationPayload(season) {
   const drafts = readDrafts()
   const entries = (Array.isArray(season?.calendar) ? season.calendar : [])
+    .filter((match) => isPastMatch(match))
     .map((match) => {
       const draft = drafts[getMatchKey(match)]
       if (!draft || !isCompleteDraft(draft)) return null

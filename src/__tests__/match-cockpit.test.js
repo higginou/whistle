@@ -22,6 +22,7 @@ const SEASON = {
 
 describe('match-cockpit', () => {
   beforeEach(() => {
+    vi.useRealTimers()
     document.body.innerHTML = ''
     localStorage.clear()
     vi.unstubAllGlobals()
@@ -71,6 +72,26 @@ describe('match-cockpit', () => {
     const session = getCockpitSession(season)
     expect(session.remainingCount).toBe(1)
     expect(session.currentMatch.matchday).toBe(19)
+  })
+
+  it('ignores future scheduled matches in the cockpit queue', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-05-06T12:00:00Z'))
+
+    const season = {
+      season: '2025-2026',
+      calendar: [
+        { matchday: 21, date: '2026-04-18', home: 'bayonne', away: 'pau' },
+        { matchday: 22, date: '2026-04-25', home: 'lyon', away: 'castres' },
+        { matchday: 23, date: '2026-05-09', home: 'racing-92', away: 'la-rochelle' },
+        { matchday: 24, date: '2026-05-16', home: 'la-rochelle', away: 'toulouse' },
+      ],
+    }
+
+    const session = getCockpitSession(season)
+    expect(session.totalCount).toBe(2)
+    expect(session.remainingCount).toBe(2)
+    expect(session.remainingMatches.map((match) => match.matchday)).toEqual([21, 22])
   })
 
   it('builds a normalized payload for validation', () => {
