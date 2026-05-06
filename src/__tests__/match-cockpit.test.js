@@ -166,6 +166,7 @@ describe('match-cockpit', () => {
     expect(fetchMock).toHaveBeenCalledWith('/api/admin/matches', expect.objectContaining({ method: 'POST' }))
     expect(fetchMock).toHaveBeenCalledWith('/api/admin/recompute', expect.objectContaining({ method: 'POST' }))
     expect(fetchMock).toHaveBeenCalledWith('/api/public/season?season=2025-2026', { cache: 'no-store' })
+    expect(document.querySelector('dialog.w-match-cockpit').open).toBe(false)
     const matchBody = JSON.parse(fetchMock.mock.calls[0][1].body)
     expect(() => normalizeAdminMatchPayload(matchBody)).not.toThrow()
     expect(matchBody.date).toBe('2026-04-18T00:00:00Z')

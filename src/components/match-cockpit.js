@@ -555,6 +555,7 @@ async function submitFinalValidation(payload) {
 
   await postJSON('/api/admin/recompute', { seasonId: payload.seasonId })
   await loadSeason(payload.seasonId)
+  if (dialog?.open) dialog.close()
 }
 
 async function handleSubmit(event) {
