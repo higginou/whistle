@@ -45,6 +45,8 @@ Executer les scripts SQL dans cet ordre sur la base Postgres de production.
 4. Import matchs : `_bmad-output/implementation-artifacts/vercel-matches-import.sql`.
 5. Recalcul admin depuis `/admin` avec `Recalculer la saison`.
 
+`vercel-matches-import.sql` est un artefact versionne permanent d'initialisation DB pour la saison `2025-2026`. Il ne contient pas de secret ; il documente les lignes importees et les lignes historiques ignorees pour cause de conflit de calendrier.
+
 Le schema cree les tables `seasons`, `matches`, `projection_snapshots` et `audit_log`. La table `projection_snapshots` est append-only : ne pas utiliser `UPDATE` ou `DELETE` comme procedure normale de production.
 
 ## Verification SQL

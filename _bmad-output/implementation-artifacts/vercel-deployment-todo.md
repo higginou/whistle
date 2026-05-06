@@ -13,19 +13,22 @@ Date: 2026-05-05
 - [x] Import initial `matches` execute.
 - [x] Volumes DB verifies: matchs presents jusqu'a la journee 26.
 - [x] API publique ne retourne plus `503`; elle atteint la DB.
-- [ ] API publique retourne un JSON public complet apres premier recalcul de production.
+- [x] API publique retourne un JSON public complet apres premier recalcul de production.
 - [x] Interface admin minimale ajoutee dans l'app.
 - [x] Runbook de deploiement admin documente : `_bmad-output/implementation-artifacts/admin-deployment-runbook.md`.
+- [x] Validation cockpit executee en production jusqu'a la journee 22.
+- [x] API publique rafraichie apres validation cockpit : `matchday: 22`, JSON complet disponible.
+- [x] Decision prise : `_bmad-output/implementation-artifacts/vercel-matches-import.sql` est un artefact versionne permanent d'initialisation DB.
 
 ## Bloquant courant
 
-- `GET /api/public/season?season=2025-2026` retourne encore `404` car aucun snapshot n'existe dans `projection_snapshots`.
-- Il faut declencher un premier recalcul depuis `/admin` pour creer ce snapshot.
-- Le parcours UI admin existe maintenant : login, verification session, recalcul manuel et diagnostic public.
+- Aucun bloquant courant cote runtime public : `GET /api/public/season?season=2025-2026` retourne un JSON public complet, rafraichi apres validation cockpit.
+- Le parcours UI admin existe : login, verification session, recalcul manuel et diagnostic public.
 
 ## Travail produit pendant le deploiement
 
 - Fichier d'import genere: `_bmad-output/implementation-artifacts/vercel-matches-import.sql`.
+- Decision: le fichier est conserve et versionne comme artefact de reprise/initialisation DB, car il est reference par le runbook et ne contient aucun secret.
 - Ce fichier importe `175` matchs:
   - `133` joues.
   - `42` programmes.
@@ -40,14 +43,14 @@ Date: 2026-05-05
    - Bouton `Recalculer la saison` appelant `POST /api/admin/recompute` avec `seasonId: '2025-2026'`.
    - Diagnostic public et erreurs actionnables: non authentifie, DB indisponible, recalcul echoue, snapshot absent.
 
-2. Declencher le premier recalcul depuis l'interface admin.
+2. Declencher le premier recalcul depuis l'interface admin. **Fait / snapshot public disponible.**
    - Resultat attendu: reponse `201` avec `recalculated: true`, `snapshotId`, `matchday`.
 
-3. Verifier l'API publique.
+3. Verifier l'API publique. **Fait.**
    - URL: `https://whistle-chi.vercel.app/api/public/season?season=2025-2026`.
    - Resultat attendu: JSON public complet avec `teams`, `calendar`, `predictions`, `results`.
 
-4. Verifier l'application publique.
+4. Verifier l'application publique apres le dernier correctif cockpit.
    - Accueil charge sans ecran vide.
    - Classement affiche.
    - Donjon lit les resultats Vercel.
@@ -71,3 +74,4 @@ Date: 2026-05-05
 - Ne pas utiliser la console navigateur comme procedure normale de production.
 - La console navigateur peut depanner, mais le flux cible doit passer par une UI admin protegee.
 - `public/data/*` ne doit pas redevenir une source active: le runtime public doit rester Vercel API + Postgres.
+- `_bmad-output/implementation-artifacts/vercel-matches-import.sql` est versionne malgre sa nature generee : c'est un artefact de deploiement auditable, sans secret, necessaire pour refaire l'initialisation DB de la saison courante.
