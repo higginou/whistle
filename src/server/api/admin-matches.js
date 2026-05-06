@@ -79,6 +79,30 @@ export async function saveAdminMatch(match, sql) {
   const homeBonus = normalizeBonus(match.homeBonus)
   const awayBonus = normalizeBonus(match.awayBonus)
 
+  const updatedRows = await sql`
+    UPDATE matches
+    SET
+      date = ${match.date},
+      home_score = ${match.homeScore},
+      away_score = ${match.awayScore},
+      home_tries = ${match.homeTries},
+      away_tries = ${match.awayTries},
+      home_bonus_offensive = ${homeBonus.offensive},
+      home_bonus_defensive = ${homeBonus.defensive},
+      away_bonus_offensive = ${awayBonus.offensive},
+      away_bonus_defensive = ${awayBonus.defensive},
+      status = ${match.status},
+      source = 'admin',
+      updated_at = NOW()
+    WHERE season_id = ${match.seasonId}
+      AND matchday = ${match.matchday}
+      AND home_team_id = ${match.homeTeamId}
+      AND away_team_id = ${match.awayTeamId}
+    RETURNING id
+  `
+
+  if (updatedRows.length > 0) return updatedRows
+
   return sql`
     INSERT INTO matches (
       season_id,
@@ -115,20 +139,6 @@ export async function saveAdminMatch(match, sql) {
       'admin',
       NOW()
     )
-    ON CONFLICT (season_id, matchday, home_team_id, away_team_id)
-    DO UPDATE SET
-      date = EXCLUDED.date,
-      home_score = EXCLUDED.home_score,
-      away_score = EXCLUDED.away_score,
-      home_tries = EXCLUDED.home_tries,
-      away_tries = EXCLUDED.away_tries,
-      home_bonus_offensive = EXCLUDED.home_bonus_offensive,
-      home_bonus_defensive = EXCLUDED.home_bonus_defensive,
-      away_bonus_offensive = EXCLUDED.away_bonus_offensive,
-      away_bonus_defensive = EXCLUDED.away_bonus_defensive,
-      status = EXCLUDED.status,
-      source = EXCLUDED.source,
-      updated_at = NOW()
     RETURNING id
   `
 }

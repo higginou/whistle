@@ -39,6 +39,16 @@ function createSqlRecorder() {
   return { sql, calls }
 }
 
+function createSqlRecorderWithResults(results) {
+  const calls = []
+  const sql = (strings, ...values) => {
+    calls.push({ text: strings.join('$'), values })
+    return Promise.resolve(results[calls.length - 1] ?? [])
+  }
+
+  return { sql, calls }
+}
+
 function createPublicSql(rows, matchRows = []) {
   let calls = 0
   return () => Promise.resolve(calls++ === 0 ? rows : matchRows)
@@ -263,7 +273,7 @@ describe('admin matches API', () => {
     expect(res.body.match.awayBonus.defensive).toBe(true)
     expect(res.body.match.homeTries).toBe(3)
     expect(res.body.match.awayTries).toBe(1)
-    expect(recorder.calls[0].text).toContain('INSERT INTO matches')
+    expect(recorder.calls[0].text).toContain('UPDATE matches')
     expect(recorder.calls[0].text).toContain('home_tries')
     expect(recorder.calls[0].values).toContain('la-rochelle')
     expect(recorder.calls[0].values).toContain(3)
@@ -299,7 +309,7 @@ describe('admin matches API', () => {
   })
 
   it('uses the same persistence contract outside the route handler', async () => {
-    const recorder = createSqlRecorder()
+    const recorder = createSqlRecorderWithResults([[], [{ id: 'match-id' }]])
     await saveAdminMatch(
       {
         seasonId: '2025-2026',
@@ -316,7 +326,9 @@ describe('admin matches API', () => {
       recorder.sql,
     )
 
-    expect(recorder.calls).toHaveLength(1)
+    expect(recorder.calls).toHaveLength(2)
+    expect(recorder.calls[0].text).toContain('UPDATE matches')
+    expect(recorder.calls[1].text).toContain('INSERT INTO matches')
   })
 
   it('maps the latest projection snapshot to the public payload contract', async () => {
