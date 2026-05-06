@@ -231,6 +231,39 @@ function renderEmptyState() {
     </div>`
 }
 
+function readFinalValidationPayload() {
+  const payload = readJSON(FINAL_STORAGE_KEY, null)
+  if (!payload || !Array.isArray(payload.entries) || payload.entries.length === 0) return null
+
+  return payload
+}
+
+function backendErrorMessage(error) {
+  if (error?.message === 'admin-validation-401') return 'Session admin expirée. Reconnectez-vous dans /admin, puis relancez la validation.'
+  if (error?.message === 'admin-validation-400') return 'Données refusées par le backend. La saisie locale est conservée.'
+  if (error?.message === 'admin-validation-503') return 'Stockage Vercel indisponible. La saisie locale est conservée.'
+
+  return 'Validation backend indisponible. La saisie locale est conservée.'
+}
+
+function renderFinalRetryState(message = 'Validation backend indisponible. La saisie locale est conservée.') {
+  return `
+    <div class="w-match-cockpit__handle" aria-hidden="true"></div>
+    <button class="w-match-cockpit__close" type="button" aria-label="Fermer">×</button>
+    <div class="w-match-cockpit__content">
+      <div class="w-match-cockpit__empty w-match-cockpit__empty--done">
+        <p class="w-match-cockpit__eyebrow">Validation finale</p>
+        <h2 class="w-match-cockpit__title">Saisie locale conservée</h2>
+        <p class="w-match-cockpit__subtitle">Reconnectez-vous si besoin, puis relancez l’envoi au backend.</p>
+        <div class="w-match-cockpit__hint" data-cockpit-status role="status" aria-live="polite" data-tone="danger">${esc(message)}</div>
+        <footer class="w-match-cockpit__actions" aria-label="Actions de validation finale">
+          <button class="w-match-cockpit__action w-match-cockpit__action--secondary" type="button" data-cockpit-close>Fermer</button>
+          <button class="w-match-cockpit__action w-match-cockpit__action--primary" type="button" data-cockpit-final-retry>Relancer la validation</button>
+        </footer>
+      </div>
+    </div>`
+}
+
 function buildContent(session) {
   const season = session?.season
   const match = session?.currentMatch
@@ -343,9 +376,11 @@ function bindDialogEvents() {
   const form = dialog?.querySelector('.w-match-cockpit__panel')
   const closeBtn = dialog?.querySelector('.w-match-cockpit__close')
   const footerClose = dialog?.querySelector('[data-cockpit-close]')
+  const finalRetryBtn = dialog?.querySelector('[data-cockpit-final-retry]')
 
   if (closeBtn) closeBtn.addEventListener('click', handleClose)
   if (footerClose) footerClose.addEventListener('click', handleClose)
+  if (finalRetryBtn) finalRetryBtn.addEventListener('click', handleFinalRetry)
   if (form) {
     form.addEventListener('input', handleInput)
     form.addEventListener('submit', handleSubmit)
@@ -404,10 +439,13 @@ async function moveToNextMatch() {
     writeJSON(FINAL_STORAGE_KEY, payload)
     try {
       await submitFinalValidation(payload)
-    } catch (_error) {
-      setStatus('Validation backend indisponible. La saisie locale est conservee.', 'danger')
+    } catch (error) {
+      finalValidationPending = false
+      dialog.innerHTML = renderFinalRetryState(backendErrorMessage(error))
+      bindDialogEvents()
       return false
     }
+    localStorage.removeItem(FINAL_STORAGE_KEY)
     dialog.innerHTML = `
       <div class="w-match-cockpit__handle" aria-hidden="true"></div>
       <button class="w-match-cockpit__close" type="button" aria-label="Fermer">×</button>
@@ -452,12 +490,49 @@ async function postJSON(url, payload) {
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'same-origin',
     body: JSON.stringify(payload),
   })
 
-  if (!response.ok) throw new Error('admin-validation-failed')
+  if (!response.ok) throw new Error(`admin-validation-${response.status}`)
 
   return response
+}
+
+async function handleFinalRetry() {
+  if (finalValidationPending) return
+  const payload = readFinalValidationPayload()
+  if (!payload) return
+
+  finalValidationPending = true
+  const retryBtn = dialog?.querySelector('[data-cockpit-final-retry]')
+  if (retryBtn) retryBtn.disabled = true
+  setStatus('Validation backend en cours.', 'info')
+
+  try {
+    await submitFinalValidation(payload)
+  } catch (error) {
+    finalValidationPending = false
+    dialog.innerHTML = renderFinalRetryState(backendErrorMessage(error))
+    bindDialogEvents()
+    return
+  }
+
+  localStorage.removeItem(FINAL_STORAGE_KEY)
+  finalValidationPending = false
+  dialog.innerHTML = `
+    <div class="w-match-cockpit__handle" aria-hidden="true"></div>
+    <button class="w-match-cockpit__close" type="button" aria-label="Fermer">×</button>
+    <div class="w-match-cockpit__content">
+      <div class="w-match-cockpit__empty w-match-cockpit__empty--done">
+        <p class="w-match-cockpit__eyebrow">Validation finale</p>
+        <h2 class="w-match-cockpit__title">Tous les matchs sont complets</h2>
+        <p class="w-match-cockpit__subtitle">Le payload normalisé est prêt pour l’envoi au backend.</p>
+        <div class="w-match-cockpit__hint" data-cockpit-status role="status" aria-live="polite">Validation finale prête.</div>
+      </div>
+    </div>`
+  bindDialogEvents()
+  setStatus('Validation finale prête.', 'success')
 }
 
 async function submitFinalValidation(payload) {
@@ -559,6 +634,12 @@ export function open(context = {}) {
 export function maybeOpen(season) {
   const session = getCockpitSession(season)
   if (session.remainingCount > 0) open({ season, match: session.currentMatch, draft: session.draft })
+  else if (readFinalValidationPayload()) {
+    if (!dialog) render(document.body)
+    dialog.innerHTML = renderFinalRetryState()
+    bindDialogEvents()
+    if (!dialog.open) dialog.showModal()
+  }
 }
 
 export function close() {

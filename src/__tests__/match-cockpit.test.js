@@ -200,4 +200,38 @@ describe('match-cockpit', () => {
     expect(fetchMock.mock.calls[1][0]).toBe('/api/admin/recompute')
     expect(fetchMock.mock.calls[2][0]).toBe('/api/public/season?season=2025-2026')
   })
+
+  it('keeps final validation retryable when the admin session expired', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: false, status: 401, json: () => Promise.resolve({ saved: false }) })
+      .mockResolvedValue({ ok: true, json: () => Promise.resolve({}) })
+    vi.stubGlobal('fetch', fetchMock)
+    const season = {
+      season: '2025-2026',
+      calendar: [{ matchday: 18, date: '2026-04-18', home: 'la-rochelle', away: 'toulouse' }],
+    }
+
+    open({ season, match: season.calendar[0], currentIndex: 1, totalCount: 1, remainingCount: 1 })
+
+    const inputs = document.querySelectorAll('input')
+    inputs[0].value = '28'
+    inputs[1].value = '14'
+    inputs[2].value = '4'
+    inputs[3].value = '1'
+    document.querySelector('.w-match-cockpit__panel').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    expect(document.querySelector('[data-cockpit-status]').textContent).toContain('Session admin expirée')
+    expect(JSON.parse(localStorage.getItem('w-match-cockpit-final')).entries).toHaveLength(1)
+
+    document.querySelector('[data-cockpit-final-retry]').click()
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    expect(fetchMock).toHaveBeenCalledTimes(4)
+    expect(fetchMock.mock.calls[1][0]).toBe('/api/admin/matches')
+    expect(fetchMock.mock.calls[2][0]).toBe('/api/admin/recompute')
+    expect(fetchMock.mock.calls[3][0]).toBe('/api/public/season?season=2025-2026')
+    expect(localStorage.getItem('w-match-cockpit-final')).toBeNull()
+  })
 })
