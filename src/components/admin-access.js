@@ -4,6 +4,7 @@ const SESSION_URL = '/api/admin/session'
 const LOGIN_URL = '/api/admin/login'
 const RECOMPUTE_URL = '/api/admin/recompute'
 const SEASON_ID = '2025-2026'
+const PUBLIC_SEASON_URL = `/api/public/season?season=${SEASON_ID}`
 
 let root = null
 let passwordInput = null
@@ -11,6 +12,8 @@ let submitButton = null
 let messageEl = null
 let recomputeButton = null
 let recomputeResultEl = null
+let diagnosticEl = null
+let diagnosticRequestId = 0
 
 function safeFetch(url, options) {
   if (typeof fetch !== 'function') return Promise.reject(new Error('fetch-unavailable'))
@@ -41,6 +44,19 @@ function recomputeMessageFor(status, error) {
   return 'Recalcul impossible pour le moment. Verifie le runtime puis relance.'
 }
 
+function publicDiagnosticMessageFor(status, error) {
+  if (status === 404 && error === 'projection-not-found') {
+    return 'Snapshot public absent. Lance un recalcul pour creer le premier JSON public.'
+  }
+  if (status === 404 && error === 'season-not-found') return 'Saison absente. Verifie le seed de la base Vercel.'
+  if (status === 503 || error === 'storage-unavailable') return 'Stockage public indisponible. Verifie Vercel Postgres.'
+  return 'Diagnostic public indisponible. Relance apres verification du runtime.'
+}
+
+function hasPublicFreshness(data) {
+  return typeof data?.lastUpdated === 'string' && data.lastUpdated.trim() !== '' && Number.isInteger(data?.matchday)
+}
+
 async function readJson(response) {
   try {
     return await response.json()
@@ -54,6 +70,38 @@ function setRecomputeResult(message, role = 'status') {
   recomputeResultEl.setAttribute('role', role)
   recomputeResultEl.textContent = message
   recomputeResultEl.hidden = message === ''
+}
+
+function setDiagnostic(message) {
+  if (!diagnosticEl) return
+  diagnosticEl.textContent = message
+  diagnosticEl.hidden = message === ''
+}
+
+async function refreshPublicDiagnostic() {
+  const requestId = ++diagnosticRequestId
+  setDiagnostic('Session admin valide. Verification du JSON public...')
+
+  try {
+    const response = await safeFetch(PUBLIC_SEASON_URL, { cache: 'no-store' })
+    const data = await readJson(response)
+    if (requestId !== diagnosticRequestId) return
+
+    if (response.ok && hasPublicFreshness(data)) {
+      setDiagnostic(`Session admin valide. JSON public disponible. Fraicheur : ${data.lastUpdated}. Matchday : journee ${data.matchday}.`)
+      return
+    }
+
+    if (response.ok) {
+      setDiagnostic('Session admin valide. Diagnostic public indisponible. Relance apres verification du runtime.')
+      return
+    }
+
+    setDiagnostic(`Session admin valide. ${publicDiagnosticMessageFor(response.status, data.error)}`)
+  } catch (_error) {
+    if (requestId !== diagnosticRequestId) return
+    setDiagnostic('Session admin valide. Stockage public indisponible. Verifie Vercel Postgres.')
+  }
 }
 
 function setRecomputePending(isPending) {
@@ -76,6 +124,7 @@ async function recomputeSeason() {
 
     if (response.ok && data.recalculated === true) {
       setRecomputeResult(`Snapshot cree : ${data.snapshotId}. Matchday : journee ${data.matchday}.`)
+      await refreshPublicDiagnostic()
       return
     }
 
@@ -101,6 +150,7 @@ function buildPanel() {
     <p class="w-admin-access__eyebrow">Session valide</p>
     <h2>Actions admin</h2>
     <p class="w-admin-access__copy">La session admin est active. Declenche le recalcul serveur pour creer ou rafraichir le snapshot public.</p>
+    <p class="w-admin-access__diagnostic" aria-live="polite">Session admin valide. Diagnostic public en attente.</p>
     <div class="w-admin-access__actions" aria-label="Actions admin">
       <button class="w-admin-access__button" type="button" data-admin-action="recompute">Recalculer la saison</button>
       <p class="w-admin-access__result" aria-live="polite" hidden></p>
@@ -109,7 +159,9 @@ function buildPanel() {
   `
   recomputeButton = panel.querySelector('[data-admin-action="recompute"]')
   recomputeResultEl = panel.querySelector('.w-admin-access__result')
+  diagnosticEl = panel.querySelector('.w-admin-access__diagnostic')
   recomputeButton.addEventListener('click', recomputeSeason)
+  refreshPublicDiagnostic()
   return panel
 }
 
