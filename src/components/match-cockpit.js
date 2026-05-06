@@ -114,6 +114,7 @@ function normalizeMatchEntry(match, season, draft) {
 function normalizeAdminDate(date) {
   if (typeof date !== 'string') return date
   if (/^\d{4}-\d{2}-\d{2}$/.test(date)) return `${date}T00:00:00Z`
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.000Z$/.test(date)) return date.replace('.000Z', 'Z')
 
   return date
 }

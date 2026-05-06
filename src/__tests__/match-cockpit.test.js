@@ -175,6 +175,29 @@ describe('match-cockpit', () => {
     expect(matchBody.awayBonus.defensive).toBe(false)
   })
 
+  it('normalizes public API calendar timestamps before backend validation', async () => {
+    const fetchMock = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({}) }))
+    vi.stubGlobal('fetch', fetchMock)
+    const season = {
+      season: '2025-2026',
+      calendar: [{ matchday: 18, date: '2026-04-18T00:00:00.000Z', home: 'la-rochelle', away: 'toulouse' }],
+    }
+
+    open({ season, match: season.calendar[0], currentIndex: 1, totalCount: 1, remainingCount: 1 })
+
+    const inputs = document.querySelectorAll('input')
+    inputs[0].value = '28'
+    inputs[1].value = '14'
+    inputs[2].value = '4'
+    inputs[3].value = '1'
+    document.querySelector('.w-match-cockpit__panel').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }))
+    await new Promise((resolve) => setTimeout(resolve, 0))
+
+    const matchBody = JSON.parse(fetchMock.mock.calls[0][1].body)
+    expect(matchBody.date).toBe('2026-04-18T00:00:00Z')
+    expect(() => normalizeAdminMatchPayload(matchBody)).not.toThrow()
+  })
+
   it('guards final validation against duplicate submits', async () => {
     const fetchMock = vi.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({}) }))
     vi.stubGlobal('fetch', fetchMock)
