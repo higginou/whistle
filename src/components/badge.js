@@ -35,7 +35,7 @@ function dismissBadge(badge) {
 
 /**
  * Render the "Nouvelle Journee" badge into the given container (badge slot).
- * Listens to store keys: dataFresh, season, revealed.
+ * Listens to store keys: dataFresh, season, tribuneArrivalClosed.
  * @param {HTMLElement} container — the w-score-card__badge-slot element
  */
 export function render(container) {
@@ -55,7 +55,7 @@ export function render(container) {
     container.appendChild(badgeEl)
   }
 
-  function handleReveal(event) {
+  function handleArrivalClosed(event) {
     const { value } = event.detail
     if (value !== true) return
     if (dismissed) return
@@ -69,7 +69,7 @@ export function render(container) {
   // Listen for data freshness and season data
   on('dataFresh', tryRender)
   on('season', tryRender)
-  on('revealed', handleReveal)
+  on('tribuneArrivalClosed', handleArrivalClosed)
 
   // Initial render if data already present
   tryRender()

@@ -9,8 +9,8 @@ describe('store', () => {
       expect(get('season')).toBe(null)
     })
 
-    it('has revealed = false', () => {
-      expect(get('revealed')).toBe(false)
+    it('has tribuneArrivalClosed = false', () => {
+      expect(get('tribuneArrivalClosed')).toBe(false)
     })
 
     it('has activeSheet = null', () => {
@@ -37,10 +37,10 @@ describe('store', () => {
     })
 
     it('overwrites previous value', () => {
-      set('revealed', true)
-      expect(get('revealed')).toBe(true)
-      set('revealed', false)
-      expect(get('revealed')).toBe(false)
+      set('tribuneArrivalClosed', true)
+      expect(get('tribuneArrivalClosed')).toBe(true)
+      set('tribuneArrivalClosed', false)
+      expect(get('tribuneArrivalClosed')).toBe(false)
     })
   })
 
@@ -73,12 +73,12 @@ describe('store', () => {
       unsub()
     })
 
-    it('dispatches reveal-triggered event', () => {
+    it('dispatches tribune-arrival-closed event', () => {
       let received = null
-      const unsub = on('revealed', (event) => {
+      const unsub = on('tribuneArrivalClosed', (event) => {
         received = event.detail
       })
-      set('revealed', true)
+      set('tribuneArrivalClosed', true)
       expect(received).toEqual({ value: true, previous: false })
       unsub()
     })
@@ -142,13 +142,13 @@ describe('store', () => {
   describe('unsubscribe', () => {
     it('stops receiving events after unsubscribe', () => {
       let count = 0
-      const unsub = on('revealed', () => {
+      const unsub = on('tribuneArrivalClosed', () => {
         count++
       })
-      set('revealed', true)
+      set('tribuneArrivalClosed', true)
       expect(count).toBe(1)
       unsub()
-      set('revealed', false)
+      set('tribuneArrivalClosed', false)
       expect(count).toBe(1)
     })
   })
@@ -156,10 +156,10 @@ describe('store', () => {
   describe('reset', () => {
     it('restores initial state values', () => {
       set('season', { id: '2025-2026' })
-      set('revealed', true)
+      set('tribuneArrivalClosed', true)
       reset()
       expect(get('season')).toBe(null)
-      expect(get('revealed')).toBe(false)
+      expect(get('tribuneArrivalClosed')).toBe(false)
     })
 
     it('removes all listeners', () => {

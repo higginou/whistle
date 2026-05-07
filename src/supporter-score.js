@@ -88,7 +88,7 @@ function onSimulationMode(event) {
   }
 }
 
-function onReveal(event) {
+function onTribuneArrivalClosed(event) {
   const { value, previous } = event.detail
   if (value !== true || previous === true) return
 
@@ -112,7 +112,7 @@ export function initSupporterScore() {
   on('activeTab', onTabChanged)
   on('selectedTeam', onTeamSelected)
   on('simulationMode', onSimulationMode)
-  on('revealed', onReveal)
+  on('tribuneArrivalClosed', onTribuneArrivalClosed)
 }
 
 export function resetSupporterScoreState() {

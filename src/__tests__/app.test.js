@@ -112,6 +112,9 @@ describe('app integration', () => {
     expect(sessionStorage.getItem('w-tribune-arrival-closed')).toBe('1')
     expect(document.querySelector('.w-tribune-arrival')).toBeNull()
     expect(document.querySelector('.w-standings-section')).not.toBeNull()
+    expect(document.body.textContent).not.toContain('Reveler la projection')
+    expect(document.body.textContent).not.toContain('Projection en cours')
+    expect(document.body.textContent).not.toContain('Rejouer')
   })
 
   it('closes Tribune arrival without triggering positional animation', async () => {

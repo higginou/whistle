@@ -59,7 +59,7 @@ describe('badge', () => {
     expect(badge.getAttribute('aria-live')).toBe('polite')
   })
 
-  it('badge disappears when revealed becomes true', () => {
+  it('badge disappears when Tribune arrival closes', () => {
     set('dataFresh', true)
     set('season', MOCK_SEASON)
     render(container)
@@ -70,11 +70,11 @@ describe('badge', () => {
     // Simulate reduced motion for instant removal in test env
     globalThis.matchMedia = vi.fn().mockReturnValue({ matches: true })
 
-    set('revealed', true)
+    set('tribuneArrivalClosed', true)
     expect(container.querySelector('.w-badge-new')).toBeNull()
   })
 
-  it('badge is not re-shown after revealed resets to false', () => {
+  it('badge is not re-shown after Tribune arrival close resets to false', () => {
     set('dataFresh', true)
     set('season', MOCK_SEASON)
     render(container)
@@ -82,11 +82,11 @@ describe('badge', () => {
     expect(container.querySelector('.w-badge-new')).not.toBeNull()
 
     globalThis.matchMedia = vi.fn().mockReturnValue({ matches: true })
-    set('revealed', true)
+    set('tribuneArrivalClosed', true)
     expect(container.querySelector('.w-badge-new')).toBeNull()
 
-    // Reset revealed — badge should NOT reappear
-    set('revealed', false)
+    // Reset arrival close — badge should NOT reappear
+    set('tribuneArrivalClosed', false)
     // Trigger data fresh again to test one-shot behavior
     set('dataFresh', true)
     expect(container.querySelector('.w-badge-new')).toBeNull()

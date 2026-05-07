@@ -2,7 +2,6 @@
 
 const EVENT_NAMES = {
   season: 'season-loaded',
-  revealed: 'reveal-triggered',
   activeSheet: 'sheet-opened',
   selectedTeam: 'team-selected',
   dataFresh: 'data-fresh',
@@ -18,7 +17,6 @@ const EVENT_NAMES = {
 
 const INITIAL_STATE = {
   season: null,
-  revealed: false,
   activeSheet: null,
   selectedTeam: null,
   dataFresh: false,

@@ -45,7 +45,7 @@ describe('supporter-score', () => {
     expect(localStorage.getItem('w-supporter-last-consultation-day')).toBe('2026-04-12')
   })
 
-  it('awards simple bonuses for consultation, simulation, and reveal', async () => {
+  it('awards simple bonuses for consultation, simulation, and Tribune arrival close', async () => {
     const { get, set } = await import('../store.js')
     const { initSupporterScore } = await import('../supporter-score.js')
 
@@ -66,7 +66,7 @@ describe('supporter-score', () => {
     set('simulationMode', true)
     expect(get('supporterScore')).toBe(base + 6)
 
-    set('revealed', true)
+    set('tribuneArrivalClosed', true)
     expect(get('supporterScore')).toBe(base + 10)
     expect(localStorage.getItem('w-supporter-score')).toBe(String(base + 10))
   })

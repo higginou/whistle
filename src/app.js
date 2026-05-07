@@ -8,7 +8,6 @@ import { render as renderLayout } from './components/page-layout.js'
 import { render as renderBottomNav, update as updateBottomNav, tabIds } from './components/bottom-nav.js'
 import { render as renderScoreCard } from './components/score-card.js'
 import { render as renderZoneGroups } from './components/zone-group.js'
-import { render as renderRevealButton } from './components/reveal-button.js'
 import { render as renderTribuneArrival, isClosedForSession } from './components/tribune-arrival.js'
 import { render as renderEmptyState } from './components/empty-state.js'
 import { initSupporterScore } from './supporter-score.js'
@@ -221,15 +220,12 @@ function renderTabContent(tabId, container) {
       const hero = document.createElement('section')
       hero.className = 'w-hero-section'
       hero.setAttribute('aria-label', 'Equipe favorite')
-      const reveal = document.createElement('section')
-      reveal.className = 'w-reveal-section'
       const standings = document.createElement('section')
       standings.className = 'w-standings-section'
       standings.setAttribute('aria-label', 'Classement')
       standings.innerHTML = '<h2 class="w-standings-title">Classement</h2>'
-      container.append(hero, reveal, standings)
+      container.append(hero, standings)
       renderScoreCard(hero)
-      if (!isSimulated) renderRevealButton(reveal)
 
       if (isSimulated) {
         const simTeams = get('simulatedStandings')

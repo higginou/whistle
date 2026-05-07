@@ -147,7 +147,7 @@ development_status:
   epic-14: in-progress
   14-1-maquettes-du-nouveau-flux-darrivee-tribune: done
   14-2-ecran-darrivee-tribune-seule-avec-fermeture-session-only: done
-  14-3-suppression-definitive-du-bouton-reveler-la-projection: backlog
+  14-3-suppression-definitive-du-bouton-reveler-la-projection: done
 
 # Inter-epic tasks (retro action items, debt, preparation)
 # Tracked here to avoid losing visibility on work between epics
