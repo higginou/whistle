@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#07070b" />
+    <title>Whistle Epic 14.1 - Variante A Stadium Gate</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --w-night: #07070b;
+        --w-stand: #101018;
+        --w-card: #17151f;
+        --w-line: rgba(255, 221, 96, 0.24);
+        --w-yellow: #ffd84d;
+        --w-yellow-strong: #ffe68a;
+        --w-text: #fff8df;
+        --w-muted: #c7bd9e;
+        --w-shadow: 0 28px 70px rgba(0, 0, 0, 0.48);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        min-height: 100dvh;
+        margin: 0;
+        color: var(--w-text);
+        background:
+          radial-gradient(circle at 50% -8%, rgba(255, 216, 77, 0.2), transparent 34%),
+          linear-gradient(180deg, #11101a 0%, var(--w-night) 62%, #020203 100%);
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+          repeating-linear-gradient(90deg, transparent 0 18px, rgba(255, 216, 77, 0.04) 18px 20px),
+          linear-gradient(180deg, transparent 0 54%, rgba(255, 216, 77, 0.07) 54% 55%, transparent 55%);
+        opacity: 0.8;
+      }
+
+      .w-shell {
+        position: relative;
+        width: min(430px, 100%);
+        min-height: 100dvh;
+        margin: 0 auto;
+        padding: 18px 16px calc(96px + env(safe-area-inset-bottom));
+        display: grid;
+        align-content: center;
+      }
+
+      .w-arrival[hidden], .w-ranking[hidden] { display: none; }
+
+      .w-arrival {
+        min-height: calc(100dvh - 132px);
+        display: grid;
+        align-content: center;
+        gap: 18px;
+      }
+
+      .w-kicker {
+        display: inline-flex;
+        width: fit-content;
+        min-height: 32px;
+        align-items: center;
+        border: 1px solid rgba(255, 216, 77, 0.32);
+        border-radius: 999px;
+        padding: 0 12px;
+        color: var(--w-yellow-strong);
+        background: rgba(255, 216, 77, 0.1);
+        font-size: 0.72rem;
+        font-weight: 900;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .w-tribune-card {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid var(--w-line);
+        border-radius: 30px;
+        padding: 22px;
+        background:
+          linear-gradient(135deg, rgba(255, 216, 77, 0.14), transparent 40%),
+          linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+          var(--w-card);
+        box-shadow: var(--w-shadow);
+      }
+
+      .w-tribune-card::after {
+        content: "SR";
+        position: absolute;
+        right: -10px;
+        bottom: -18px;
+        color: rgba(255, 216, 77, 0.08);
+        font-size: 8.2rem;
+        font-weight: 1000;
+        letter-spacing: -0.12em;
+      }
+
+      h1 {
+        position: relative;
+        margin: 14px 0 10px;
+        max-width: 9ch;
+        font-size: clamp(2.6rem, 15vw, 4.1rem);
+        line-height: 0.88;
+        letter-spacing: -0.08em;
+      }
+
+      .w-copy {
+        position: relative;
+        max-width: 28ch;
+        margin: 0;
+        color: var(--w-muted);
+        font-size: 1rem;
+        line-height: 1.55;
+      }
+
+      .w-score-strip {
+        position: relative;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 22px;
+      }
+
+      .w-stat {
+        min-height: 72px;
+        border: 1px solid rgba(255, 248, 223, 0.12);
+        border-radius: 18px;
+        padding: 12px;
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .w-stat span {
+        display: block;
+        color: var(--w-muted);
+        font-size: 0.72rem;
+        font-weight: 800;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .w-stat strong {
+        display: block;
+        margin-top: 6px;
+        color: var(--w-yellow);
+        font-size: 1.6rem;
+        line-height: 1;
+      }
+
+      .w-absence {
+        border: 1px dashed rgba(255, 216, 77, 0.34);
+        border-radius: 20px;
+        padding: 14px 16px;
+        color: #f9edbc;
+        background: rgba(255, 216, 77, 0.08);
+        font-size: 0.93rem;
+        line-height: 1.45;
+      }
+
+      .w-close-bar {
+        position: fixed;
+        left: 50%;
+        bottom: 0;
+        z-index: 2;
+        width: min(430px, 100%);
+        transform: translateX(-50%);
+        padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+        background: linear-gradient(180deg, transparent, rgba(7, 7, 11, 0.92) 24%, #07070b);
+      }
+
+      .w-button {
+        width: 100%;
+        min-height: 56px;
+        border: 0;
+        border-radius: 18px;
+        color: #171000;
+        background: linear-gradient(135deg, var(--w-yellow), #fff2a8);
+        box-shadow: 0 12px 30px rgba(255, 216, 77, 0.22);
+        font: inherit;
+        font-weight: 950;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .w-button:active { transform: scale(0.98); }
+      .w-button:focus-visible { outline: 3px solid #ffffff; outline-offset: 4px; }
+
+      .w-ranking {
+        padding-top: 18px;
+      }
+
+      .w-ranking h2 { margin: 0 0 8px; font-size: 1.8rem; letter-spacing: -0.04em; }
+      .w-ranking p { margin: 0 0 16px; color: var(--w-muted); }
+
+      .w-row {
+        min-height: 54px;
+        display: grid;
+        grid-template-columns: 40px 1fr auto;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+        border: 1px solid rgba(255, 248, 223, 0.1);
+        border-radius: 16px;
+        padding: 10px 12px;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .w-row.is-favorite {
+        border-color: rgba(255, 216, 77, 0.48);
+        background: rgba(255, 216, 77, 0.12);
+      }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .w-tribune-card { animation: gate-in 460ms cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+        @keyframes gate-in { from { opacity: 0; transform: translateY(18px) scale(0.98); } to { opacity: 1; transform: none; } }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="w-shell">
+      <section class="w-arrival" aria-labelledby="arrival-title">
+        <article class="w-tribune-card" aria-label="Carte Tribune La Rochelle seule">
+          <span class="w-kicker">Entree Tribune</span>
+          <h1 id="arrival-title">Porte jaune ouverte.</h1>
+          <p class="w-copy">Avant tout classement, Whistle te place dans la tribune rochelaise. Une seule carte, un seul club, zero friction.</p>
+          <div class="w-score-strip" aria-label="Situation La Rochelle">
+            <div class="w-stat"><span>Stade Rochelais</span><strong>7e</strong></div>
+            <div class="w-stat"><span>Humeur</span><strong>En chasse</strong></div>
+          </div>
+        </article>
+        <aside class="w-absence" aria-label="Contenus volontairement absents avant fermeture">
+          Avant fermeture : aucun classement affiche et aucun bouton "Reveler la projection". Le seul appel a l'action est Fermer, en bas de l'ecran.
+        </aside>
+      </section>
+
+      <section class="w-ranking" aria-labelledby="ranking-title" hidden>
+        <h2 id="ranking-title">Classement direct</h2>
+        <p>Etat apres fermeture : le classement apparait directement, sans etape de reveal manuel.</p>
+        <div class="w-row"><strong>1</strong><span>Toulouse</span><span>Top 6</span></div>
+        <div class="w-row"><strong>2</strong><span>Bordeaux-Begles</span><span>Top 6</span></div>
+        <div class="w-row is-favorite"><strong>7</strong><span>La Rochelle</span><span>En chasse</span></div>
+        <div class="w-row"><strong>14</strong><span>Oyonnax</span><span>Maintien</span></div>
+      </section>
+    </main>
+
+    <section class="w-close-bar" aria-label="Action de fermeture de la Tribune">
+      <button class="w-button" type="button">Fermer</button>
+    </section>
+
+    <script>
+      const closeButton = document.querySelector('.w-button');
+      const arrival = document.querySelector('.w-arrival');
+      const ranking = document.querySelector('.w-ranking');
+
+      closeButton.addEventListener('click', () => {
+        arrival.hidden = true;
+        ranking.hidden = false;
+        closeButton.closest('.w-close-bar').hidden = true;
+        ranking.focus({ preventScroll: true });
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#06080c" />
+    <title>Whistle Epic 14.1 - Variante C Spotlight Card</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --w-bg: #06080c;
+        --w-card: #111722;
+        --w-card-2: #182232;
+        --w-yellow: #ffdc50;
+        --w-blue: #42a5ff;
+        --w-text: #f8f4e8;
+        --w-muted: #bbc3c9;
+        font-family: Avenir Next, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        min-height: 100dvh;
+        margin: 0;
+        color: var(--w-text);
+        background:
+          radial-gradient(ellipse at 50% 10%, rgba(255, 220, 80, 0.28), transparent 30%),
+          radial-gradient(circle at 20% 78%, rgba(66, 165, 255, 0.14), transparent 26%),
+          linear-gradient(180deg, #121827, var(--w-bg) 72%);
+      }
+
+      .w-shell {
+        width: min(430px, 100%);
+        min-height: 100dvh;
+        margin: 0 auto;
+        padding: 18px 16px calc(98px + env(safe-area-inset-bottom));
+        display: grid;
+        align-items: center;
+      }
+
+      .w-arrival[hidden], .w-ranking[hidden] { display: none; }
+
+      .w-arrival {
+        display: grid;
+        gap: 16px;
+      }
+
+      .w-spotlight {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 220, 80, 0.28);
+        border-radius: 34px;
+        padding: 24px 20px;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+          var(--w-card);
+        box-shadow: 0 34px 80px rgba(0, 0, 0, 0.5);
+      }
+
+      .w-spotlight::before {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: -110px;
+        width: 190px;
+        height: 260px;
+        transform: translateX(-50%);
+        background: radial-gradient(ellipse, rgba(255, 220, 80, 0.26), transparent 62%);
+        filter: blur(2px);
+      }
+
+      .w-crest {
+        position: relative;
+        width: 82px;
+        height: 82px;
+        margin: 0 auto 18px;
+        display: grid;
+        place-items: center;
+        border: 2px solid rgba(255, 220, 80, 0.5);
+        border-radius: 28px;
+        color: #151006;
+        background: linear-gradient(135deg, #ffdc50, #fff2a3);
+        font-size: 1.5rem;
+        font-weight: 1000;
+        box-shadow: 0 18px 48px rgba(255, 220, 80, 0.2);
+      }
+
+      h1 {
+        position: relative;
+        margin: 0 auto;
+        max-width: 11ch;
+        text-align: center;
+        font-size: clamp(2.45rem, 13vw, 3.75rem);
+        line-height: 0.92;
+        letter-spacing: -0.08em;
+      }
+
+      .w-copy {
+        position: relative;
+        margin: 14px auto 0;
+        max-width: 30ch;
+        color: var(--w-muted);
+        text-align: center;
+        font-size: 1rem;
+        line-height: 1.55;
+      }
+
+      .w-mini-board {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 22px;
+      }
+
+      .w-chip {
+        min-height: 68px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px;
+        padding: 11px 8px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .w-chip span {
+        display: block;
+        color: var(--w-muted);
+        font-size: 0.68rem;
+        font-weight: 850;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .w-chip strong {
+        display: block;
+        margin-top: 6px;
+        color: var(--w-yellow);
+        font-size: 1rem;
+      }
+
+      .w-absence {
+        border-radius: 20px;
+        padding: 14px 15px;
+        color: #fff5c8;
+        background: linear-gradient(135deg, rgba(255, 220, 80, 0.12), rgba(66, 165, 255, 0.08));
+        border: 1px solid rgba(255, 220, 80, 0.25);
+        line-height: 1.45;
+      }
+
+      .w-bottom-action {
+        position: fixed;
+        left: 50%;
+        bottom: 0;
+        width: min(430px, 100%);
+        transform: translateX(-50%);
+        padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+        background: linear-gradient(180deg, transparent, rgba(6, 8, 12, 0.96) 24%, #06080c);
+      }
+
+      .w-close {
+        width: 100%;
+        min-height: 58px;
+        border: 1px solid rgba(255, 220, 80, 0.68);
+        border-radius: 20px;
+        color: #141006;
+        background: linear-gradient(135deg, var(--w-yellow), #fff1a1);
+        font: inherit;
+        font-size: 1.04rem;
+        font-weight: 1000;
+        cursor: pointer;
+        touch-action: manipulation;
+      }
+
+      .w-close:active { transform: scale(0.98); }
+      .w-close:focus-visible { outline: 3px solid #ffffff; outline-offset: 4px; }
+
+      .w-ranking {
+        align-self: start;
+        padding-top: 18px;
+      }
+
+      .w-ranking h2 { margin: 0 0 8px; font-size: 1.85rem; letter-spacing: -0.05em; }
+      .w-ranking p { margin: 0 0 16px; color: var(--w-muted); line-height: 1.45; }
+
+      .w-list { display: grid; gap: 10px; }
+      .w-rank-row {
+        min-height: 54px;
+        display: grid;
+        grid-template-columns: 34px 1fr auto;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        padding: 10px 12px;
+        background: var(--w-card-2);
+      }
+
+      .w-rank-row.is-favorite {
+        border-color: rgba(255, 220, 80, 0.5);
+        background: linear-gradient(135deg, rgba(255, 220, 80, 0.15), var(--w-card-2));
+      }
+
+      .w-rank-row em { color: var(--w-yellow); font-style: normal; font-weight: 850; }
+
+      @media (prefers-reduced-motion: no-preference) {
+        .w-crest { animation: crest-in 520ms cubic-bezier(0.18, 0.9, 0.2, 1.1) both; }
+        @keyframes crest-in { from { opacity: 0; transform: translateY(12px) scale(0.92); } to { opacity: 1; transform: none; } }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="w-shell">
+      <section class="w-arrival" aria-labelledby="arrival-title">
+        <article class="w-spotlight" aria-label="Spotlight Tribune La Rochelle seul">
+          <div class="w-crest" aria-hidden="true">SR</div>
+          <h1 id="arrival-title">La tribune d'abord.</h1>
+          <p class="w-copy">La Rochelle prend toute la lumiere au lancement. Le reste du Top 14 attend derriere le rideau.</p>
+          <div class="w-mini-board" aria-label="Resume La Rochelle">
+            <div class="w-chip"><span>Rang</span><strong>7e</strong></div>
+            <div class="w-chip"><span>Zone</span><strong>Top 6</strong></div>
+            <div class="w-chip"><span>Ton</span><strong>Chaud</strong></div>
+          </div>
+        </article>
+        <section class="w-absence" aria-label="Controle de flux avant fermeture">
+          Etat initial explicite : pas de classement visible, pas de bouton "Reveler la projection", uniquement la carte Tribune et Fermer en bas.
+        </section>
+      </section>
+
+      <section class="w-ranking" aria-labelledby="ranking-title" hidden>
+        <h2 id="ranking-title">Classement libere</h2>
+        <p>La fermeture de la Tribune enchaine directement sur la liste, comme prevu pour la story suivante.</p>
+        <div class="w-list" aria-label="Extrait du classement direct">
+          <div class="w-rank-row"><strong>1</strong><span>Toulouse</span><em>+2</em></div>
+          <div class="w-rank-row"><strong>4</strong><span>Racing 92</span><em>Top 6</em></div>
+          <div class="w-rank-row is-favorite"><strong>7</strong><span>La Rochelle</span><em>Favori</em></div>
+          <div class="w-rank-row"><strong>12</strong><span>Bayonne</span><em>Stable</em></div>
+        </div>
+      </section>
+    </main>
+
+    <section class="w-bottom-action" aria-label="Bouton de fermeture de l'arrivee">
+      <button class="w-close" type="button">Fermer</button>
+    </section>
+
+    <script>
+      const close = document.querySelector('.w-close');
+      const arrival = document.querySelector('.w-arrival');
+      const ranking = document.querySelector('.w-ranking');
+
+      close.addEventListener('click', () => {
+        arrival.hidden = true;
+        ranking.hidden = false;
+        close.closest('.w-bottom-action').hidden = true;
+      });
+    </script>
+  </body>
+</html>

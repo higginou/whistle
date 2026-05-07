@@ -36,7 +36,7 @@
 # - Inter-epic work (retro action items, debt, prep) is tracked under inter_epic_tasks
 
 generated: 2026-03-28
-last_updated: 2026-05-06 (epic 13 done)
+last_updated: 2026-05-06 (epic 14 created)
 project: Whistle
 project_key: NOKEY
 tracking_system: file-system
@@ -142,6 +142,12 @@ development_status:
   13-3-diagnostic-runtime-vercel-et-donnees-publiques: done
   13-4-runbook-de-deploiement-admin: done
   epic-13-retrospective: done
+
+  # Epic 14 : Arrivee Tribune & Classement Direct
+  epic-14: in-progress
+  14-1-maquettes-du-nouveau-flux-darrivee-tribune: done
+  14-2-ecran-darrivee-tribune-seule-avec-fermeture-session-only: backlog
+  14-3-suppression-definitive-du-bouton-reveler-la-projection: backlog
 
 # Inter-epic tasks (retro action items, debt, preparation)
 # Tracked here to avoid losing visibility on work between epics
