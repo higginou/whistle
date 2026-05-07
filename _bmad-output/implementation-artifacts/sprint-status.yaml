@@ -144,10 +144,11 @@ development_status:
   epic-13-retrospective: done
 
   # Epic 14 : Arrivee Tribune & Classement Direct
-  epic-14: in-progress
+  epic-14: done
   14-1-maquettes-du-nouveau-flux-darrivee-tribune: done
   14-2-ecran-darrivee-tribune-seule-avec-fermeture-session-only: done
   14-3-suppression-definitive-du-bouton-reveler-la-projection: done
+  epic-14-retrospective: done
 
 # Inter-epic tasks (retro action items, debt, preparation)
 # Tracked here to avoid losing visibility on work between epics
