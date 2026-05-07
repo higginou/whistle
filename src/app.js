@@ -9,6 +9,7 @@ import { render as renderBottomNav, update as updateBottomNav, tabIds } from './
 import { render as renderScoreCard } from './components/score-card.js'
 import { render as renderZoneGroups } from './components/zone-group.js'
 import { render as renderRevealButton } from './components/reveal-button.js'
+import { render as renderTribuneArrival, isClosedForSession } from './components/tribune-arrival.js'
 import { render as renderEmptyState } from './components/empty-state.js'
 import { initSupporterScore } from './supporter-score.js'
 import {
@@ -36,6 +37,10 @@ let shell = null
 let nav = null
 let viewport = null
 let prevTabIndex = 0
+
+if (!isAdminRoute) {
+  set('tribuneArrivalClosed', isClosedForSession())
+}
 
 // Tab view cache: tabId → div element
 const tabViews = new Map()
@@ -71,6 +76,16 @@ on('simulationMode', () => {
   }
   const activeTab = get('activeTab')
   if (activeTab === 'classements') showTab('classements', true)
+})
+
+on('tribuneArrivalClosed', () => {
+  if (!viewport) return
+  const classementsView = tabViews.get('classements')
+  if (classementsView) {
+    classementsView.remove()
+    tabViews.delete('classements')
+  }
+  if (get('activeTab') === 'classements') showTab('classements', true)
 })
 
 function esc(str) {
@@ -198,6 +213,11 @@ function renderTabContent(tabId, container) {
   switch (tabId) {
     case 'classements': {
       const isSimulated = get('simulationMode')
+      if (!isSimulated && !get('tribuneArrivalClosed')) {
+        renderTribuneArrival(container)
+        break
+      }
+
       const hero = document.createElement('section')
       hero.className = 'w-hero-section'
       hero.setAttribute('aria-label', 'Equipe favorite')

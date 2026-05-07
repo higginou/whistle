@@ -177,8 +177,8 @@ function teamName(id, teams) {
  * @param {object} season
  * @returns {string}
  */
-function buildHTML(team, season) {
-  const isDetaille = get('viewMode') === 'detaille'
+function buildHTML(team, season, options = {}) {
+  const isDetaille = options.forceDetaille || get('viewMode') === 'detaille'
   const supporterScore = get('supporterScore') ?? 0
   const supporter = getSupporterScoreMarkup(supporterScore)
   const hero = getHeroSummary(team)
@@ -307,7 +307,7 @@ function formatDateFr(isoDate) {
   }).format(d)
 }
 
-export function render(container) {
+export function render(container, options = {}) {
   const article = document.createElement('article')
   article.className = 'w-score-card'
   article.setAttribute('aria-label', 'Fiche La Rochelle')
@@ -365,7 +365,7 @@ export function render(container) {
     const team = extractTeam(season)
     if (!team) return
 
-    article.innerHTML = buildHTML(team, season)
+    article.innerHTML = buildHTML(team, season, options)
 
     // Re-attach persistent badge slot into the header
     const header = article.querySelector('.w-score-card__header')

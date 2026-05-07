@@ -13,6 +13,7 @@ const EVENT_NAMES = {
   simulationMode: 'simulation-mode-changed',
   simulatedStandings: 'simulated-standings-changed',
   supporterScore: 'supporter-score-changed',
+  tribuneArrivalClosed: 'tribune-arrival-closed',
 }
 
 const INITIAL_STATE = {
@@ -28,6 +29,7 @@ const INITIAL_STATE = {
   simulationMode: false,
   simulatedStandings: null,
   supporterScore: 0,
+  tribuneArrivalClosed: false,
 }
 
 const state = { ...INITIAL_STATE }
