@@ -6,26 +6,149 @@
   padding: var(--w-space-md) 0 calc(96px + env(safe-area-inset-bottom, 0px));
 }
 
-.w-tribune-arrival__kicker {
-  justify-self: start;
-  min-height: 32px;
-  display: inline-flex;
+.w-tribune-arrival__ticket {
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
+  color: #181206;
+  background:
+    linear-gradient(90deg, transparent 0 16px, rgba(24, 18, 6, 0.08) 16px 17px, transparent 17px),
+    linear-gradient(135deg, #fff0a7, #f5d76e);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.44);
+}
+
+.w-tribune-arrival__ticket::before,
+.w-tribune-arrival__ticket::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--w-bg-page);
+}
+
+.w-tribune-arrival__ticket::before {
+  left: -17px;
+}
+
+.w-tribune-arrival__ticket::after {
+  right: -17px;
+}
+
+.w-tribune-arrival__ticket-head {
+  min-height: 58px;
+  display: flex;
   align-items: center;
-  padding: 0 12px;
-  border: 1px solid rgba(245, 200, 76, 0.32);
-  border-radius: 999px;
-  background: rgba(245, 200, 76, 0.1);
-  color: var(--w-accent);
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 22px 14px;
+  border-bottom: 2px dashed rgba(24, 18, 6, 0.22);
   font-size: 0.72rem;
-  font-weight: 900;
-  letter-spacing: 0.16em;
+  font-weight: 950;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+}
+
+.w-tribune-arrival__seat {
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: #fff7dd;
+  background: #16110a;
+  font-size: 0.8rem;
+  letter-spacing: 0;
+}
+
+.w-tribune-arrival__ticket-body {
+  padding: 22px;
+}
+
+.w-tribune-arrival__title {
+  max-width: 9ch;
+  color: #181206;
+  font-size: clamp(2.55rem, 14vw, 4rem);
+  font-weight: 950;
+  line-height: 0.9;
+  letter-spacing: -0.08em;
+}
+
+.w-tribune-arrival__copy {
+  max-width: 29ch;
+  margin-top: 14px;
+  color: #181206;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 .w-tribune-arrival__card .w-score-card {
   min-height: auto;
-  border-color: rgba(245, 200, 76, 0.28);
-  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.44), var(--w-shadow-card);
+  margin-top: 20px;
+  border-color: rgba(24, 18, 6, 0.16);
+  color: #181206;
+  background: rgba(24, 18, 6, 0.1);
+  box-shadow: none;
+}
+
+.w-tribune-arrival__card .w-score-card::before,
+.w-tribune-arrival__card .w-score-card::after {
+  display: none;
+}
+
+.w-tribune-arrival__card .w-score-card__eyebrow,
+.w-tribune-arrival__card .w-score-card__headline,
+.w-tribune-arrival__card .w-score-card__stake,
+.w-tribune-arrival__card .w-score-card__team-name,
+.w-tribune-arrival__card .w-score-card__supporter-value,
+.w-tribune-arrival__card .w-mini-card__pos-num {
+  color: #181206;
+}
+
+.w-tribune-arrival__card .w-score-card__eyebrow,
+.w-tribune-arrival__card .w-score-card__supporter-tier,
+.w-tribune-arrival__card .w-mini-card__xp-pct {
+  color: #4f2f00;
+}
+
+.w-tribune-arrival__card .w-score-card__supporter,
+.w-tribune-arrival__card .w-mini-card {
+  border-color: rgba(24, 18, 6, 0.14);
+  background: rgba(24, 18, 6, 0.1);
+  box-shadow: none;
+}
+
+.w-tribune-arrival__card .w-score-card__supporter-note,
+.w-tribune-arrival__card .w-score-card__supporter-label,
+.w-tribune-arrival__card .w-mini-card__label,
+.w-tribune-arrival__card .w-mini-card__confidence,
+.w-tribune-arrival__card .w-mini-card__explication-text,
+.w-tribune-arrival__card .w-match-pill__detail {
+  color: rgba(24, 18, 6, 0.72);
+}
+
+.w-tribune-arrival__card .w-score-card__crest {
+  color: #fff7dd;
+  background: #16110a;
+  box-shadow: none;
+}
+
+.w-tribune-arrival__card .w-score-card__supporter-bar,
+.w-tribune-arrival__card .w-mini-card__xp-bar {
+  background: rgba(24, 18, 6, 0.18);
+}
+
+.w-tribune-arrival__card .w-score-card__supporter-bar span,
+.w-tribune-arrival__card .w-mini-card__xp-fill {
+  background: #181206;
+}
+
+.w-tribune-arrival__card .w-match-pill {
+  background: rgba(24, 18, 6, 0.1);
+}
+
+.w-tribune-arrival__card .w-match-pill__name,
+.w-tribune-arrival__card .w-mini-card__value,
+.w-tribune-arrival__card .w-mini-card__zone {
+  color: #181206;
 }
 
 .w-tribune-arrival__note {

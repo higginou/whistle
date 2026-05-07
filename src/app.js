@@ -217,15 +217,11 @@ function renderTabContent(tabId, container) {
         break
       }
 
-      const hero = document.createElement('section')
-      hero.className = 'w-hero-section'
-      hero.setAttribute('aria-label', 'Equipe favorite')
       const standings = document.createElement('section')
       standings.className = 'w-standings-section'
       standings.setAttribute('aria-label', 'Classement')
       standings.innerHTML = '<h2 class="w-standings-title">Classement</h2>'
-      container.append(hero, standings)
-      renderScoreCard(hero)
+      container.append(standings)
 
       if (isSimulated) {
         const simTeams = get('simulatedStandings')

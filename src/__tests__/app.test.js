@@ -95,6 +95,8 @@ describe('app integration', () => {
     set('season', makeSeason())
 
     expect(document.querySelector('.w-tribune-arrival')).not.toBeNull()
+    expect(document.querySelector('.w-tribune-arrival__ticket')).not.toBeNull()
+    expect(document.querySelector('.w-tribune-arrival__title')?.textContent).toBe('Ton billet du lundi.')
     expect(document.querySelector('.w-score-card')).not.toBeNull()
     expect(document.querySelector('.w-standings-section')).toBeNull()
     expect(document.querySelector('.w-reveal-button')).toBeNull()
@@ -111,6 +113,7 @@ describe('app integration', () => {
 
     expect(sessionStorage.getItem('w-tribune-arrival-closed')).toBe('1')
     expect(document.querySelector('.w-tribune-arrival')).toBeNull()
+    expect(document.querySelector('.w-score-card')).toBeNull()
     expect(document.querySelector('.w-standings-section')).not.toBeNull()
     expect(document.body.textContent).not.toContain('Reveler la projection')
     expect(document.body.textContent).not.toContain('Projection en cours')
@@ -128,6 +131,7 @@ describe('app integration', () => {
     document.querySelector('.w-tribune-arrival__close').click()
 
     expect(animate).not.toHaveBeenCalled()
+    expect(document.querySelector('.w-score-card')).toBeNull()
     expect(document.querySelector('.w-standings-section')).not.toBeNull()
   })
 
@@ -139,6 +143,7 @@ describe('app integration', () => {
     set('season', makeSeason())
 
     expect(document.querySelector('.w-tribune-arrival')).toBeNull()
+    expect(document.querySelector('.w-score-card')).toBeNull()
     expect(document.querySelector('.w-standings-section')).not.toBeNull()
   })
 
