@@ -1,6 +1,7 @@
 import { createPostgresClient } from '../db/connection.js'
 
 const SEASON_ID_RE = /^\d{4}-\d{4}$/
+const TOP14_MATCHES_PER_MATCHDAY = 7
 
 export function normalizeSeasonId(season = '2025-2026') {
   if (typeof season !== 'string' || !SEASON_ID_RE.test(season)) throw new Error('invalid-season')
@@ -39,6 +40,19 @@ export async function getPublicSeasonPayload(seasonId, sql) {
   const latestPlayedMatchday = Number(latestPlayedRows[0]?.latest_played_matchday ?? 0)
   const snapshotMatchday = Number(rows[0].matchday)
   if (latestPlayedMatchday > snapshotMatchday) throw new Error('projection-stale')
+
+  const incompleteMatchdayRows = await sql`
+    SELECT expected.matchday, COUNT(matches.id)::int AS played_count
+    FROM generate_series(1, ${snapshotMatchday}) AS expected(matchday)
+    LEFT JOIN matches ON matches.season_id = ${seasonId}
+      AND matches.matchday = expected.matchday
+      AND matches.status = 'played'
+    GROUP BY expected.matchday
+    HAVING COUNT(matches.id) <> ${TOP14_MATCHES_PER_MATCHDAY}
+    ORDER BY expected.matchday ASC
+    LIMIT 1
+  `
+  if (incompleteMatchdayRows.length > 0) throw new Error('projection-incomplete')
 
   const matchRows = await sql`
     SELECT

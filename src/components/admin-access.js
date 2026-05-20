@@ -49,6 +49,8 @@ function publicDiagnosticMessageFor(status, error) {
     return 'Snapshot public absent. Lance un recalcul pour creer le premier JSON public.'
   }
   if (status === 404 && error === 'season-not-found') return 'Saison absente. Verifie le seed de la base Vercel.'
+  if (status === 409 && error === 'projection-stale') return 'Snapshot public en retard. Lance un recalcul apres avoir saisi les derniers matchs.'
+  if (status === 409 && error === 'projection-incomplete') return 'Snapshot public incomplet. Verifie les journees avec moins de 7 matchs joues avant de recalculer.'
   if (status === 503 || error === 'storage-unavailable') return 'Stockage public indisponible. Verifie Vercel Postgres.'
   return 'Diagnostic public indisponible. Relance apres verification du runtime.'
 }

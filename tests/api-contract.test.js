@@ -49,7 +49,7 @@ function createSqlRecorderWithResults(results) {
   return { sql, calls }
 }
 
-function createPublicSql(rows, matchRows = [], latestPlayedMatchday = null) {
+function createPublicSql(rows, matchRows = [], latestPlayedMatchday = null, incompleteMatchdayRows = []) {
   let calls = 0
   return () => {
     calls++
@@ -59,12 +59,13 @@ function createPublicSql(rows, matchRows = [], latestPlayedMatchday = null) {
         latest_played_matchday: latestPlayedMatchday ?? rows[0]?.matchday ?? 0,
       }])
     }
+    if (calls === 3) return Promise.resolve(incompleteMatchdayRows)
 
     return Promise.resolve(matchRows)
   }
 }
 
-function createPublicSqlRecorder(rows, matchRows = [], latestPlayedMatchday = null) {
+function createPublicSqlRecorder(rows, matchRows = [], latestPlayedMatchday = null, incompleteMatchdayRows = []) {
   const calls = []
   const sql = (strings, ...values) => {
     calls.push({ text: strings.join('$'), values })
@@ -74,6 +75,7 @@ function createPublicSqlRecorder(rows, matchRows = [], latestPlayedMatchday = nu
         latest_played_matchday: latestPlayedMatchday ?? rows[0]?.matchday ?? 0,
       }])
     }
+    if (calls.length === 3) return Promise.resolve(incompleteMatchdayRows)
 
     return Promise.resolve(matchRows)
   }
@@ -416,5 +418,51 @@ describe('admin matches API', () => {
 
     expect(res.statusCode).toBe(409)
     expect(res.body).toEqual({ error: 'projection-stale' })
+  })
+
+  it('refuses to serve a projection snapshot when a previous played matchday is incomplete', async () => {
+    await expect(
+      getPublicSeasonPayload(
+        '2025-2026',
+        createPublicSql(
+          [
+            {
+              season: '2025-2026',
+              matchday: 24,
+              generated_at: '2026-05-20T12:24:12Z',
+              brier_score: null,
+              standings: { teams: [], predictions: [] },
+            },
+          ],
+          [],
+          24,
+          [{ matchday: 3, played_count: 6 }],
+        ),
+      ),
+    ).rejects.toThrow(/projection-incomplete/)
+  })
+
+  it('returns a controlled error when the public projection is incomplete', async () => {
+    const res = createResponse()
+
+    await publicSeasonHandler({ method: 'GET', query: { season: '2025-2026' } }, res, {}, {
+      sql: createPublicSql(
+        [
+          {
+            season: '2025-2026',
+            matchday: 24,
+            generated_at: '2026-05-20T12:24:12Z',
+            brier_score: null,
+            standings: { teams: [], predictions: [] },
+          },
+        ],
+        [],
+        24,
+        [{ matchday: 3, played_count: 6 }],
+      ),
+    })
+
+    expect(res.statusCode).toBe(409)
+    expect(res.body).toEqual({ error: 'projection-incomplete' })
   })
 })
