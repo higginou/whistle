@@ -5,9 +5,8 @@
 -- - Rugbyrama J5-J9 follow the same descending result id pattern.
 -- - LNR J3 confirms Toulon-La Rochelle is attached to J3 despite being played on 2025-11-08.
 --
--- Run this against Vercel Postgres, then launch POST /api/admin/recompute.
-
-BEGIN;
+-- Run this single statement against Vercel Postgres, then run the verification
+-- query from prod-verify-matchday-counts.sql.
 
 INSERT INTO matches (
   season_id,
@@ -47,12 +46,3 @@ ON CONFLICT (season_id, matchday, home_team_id, away_team_id) DO UPDATE SET
   status = EXCLUDED.status,
   source = EXCLUDED.source,
   updated_at = NOW();
-
-COMMIT;
-
-SELECT matchday, COUNT(*) AS played_count
-FROM matches
-WHERE season_id = '2025-2026'
-  AND status = 'played'
-GROUP BY matchday
-ORDER BY matchday;

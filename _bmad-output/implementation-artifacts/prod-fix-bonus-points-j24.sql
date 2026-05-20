@@ -6,127 +6,38 @@
 -- - missing offensive bonuses on large wins where tries were unavailable;
 -- - one Toulouse offensive bonus flag that makes the public total 83 instead of the official 82.
 --
--- Run this against Vercel Postgres, then launch POST /api/admin/recompute.
-
-BEGIN;
-
-UPDATE matches
-SET away_bonus_defensive = FALSE,
-    source = 'admin-repair',
-    updated_at = NOW()
-WHERE season_id = '2025-2026'
-  AND matchday = 24
-  AND home_team_id = 'lyon'
-  AND away_team_id = 'bayonne';
+-- Run this single statement against Vercel Postgres, then run the verification
+-- query from prod-verify-points-j24.sql.
 
 UPDATE matches
-SET home_bonus_defensive = TRUE,
+SET home_bonus_offensive = patch.home_bonus_offensive,
+    home_bonus_defensive = patch.home_bonus_defensive,
+    away_bonus_offensive = patch.away_bonus_offensive,
+    away_bonus_defensive = patch.away_bonus_defensive,
     source = 'admin-repair',
     updated_at = NOW()
-WHERE season_id = '2025-2026'
-  AND matchday = 9
-  AND home_team_id = 'montpellier'
-  AND away_team_id = 'clermont';
-
-UPDATE matches
-SET away_bonus_offensive = TRUE,
-    source = 'admin-repair',
-    updated_at = NOW()
-WHERE season_id = '2025-2026'
-  AND matchday = 10
-  AND home_team_id = 'perpignan'
-  AND away_team_id = 'montpellier';
-
-UPDATE matches
-SET home_bonus_defensive = TRUE,
-    source = 'admin-repair',
-    updated_at = NOW()
-WHERE season_id = '2025-2026'
-  AND matchday = 17
-  AND home_team_id = 'stade-francais'
-  AND away_team_id = 'toulouse';
-
-UPDATE matches
-SET away_bonus_defensive = TRUE,
-    source = 'admin-repair',
-    updated_at = NOW()
-WHERE season_id = '2025-2026'
-  AND matchday = 8
-  AND home_team_id = 'racing-92'
-  AND away_team_id = 'pau';
-
-UPDATE matches
-SET home_bonus_offensive = TRUE,
-    source = 'admin-repair',
-    updated_at = NOW()
-WHERE season_id = '2025-2026'
-  AND matchday = 4
-  AND home_team_id = 'pau'
-  AND away_team_id = 'lyon';
-
-UPDATE matches
-SET away_bonus_defensive = TRUE,
-    source = 'admin-repair',
-    updated_at = NOW()
-WHERE season_id = '2025-2026'
-  AND matchday = 2
-  AND home_team_id = 'toulon'
-  AND away_team_id = 'castres';
-
-UPDATE matches
-SET home_bonus_offensive = TRUE,
-    source = 'admin-repair',
-    updated_at = NOW()
-WHERE season_id = '2025-2026'
-  AND matchday = 9
-  AND home_team_id = 'la-rochelle'
-  AND away_team_id = 'racing-92';
-
-UPDATE matches
-SET home_bonus_offensive = TRUE,
-    source = 'admin-repair',
-    updated_at = NOW()
-WHERE season_id = '2025-2026'
-  AND matchday = 14
-  AND home_team_id = 'la-rochelle'
-  AND away_team_id = 'toulon';
-
-UPDATE matches
-SET away_bonus_offensive = FALSE,
-    source = 'admin-repair',
-    updated_at = NOW()
-WHERE season_id = '2025-2026'
-  AND matchday = 23
-  AND home_team_id = 'toulon'
-  AND away_team_id = 'toulouse';
-
-COMMIT;
-
-SELECT team_id, SUM(points)::int AS points
 FROM (
-  SELECT home_team_id AS team_id,
-    CASE
-      WHEN home_score > away_score THEN 4
-      WHEN home_score = away_score THEN 2
-      ELSE 0
-    END
-    + CASE WHEN home_bonus_offensive THEN 1 ELSE 0 END
-    + CASE WHEN home_bonus_defensive THEN 1 ELSE 0 END AS points
-  FROM matches
-  WHERE season_id = '2025-2026'
-    AND status = 'played'
-  UNION ALL
-  SELECT away_team_id AS team_id,
-    CASE
-      WHEN away_score > home_score THEN 4
-      WHEN away_score = home_score THEN 2
-      ELSE 0
-    END
-    + CASE WHEN away_bonus_offensive THEN 1 ELSE 0 END
-    + CASE WHEN away_bonus_defensive THEN 1 ELSE 0 END AS points
-  FROM matches
-  WHERE season_id = '2025-2026'
-    AND status = 'played'
-) points_by_match
-GROUP BY team_id
-ORDER BY points DESC, team_id ASC;
+  VALUES
+    (24, 'lyon', 'bayonne', FALSE, FALSE, FALSE, FALSE),
+    (9, 'montpellier', 'clermont', FALSE, TRUE, FALSE, FALSE),
+    (10, 'perpignan', 'montpellier', FALSE, FALSE, TRUE, FALSE),
+    (17, 'stade-francais', 'toulouse', FALSE, TRUE, FALSE, FALSE),
+    (8, 'racing-92', 'pau', FALSE, FALSE, FALSE, TRUE),
+    (4, 'pau', 'lyon', TRUE, FALSE, FALSE, FALSE),
+    (2, 'toulon', 'castres', FALSE, FALSE, FALSE, TRUE),
+    (9, 'la-rochelle', 'racing-92', TRUE, FALSE, FALSE, FALSE),
+    (14, 'la-rochelle', 'toulon', TRUE, FALSE, FALSE, FALSE),
+    (23, 'toulon', 'toulouse', FALSE, FALSE, FALSE, FALSE)
+) AS patch(
+  matchday,
+  home_team_id,
+  away_team_id,
+  home_bonus_offensive,
+  home_bonus_defensive,
+  away_bonus_offensive,
+  away_bonus_defensive
+)
+WHERE matches.season_id = '2025-2026'
+  AND matches.matchday = patch.matchday
+  AND matches.home_team_id = patch.home_team_id
+  AND matches.away_team_id = patch.away_team_id;
