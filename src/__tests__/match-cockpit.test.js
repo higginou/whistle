@@ -56,6 +56,11 @@ describe('match-cockpit', () => {
     expect(bonus.away.defensive).toBe(true)
   })
 
+  it('does not award defensive bonus above 5 points', () => {
+    const bonus = calculateBonusFlags({ homeScore: 42, awayScore: 35, homeTries: 6, awayTries: 5 })
+    expect(bonus.away.defensive).toBe(false)
+  })
+
   it('detects remaining matches from validated drafts', () => {
     localStorage.setItem('w-match-cockpit-drafts', JSON.stringify({
       '18-la-rochelle-toulouse': { homeScore: 21, awayScore: 10, homeTries: 4, awayTries: 1, validated: true },

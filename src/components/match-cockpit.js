@@ -85,8 +85,8 @@ function calculateBonusFlags(draft) {
   const homeOffensive = draft.homeTries >= draft.awayTries + 3
   const awayOffensive = draft.awayTries >= draft.homeTries + 3
 
-  const homeDefensive = draft.homeScore < draft.awayScore && draft.awayScore - draft.homeScore <= 7
-  const awayDefensive = draft.awayScore < draft.homeScore && draft.homeScore - draft.awayScore <= 7
+  const homeDefensive = draft.homeScore < draft.awayScore && draft.awayScore - draft.homeScore <= 5
+  const awayDefensive = draft.awayScore < draft.homeScore && draft.homeScore - draft.awayScore <= 5
 
   return {
     home: { offensive: homeOffensive, defensive: homeDefensive },
