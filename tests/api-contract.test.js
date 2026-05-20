@@ -49,9 +49,36 @@ function createSqlRecorderWithResults(results) {
   return { sql, calls }
 }
 
-function createPublicSql(rows, matchRows = []) {
+function createPublicSql(rows, matchRows = [], latestPlayedMatchday = null) {
   let calls = 0
-  return () => Promise.resolve(calls++ === 0 ? rows : matchRows)
+  return () => {
+    calls++
+    if (calls === 1) return Promise.resolve(rows)
+    if (calls === 2) {
+      return Promise.resolve([{
+        latest_played_matchday: latestPlayedMatchday ?? rows[0]?.matchday ?? 0,
+      }])
+    }
+
+    return Promise.resolve(matchRows)
+  }
+}
+
+function createPublicSqlRecorder(rows, matchRows = [], latestPlayedMatchday = null) {
+  const calls = []
+  const sql = (strings, ...values) => {
+    calls.push({ text: strings.join('$'), values })
+    if (calls.length === 1) return Promise.resolve(rows)
+    if (calls.length === 2) {
+      return Promise.resolve([{
+        latest_played_matchday: latestPlayedMatchday ?? rows[0]?.matchday ?? 0,
+      }])
+    }
+
+    return Promise.resolve(matchRows)
+  }
+
+  return { sql, calls }
 }
 
 describe('public season API', () => {
@@ -332,9 +359,7 @@ describe('admin matches API', () => {
   })
 
   it('maps the latest projection snapshot to the public payload contract', async () => {
-    const payload = await getPublicSeasonPayload(
-      '2025-2026',
-      createPublicSql([
+    const recorder = createPublicSqlRecorder([
         {
           season: '2025-2026',
           matchday: 18,
@@ -342,9 +367,54 @@ describe('admin matches API', () => {
           brier_score: '0.12345',
           standings: { teams: [], predictions: [] },
         },
-      ]),
-    )
+      ])
+    const payload = await getPublicSeasonPayload('2025-2026', recorder.sql)
 
     expect(payload).toMatchObject({ season: '2025-2026', matchday: 18, brierScore: 0.12345 })
+    expect(recorder.calls[0].text).toContain('ORDER BY matchday DESC, generated_at DESC, id DESC')
+  })
+
+  it('refuses to serve a projection snapshot older than the latest played matchday', async () => {
+    await expect(
+      getPublicSeasonPayload(
+        '2025-2026',
+        createPublicSql(
+          [
+            {
+              season: '2025-2026',
+              matchday: 22,
+              generated_at: '2026-05-04T08:31:58Z',
+              brier_score: null,
+              standings: { teams: [], predictions: [] },
+            },
+          ],
+          [],
+          24,
+        ),
+      ),
+    ).rejects.toThrow(/projection-stale/)
+  })
+
+  it('returns a controlled error when the public projection is stale', async () => {
+    const res = createResponse()
+
+    await publicSeasonHandler({ method: 'GET', query: { season: '2025-2026' } }, res, {}, {
+      sql: createPublicSql(
+        [
+          {
+            season: '2025-2026',
+            matchday: 22,
+            generated_at: '2026-05-04T08:31:58Z',
+            brier_score: null,
+            standings: { teams: [], predictions: [] },
+          },
+        ],
+        [],
+        24,
+      ),
+    })
+
+    expect(res.statusCode).toBe(409)
+    expect(res.body).toEqual({ error: 'projection-stale' })
   })
 })

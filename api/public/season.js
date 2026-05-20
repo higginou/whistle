@@ -21,6 +21,7 @@ export default async function publicSeasonHandler(req, res, env = process.env, o
   } catch (error) {
     if (error.message === 'season-not-found') return res.status(404).json({ error: 'season-not-found' })
     if (error.message === 'projection-not-found') return res.status(404).json({ error: 'projection-not-found' })
+    if (error.message === 'projection-stale') return res.status(409).json({ error: 'projection-stale' })
 
     return res.status(503).json({ error: 'storage-unavailable' })
   }

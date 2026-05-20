@@ -32,6 +32,7 @@ async function loadSeason(seasonId = '2025-2026') {
 
   try {
     const response = await fetch(url, { cache: 'no-store' })
+    if (response.status === 409) throw new Error('projection-stale')
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
     const data = await response.json()
 
@@ -49,6 +50,12 @@ async function loadSeason(seasonId = '2025-2026') {
 
     set('season', data)
   } catch (_fetchError) {
+    if (_fetchError.message === 'projection-stale') {
+      localStorage.removeItem(cacheKey)
+      set('season', null)
+      return
+    }
+
     // Network failed — fallback to cache
     const cached = readCache(cacheKey)
     if (cached) {

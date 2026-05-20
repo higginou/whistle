@@ -21,7 +21,7 @@ export async function getPublicSeasonPayload(seasonId, sql) {
       SELECT matchday, generated_at, brier_score, standings
       FROM projection_snapshots
       WHERE season_id = seasons.id
-      ORDER BY generated_at DESC
+      ORDER BY matchday DESC, generated_at DESC, id DESC
       LIMIT 1
     ) projection_snapshots ON TRUE
     WHERE seasons.id = ${seasonId}
@@ -29,6 +29,16 @@ export async function getPublicSeasonPayload(seasonId, sql) {
 
   if (rows.length === 0) throw new Error('season-not-found')
   if (!rows[0].standings) throw new Error('projection-not-found')
+
+  const latestPlayedRows = await sql`
+    SELECT COALESCE(MAX(matchday), 0) AS latest_played_matchday
+    FROM matches
+    WHERE season_id = ${seasonId}
+      AND status = 'played'
+  `
+  const latestPlayedMatchday = Number(latestPlayedRows[0]?.latest_played_matchday ?? 0)
+  const snapshotMatchday = Number(rows[0].matchday)
+  if (latestPlayedMatchday > snapshotMatchday) throw new Error('projection-stale')
 
   const matchRows = await sql`
     SELECT

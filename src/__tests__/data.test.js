@@ -13,6 +13,9 @@ const localStorageMock = (() => {
     setItem: vi.fn((key, value) => {
       storage[key] = value
     }),
+    removeItem: vi.fn((key) => {
+      delete storage[key]
+    }),
     _clear() {
       storage = {}
     },
@@ -41,6 +44,7 @@ beforeEach(() => {
   localStorageMock._clear()
   localStorageMock.getItem.mockClear()
   localStorageMock.setItem.mockClear()
+  localStorageMock.removeItem.mockClear()
 })
 
 describe('data.loadSeason', () => {
@@ -196,6 +200,23 @@ describe('data.loadSeason', () => {
 
     await loadSeason('2025-2026')
 
+    expect(store.set).toHaveBeenCalledWith('season', null)
+  })
+
+  it('does not fall back to cache when the public projection is stale', async () => {
+    localStorageMock._set(
+      'whistle-season-2025-2026',
+      JSON.stringify(SEASON_DATA),
+    )
+
+    mockFetch.mockResolvedValueOnce({
+      ok: false,
+      status: 409,
+    })
+
+    await loadSeason('2025-2026')
+
+    expect(localStorageMock.removeItem).toHaveBeenCalledWith('whistle-season-2025-2026')
     expect(store.set).toHaveBeenCalledWith('season', null)
   })
 
